@@ -1570,5 +1570,8 @@
   },
   "taskCompletedLabel": "Completed: {date}",
   "oauthCouldNotLaunchBrowser": "Could not launch browser for OAuth",
-  "authorizationTimedOut": "Authorization timed out"
+  "authorizationTimedOut": "Authorization timed out",
+  "sendLeavesDeviceTitle": "This text leaves the phone",
+  "noTimestampsFound": "No timestamps found",
+  "pdfImportUnsupported": "PDF is not imported"
 }

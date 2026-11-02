@@ -3373,4 +3373,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Authorization timed out';
+
+  @override
+  String get sendLeavesDeviceTitle => 'This text leaves the phone';
+
+  @override
+  String get noTimestampsFound => 'No timestamps found';
+
+  @override
+  String get pdfImportUnsupported => 'PDF is not imported';
 }

@@ -1563,5 +1563,8 @@
   },
   "taskCompletedLabel": "تکمیل‌شده: {date}",
   "oauthCouldNotLaunchBrowser": "امکان راه‌اندازی مرورگر برای OAuth وجود ندارد",
-  "authorizationTimedOut": "مهلت مجوز به پایان رسید"
+  "authorizationTimedOut": "مهلت مجوز به پایان رسید",
+  "sendLeavesDeviceTitle": "این متن از گوشی خارج می‌شود",
+  "noTimestampsFound": "برچسب زمانی پیدا نشد",
+  "pdfImportUnsupported": "PDF وارد نمی‌شود"
 }

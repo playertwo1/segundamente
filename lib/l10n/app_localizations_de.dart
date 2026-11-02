@@ -3435,4 +3435,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Autorisierung abgelaufen';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Dieser Text verlässt das Telefon';
+
+  @override
+  String get noTimestampsFound => 'Keine Zeitstempel gefunden';
+
+  @override
+  String get pdfImportUnsupported => 'PDF wird nicht importiert';
 }

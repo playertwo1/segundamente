@@ -3364,4 +3364,13 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Ủy quyền đã hết hạn';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Đoạn chữ này rời khỏi điện thoại';
+
+  @override
+  String get noTimestampsFound => 'Không thấy mốc thời gian';
+
+  @override
+  String get pdfImportUnsupported => 'Không nhập PDF';
 }

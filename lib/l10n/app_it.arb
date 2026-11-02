@@ -1561,5 +1561,8 @@
   },
   "taskCompletedLabel": "Completato: {date}",
   "oauthCouldNotLaunchBrowser": "Impossibile aprire il browser per OAuth",
-  "authorizationTimedOut": "Autorizzazione scaduta"
+  "authorizationTimedOut": "Autorizzazione scaduta",
+  "sendLeavesDeviceTitle": "Questo testo esce dal telefono",
+  "noTimestampsFound": "Nessun timestamp trovato",
+  "pdfImportUnsupported": "Il PDF non viene importato"
 }

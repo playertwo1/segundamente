@@ -3444,4 +3444,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Autorizzazione scaduta';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Questo testo esce dal telefono';
+
+  @override
+  String get noTimestampsFound => 'Nessun timestamp trovato';
+
+  @override
+  String get pdfImportUnsupported => 'Il PDF non viene importato';
 }

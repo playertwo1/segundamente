@@ -60,6 +60,9 @@ import 'package:memex/ui/main_screen/widgets/share_intent_handler.dart';
 import 'package:memex/ui/settings/widgets/backup_restore_confirm_dialog.dart';
 import 'package:memex/ui/settings/view_models/data_import_viewmodel.dart';
 import 'package:memex/ui/settings/widgets/data_import_page.dart';
+import 'package:memex/domain/models/transcript_import.dart';
+import 'package:memex/data/services/transcript_import_service.dart';
+import 'package:memex/ui/chat/widgets/send_confirmation_view.dart';
 import 'package:memex/ui/chat/widgets/open_super_agent_dialog.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:memex/data/services/app_action_link_service.dart';
@@ -1479,6 +1482,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     _isImportingSharedFiles = true;
     try {
       if (!mounted) return;
+      if (sharedPathsArePlainText(importPaths)) {
+        await _confirmAndStorePlainText(importPaths);
+        return;
+      }
       final confirmed = await _confirmSharedFileImport();
       if (confirmed != true || !mounted) return;
 
@@ -1513,6 +1520,47 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _confirmAndStorePlainText(List<String> paths) async {
+    final sources = <TranscriptImport>[];
+    for (final path in paths) {
+      sources.add(TranscriptImport.parse(await File(path).readAsBytes()));
+    }
+    final accepted = await _askSendConfirmation(TranscriptBatch(sources));
+    if (!accepted || !mounted) return;
+    final saved = await _storeConfirmedImport(
+      sources: sources,
+      sessionPrefix: 'txt',
+    );
+    if (!mounted || !saved) return;
+    ToastHelper.showSuccess(context, UserStorage.l10n.dataImportSuccess);
+  }
+
+  Future<bool> _askSendConfirmation(TranscriptBatch batch) {
+    final dialogContext = rootNavigatorKey.currentContext ?? context;
+    return showSendConfirmationDialog(
+      context: dialogContext,
+      outgoingText: batch.outgoingText,
+      timestampsFound: batch.timestampsFound,
+      pdfUnsupported: batch.pdfUnsupported,
+    );
+  }
+
+  Future<bool> _storeConfirmedImport({
+    required List<TranscriptImport> sources,
+    required String sessionPrefix,
+  }) async {
+    final userId = await UserStorage.getUserId();
+    if (userId == null || userId.isEmpty) {
+      throw StateError('user missing');
+    }
+    return TranscriptImportService().saveIfConfirmed(
+      userId: userId,
+      sessionId: '${sessionPrefix}_${DateTime.now().millisecondsSinceEpoch}',
+      sources: sources,
+      confirmed: true,
     );
   }
 
@@ -1775,6 +1823,20 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
     final text = candidate.text;
     if (text == null || text.isEmpty) return;
+
+    final source = TranscriptImport.fromText(text);
+    final accepted = await _askSendConfirmation(TranscriptBatch([source]));
+    if (!accepted || !mounted) return;
+
+    try {
+      await _storeConfirmedImport(sources: [source], sessionPrefix: 'paste');
+    } catch (e, stackTrace) {
+      _logger.severe('Pasted transcript was not stored: $e', e, stackTrace);
+      if (mounted) {
+        ToastHelper.showError(context, UserStorage.l10n.operationFailed(e));
+      }
+    }
+    if (!mounted) return;
 
     await _clipboardPreviewService.markHandled(candidate);
     if (!mounted) return;

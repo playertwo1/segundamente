@@ -3353,4 +3353,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'انتهت صلاحية التفويض';
+
+  @override
+  String get sendLeavesDeviceTitle => 'هذا النص يغادر الهاتف';
+
+  @override
+  String get noTimestampsFound => 'لم يُعثر على طوابع زمنية';
+
+  @override
+  String get pdfImportUnsupported => 'لا يُستورد PDF';
 }

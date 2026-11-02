@@ -199,23 +199,23 @@ void main() {
         },
       );
       final metadataFile = File(storage.metadataPath(userId, sessionId));
-      final metadata = jsonDecode(await metadataFile.readAsString())
-          as Map<String, dynamic>;
+      final metadata =
+          jsonDecode(await metadataFile.readAsString()) as Map<String, dynamic>;
       metadata['message_count'] = 3;
       await metadataFile.writeAsString(jsonEncode(metadata));
 
       await storage.listSessionMetadata(userId);
 
-      final cleaned = jsonDecode(await metadataFile.readAsString())
-          as Map<String, dynamic>;
+      final cleaned =
+          jsonDecode(await metadataFile.readAsString()) as Map<String, dynamic>;
       expect(cleaned.containsKey('message_count'), isFalse);
 
       cleaned['message_count'] = 9;
       await metadataFile.writeAsString(jsonEncode(cleaned));
       await storage.listSessionMetadata(userId);
 
-      final second = jsonDecode(await metadataFile.readAsString())
-          as Map<String, dynamic>;
+      final second =
+          jsonDecode(await metadataFile.readAsString()) as Map<String, dynamic>;
       expect(second['message_count'], 9);
     });
 
@@ -260,7 +260,8 @@ void main() {
       expect(jsonDecode(lines.single)['role'], 'user');
     });
 
-    test('keeps the conversation after the active model config changes', () async {
+    test('keeps the conversation after the active model config changes',
+        () async {
       const sessionId = 'memex_agent_model_switch';
       const kept = 'conversa antes da troca';
       final storage = ChatSessionStorage.instance;
@@ -319,6 +320,40 @@ void main() {
       ) as Map<String, dynamic>;
       expect(metadata.containsKey('modelId'), isFalse);
       expect(metadata.containsKey('provider'), isFalse);
+    });
+
+    test('a second storage instance reads the same conversation files',
+        () async {
+      const sessionId = 'memex_agent_restart_instance';
+      const kept = 'conversa que sobrevive';
+      final storage = ChatSessionStorage.instance;
+      await storage.createSession(
+        userId: userId,
+        sessionId: sessionId,
+        metadata: {
+          'session_id': sessionId,
+          'agent_name': 'memex_agent',
+          'title': 'Restart',
+          'created_at': '2026-11-02T12:00:00.000',
+          'updated_at': '2026-11-02T12:00:00.000',
+        },
+        messages: [
+          {
+            'role': 'user',
+            'content': [
+              {'type': 'text', 'text': kept},
+            ],
+            'timestamp': '2026-11-02T12:01:00.000',
+          },
+        ],
+      );
+
+      final restarted = ChatSessionStorage.forTesting(
+        fileService: FileSystemService.instance,
+      );
+      final messages = await restarted.loadMessages(userId, sessionId);
+      final content = messages.single['content'] as List;
+      expect(content.single['text'], kept);
     });
 
     test('recovers valid messages from an incomplete UTF-8 tail', () async {

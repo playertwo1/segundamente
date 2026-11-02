@@ -3296,4 +3296,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => '認証がタイムアウトしました';
+
+  @override
+  String get sendLeavesDeviceTitle => 'このテキストは端末の外に出ます';
+
+  @override
+  String get noTimestampsFound => 'タイムスタンプが見つかりません';
+
+  @override
+  String get pdfImportUnsupported => 'PDFは取り込みません';
 }

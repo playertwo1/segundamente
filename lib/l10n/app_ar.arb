@@ -1563,5 +1563,8 @@
     "placeholders": {
       "week": {}
     }
-  }
+  },
+  "sendLeavesDeviceTitle": "هذا النص يغادر الهاتف",
+  "noTimestampsFound": "لم يُعثر على طوابع زمنية",
+  "pdfImportUnsupported": "لا يُستورد PDF"
 }

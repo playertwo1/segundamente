@@ -1563,5 +1563,8 @@
     "placeholders": {
       "week": {}
     }
-  }
+  },
+  "sendLeavesDeviceTitle": "這段文字會離開手機",
+  "noTimestampsFound": "未找到時間戳",
+  "pdfImportUnsupported": "不匯入 PDF"
 }

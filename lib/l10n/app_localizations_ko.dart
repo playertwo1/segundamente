@@ -3295,4 +3295,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => '인증 시간이 초과되었습니다';
+
+  @override
+  String get sendLeavesDeviceTitle => '이 텍스트는 휴대폰 밖으로 나갑니다';
+
+  @override
+  String get noTimestampsFound => '타임스탬프가 없습니다';
+
+  @override
+  String get pdfImportUnsupported => 'PDF는 가져오지 않습니다';
 }

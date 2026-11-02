@@ -3383,4 +3383,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'प्राधिकरण समय समाप्त';
+
+  @override
+  String get sendLeavesDeviceTitle => 'यह पाठ फ़ोन से बाहर जाता है';
+
+  @override
+  String get noTimestampsFound => 'कोई टाइमस्टैम्प नहीं मिला';
+
+  @override
+  String get pdfImportUnsupported => 'PDF आयात नहीं होता';
 }

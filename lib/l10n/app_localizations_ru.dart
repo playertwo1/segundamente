@@ -3401,4 +3401,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Время авторизации истекло';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Этот текст покидает телефон';
+
+  @override
+  String get noTimestampsFound => 'Метки времени не найдены';
+
+  @override
+  String get pdfImportUnsupported => 'PDF не импортируется';
 }

@@ -3393,4 +3393,13 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Otorisasi habis waktu';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Teks ini keluar dari ponsel';
+
+  @override
+  String get noTimestampsFound => 'Tidak ada stempel waktu';
+
+  @override
+  String get pdfImportUnsupported => 'PDF tidak diimpor';
 }

@@ -3256,6 +3256,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => '授权超时';
+
+  @override
+  String get sendLeavesDeviceTitle => '这段文字会离开手机';
+
+  @override
+  String get noTimestampsFound => '未找到时间戳';
+
+  @override
+  String get pdfImportUnsupported => '不导入 PDF';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -6514,4 +6523,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get authorizationTimedOut => '授權逾時';
+
+  @override
+  String get sendLeavesDeviceTitle => '這段文字會離開手機';
+
+  @override
+  String get noTimestampsFound => '未找到時間戳';
+
+  @override
+  String get pdfImportUnsupported => '不匯入 PDF';
 }

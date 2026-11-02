@@ -3395,4 +3395,13 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Yetkilendirme zaman aşımına uğradı';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Bu metin telefondan çıkar';
+
+  @override
+  String get noTimestampsFound => 'Zaman damgası bulunamadı';
+
+  @override
+  String get pdfImportUnsupported => 'PDF içe aktarılmaz';
 }

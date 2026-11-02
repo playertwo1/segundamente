@@ -1563,5 +1563,8 @@
   },
   "taskCompletedLabel": "Hoàn thành: {date}",
   "oauthCouldNotLaunchBrowser": "Không thể mở trình duyệt cho OAuth",
-  "authorizationTimedOut": "Ủy quyền đã hết hạn"
+  "authorizationTimedOut": "Ủy quyền đã hết hạn",
+  "sendLeavesDeviceTitle": "Đoạn chữ này rời khỏi điện thoại",
+  "noTimestampsFound": "Không thấy mốc thời gian",
+  "pdfImportUnsupported": "Không nhập PDF"
 }

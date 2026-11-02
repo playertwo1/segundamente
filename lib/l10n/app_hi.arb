@@ -1563,5 +1563,8 @@
     "placeholders": {
       "week": {}
     }
-  }
+  },
+  "sendLeavesDeviceTitle": "यह पाठ फ़ोन से बाहर जाता है",
+  "noTimestampsFound": "कोई टाइमस्टैम्प नहीं मिला",
+  "pdfImportUnsupported": "PDF आयात नहीं होता"
 }

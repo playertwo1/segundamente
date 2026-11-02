@@ -3425,4 +3425,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'La autorización expiró';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Este texto sale del teléfono';
+
+  @override
+  String get noTimestampsFound => 'No se encontraron marcas de tiempo';
+
+  @override
+  String get pdfImportUnsupported => 'El PDF no se importa';
 }

@@ -17,7 +17,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 |---|---|---|---|
 | F0 — Fundação | Fork roda no emulador (S25 adiado, D-009), licenças e módulos auditados, identidade própria | IN_PROGRESS | Build `globalDev` no emulador + auditoria registrada; o S25 continua `NOT_RUN` e a fase não fecha sem ele |
 | F1 — Registro de modelos | Escolher e testar modelos sem lista estática | IN_PROGRESS | Critérios 4 e (parte do) 6 abaixo |
-| F2 — Chat, voz e importação | Conversar por texto/voz; importar TXT Samsung e fotos | BACKLOG | Critérios 1, 2 e 3 abaixo |
+| F2 — Chat, voz e importação | Conversar por texto/voz; importar TXT Samsung e fotos | IN_PROGRESS | Critérios 1, 2 e 3 abaixo |
 | F3 — Extração e relatório | Relatório por sessão com evidências e confirmação | BACKLOG | Critério 6 abaixo |
 | F4 — Exportação | Mesmo relatório em PDF, DOCX e MD | BACKLOG | Critério 5 abaixo |
 | F5 — Fechamento do MVP | Testes no S25, privacidade, desempenho, visual | BACKLOG | Critério 7 abaixo + `docs/AUDIT.md` |
@@ -52,13 +52,13 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 ## F2 — Chat, voz e importação
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
 |---|---|---|---|---|---|
-| F2-01 | Chat de texto com histórico persistente | P0 | F1 | BACKLOG | Conversa sobrevive a reiniciar o app |
-| F2-02 | Voz em turnos: microfone → transcrição → resposta → áudio opcional (pt-BR) | P0 | F0-05, F2-01 | BACKLOG | Demonstração no S25; qualidade de pt-BR anotada |
-| F2-03 | Importar TXT do Samsung via Compartilhar (ACTION_SEND) e seleção de arquivo, com pré-visualização | P0 | F2-01 | BACKLOG | TXT real de ~50 min aberto sem copiar/colar; timestamps preservados |
-| F2-04 | Normalização reversível do texto (original imutável, versão normalizada separada) | P1 | F2-03 | BACKLOG | Teste: original idêntico bit a bit após normalizar |
-| F2-05 | Anexar fotos/imagens (JPG/PNG; HEIC avaliado) e analisar em provedor com visão | P0 | F1-03, F2-01 | BACKLOG | Foto analisada em um provedor; aviso nos sem visão |
-| F2-06 | Texto digitado/colado como sessão; PDF de entrada se couber | P2 | F2-01 | BACKLOG | Colar texto cria sessão; PDF `NOT_RUN` aceito se cortado |
-| F2-07 | Tela de envio: mostrar o conteúdo que sai do aparelho e pedir confirmação | P0 | F2-03 | BACKLOG | Nada é enviado sem passar por ela |
+| F2-01 | Chat de texto com histórico persistente | P0 | F1 | DONE | Conversa sobrevive a reiniciar o app |
+| F2-02 | Voz em turnos: microfone → transcrição → resposta → áudio opcional (pt-BR) | P0 | F0-05, F2-01 | NOT_RUN | Demonstração no S25; qualidade de pt-BR anotada |
+| F2-03 | Importar TXT do Samsung via Compartilhar (ACTION_SEND) e seleção de arquivo, com pré-visualização | P0 | F2-01 | IN_PROGRESS | TXT real de ~50 min aberto sem copiar/colar; timestamps preservados |
+| F2-04 | Normalização reversível do texto (original imutável, versão normalizada separada) | P1 | F2-03 | DONE | Teste: original idêntico bit a bit após normalizar |
+| F2-05 | Anexar fotos/imagens (JPG/PNG; HEIC avaliado) e analisar em provedor com visão | P0 | F1-03, F2-01 | NOT_RUN | Foto analisada em um provedor; aviso nos sem visão |
+| F2-06 | Texto digitado/colado como sessão; PDF de entrada se couber | P2 | F2-01 | DONE | Colar texto cria sessão; PDF `NOT_RUN` aceito se cortado |
+| F2-07 | Tela de envio: mostrar o conteúdo que sai do aparelho e pedir confirmação | P0 | F2-03 | DONE | Nada é enviado sem passar por ela |
 
 **Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra.
 

@@ -1561,5 +1561,8 @@
   },
   "taskCompletedLabel": "Tamamlandı: {date}",
   "oauthCouldNotLaunchBrowser": "OAuth için tarayıcı başlatılamadı",
-  "authorizationTimedOut": "Yetkilendirme zaman aşımına uğradı"
+  "authorizationTimedOut": "Yetkilendirme zaman aşımına uğradı",
+  "sendLeavesDeviceTitle": "Bu metin telefondan çıkar",
+  "noTimestampsFound": "Zaman damgası bulunamadı",
+  "pdfImportUnsupported": "PDF içe aktarılmaz"
 }

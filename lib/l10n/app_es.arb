@@ -1563,5 +1563,8 @@
     "placeholders": {
       "week": {}
     }
-  }
+  },
+  "sendLeavesDeviceTitle": "Este texto sale del teléfono",
+  "noTimestampsFound": "No se encontraron marcas de tiempo",
+  "pdfImportUnsupported": "El PDF no se importa"
 }

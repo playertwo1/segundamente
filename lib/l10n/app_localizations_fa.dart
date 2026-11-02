@@ -3378,4 +3378,13 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'مهلت مجوز به پایان رسید';
+
+  @override
+  String get sendLeavesDeviceTitle => 'این متن از گوشی خارج می‌شود';
+
+  @override
+  String get noTimestampsFound => 'برچسب زمانی پیدا نشد';
+
+  @override
+  String get pdfImportUnsupported => 'PDF وارد نمی‌شود';
 }

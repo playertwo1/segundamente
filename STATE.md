@@ -1,11 +1,11 @@
 # STATE — ponto de retomada
 
-**Atualizado:** 2026-11-02 · **Fase ativa:** F1 — Registro de modelos · **Estado:** IN_PROGRESS
+**Atualizado:** 2026-11-02 · **Fase ativa:** F2 — Chat, voz e importação · **Estado:** IN_PROGRESS
 
-A F0 continua `IN_PROGRESS`: o dono pediu para usar só o emulador (D-009) e, em seguida, autorizou começar a F1 com o S25 ainda `NOT_RUN`. A fase F0 não fecha sem o telefone. O portão da F1 também não fecha: faltam resposta real de dois provedores e o login OAuth.
+A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua `IN_PROGRESS`: faltam resposta real de dois provedores e o login OAuth. O dono autorizou abrir a F2 em 2026-11-02 com esses dois portões abertos. O portão da F2 não fecha: os critérios 1, 2 e 3 no S25 estão `NOT_RUN`.
 
 ## O que existe hoje (confirmado)
-- Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). `origin/main` está em `60e0ecf`, 4 commits à frente do upstream `6143923`. A F1 está no working tree, ainda sem commit.
+- Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). `origin/main` está em `790e8b8`, 5 commits à frente do upstream `6143923`. A F1 está publicada. A F2 está no working tree, ainda sem commit.
 - No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`) e Gemini (`gemini_auth_service.dart`); Claude só por chave de API (`lib/domain/models/llm_config.dart`).
 - Planejamento: `PROJECT.md`, `ROADMAP.md`, `docs/DECISIONS.md`, `docs/questionario/`.
 
@@ -34,6 +34,22 @@ A F0 continua `IN_PROGRESS`: o dono pediu para usar só o emulador (D-009) e, em
   - `test/ui/settings/widgets/model_config_edit_page_test.dart`
   - `test/data/services/chat_session_storage_test.dart`
 - `flutter analyze` e a suíte inteira não foram reexecutados. A linha de base continua 161 infos e 30 falhas no Windows.
+- Publicada em `790e8b8` (`feat(models): catálogo versionado, capacidades e histórico na troca`). O commit não espera mais aprovação.
+
+## Evidência da F2 (2026-11-02)
+- F2-01 `DONE` com limite explícito. Uma segunda instância `ChatSessionStorage.forTesting` leu `conversa que sobrevive` nos mesmos arquivos. Não foi morte do processo do app nem o emulador.
+- F2-02 `NOT_RUN`. Sem demonstração no S25 e sem TTS novo. SenseVoice não foi trocado.
+- F2-03 `IN_PROGRESS`. O parser cobre relógio sozinho, `Locutor 1 00:01:02`, `화자 1 (1:05)`, `[00:02:03] Locutor 2` e intervalo `00:00:10,000 --> 00:00:14,120` (usa o início). O cabeçalho vira título. Não há um TXT real de ~50 min neste ambiente.
+- F2-04 `DONE`. Depois de normalizar `00:01\r\n  olá  \r\n`, `original.bin` continua igual aos bytes de entrada. O texto normalizado é outro arquivo: `[00:00:01]\nolá`.
+- F2-05 `NOT_RUN`. Nenhuma foto foi analisada num provedor.
+- F2-06 `DONE` para colar; PDF `NOT_RUN`. O texto `nota colada sem relógio` só virou sessão com confirmação. Bytes que começam com `%PDF` não são lidos nem gravados. Nenhum PDF real foi aberto.
+- F2-07 `DONE` no caminho de texto. A tela mostra o texto exato, inclusive espaços. Cancelar não confirma e não grava. Compartilhar só `.txt` e colar da área de transferência passam por essa tela. Outros tipos de arquivo continuam no diálogo genérico, que não mostra o conteúdo.
+- Comando: `flutter test --reporter compact` nos quatro arquivos abaixo. Saída: `00:50 +22: All tests passed!`
+  - `test/domain/models/transcript_import_test.dart`
+  - `test/data/services/transcript_import_service_test.dart`
+  - `test/ui/chat/widgets/send_confirmation_view_test.dart`
+  - `test/data/services/chat_session_storage_test.dart`
+- `flutter analyze` e a suíte inteira não foram reexecutados.
 
 ## Toolchain (ambiente local, fora do repo)
 - Flutter em `C:\Users\notefael\tools\flutter`, fora do PATH: usar `C:\Users\notefael\tools\flutter\bin\flutter`. `flutter config --jdk-dir` aponta para `C:\Users\notefael\AppData\Local\Programs\jdk-17` (o Java 25 padrão quebra o Gradle 8.14).
@@ -41,13 +57,13 @@ A F0 continua `IN_PROGRESS`: o dono pediu para usar só o emulador (D-009) e, em
 - O Gradle instalou sozinho o Android SDK Platform 34. As demais licenças do SDK seguem não aceitas.
 
 ## Última atividade
-- 2026-11-02: F0-04 a F0-06 publicadas em `60e0ecf`. F1 implementada no working tree: catálogo, id manual, matriz de capacidades e histórico independente do modelo. Sem chamada real de provedor e sem login OAuth.
+- 2026-11-02: F1 publicada em `790e8b8`. F2 aberta por pedido do dono: prévia do texto que sai do telefone, parser de transcrição, original imutável e sessão só depois da confirmação. Sem chamada real de provedor, sem TXT de 50 min e sem o S25.
 
 ## Próxima ação
-- O portão da F1 continua aberto. Para fechar F1-02 e F1-03 falta uma resposta real de OpenAI e de Gemini. F1-04 espera o login no S25. F1-05 espera uma chave Claude ou um endpoint local. A F0 continua aberta pelo S25 (D-009). O commit desta F1 espera aprovação do dono.
+- O portão da F2 continua aberto até os critérios 1, 2 e 3 no S25. F2-03 espera um TXT real de ~50 min. F2-02 e F2-05 estão `NOT_RUN`. A F1 continua aberta por uma resposta real de OpenAI e de Gemini. A F0 continua aberta pelo S25 (D-009). O commit desta F2 espera aprovação do dono.
 
 ## Bloqueios e aprovações humanas
-- S25 Ultra adiado pelo dono (D-009). Sem chave de API e sem endpoint local neste ambiente. Commit e push da F1 esperam aprovação.
+- S25 Ultra adiado pelo dono (D-009). Sem chave de API e sem endpoint local neste ambiente. Sem TXT real de ~50 min. Commit e push da F2 esperam aprovação.
 
 ## Divergências entre roadmap e implementação
-- A F1 começou com a F0 ainda aberta, por pedido do dono. O S25 segue `NOT_RUN` e não foi tratado como `PASS`.
+- A F1 começou com a F0 ainda aberta, por pedido do dono. A F2 começou com a F0 e o portão da F1 ainda abertos, também por pedido do dono. O S25 segue `NOT_RUN` e não foi tratado como `PASS`.

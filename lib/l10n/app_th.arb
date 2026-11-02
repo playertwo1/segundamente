@@ -1561,5 +1561,8 @@
   },
   "taskCompletedLabel": "เสร็จสิ้น: {date}",
   "oauthCouldNotLaunchBrowser": "ไม่สามารถเปิดเบราว์เซอร์สำหรับ OAuth",
-  "authorizationTimedOut": "การอนุญาตหมดเวลา"
+  "authorizationTimedOut": "การอนุญาตหมดเวลา",
+  "sendLeavesDeviceTitle": "ข้อความนี้จะออกจากโทรศัพท์",
+  "noTimestampsFound": "ไม่พบเวลา",
+  "pdfImportUnsupported": "ไม่นำเข้า PDF"
 }

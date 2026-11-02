@@ -1892,6 +1892,11 @@ class FileSystemService {
     return path.join(getWorkspacePath(userId), 'ChatSessions');
   }
 
+  /// Original transcript bytes and the separate normalized text.
+  String getTranscriptImportsPath(String userId) {
+    return path.join(getWorkspacePath(userId), 'TranscriptImports');
+  }
+
   /// GetKnowledgeInsightsdirectory path
   String getKnowledgeInsightsPath(String userId) {
     return path.join(getWorkspacePath(userId), 'KnowledgeInsights');

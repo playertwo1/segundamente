@@ -1563,5 +1563,8 @@
     "placeholders": {
       "week": {}
     }
-  }
+  },
+  "sendLeavesDeviceTitle": "このテキストは端末の外に出ます",
+  "noTimestampsFound": "タイムスタンプが見つかりません",
+  "pdfImportUnsupported": "PDFは取り込みません"
 }

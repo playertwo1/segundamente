@@ -3403,4 +3403,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Autorização expirada';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Este texto sai do telefone';
+
+  @override
+  String get noTimestampsFound => 'Nenhum timestamp encontrado';
+
+  @override
+  String get pdfImportUnsupported => 'PDF não é importado';
 }

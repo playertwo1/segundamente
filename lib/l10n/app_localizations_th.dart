@@ -3365,4 +3365,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'การอนุญาตหมดเวลา';
+
+  @override
+  String get sendLeavesDeviceTitle => 'ข้อความนี้จะออกจากโทรศัพท์';
+
+  @override
+  String get noTimestampsFound => 'ไม่พบเวลา';
+
+  @override
+  String get pdfImportUnsupported => 'ไม่นำเข้า PDF';
 }

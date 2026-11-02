@@ -6075,6 +6075,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Authorization timed out'**
   String get authorizationTimedOut;
+
+  /// No description provided for @sendLeavesDeviceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This text leaves the phone'**
+  String get sendLeavesDeviceTitle;
+
+  /// No description provided for @noTimestampsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No timestamps found'**
+  String get noTimestampsFound;
+
+  /// No description provided for @pdfImportUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF is not imported'**
+  String get pdfImportUnsupported;
 }
 
 class _AppLocalizationsDelegate

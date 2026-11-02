@@ -3432,4 +3432,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get authorizationTimedOut => 'Autorisation expirée';
+
+  @override
+  String get sendLeavesDeviceTitle => 'Ce texte quitte le téléphone';
+
+  @override
+  String get noTimestampsFound => 'Aucun horodatage trouvé';
+
+  @override
+  String get pdfImportUnsupported => 'Le PDF n\'est pas importé';
 }
