@@ -168,3 +168,8 @@ Two approaches — pick the right one based on string length:
 - **Multi-line text** (long descriptions, agent prompts, onboarding copy): defined directly in `AppLocalizationsExt` (`lib/l10n/app_localizations_ext.dart`) as Dart code — better readability than JSON for multi-line content.
 
 Access all strings via `UserStorage.l10n` (static, initialized in `main()`).
+
+
+## Segunda Mente (fork) — retomada do trabalho
+
+Este repositório é o fork **Segunda Mente** do Memex. Antes de agir: leia `STATE.md` (próxima ação) e `ROADMAP.md` (fases, subfases, evidência exigida). Escopo em `PROJECT.md`, decisões em `docs/DECISIONS.md`. Regras de execução: `docs/WATCHDOG.md`; auditoria antes de fechar fase: `docs/AUDIT.md`. Subfase só é `DONE` com evidência; não executado é `NOT_RUN`. Segredos, chaves e tokens nunca entram no repositório. Este arquivo continua sendo a regra de código.

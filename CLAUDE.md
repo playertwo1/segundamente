@@ -131,3 +131,8 @@ flutter analyze
 dart run build_runner build --delete-conflicting-outputs
 cd ios && pod install && cd ..
 ```
+
+
+## Segunda Mente (fork)
+
+Retomada do trabalho: `STATE.md` → `ROADMAP.md`. Veja a seção "Segunda Mente (fork)" no `AGENTS.md`.
