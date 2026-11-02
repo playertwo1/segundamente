@@ -830,7 +830,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get confirmLocation => 'Xác nhận vị trí';
 
   @override
-  String get welcomeToMemex => 'Chào mừng đến Memex';
+  String get welcomeToMemex => 'Chào mừng đến Segunda Mente';
 
   @override
   String get createUserIdToStart => 'Tạo hồ sơ của bạn';

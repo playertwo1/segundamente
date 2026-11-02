@@ -812,7 +812,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get confirmLocation => '場所を確認';
 
   @override
-  String get welcomeToMemex => 'Memex へようこそ';
+  String get welcomeToMemex => 'Segunda Mente へようこそ';
 
   @override
   String get createUserIdToStart => 'プロフィールを作成';

@@ -832,7 +832,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get confirmLocation => 'स्थान पुष्टि करें';
 
   @override
-  String get welcomeToMemex => 'Memex में आपका स्वागत है';
+  String get welcomeToMemex => 'Segunda Mente में आपका स्वागत है';
 
   @override
   String get createUserIdToStart => 'अपनी प्रोफ़ाइल बनाएं';

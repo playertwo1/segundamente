@@ -45,7 +45,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.memexlab.memex"
+        applicationId = "app.segundamente"
         minSdk = 26  // Required by health plugin 13.2.1
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -79,12 +79,12 @@ android {
         }
     }
 
-    val globalApplicationId = "com.memexlab.memex"
-    val cnApplicationId = "com.memexlab.memex.cn"
-    val globalEarlyApplicationId = "com.memexlab.memex.early"
-    val cnEarlyApplicationId = "com.memexlab.memex.cn.early"
-    val globalDevApplicationId = "com.memexlab.memex.dev"
-    val cnDevApplicationId = "com.memexlab.memex.cn.dev"
+    val globalApplicationId = "app.segundamente"
+    val cnApplicationId = "app.segundamente.cn"
+    val globalEarlyApplicationId = "app.segundamente.early"
+    val cnEarlyApplicationId = "app.segundamente.cn.early"
+    val globalDevApplicationId = "app.segundamente.dev"
+    val cnDevApplicationId = "app.segundamente.cn.dev"
 
     // Static shortcut targetPackage must be a literal in each flavor overlay.
     // Android persists @string references as resource IDs in ShortcutInfo intents.
@@ -93,7 +93,7 @@ android {
         create("global") {
             dimension = "market"
             applicationId = globalApplicationId
-            manifestPlaceholders["appLabel"] = "Memex"
+            manifestPlaceholders["appLabel"] = "Segunda Mente"
             if (hasGlobalKeystore) {
                 signingConfig = signingConfigs.getByName("globalRelease")
             }
@@ -101,7 +101,7 @@ android {
         create("cn") {
             dimension = "market"
             applicationId = cnApplicationId
-            manifestPlaceholders["appLabel"] = "Memex"
+            manifestPlaceholders["appLabel"] = "Segunda Mente"
             if (hasCnKeystore) {
                 signingConfig = signingConfigs.getByName("cnRelease")
             }
@@ -109,7 +109,7 @@ android {
         create("globalEarly") {
             dimension = "market"
             applicationId = globalEarlyApplicationId
-            manifestPlaceholders["appLabel"] = "Memex Early"
+            manifestPlaceholders["appLabel"] = "Segunda Mente Early"
             if (hasEarlyKeystore) {
                 signingConfig = signingConfigs.getByName("earlyRelease")
             }
@@ -117,7 +117,7 @@ android {
         create("cnEarly") {
             dimension = "market"
             applicationId = cnEarlyApplicationId
-            manifestPlaceholders["appLabel"] = "Memex Early CN"
+            manifestPlaceholders["appLabel"] = "Segunda Mente Early CN"
             if (hasEarlyKeystore) {
                 signingConfig = signingConfigs.getByName("earlyRelease")
             }
@@ -125,12 +125,12 @@ android {
         create("globalDev") {
             dimension = "market"
             applicationId = globalDevApplicationId
-            manifestPlaceholders["appLabel"] = "Memex Dev"
+            manifestPlaceholders["appLabel"] = "Segunda Mente Dev"
         }
         create("cnDev") {
             dimension = "market"
             applicationId = cnDevApplicationId
-            manifestPlaceholders["appLabel"] = "Memex Dev CN"
+            manifestPlaceholders["appLabel"] = "Segunda Mente Dev CN"
         }
     }
 
@@ -147,7 +147,7 @@ android {
         val variant = this
         outputs.all {
             val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
-            output.outputFileName = "memex_${variant.flavorName}_${variant.versionName}_${variant.versionCode}.apk"
+            output.outputFileName = "segundamente_${variant.flavorName}_${variant.versionName}_${variant.versionCode}.apk"
         }
     }
 }

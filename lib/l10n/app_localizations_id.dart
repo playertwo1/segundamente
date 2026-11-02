@@ -836,7 +836,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get confirmLocation => 'Konfirmasi lokasi';
 
   @override
-  String get welcomeToMemex => 'Selamat datang di Memex';
+  String get welcomeToMemex => 'Selamat datang di Segunda Mente';
 
   @override
   String get createUserIdToStart => 'Buat profil Anda';

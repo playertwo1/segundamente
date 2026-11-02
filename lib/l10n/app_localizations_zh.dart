@@ -806,7 +806,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get confirmLocation => '确认位置';
 
   @override
-  String get welcomeToMemex => '欢迎来到 Memex';
+  String get welcomeToMemex => '欢迎来到 Segunda Mente';
 
   @override
   String get createUserIdToStart => '请创建一个你的专属昵称';
@@ -4028,7 +4028,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get confirmLocation => '確認位置';
 
   @override
-  String get welcomeToMemex => '歡迎來到 Memex';
+  String get welcomeToMemex => '歡迎來到 Segunda Mente';
 
   @override
   String get createUserIdToStart => '請建立你的專屬暱稱';

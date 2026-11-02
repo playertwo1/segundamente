@@ -838,7 +838,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get confirmLocation => 'Konumu onayla';
 
   @override
-  String get welcomeToMemex => 'Memex\'e hoş geldiniz';
+  String get welcomeToMemex => 'Segunda Mente\'ye hoş geldiniz';
 
   @override
   String get createUserIdToStart => 'Profilinizi oluşturun';

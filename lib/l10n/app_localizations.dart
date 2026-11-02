@@ -1585,7 +1585,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeToMemex.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Memex'**
+  /// **'Welcome to Segunda Mente'**
   String get welcomeToMemex;
 
   /// No description provided for @createUserIdToStart.

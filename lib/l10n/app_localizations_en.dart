@@ -830,7 +830,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmLocation => 'Confirm location';
 
   @override
-  String get welcomeToMemex => 'Welcome to Memex';
+  String get welcomeToMemex => 'Welcome to Segunda Mente';
 
   @override
   String get createUserIdToStart => 'Create your profile';

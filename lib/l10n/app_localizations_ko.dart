@@ -812,7 +812,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get confirmLocation => '위치 확인';
 
   @override
-  String get welcomeToMemex => 'Memex에 오신 것을 환영합니다';
+  String get welcomeToMemex => 'Segunda Mente에 오신 것을 환영합니다';
 
   @override
   String get createUserIdToStart => '프로필 만들기';

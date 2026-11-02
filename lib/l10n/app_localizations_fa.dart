@@ -831,7 +831,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get confirmLocation => 'تأیید مکان';
 
   @override
-  String get welcomeToMemex => 'به Memex خوش آمدید';
+  String get welcomeToMemex => 'به Segunda Mente خوش آمدید';
 
   @override
   String get createUserIdToStart => 'پروفایل خود را بسازید';

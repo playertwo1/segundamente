@@ -843,7 +843,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get confirmLocation => 'Confirmer le lieu';
 
   @override
-  String get welcomeToMemex => 'Bienvenue dans Memex';
+  String get welcomeToMemex => 'Bienvenue dans Segunda Mente';
 
   @override
   String get createUserIdToStart => 'Créez votre profil';

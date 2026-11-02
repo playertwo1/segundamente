@@ -838,7 +838,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get confirmLocation => 'Подтвердить место';
 
   @override
-  String get welcomeToMemex => 'Добро пожаловать в Memex';
+  String get welcomeToMemex => 'Добро пожаловать в Segunda Mente';
 
   @override
   String get createUserIdToStart => 'Создайте профиль';

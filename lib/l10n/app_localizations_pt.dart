@@ -840,7 +840,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get confirmLocation => 'Confirmar local';
 
   @override
-  String get welcomeToMemex => 'Boas-vindas ao Memex';
+  String get welcomeToMemex => 'Boas-vindas à Segunda Mente';
 
   @override
   String get createUserIdToStart => 'Crie seu perfil';
