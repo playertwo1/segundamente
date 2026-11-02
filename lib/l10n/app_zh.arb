@@ -1557,5 +1557,9 @@
   "reportSectionQuestion": "疑问",
   "reportExportMarkdown": "Markdown",
   "reportExportPdf": "PDF",
-  "reportExportDocx": "DOCX"
+  "reportExportDocx": "DOCX",
+  "followUpsTitle": "跟进",
+  "openFollowUps": "跟进",
+  "followUpsEmpty": "没有已确认的跟进",
+  "followUpsSearchHint": "搜索报告"
 }

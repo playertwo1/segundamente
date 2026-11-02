@@ -6273,6 +6273,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'DOCX'**
   String get reportExportDocx;
+
+  /// No description provided for @followUpsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-ups'**
+  String get followUpsTitle;
+
+  /// No description provided for @openFollowUps.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-ups'**
+  String get openFollowUps;
+
+  /// No description provided for @followUpsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No approved follow-ups'**
+  String get followUpsEmpty;
+
+  /// No description provided for @followUpsSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search reports'**
+  String get followUpsSearchHint;
 }
 
 class _AppLocalizationsDelegate

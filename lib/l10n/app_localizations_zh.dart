@@ -3355,6 +3355,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reportExportDocx => 'DOCX';
+
+  @override
+  String get followUpsTitle => '跟进';
+
+  @override
+  String get openFollowUps => '跟进';
+
+  @override
+  String get followUpsEmpty => '没有已确认的跟进';
+
+  @override
+  String get followUpsSearchHint => '搜索报告';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -6712,4 +6724,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get reportExportDocx => 'DOCX';
+
+  @override
+  String get followUpsTitle => '後續';
+
+  @override
+  String get openFollowUps => '後續';
+
+  @override
+  String get followUpsEmpty => '沒有已確認的後續';
+
+  @override
+  String get followUpsSearchHint => '搜尋報告';
 }

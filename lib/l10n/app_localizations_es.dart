@@ -3524,4 +3524,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get reportExportDocx => 'DOCX';
+
+  @override
+  String get followUpsTitle => 'Follow-ups';
+
+  @override
+  String get openFollowUps => 'Follow-ups';
+
+  @override
+  String get followUpsEmpty => 'No approved follow-ups';
+
+  @override
+  String get followUpsSearchHint => 'Search reports';
 }

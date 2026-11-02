@@ -10,6 +10,7 @@ import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/data/services/transcript_import_service.dart';
+import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/transcript_import.dart';
 import 'package:memex/utils/user_storage.dart';
@@ -233,6 +234,87 @@ void main() {
     for (final path in written) {
       expect(await File(path).exists(), isFalse);
     }
+    expect(await original.readAsBytes(), bytes);
+  });
+
+  test('follow-ups, text search and revisions stay beside the report', () async {
+    final original = await storeTranscript();
+    final bytes = await original.readAsBytes();
+    const otherId = 'txt_other';
+    await TranscriptImportService().saveIfConfirmed(
+      userId: userId,
+      sessionId: otherId,
+      sources: [
+        TranscriptImport.parse(utf8.encode('00:01\noutro assunto\n')),
+      ],
+      confirmed: true,
+    );
+
+    final meeting = await service.draft(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+    );
+    await service.draft(
+      userId: userId,
+      sessionId: otherId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+    );
+    final followUp = meeting.items[1];
+    expect(followUp.kind, ReportItemKind.followUp);
+
+    await service.setStatus(
+      userId: userId,
+      sessionId: sessionId,
+      itemId: followUp.id,
+      status: ReportItemStatus.approved,
+      at: '2026-11-02T15:04:00',
+    );
+    final panel = await service.approvedFollowUps(userId: userId);
+    expect(panel, hasLength(1));
+    expect(panel.single.sessionId, sessionId);
+    expect(panel.single.item.text, 'mandar o resumo');
+
+    final found = await service.search(userId: userId, query: 'escopo');
+    expect(found.single.sessionId, sessionId);
+    expect(await service.search(userId: userId, query: 'assunto'), hasLength(1));
+
+    await service.editItem(
+      userId: userId,
+      sessionId: sessionId,
+      itemId: meeting.items.first.id,
+      text: 'fechar depois',
+      assignee: reportAssigneeUnknown,
+      due: reportDueUnknown,
+      at: '2026-11-02T15:05:00',
+    );
+    await service.editItem(
+      userId: userId,
+      sessionId: sessionId,
+      itemId: meeting.items.first.id,
+      text: 'fechar depois',
+      assignee: 'Ana',
+      due: reportDueUnknown,
+      at: '2026-11-02T15:06:00',
+    );
+    final changes = await service.latestTextChanges(userId: userId);
+    final change = changes[reportHitKey(sessionId, meeting.items.first.id)];
+    expect(change, isNotNull);
+    expect(change!.before, 'fechar o escopo');
+    expect(change.after, 'fechar depois');
+
+    final revisions = File(
+      p.join(
+        FileSystemService.instance.getSessionReportsPath(userId),
+        sessionId,
+        'revisions.json',
+      ),
+    );
+    expect(await revisions.exists(), isTrue);
+    await service.deleteDerivatives(userId: userId, sessionId: sessionId);
+    expect(await revisions.exists(), isFalse);
     expect(await original.readAsBytes(), bytes);
   });
 }

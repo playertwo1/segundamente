@@ -7,8 +7,10 @@ import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
 import 'package:memex/data/repositories/memex_router.dart';
+import 'package:memex/ui/chat/view_models/follow_ups_viewmodel.dart';
 import 'package:memex/ui/chat/view_models/session_report_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/agent_chat_dialog.dart';
+import 'package:memex/ui/chat/widgets/follow_ups_screen.dart';
 import 'package:memex/ui/chat/widgets/session_report_screen.dart';
 import 'package:memex/ui/chat/widgets/transcript_file_import_button.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
@@ -105,6 +107,16 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
     }
   }
 
+  void _openFollowUps() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => FollowUpsScreen(
+          viewModel: FollowUpsViewModel(router: MemexRouter()),
+        ),
+      ),
+    );
+  }
+
   void _openReport(String sessionId) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -161,6 +173,12 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
             centerTitle: true,
             leading: const AppBackButton(),
             actions: [
+              IconButton(
+                key: const ValueKey('open_follow_ups'),
+                tooltip: UserStorage.l10n.openFollowUps,
+                icon: const Icon(Icons.checklist_outlined),
+                onPressed: _openFollowUps,
+              ),
               TranscriptFileImportButton(
                 onStored: () => widget.viewModel.loadSessions(),
               ),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/file_system_service.dart';
+import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/transcript_import.dart';
 import 'package:memex/utils/logger.dart';
@@ -85,6 +86,7 @@ class SessionReportService {
     required String text,
     required String assignee,
     required String due,
+    String? at,
   }) async {
     final current = await _required(userId, sessionId);
     final next = editReportItem(
@@ -95,6 +97,13 @@ class SessionReportService {
       due: due,
     );
     await _write(_reportFile(userId, sessionId), next);
+    await _appendRevisions(
+      userId: userId,
+      sessionId: sessionId,
+      before: current,
+      after: next,
+      at: at ?? DateTime.now().toIso8601String(),
+    );
     return next;
   }
 
@@ -103,6 +112,7 @@ class SessionReportService {
     required String sessionId,
     required String itemId,
     required ReportItemStatus status,
+    String? at,
   }) async {
     final current = await _required(userId, sessionId);
     final next = setReportItemStatus(
@@ -111,7 +121,45 @@ class SessionReportService {
       status: status,
     );
     await _write(_reportFile(userId, sessionId), next);
+    await _appendRevisions(
+      userId: userId,
+      sessionId: sessionId,
+      before: current,
+      after: next,
+      at: at ?? DateTime.now().toIso8601String(),
+    );
     return next;
+  }
+
+  Future<List<ReportHit>> search({
+    required String userId,
+    required String query,
+  }) async {
+    return searchReports(await _loadAll(userId), query);
+  }
+
+  Future<List<ReportHit>> approvedFollowUps({
+    required String userId,
+  }) async {
+    return approvedFollowUpHits(await _loadAll(userId));
+  }
+
+  Future<Map<String, ReportRevision>> latestTextChanges({
+    required String userId,
+  }) async {
+    final reports = await _loadAll(userId);
+    final changes = <String, ReportRevision>{};
+    for (final report in reports) {
+      final history = await _readRevisions(
+        _revisionsFile(userId, report.sessionId),
+      );
+      for (final item in report.items) {
+        final change = latestTextChange(history, item.id);
+        if (change == null) continue;
+        changes[reportHitKey(report.sessionId, item.id)] = change;
+      }
+    }
+    return changes;
   }
 
   Future<void> deleteDerivatives({
@@ -135,6 +183,74 @@ class SessionReportService {
         'report.json',
       ),
     );
+  }
+
+  File _revisionsFile(String userId, String sessionId) {
+    return File(
+      p.join(
+        _files.getSessionReportsPath(userId),
+        sessionId,
+        'revisions.json',
+      ),
+    );
+  }
+
+  Future<void> _appendRevisions({
+    required String userId,
+    required String sessionId,
+    required SessionReport before,
+    required SessionReport after,
+    required String at,
+  }) async {
+    final previous = {
+      for (final item in before.items) item.id: item,
+    };
+    final added = <ReportRevision>[];
+    for (final item in after.items) {
+      final old = previous[item.id];
+      if (old == null) continue;
+      added.addAll(
+        revisionsForChange(before: old, after: item, at: at),
+      );
+    }
+    if (added.isEmpty) return;
+    final file = _revisionsFile(userId, sessionId);
+    final history = await _readRevisions(file);
+    await file.parent.create(recursive: true);
+    await file.writeAsString(
+      const JsonEncoder.withIndent('  ').convert(
+        revisionsToJson([...history, ...added]),
+      ),
+      flush: true,
+    );
+  }
+
+  Future<List<ReportRevision>> _readRevisions(File file) async {
+    if (!await file.exists()) return const [];
+    final raw = jsonDecode(await file.readAsString());
+    if (raw is! Map) throw FormatException('revisions are not an object');
+    return revisionsFromJson(raw.cast<String, dynamic>());
+  }
+
+  Future<List<SessionReport>> _loadAll(String userId) async {
+    final root = Directory(_files.getSessionReportsPath(userId));
+    if (!await root.exists()) return const [];
+    final dirs = <Directory>[];
+    await for (final entity in root.list()) {
+      if (entity is Directory) dirs.add(entity);
+    }
+    dirs.sort(
+      (a, b) => p.basename(a.path).compareTo(p.basename(b.path)),
+    );
+    final reports = <SessionReport>[];
+    for (final dir in dirs) {
+      final report = await load(
+        userId: userId,
+        sessionId: p.basename(dir.path),
+      );
+      if (report != null) reports.add(report);
+    }
+    return reports;
   }
 
   Future<SessionReport> _required(String userId, String sessionId) async {

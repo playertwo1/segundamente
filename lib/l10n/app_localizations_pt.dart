@@ -3502,4 +3502,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get reportExportDocx => 'DOCX';
+
+  @override
+  String get followUpsTitle => 'Encaminhamentos';
+
+  @override
+  String get openFollowUps => 'Encaminhamentos';
+
+  @override
+  String get followUpsEmpty => 'Nenhum encaminhamento aprovado';
+
+  @override
+  String get followUpsSearchHint => 'Buscar nos relatórios';
 }

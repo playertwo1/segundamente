@@ -1603,5 +1603,9 @@
   "reportSectionQuestion": "Questions",
   "reportExportMarkdown": "Markdown",
   "reportExportPdf": "PDF",
-  "reportExportDocx": "DOCX"
+  "reportExportDocx": "DOCX",
+  "followUpsTitle": "Follow-ups",
+  "openFollowUps": "Follow-ups",
+  "followUpsEmpty": "No approved follow-ups",
+  "followUpsSearchHint": "Search reports"
 }

@@ -1596,5 +1596,9 @@
   "reportSectionQuestion": "Dúvidas",
   "reportExportMarkdown": "Markdown",
   "reportExportPdf": "PDF",
-  "reportExportDocx": "DOCX"
+  "reportExportDocx": "DOCX",
+  "followUpsTitle": "Encaminhamentos",
+  "openFollowUps": "Encaminhamentos",
+  "followUpsEmpty": "Nenhum encaminhamento aprovado",
+  "followUpsSearchHint": "Buscar nos relatórios"
 }

@@ -1596,5 +1596,9 @@
   "reportSectionQuestion": "疑問",
   "reportExportMarkdown": "Markdown",
   "reportExportPdf": "PDF",
-  "reportExportDocx": "DOCX"
+  "reportExportDocx": "DOCX",
+  "followUpsTitle": "後續",
+  "openFollowUps": "後續",
+  "followUpsEmpty": "沒有已確認的後續",
+  "followUpsSearchHint": "搜尋報告"
 }

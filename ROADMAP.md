@@ -21,7 +21,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F3 — Extração e relatório | Relatório por sessão com evidências e confirmação | IN_PROGRESS | Critério 6 abaixo |
 | F4 — Exportação | Mesmo relatório em PDF, DOCX e MD | IN_PROGRESS | Critério 5 abaixo |
 | F5 — Fechamento do MVP | Testes no S25, privacidade, desempenho, visual | IN_PROGRESS | Critério 7 abaixo + `docs/AUDIT.md` |
-| F6 — Memória longitudinal | Busca semântica, tópicos, "o que mudou?" | BLOCKED | MVP concluído |
+| F6 — Memória longitudinal | Busca semântica, tópicos, "o que mudou?" | IN_PROGRESS | MVP concluído |
 | F7 — Voz contínua e ponte CLI | Full duplex; Claude Code/Codex CLI no PC | BLOCKED | MVP concluído + termos verificados |
 | F8 — NotebookLM | Via Drive/Docs, depois conectores | BLOCKED | MVP e exportação estáveis; consentimento por envio |
 
@@ -104,8 +104,17 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 6. Editar/confirmar decisões, ideias, tarefas e follow-ups sem perder o original; histórico persiste ao trocar de modelo.
 7. Nada é enviado sem escolha explícita; nada vira tarefa/decisão sem confirmação.
 
+## F6 — Memória longitudinal
+| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
+|---|---|---|---|---|---|
+| F6-01 | Busca entre sessões | P0 | F5 | IN_PROGRESS | Busca semântica com evidência; texto local não substitui |
+| F6-02 | Painel de encaminhamentos aprovados | P0 | F3 | IN_PROGRESS | Lista conferida no aparelho |
+| F6-03 | O que mudou e por quê, com histórico de versões | P0 | F3 | IN_PROGRESS | Diferença e motivo registrados |
+| F6-04 | Tópicos e projetos | P1 | F6-01 | NOT_RUN | Entidade própria, ligada às sessões |
+
+**Portão F6:** busca semântica entre sessões, tópicos, "o que mudou e por quê?", painel de encaminhamentos e histórico de versões. Aberto em 2026-11-02 (D-010) com os portões da F0 à F5 ainda abertos. A busca feita é texto local. Semântica, tópicos e o "por quê" continuam `NOT_RUN`. O MVP não está pronto.
+
 ## Fases futuras (bloqueadas até o MVP)
-- **F6:** busca semântica entre sessões, tópicos/projetos, "o que mudou e por quê?", painel de follow-ups, histórico de versões.
 - **F7:** voz contínua full duplex; ponte opcional com Claude Code/Codex CLI oficiais no PC (única via aceita para assinatura Claude); modelos locais (Ollama).
 - **F8:** NotebookLM — Via A (exportar para Google Docs), depois B (conector comunitário, opt-in), C (API empresarial só se justificar).
 
@@ -117,3 +126,4 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 
 ## Mudanças de escopo
 - 2026-11-02 — escopo do MVP, fases e Claude por chave de API: ver [docs/DECISIONS.md](docs/DECISIONS.md).
+- 2026-11-02 — a F6 começa com o MVP aberto: D-010. A F7 e a F8 continuam bloqueadas.
