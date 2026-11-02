@@ -5,7 +5,7 @@
 O dono pediu para usar só o emulador por enquanto (D-009). O Galaxy S25 Ultra segue `NOT_RUN`.
 
 ## O que existe hoje (confirmado)
-- Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0), `main` ainda com o código do Memex (só docs foram adicionados).
+- Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). `origin/main` está em `22901fe`, 3 commits à frente do upstream `6143923`.
 - No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`) e Gemini (`gemini_auth_service.dart`); Claude só por chave de API (`lib/domain/models/llm_config.dart`).
 - Planejamento: `PROJECT.md`, `ROADMAP.md`, `docs/DECISIONS.md`, `docs/questionario/`.
 
@@ -15,7 +15,10 @@ O dono pediu para usar só o emulador por enquanto (D-009). O Galaxy S25 Ultra s
 - `flutter analyze`: 161 issues, 0 error, 0 warning (só `info` de estilo). O Flutter devolve exit code 1 por causa dos infos.
 - `flutter test`: 1011 passaram, 7 ignorados, **30 falharam** (13 em `backup_service_test`, 4 em `file_operation_service_grep_test`, 3 em `share_intent_handler_test`, o resto isolado). Causas vistas: `PathAccessException` errno 32 (arquivo em uso no Windows) em 10 casos, `UNIQUE constraint failed` em 2, `MissingPluginException(path_provider)` em 1; o restante não foi investigado. O código era idêntico ao upstream quando esses testes rodaram, então são falhas da linha de base neste ambiente. Neste turno só rodei `flutter test test/l10n/welcome_name_test.dart`: 1 passou.
 - F0-03 `DONE` no emulador. `aapt dump badging` do APK novo: `package: name='app.segundamente.dev'` e `application-label:'Segunda Mente Dev'`. `adb install` → `Success`. `pm path` mostrou os dois pacotes ao mesmo tempo: `com.memexlab.memex.dev` e `app.segundamente.dev`. O app novo abriu em "Welcome to Segunda Mente" (Maestro, `emulator-5554`). Assinatura: certificado de debug `CN=Android Debug`; nenhum `.jks`, `.keystore` ou `key-*.properties` versionado. Ícone provisório: adaptive icon em `mipmap-anydpi-v26/launcher_icon.xml`.
-- **Ainda `NOT_RUN`:** execução no **S25 Ultra**; F0-04 a F0-06; logins OAuth.
+- F0-04 `DONE`: 288 pacotes do `pubspec.lock` classificados. Diretas em MIT, BSD-3-Clause, Apache-2.0 ou na GPL-3.0 do próprio app. Três transitivas de desktop (`dbus`, `geoclue`, `gsettings`) são MPL-2.0. Nenhuma GPL-2.0-only nem AGPL no APK. Tabela em `docs/F0-04-licencas.md`.
+- F0-05 `DONE`: nota em `docs/F0-05-modulos.md`. Voz do MVP decidida (D-007): transcrição pt-BR pela nuvem, no modelo configurado; TTS do Android fica para a F2; SenseVoice não cobre português. OAuth continua `NOT_RUN`.
+- F0-06 `DONE`: `git fetch upstream` e `git merge upstream/main` → `Already up to date`. Contagem `HEAD...upstream/main` = `3	0`. Procedimento em `docs/F0-06-upstream.md`.
+- **Ainda `NOT_RUN`:** execução no **S25 Ultra**; logins OAuth.
 
 ## Toolchain (ambiente local, fora do repo)
 - Flutter em `C:\Users\notefael\tools\flutter`, fora do PATH: usar `C:\Users\notefael\tools\flutter\bin\flutter`. `flutter config --jdk-dir` aponta para `C:\Users\notefael\AppData\Local\Programs\jdk-17` (o Java 25 padrão quebra o Gradle 8.14).
@@ -23,13 +26,13 @@ O dono pediu para usar só o emulador por enquanto (D-009). O Galaxy S25 Ultra s
 - O Gradle instalou sozinho o Android SDK Platform 34. As demais licenças do SDK seguem não aceitas.
 
 ## Última atividade
-- 2026-11-02: o dono mandou seguir só no emulador. F0-02 reconfirmada nele. F0-03 aplicada: nome "Segunda Mente", `applicationId` `app.segundamente*`, ícone provisório, APK debug instalado ao lado do pacote antigo.
+- 2026-11-02: F0-04, F0-05 e F0-06 escritas. Licenças compatíveis com GPL-3.0 no APK. Voz do MVP definida. Merge do upstream executado e já estava em dia.
 
 ## Próxima ação
-- F0-04: auditoria de licenças GPL-3.0 das dependências, em `docs/`. Depois F0-05 (módulos, incluindo a decisão de voz) e F0-06 (rotina de upstream). O S25 Ultra entra quando o dono conectar o aparelho. Os 30 testes falhos da linha de base continuam baseline, salvo se atrapalharem.
+- O único item aberto da F0 é o S25 Ultra (`NOT_RUN`, D-009). A fase não fecha sem essa execução. F1 espera o portão. Os 30 testes falhos da linha de base continuam baseline.
 
 ## Bloqueios e aprovações humanas
-- S25 Ultra adiado pelo dono (D-009). Commit e push desta identidade esperam aprovação do dono.
+- S25 Ultra adiado pelo dono (D-009). Commit e push das notas F0-04 a F0-06 esperam aprovação do dono.
 
 ## Divergências entre roadmap e implementação
 - Nenhuma.

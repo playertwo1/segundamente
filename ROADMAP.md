@@ -31,9 +31,9 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F0-01 | Configurar `upstream=memex-lab/memex`; branch de trabalho; registrar commit base do Memex | P0 | — | DONE | `git remote -v` e hash base em STATE.md |
 | F0-02 | Build limpo e execução `flutter run --flavor globalDev` no emulador; S25 adiado (D-009) | P0 | F0-01 | DONE | App abre no emulador; `flutter analyze` e `flutter test` rodados. S25 Ultra: `NOT_RUN` |
 | F0-03 | Identidade própria: nome "Segunda Mente", `applicationId`, assinatura/keystore (fora do repo), ícone provisório | P0 | F0-02 | DONE | APK `app.segundamente.dev` instala ao lado de `com.memexlab.memex.dev` |
-| F0-04 | Auditoria de licença: GPL-3.0, dependências, atribuições obrigatórias | P1 | F0-01 | READY | Tabela de dependências + licenças em `docs/` |
-| F0-05 | Auditoria de módulos reutilizáveis: provedores/LLM, OAuth, voz (STT/TTS), anexos, banco (Drift), exportação | P1 | F0-02 | BACKLOG | Nota em `docs/` dizendo o que existe, o que falta e onde mexer; decide a voz (STT/TTS) |
-| F0-06 | Rotina de atualização do upstream (merge/rebase seguro) | P2 | F0-01 | BACKLOG | Procedimento documentado e testado em uma atualização real |
+| F0-04 | Auditoria de licença: GPL-3.0, dependências, atribuições obrigatórias | P1 | F0-01 | DONE | Tabela de dependências + licenças em `docs/F0-04-licencas.md` |
+| F0-05 | Auditoria de módulos reutilizáveis: provedores/LLM, OAuth, voz (STT/TTS), anexos, banco (Drift), exportação | P1 | F0-02 | DONE | Nota em `docs/F0-05-modulos.md`; voz decidida em D-007 |
+| F0-06 | Rotina de atualização do upstream (merge/rebase seguro) | P2 | F0-01 | DONE | Procedimento em `docs/F0-06-upstream.md`, merge real executado |
 
 **Portão F0:** F0-01 a F0-05 `DONE`. A execução no S25 Ultra está adiada (D-009): é `NOT_RUN`, não `PASS`, e não bloqueia F0-04 a F0-06 no emulador. A fase só fecha depois dessa execução, ou de uma decisão nova. Se build, licença ou teste no aparelho de prova falharem, parar e registrar decisão em `docs/DECISIONS.md` antes de seguir.
 
