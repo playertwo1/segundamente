@@ -1,11 +1,11 @@
 # STATE — ponto de retomada
 
-**Atualizado:** 2026-11-02 · **Fase ativa:** F4 — Exportação · **Estado:** IN_PROGRESS
+**Atualizado:** 2026-11-02 · **Fase ativa:** F5 — Fechamento do MVP · **Estado:** IN_PROGRESS
 
-A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua `IN_PROGRESS`: faltam resposta real de dois provedores e o login OAuth. A F2 continua `IN_PROGRESS`: faltam o TXT real de ~50 min, o S25 e a voz. A F3 continua `IN_PROGRESS`: faltam a amostra de 53 min e uma resposta real de modelo. O dono autorizou abrir a F4 em 2026-11-02 com esses portões abertos. O portão da F4 não fecha: o PDF não foi aberto no aparelho, o DOCX não foi aberto no Word e o compartilhamento Android está `NOT_RUN`.
+A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua `IN_PROGRESS`: faltam resposta real de dois provedores e o login OAuth. A F2 continua `IN_PROGRESS`: faltam o TXT real de ~50 min, o S25 e a voz. A F3 continua `IN_PROGRESS`: faltam a amostra de 53 min e uma resposta real de modelo. A F4 continua `IN_PROGRESS`: faltam abrir o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. O dono autorizou abrir a F5 em 2026-11-02 com esses portões abertos. O portão da F5 não fecha: `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto.
 
 ## O que existe hoje (confirmado)
-- Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). `origin/main` está em `db7bc1d`, sobre a F2 `e8b30b1` e a F1 `790e8b8`. Esse commit publica o botão de TXT e o relatório da F3. Este commit é a F4. O portão da F3 continua aberto.
+- Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). `origin/main` está em `db7bc1d`, sobre a F2 `e8b30b1` e a F1 `790e8b8`. A F4 está no commit local `969d177`, ainda sem push. Este commit é a F5. Os portões da F3, da F4 e da F5 continuam abertos.
 - No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`) e Gemini (`gemini_auth_service.dart`); Claude só por chave de API (`lib/domain/models/llm_config.dart`).
 - Planejamento: `PROJECT.md`, `ROADMAP.md`, `docs/DECISIONS.md`, `docs/questionario/`.
 
@@ -75,7 +75,7 @@ A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua 
 - Publicada no commit `db7bc1d` (`feat(report): relatório local e escolha de TXT`), enviado a `origin/main`. Não emendar `e8b30b1` nem `db7bc1d`.
 
 ## Evidência da F4 (2026-11-02)
-- Aberta por pedido do dono, com a F0, a F1, a F2 e a F3 ainda abertas. A fase fica `IN_PROGRESS`. Este é o commit da F4. O portão não fecha.
+- Aberta por pedido do dono, com a F0, a F1, a F2 e a F3 ainda abertas. A fase fica `IN_PROGRESS`. Publicada no commit local `969d177` (`feat(export): relatório em Markdown, PDF e DOCX`). Esse commit não foi enviado. O portão não fecha.
 - F4-01 `DONE` no fixture. O Markdown traz título `Relatório de reunião`, data `2026-11-02 15:04`, seções `Decisões` e `Tarefas`, fonte e relógio. Item descartado fica de fora do arquivo completo.
 - F4-02 `IN_PROGRESS`. O PDF começa com `%PDF-1.4`, usa WinAnsi e contém `Decisões`, `não identificado`, `Relógio` e `ação`. Um relatório longo ocupa duas páginas. Aberto no aparelho: `NOT_RUN`. Um caractere fora do Latin-1 vira `?` só no PDF.
 - F4-03 `IN_PROGRESS`. O DOCX guarda o mesmo texto em `word/document.xml`. Aberto no Word ou no Docs: `NOT_RUN`.
@@ -87,20 +87,33 @@ A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua 
 - `flutter analyze` e a suíte inteira não foram reexecutados.
 - Este `flutter test` reescreveu `analysis_options.yaml` de novo. Revertido com `git checkout`. `android/gradle.properties` não mudou.
 
+## Evidência da F5 (2026-11-02)
+- Aberta por pedido do dono, com a F0, a F1, a F2, a F3 e a F4 ainda abertas. A fase fica `IN_PROGRESS`. Este é o commit da F5. O portão não fecha. A F6 não está neste commit.
+- F5-01 `IN_PROGRESS`. Checklist dos 7 critérios em `docs/F5-01-checklist.md`. Cada critério no S25 Ultra está `NOT_RUN`.
+- F5-02 `IN_PROGRESS`. Nota em `docs/F5-02-privacidade.md`. O log de sucesso da OpenAI não imprime mais access token, refresh token nem ID token. A falha dedicada da troca de código, na OpenAI e no Gemini, registra só o status HTTP. O `catch` ainda grava a exceção. O teste `openai_auth_log_test.dart` recusa `${tokenResponse.body}` e `${response.body}` e ainda exige `jsonDecode(tokenResponse.body)`. Tokens e `apiKey` continuam em `SharedPreferences`. Uma passagem sem histórico corrigiu a frase que punha a `apiKey` do Gemini no cabeçalho: nessa lista de modelos a chave vai na query `key=`.
+- F5-03 `IN_PROGRESS`. Nota em `docs/F5-03-medicoes.md`. Fixture sintético de 1500 segmentos (50 min, um a cada 2 s): parse 15 ms. Exportação de 100 itens nos três formatos: 25 ms. Não é o TXT do Samsung. A lista de histórico e o aparelho estão `NOT_RUN`. Nenhum código de desempenho foi mudado.
+- F5-04 `NOT_RUN`. Sem capturas e sem mudança visual.
+- F5-05 `IN_PROGRESS`. `docs/reviews/F5.md` termina em `AUDIT RESULT: FAIL` por causa do S25 e do armazenamento em claro. Atribuições de licença continuam em `docs/F0-04-licencas.md`. Não há `LicensePage` em `lib/`.
+- Comando: `flutter test --reporter expanded` nos dois arquivos abaixo. Saída: `F5-03 parse_ms=15 segments=1500`, `F5-03 export_ms=25 items=100`, `00:00 +3: All tests passed!`
+  - `test/data/services/openai_auth_log_test.dart`
+  - `test/domain/models/f5_measurements_test.dart`
+- `flutter analyze` e a suíte inteira não foram reexecutados.
+- Este `flutter test` reescreveu `analysis_options.yaml` de novo. Revertido com `git checkout`. `android/gradle.properties` não mudou.
+
 ## Toolchain (ambiente local, fora do repo)
 - Flutter em `C:\Users\notefael\tools\flutter`, fora do PATH: usar `C:\Users\notefael\tools\flutter\bin\flutter`. `flutter config --jdk-dir` aponta para `C:\Users\notefael\AppData\Local\Programs\jdk-17` (o Java 25 padrão quebra o Gradle 8.14).
 - O Flutter 3.47 reescreve `analysis_options.yaml` e `android/gradle.properties` ao rodar `pub get`/build; reverter com `git checkout` antes de commitar. Usar `flutter pub get --enforce-lockfile`.
 - O Gradle instalou sozinho o Android SDK Platform 34. As demais licenças do SDK seguem não aceitas.
 
 ## Última atividade
-- 2026-11-02: `db7bc1d` enviado a `origin/main`. Este commit é a F4: Markdown conferido; PDF e DOCX com o mesmo texto no fixture; seleção de itens. Sem abertura no aparelho, sem Word e sem a folha de compartilhamento.
+- 2026-11-02: `db7bc1d` está em `origin/main`. `969d177` é a F4, local. Este commit é a F5: log sem valor de token, medição sintética (parse 15 ms, exportação 25 ms) e auditoria `FAIL`.
 
 ## Próxima ação
-- O portão da F4 continua aberto até o mesmo relatório ser conferido em PDF no aparelho, DOCX no Word e Markdown. O dono aprovou, em seguida, o commit da F5. Esse commit ainda não está aqui. A F3 continua aberta até a amostra de 53 min e uma saída real de modelo. A F2 continua aberta até os critérios 1, 2 e 3 no S25; F2-03 espera um TXT real de ~50 min; F2-02 e F2-05 estão `NOT_RUN`. A F1 continua aberta por uma resposta real de OpenAI e de Gemini. A F0 continua aberta pelo S25 (D-009). Não começar a F6.
+- O portão da F5 continua aberto. O push de `969d177` e deste commit espera aprovação. O dono pediu a F6 depois deste commit. A F6 não está aqui. A F4 continua aberta até o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F3 continua aberta até a amostra de 53 min e uma saída real de modelo. A F2 continua aberta até os critérios 1, 2 e 3 no S25; F2-03 espera um TXT real de ~50 min; F2-02 e F2-05 estão `NOT_RUN`. A F1 continua aberta por uma resposta real de OpenAI e de Gemini. A F0 continua aberta pelo S25 (D-009).
 
 ## Bloqueios e aprovações humanas
-- S25 Ultra adiado pelo dono (D-009). Sem chave de API e sem endpoint local neste ambiente. Sem TXT real de ~50 min e sem amostra de 53 min. O commit e o push de `e8b30b1` e de `db7bc1d` já foram feitos. O dono aprovou este commit da F4 e o commit seguinte da F5. O push da F4 e da F5 espera um sim. Não emendar `e8b30b1` nem `db7bc1d`.
+- S25 Ultra adiado pelo dono (D-009). Sem chave de API e sem endpoint local neste ambiente. Sem TXT real de ~50 min e sem amostra de 53 min. O commit e o push de `e8b30b1` e de `db7bc1d` já foram feitos. O dono aprovou `969d177` e este commit da F5. O push desses dois espera um sim. Não emendar `e8b30b1`, `db7bc1d` nem `969d177`.
 
 ## Divergências entre roadmap e implementação
-- A F1 começou com a F0 ainda aberta, por pedido do dono. A F2 começou com a F0 e o portão da F1 ainda abertos, também por pedido do dono. A F3 começou com a F0, a F1 e a F2 ainda abertas, pelo mesmo pedido. A F4 começou com esses portões e o da F3 ainda abertos. O S25 segue `NOT_RUN` e não foi tratado como `PASS`.
+- A F1 começou com a F0 ainda aberta, por pedido do dono. A F2 começou com a F0 e o portão da F1 ainda abertos, também por pedido do dono. A F3 começou com a F0, a F1 e a F2 ainda abertas, pelo mesmo pedido. A F4 começou com esses portões e o da F3 ainda abertos. A F5 começou com esses portões e o da F4 ainda abertos. O S25 segue `NOT_RUN` e não foi tratado como `PASS`.
 - O esquema da F3 não tem um tipo Topic separado. Os itens e as seções do relatório cobrem o extrator. O relatório é arquivo, não linha só no SQLite.

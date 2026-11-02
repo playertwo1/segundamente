@@ -190,7 +190,9 @@ class OpenAiAuthService {
       );
 
       if (tokenResponse.statusCode != 200) {
-        _logger.severe('Token exchange failed: ${tokenResponse.body}');
+        _logger.severe(
+          'Token exchange failed: ${tokenResponse.statusCode}',
+        );
         throw Exception('Failed to get token: ${tokenResponse.statusCode}');
       }
 
@@ -255,15 +257,7 @@ class OpenAiAuthService {
         accountId = 'default_account'; // Don't crash, just use a placeholder
       }
 
-      // 8. Securely Store Tokens
-      _logger.info('--- OpenAI Auth Success Info ---');
-      _logger.info('Account ID: $accountId');
-      _logger.info('Access Token: $accessToken');
-      _logger.info('Refresh Token: $refreshToken');
-      _logger.info('ID Token: $idToken');
-      _logger.info(
-          'Expires At: ${DateTime.fromMillisecondsSinceEpoch(expiresAt)}');
-      _logger.info('--------------------------------');
+      _logger.info('OpenAI auth tokens stored');
 
       await _saveTokens(
         accessToken: accessToken,

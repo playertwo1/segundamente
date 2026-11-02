@@ -186,8 +186,10 @@ class GeminiAuthService {
       );
 
       if (tokenResponse.statusCode != 200) {
-        throw Exception(
-            'Token exchange failed: ${tokenResponse.statusCode} ${tokenResponse.body}');
+        _logger.severe(
+          'Token exchange failed: ${tokenResponse.statusCode}',
+        );
+        throw Exception('Failed to get token: ${tokenResponse.statusCode}');
       }
 
       final data = jsonDecode(tokenResponse.body) as Map<String, dynamic>;

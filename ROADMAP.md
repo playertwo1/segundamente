@@ -20,7 +20,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F2 — Chat, voz e importação | Conversar por texto/voz; importar TXT Samsung e fotos | IN_PROGRESS | Critérios 1, 2 e 3 abaixo |
 | F3 — Extração e relatório | Relatório por sessão com evidências e confirmação | IN_PROGRESS | Critério 6 abaixo |
 | F4 — Exportação | Mesmo relatório em PDF, DOCX e MD | IN_PROGRESS | Critério 5 abaixo |
-| F5 — Fechamento do MVP | Testes no S25, privacidade, desempenho, visual | BACKLOG | Critério 7 abaixo + `docs/AUDIT.md` |
+| F5 — Fechamento do MVP | Testes no S25, privacidade, desempenho, visual | IN_PROGRESS | Critério 7 abaixo + `docs/AUDIT.md` |
 | F6 — Memória longitudinal | Busca semântica, tópicos, "o que mudou?" | BLOCKED | MVP concluído |
 | F7 — Voz contínua e ponte CLI | Full duplex; Claude Code/Codex CLI no PC | BLOCKED | MVP concluído + termos verificados |
 | F8 — NotebookLM | Via Drive/Docs, depois conectores | BLOCKED | MVP e exportação estáveis; consentimento por envio |
@@ -87,13 +87,13 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 ## F5 — Fechamento do MVP
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
 |---|---|---|---|---|---|
-| F5-01 | Teste ponta a ponta dos 7 critérios no S25 Ultra | P0 | F4 | BACKLOG | Checklist preenchido com evidência |
-| F5-02 | Revisão de privacidade: chaves e tokens protegidos, sem segredo em log, política de envio compreensível | P0 | F4 | BACKLOG | Revisão registrada |
-| F5-03 | Desempenho (sessão longa, lista de histórico) e correções | P1 | F4 | BACKLOG | Medições registradas |
-| F5-04 | Refinamento visual (Material 3, uso com uma mão) | P2 | F4 | BACKLOG | Capturas antes/depois |
-| F5-05 | Auditoria final (`docs/AUDIT.md`) e atribuições GPL | P0 | F5-01 | BACKLOG | Relatório de auditoria sem item crítico aberto |
+| F5-01 | Teste ponta a ponta dos 7 critérios no S25 Ultra | P0 | F4 | IN_PROGRESS | Checklist preenchido com evidência |
+| F5-02 | Revisão de privacidade: chaves e tokens protegidos, sem segredo em log, política de envio compreensível | P0 | F4 | IN_PROGRESS | Revisão registrada |
+| F5-03 | Desempenho (sessão longa, lista de histórico) e correções | P1 | F4 | IN_PROGRESS | Medições registradas |
+| F5-04 | Refinamento visual (Material 3, uso com uma mão) | P2 | F4 | NOT_RUN | Capturas antes/depois |
+| F5-05 | Auditoria final (`docs/AUDIT.md`) e atribuições GPL | P0 | F5-01 | IN_PROGRESS | Relatório de auditoria sem item crítico aberto |
 
-**Portão F5 = MVP pronto.**
+**Portão F5 = MVP pronto.** Aberto em 2026-11-02 com os portões da F0, da F1, da F2, da F3 e da F4 ainda abertos. `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto.
 
 ## Critérios de aceite do MVP (no Galaxy S25 Ultra, sem NotebookLM, PC ligado, Hermes ou serviço pago próprio)
 1. Conversar por texto e falar com o app com resposta opcional em áudio.
