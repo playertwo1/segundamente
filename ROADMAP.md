@@ -15,7 +15,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 ## Fases
 | Fase | Resultado verificável | Estado | Portão de saída |
 |---|---|---|---|
-| F0 — Fundação | Fork roda no S25 Ultra, licenças e módulos auditados, identidade própria | READY | Build `globalDev` instalado no S25 + auditoria registrada; falhou → reavaliar a base |
+| F0 — Fundação | Fork roda no S25 Ultra, licenças e módulos auditados, identidade própria | IN_PROGRESS | Build `globalDev` instalado no S25 + auditoria registrada; falhou → reavaliar a base |
 | F1 — Registro de modelos | Escolher e testar modelos sem lista estática | BACKLOG | Critérios 4 e (parte do) 6 abaixo |
 | F2 — Chat, voz e importação | Conversar por texto/voz; importar TXT Samsung e fotos | BACKLOG | Critérios 1, 2 e 3 abaixo |
 | F3 — Extração e relatório | Relatório por sessão com evidências e confirmação | BACKLOG | Critério 6 abaixo |
@@ -28,8 +28,8 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 ## F0 — Fundação (ativa)
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
 |---|---|---|---|---|---|
-| F0-01 | Configurar `upstream=memex-lab/memex`; branch de trabalho; registrar commit base do Memex | P0 | — | READY | `git remote -v` e hash base em STATE.md |
-| F0-02 | Build limpo e execução `flutter run --flavor globalDev` no S25 Ultra | P0 | F0-01 | READY | App abre no aparelho; `flutter analyze` e `flutter test` rodados (resultado real) |
+| F0-01 | Configurar `upstream=memex-lab/memex`; branch de trabalho; registrar commit base do Memex | P0 | — | DONE | `git remote -v` e hash base em STATE.md |
+| F0-02 | Build limpo e execução `flutter run --flavor globalDev` no S25 Ultra | P0 | F0-01 | IN_PROGRESS | App abre no aparelho; `flutter analyze` e `flutter test` rodados (resultado real) |
 | F0-03 | Identidade própria: nome "Segunda Mente", `applicationId`, assinatura/keystore (fora do repo), ícone provisório | P0 | F0-02 | BACKLOG | APK instala ao lado do Memex original sem colisão |
 | F0-04 | Auditoria de licença: GPL-3.0, dependências, atribuições obrigatórias | P1 | F0-01 | BACKLOG | Tabela de dependências + licenças em `docs/` |
 | F0-05 | Auditoria de módulos reutilizáveis: provedores/LLM, OAuth, voz (STT/TTS), anexos, banco (Drift), exportação | P1 | F0-02 | BACKLOG | Nota em `docs/` dizendo o que existe, o que falta e onde mexer; decide a voz (STT/TTS) |
