@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/utils/user_storage.dart';
 
 class SessionReportView extends StatefulWidget {
@@ -9,6 +10,7 @@ class SessionReportView extends StatefulWidget {
     required this.onDraft,
     required this.onEdit,
     required this.onSetStatus,
+    this.onExport = _ignoreExport,
     this.errorMessage,
   });
 
@@ -24,7 +26,14 @@ class SessionReportView extends StatefulWidget {
     required String itemId,
     required ReportItemStatus status,
   }) onSetStatus;
+  final Future<void> Function(ReportExportFormat format, Set<String> itemIds)
+      onExport;
   final String? errorMessage;
+
+  static Future<void> _ignoreExport(
+    ReportExportFormat format,
+    Set<String> itemIds,
+  ) async {}
 
   @override
   State<SessionReportView> createState() => _SessionReportViewState();
@@ -33,6 +42,8 @@ class SessionReportView extends StatefulWidget {
 class _SessionReportViewState extends State<SessionReportView> {
   ReportKind _kind = ReportKind.livre;
   var _query = '';
+  var _selectionToken = '';
+  final _selected = <String>{};
   final _customTitle = TextEditingController();
 
   @override
@@ -40,6 +51,7 @@ class _SessionReportViewState extends State<SessionReportView> {
     super.initState();
     final kind = widget.report?.kind;
     if (kind != null) _kind = kind;
+    _syncSelection(widget.report);
   }
 
   @override
@@ -49,6 +61,21 @@ class _SessionReportViewState extends State<SessionReportView> {
     if (next != null && oldWidget.report?.kind != next.kind) {
       _kind = next.kind;
     }
+    _syncSelection(next);
+  }
+
+  void _syncSelection(SessionReport? report) {
+    final token = report?.items.map((item) => item.id).join('|') ?? '';
+    if (token == _selectionToken) return;
+    _selectionToken = token;
+    _selected
+      ..clear()
+      ..addAll(
+        report?.items
+                .where((item) => item.status != ReportItemStatus.discarded)
+                .map((item) => item.id) ??
+            const Iterable<String>.empty(),
+      );
   }
 
   @override
@@ -111,6 +138,17 @@ class _SessionReportViewState extends State<SessionReportView> {
             child: Text(l10n.reportGenerate),
           ),
         ),
+        if (report != null)
+          Wrap(
+            children: [
+              for (final format in ReportExportFormat.values)
+                TextButton(
+                  key: ValueKey('report_export_${format.name}'),
+                  onPressed: () => widget.onExport(format, {..._selected}),
+                  child: Text(_exportLabel(format)),
+                ),
+            ],
+          ),
         if (widget.errorMessage != null)
           Text(
             widget.errorMessage!,
@@ -127,12 +165,34 @@ class _SessionReportViewState extends State<SessionReportView> {
             for (final item in visible.where((item) => item.kind == section))
               _ReportItemTile(
                 item: item,
+                selected: _selected.contains(item.id),
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      _selected.add(item.id);
+                    } else {
+                      _selected.remove(item.id);
+                    }
+                  });
+                },
                 onEdit: widget.onEdit,
                 onSetStatus: widget.onSetStatus,
               ),
           ],
       ],
     );
+  }
+
+  String _exportLabel(ReportExportFormat format) {
+    final l10n = UserStorage.l10n;
+    switch (format) {
+      case ReportExportFormat.markdown:
+        return l10n.reportExportMarkdown;
+      case ReportExportFormat.pdf:
+        return l10n.reportExportPdf;
+      case ReportExportFormat.docx:
+        return l10n.reportExportDocx;
+    }
   }
 
   String _kindLabel(ReportKind kind) {
@@ -177,11 +237,15 @@ class _SessionReportViewState extends State<SessionReportView> {
 class _ReportItemTile extends StatelessWidget {
   const _ReportItemTile({
     required this.item,
+    required this.selected,
+    required this.onSelected,
     required this.onEdit,
     required this.onSetStatus,
   });
 
   final ReportItem item;
+  final bool selected;
+  final ValueChanged<bool> onSelected;
   final Future<void> Function({
     required String itemId,
     required String text,
@@ -206,6 +270,11 @@ class _ReportItemTile extends StatelessWidget {
       children: [
         ListTile(
           key: ValueKey('report_item_${item.id}'),
+          leading: Checkbox(
+            key: ValueKey('report_export_item_${item.id}'),
+            value: selected,
+            onChanged: (value) => onSelected(value ?? false),
+          ),
           title: Text(item.text),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

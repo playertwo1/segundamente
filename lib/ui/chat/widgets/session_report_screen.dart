@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/ui/chat/view_models/session_report_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/session_report_view.dart';
+import 'package:memex/utils/result.dart';
+import 'package:memex/utils/share_service.dart';
 import 'package:memex/utils/user_storage.dart';
 
 class SessionReportScreen extends StatefulWidget {
@@ -40,11 +43,28 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           return SessionReportView(
-              report: viewModel.report,
-              errorMessage: viewModel.errorMessage,
-              onDraft: viewModel.draft,
-              onEdit: viewModel.edit,
-              onSetStatus: viewModel.setStatus,
+            report: viewModel.report,
+            errorMessage: viewModel.errorMessage,
+            onDraft: viewModel.draft,
+            onEdit: viewModel.edit,
+            onSetStatus: viewModel.setStatus,
+            onExport: (format, itemIds) async {
+              final result = await viewModel.export(
+                format: format,
+                itemIds: itemIds,
+              );
+              if (!mounted || result.isError) return;
+              try {
+                await ShareService.shareExistingFile(
+                  context,
+                  path: result.valueOrThrow,
+                  mimeType: reportExportMimeType(format),
+                );
+              } catch (error) {
+                if (!mounted) return;
+                viewModel.showError(error);
+              }
+            },
           );
         },
       ),

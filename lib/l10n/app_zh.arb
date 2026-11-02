@@ -1554,5 +1554,8 @@
   "reportSectionDecision": "决定",
   "reportSectionTask": "任务",
   "reportSectionFollowUp": "跟进",
-  "reportSectionQuestion": "疑问"
+  "reportSectionQuestion": "疑问",
+  "reportExportMarkdown": "Markdown",
+  "reportExportPdf": "PDF",
+  "reportExportDocx": "DOCX"
 }

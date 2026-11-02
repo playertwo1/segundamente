@@ -6,7 +6,9 @@ import 'package:memex/data/repositories/chat.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/file_system_service.dart';
 import 'package:memex/data/services/local_asset_server.dart';
+import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
+import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/data/services/transcript_import_service.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/transcript_import.dart';
@@ -199,5 +201,38 @@ void main() {
       await ChatSessionStorage.instance.sessionExists(userId, sessionId),
       isFalse,
     );
+  });
+
+  test('export writes the three files and delete removes them', () async {
+    final original = await storeTranscript();
+    final bytes = await original.readAsBytes();
+    await service.draft(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+    );
+    final exporter = SessionReportExportService();
+    final exportedAt = DateTime(2026, 11, 2, 15, 4);
+    final written = <String>[];
+    for (final format in ReportExportFormat.values) {
+      final file = await exporter.write(
+        userId: userId,
+        sessionId: sessionId,
+        format: format,
+        exportedAt: exportedAt,
+      );
+      written.add(file.path);
+      expect(await file.exists(), isTrue);
+      expect(file.path, endsWith(reportExportFileName(format)));
+    }
+    expect(await original.readAsBytes(), bytes);
+
+    final removed = await deleteChatSessionEndpoint(sessionId);
+    expect(removed, isTrue);
+    for (final path in written) {
+      expect(await File(path).exists(), isFalse);
+    }
+    expect(await original.readAsBytes(), bytes);
   });
 }

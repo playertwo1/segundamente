@@ -1593,5 +1593,8 @@
   "reportSectionDecision": "Decisões",
   "reportSectionTask": "Tarefas",
   "reportSectionFollowUp": "Encaminhamentos",
-  "reportSectionQuestion": "Dúvidas"
+  "reportSectionQuestion": "Dúvidas",
+  "reportExportMarkdown": "Markdown",
+  "reportExportPdf": "PDF",
+  "reportExportDocx": "DOCX"
 }

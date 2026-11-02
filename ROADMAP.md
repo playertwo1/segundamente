@@ -18,8 +18,8 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F0 — Fundação | Fork roda no emulador (S25 adiado, D-009), licenças e módulos auditados, identidade própria | IN_PROGRESS | Build `globalDev` no emulador + auditoria registrada; o S25 continua `NOT_RUN` e a fase não fecha sem ele |
 | F1 — Registro de modelos | Escolher e testar modelos sem lista estática | IN_PROGRESS | Critérios 4 e (parte do) 6 abaixo |
 | F2 — Chat, voz e importação | Conversar por texto/voz; importar TXT Samsung e fotos | IN_PROGRESS | Critérios 1, 2 e 3 abaixo |
-| F3 — Extração e relatório | Relatório por sessão com evidências e confirmação | BACKLOG | Critério 6 abaixo |
-| F4 — Exportação | Mesmo relatório em PDF, DOCX e MD | BACKLOG | Critério 5 abaixo |
+| F3 — Extração e relatório | Relatório por sessão com evidências e confirmação | IN_PROGRESS | Critério 6 abaixo |
+| F4 — Exportação | Mesmo relatório em PDF, DOCX e MD | IN_PROGRESS | Critério 5 abaixo |
 | F5 — Fechamento do MVP | Testes no S25, privacidade, desempenho, visual | BACKLOG | Critério 7 abaixo + `docs/AUDIT.md` |
 | F6 — Memória longitudinal | Busca semântica, tópicos, "o que mudou?" | BLOCKED | MVP concluído |
 | F7 — Voz contínua e ponte CLI | Full duplex; Claude Code/Codex CLI no PC | BLOCKED | MVP concluído + termos verificados |
@@ -60,7 +60,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F2-06 | Texto digitado/colado como sessão; PDF de entrada se couber | P2 | F2-01 | DONE | Colar texto cria sessão; PDF `NOT_RUN` aceito se cortado |
 | F2-07 | Tela de envio: mostrar o conteúdo que sai do aparelho e pedir confirmação | P0 | F2-03 | DONE | Nada é enviado sem passar por ela |
 
-**Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` na lista de conversas está no working tree e não fecha a F2-03: falta o TXT real de ~50 min.
+**Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` está no commit `db7bc1d`, em `origin/main`, e não fecha a F2-03: falta o TXT real de ~50 min.
 
 ## F3 — Extração e relatório
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
@@ -77,12 +77,12 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 ## F4 — Exportação
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
 |---|---|---|---|---|---|
-| F4-01 | Exportar Markdown (título, data, seções, fontes) | P0 | F3 | BACKLOG | Arquivo gerado e conferido |
-| F4-02 | Exportar PDF com acentuação pt-BR | P0 | F4-01 | BACKLOG | PDF aberto no aparelho, acentos corretos |
-| F4-03 | Exportar DOCX | P0 | F4-01 | BACKLOG | Aberto no Word/Docs, conteúdo igual |
-| F4-04 | Exportar relatório completo ou partes selecionadas; compartilhar/salvar pelo Android; sem serviço externo sem consentimento | P1 | F4-01 | BACKLOG | Compartilhamento testado |
+| F4-01 | Exportar Markdown (título, data, seções, fontes) | P0 | F3 | DONE | Arquivo gerado e conferido |
+| F4-02 | Exportar PDF com acentuação pt-BR | P0 | F4-01 | IN_PROGRESS | PDF aberto no aparelho, acentos corretos |
+| F4-03 | Exportar DOCX | P0 | F4-01 | IN_PROGRESS | Aberto no Word/Docs, conteúdo igual |
+| F4-04 | Exportar relatório completo ou partes selecionadas; compartilhar/salvar pelo Android; sem serviço externo sem consentimento | P1 | F4-01 | IN_PROGRESS | Compartilhamento testado |
 
-**Portão F4:** o mesmo relatório sai em PDF, DOCX e MD com conteúdo conferido (critério 5).
+**Portão F4:** o mesmo relatório sai em PDF, DOCX e MD com conteúdo conferido (critério 5). O Markdown foi conferido num fixture. O PDF e o DOCX levam o mesmo texto, mas não foram abertos no aparelho nem no Word. A F4 foi aberta com os portões da F0, da F1, da F2 e da F3 ainda abertos.
 
 ## F5 — Fechamento do MVP
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |

@@ -6255,6 +6255,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Questions'**
   String get reportSectionQuestion;
+
+  /// No description provided for @reportExportMarkdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Markdown'**
+  String get reportExportMarkdown;
+
+  /// No description provided for @reportExportPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF'**
+  String get reportExportPdf;
+
+  /// No description provided for @reportExportDocx.
+  ///
+  /// In en, this message translates to:
+  /// **'DOCX'**
+  String get reportExportDocx;
 }
 
 class _AppLocalizationsDelegate

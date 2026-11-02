@@ -1593,5 +1593,8 @@
   "reportSectionDecision": "決定",
   "reportSectionTask": "任務",
   "reportSectionFollowUp": "後續",
-  "reportSectionQuestion": "疑問"
+  "reportSectionQuestion": "疑問",
+  "reportExportMarkdown": "Markdown",
+  "reportExportPdf": "PDF",
+  "reportExportDocx": "DOCX"
 }

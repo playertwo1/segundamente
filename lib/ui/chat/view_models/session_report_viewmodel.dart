@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:memex/data/repositories/memex_router.dart';
+import 'package:memex/utils/result.dart';
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/session_report_export.dart';
 
 class SessionReportViewModel extends ChangeNotifier {
   SessionReportViewModel({
@@ -84,6 +86,31 @@ class SessionReportViewModel extends ChangeNotifier {
       },
       onError: (error, _) => errorMessage = '$error',
     );
+    notifyListeners();
+  }
+
+  Future<Result<String>> export({
+    required ReportExportFormat format,
+    required Set<String> itemIds,
+    DateTime? exportedAt,
+  }) async {
+    errorMessage = null;
+    final result = await _router.exportSessionReport(
+      sessionId: sessionId,
+      format: format,
+      exportedAt: exportedAt ?? DateTime.now(),
+      itemIds: itemIds,
+    );
+    result.when(
+      onOk: (_) {},
+      onError: (error, _) => errorMessage = '$error',
+    );
+    notifyListeners();
+    return result;
+  }
+
+  void showError(Object error) {
+    errorMessage = '$error';
     notifyListeners();
   }
 }

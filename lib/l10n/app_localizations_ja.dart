@@ -3386,4 +3386,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get reportSectionQuestion => 'Questions';
+
+  @override
+  String get reportExportMarkdown => 'Markdown';
+
+  @override
+  String get reportExportPdf => 'PDF';
+
+  @override
+  String get reportExportDocx => 'DOCX';
 }

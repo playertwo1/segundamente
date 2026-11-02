@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/config/app_flavor.dart';
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/l10n/app_localizations.dart';
 import 'package:memex/ui/chat/widgets/session_report_view.dart';
 import 'package:memex/utils/user_storage.dart';
@@ -42,6 +43,8 @@ void main() {
       required String itemId,
       required ReportItemStatus status,
     }) onSetStatus,
+    Future<void> Function(ReportExportFormat format, Set<String> itemIds)?
+        onExport,
   }) {
     return tester.pumpWidget(
       MaterialApp(
@@ -53,6 +56,7 @@ void main() {
             onDraft: onDraft,
             onEdit: onEdit,
             onSetStatus: onSetStatus,
+            onExport: onExport ?? (_, __) async {},
           ),
         ),
       ),
@@ -109,7 +113,8 @@ void main() {
     expect(find.text('Relatório de estudo'), findsOneWidget);
   });
 
-  testWidgets('tapping a decision shows the exact source excerpt', (tester) async {
+  testWidgets('tapping a decision shows the exact source excerpt',
+      (tester) async {
     final report = sessionReportFromModelJson(
       sessionId: 's',
       kind: ReportKind.reuniao,
@@ -258,6 +263,41 @@ void main() {
     await tester.pump();
 
     expect(selected, ReportKind.estudo);
+  });
+
+  testWidgets('export keeps only the checked item', (tester) async {
+    final report = draftSessionReport(
+      sessionId: 's',
+      kind: ReportKind.reuniao,
+      customTitle: null,
+      segments: segments,
+    );
+    Set<String>? ids;
+    ReportExportFormat? format;
+    await pump(
+      tester,
+      report,
+      onDraft: (_, __) async {},
+      onEdit: ({
+        required itemId,
+        required text,
+        required assignee,
+        required due,
+      }) async {},
+      onSetStatus: ({required itemId, required status}) async {},
+      onExport: (nextFormat, nextIds) async {
+        format = nextFormat;
+        ids = nextIds;
+      },
+    );
+
+    await tester.tap(find.byKey(const ValueKey('report_export_item_item_1')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('report_export_markdown')));
+    await tester.pump();
+
+    expect(format, ReportExportFormat.markdown);
+    expect(ids, {'item_2'});
   });
 }
 

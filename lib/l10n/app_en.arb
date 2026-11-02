@@ -1600,5 +1600,8 @@
   "reportSectionDecision": "Decisions",
   "reportSectionTask": "Tasks",
   "reportSectionFollowUp": "Follow-ups",
-  "reportSectionQuestion": "Questions"
+  "reportSectionQuestion": "Questions",
+  "reportExportMarkdown": "Markdown",
+  "reportExportPdf": "PDF",
+  "reportExportDocx": "DOCX"
 }

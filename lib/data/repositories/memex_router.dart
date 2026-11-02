@@ -40,8 +40,10 @@ import 'package:memex/utils/logger.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/data/services/chat_service.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
+import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/data/services/file_system_service.dart';
 import 'package:memex/data/services/local_task_executor.dart';
 import 'package:memex/data/services/global_event_bus.dart';
@@ -1239,6 +1241,25 @@ class MemexRouter {
         itemId: itemId,
         status: status,
       );
+    });
+  }
+
+  Future<Result<String>> exportSessionReport({
+    required String sessionId,
+    required ReportExportFormat format,
+    required DateTime exportedAt,
+    Set<String>? itemIds,
+  }) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      final file = await SessionReportExportService().write(
+        userId: userId,
+        sessionId: sessionId,
+        format: format,
+        exportedAt: exportedAt,
+        itemIds: itemIds,
+      );
+      return file.path;
     });
   }
 

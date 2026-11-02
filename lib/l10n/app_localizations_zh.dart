@@ -3346,6 +3346,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reportSectionQuestion => '疑问';
+
+  @override
+  String get reportExportMarkdown => 'Markdown';
+
+  @override
+  String get reportExportPdf => 'PDF';
+
+  @override
+  String get reportExportDocx => 'DOCX';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -6694,4 +6703,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get reportSectionQuestion => '疑問';
+
+  @override
+  String get reportExportMarkdown => 'Markdown';
+
+  @override
+  String get reportExportPdf => 'PDF';
+
+  @override
+  String get reportExportDocx => 'DOCX';
 }

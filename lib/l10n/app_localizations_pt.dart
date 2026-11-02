@@ -3493,4 +3493,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get reportSectionQuestion => 'Dúvidas';
+
+  @override
+  String get reportExportMarkdown => 'Markdown';
+
+  @override
+  String get reportExportPdf => 'PDF';
+
+  @override
+  String get reportExportDocx => 'DOCX';
 }

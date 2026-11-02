@@ -177,6 +177,21 @@ class ShareService {
     );
   }
 
+  static Future<void> shareExistingFile(
+    BuildContext context, {
+    required String path,
+    required String mimeType,
+  }) async {
+    final box = context.findRenderObject() as RenderBox?;
+    final sharePositionOrigin = box != null
+        ? box.localToGlobal(Offset.zero) & box.size
+        : const Rect.fromLTWH(0, 0, 100, 100);
+    await Share.shareXFiles(
+      [XFile(path, mimeType: mimeType)],
+      sharePositionOrigin: sharePositionOrigin,
+    );
+  }
+
   static String _safeFileName(String fileName) {
     final sanitized = fileName
         .trim()
