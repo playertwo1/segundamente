@@ -1864,7 +1864,39 @@ class AppLocalizationsRu extends AppLocalizations {
   String get testTypeText => 'Текст';
 
   @override
+  String get testTypeStreaming => 'Поток';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Зрение';
+
+  @override
+  String get testTypeAudio => 'Аудио';
+
+  @override
+  String get catalogStatusSupported => 'Поддерживается';
+
+  @override
+  String get catalogStatusAccessible => 'В этом аккаунте';
+
+  @override
+  String get catalogStatusUntested => 'Не проверено';
+
+  @override
+  String get capabilityYes => 'Да';
+
+  @override
+  String get capabilityNo => 'Нет';
+
+  @override
+  String get capabilityNotTested => 'Не проверено';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'Нет возможности: $capabilities';
+  }
 
   @override
   String get testButton => 'Тест';

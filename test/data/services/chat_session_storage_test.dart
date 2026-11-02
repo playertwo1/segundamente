@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/data/model/chat_artifact.dart';
+import 'package:memex/domain/models/llm_config.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/file_system_service.dart';
 import 'package:memex/data/services/jsonl_file_store.dart';
@@ -257,6 +258,67 @@ void main() {
       expect(metadata['last_message_preview'], 'hello jsonl');
       expect(lines, hasLength(1));
       expect(jsonDecode(lines.single)['role'], 'user');
+    });
+
+    test('keeps the conversation after the active model config changes', () async {
+      const sessionId = 'memex_agent_model_switch';
+      const kept = 'conversa antes da troca';
+      final storage = ChatSessionStorage.instance;
+      await storage.createSession(
+        userId: userId,
+        sessionId: sessionId,
+        metadata: {
+          'session_id': sessionId,
+          'agent_name': 'memex_agent',
+          'title': 'Model switch',
+          'created_at': '2026-11-02T12:00:00.000',
+          'updated_at': '2026-11-02T12:00:00.000',
+        },
+      );
+      await storage.appendMessage(
+        userId: userId,
+        sessionId: sessionId,
+        message: {
+          'role': 'user',
+          'content': [
+            {'type': 'text', 'text': kept},
+          ],
+          'timestamp': '2026-11-02T12:01:00.000',
+        },
+      );
+
+      final messagesFile = File(storage.messagesPath(userId, sessionId));
+      final before = await messagesFile.readAsBytes();
+      await UserStorage.saveLLMConfigs(const [
+        LLMConfig(
+          key: 'openai-switch',
+          type: LLMConfig.typeChatCompletion,
+          modelId: 'gpt-5.6-sol',
+          apiKey: 'sk-test',
+          baseUrl: 'https://api.openai.com/v1',
+        ),
+        LLMConfig(
+          key: 'gemini-switch',
+          type: LLMConfig.typeGemini,
+          modelId: 'gemini-3.6-flash',
+          apiKey: 'gk-test',
+          baseUrl: 'https://generativelanguage.googleapis.com/v1beta',
+        ),
+      ]);
+      await UserStorage.setDefaultLLMConfigKey('openai-switch');
+      await UserStorage.setDefaultLLMConfigKey('gemini-switch');
+
+      expect(await messagesFile.readAsBytes(), before);
+      expect(await UserStorage.getDefaultLLMConfigKey(), 'gemini-switch');
+      final messages = await storage.loadMessages(userId, sessionId);
+      expect(messages, hasLength(1));
+      final content = messages.single['content'] as List;
+      expect(content.single['text'], kept);
+      final metadata = jsonDecode(
+        await File(storage.metadataPath(userId, sessionId)).readAsString(),
+      ) as Map<String, dynamic>;
+      expect(metadata.containsKey('modelId'), isFalse);
+      expect(metadata.containsKey('provider'), isFalse);
     });
 
     test('recovers valid messages from an incomplete UTF-8 tail', () async {

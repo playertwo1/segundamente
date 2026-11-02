@@ -3400,11 +3400,71 @@ abstract class AppLocalizations {
   /// **'Text'**
   String get testTypeText;
 
+  /// No description provided for @testTypeStreaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Stream'**
+  String get testTypeStreaming;
+
+  /// No description provided for @testTypeJson.
+  ///
+  /// In en, this message translates to:
+  /// **'JSON'**
+  String get testTypeJson;
+
   /// No description provided for @testTypeVision.
   ///
   /// In en, this message translates to:
   /// **'Vision'**
   String get testTypeVision;
+
+  /// No description provided for @testTypeAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get testTypeAudio;
+
+  /// No description provided for @catalogStatusSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported'**
+  String get catalogStatusSupported;
+
+  /// No description provided for @catalogStatusAccessible.
+  ///
+  /// In en, this message translates to:
+  /// **'On this account'**
+  String get catalogStatusAccessible;
+
+  /// No description provided for @catalogStatusUntested.
+  ///
+  /// In en, this message translates to:
+  /// **'Not tested'**
+  String get catalogStatusUntested;
+
+  /// No description provided for @capabilityYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get capabilityYes;
+
+  /// No description provided for @capabilityNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get capabilityNo;
+
+  /// No description provided for @capabilityNotTested.
+  ///
+  /// In en, this message translates to:
+  /// **'Not tested'**
+  String get capabilityNotTested;
+
+  /// No description provided for @capabilityMissingWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing capability: {capabilities}'**
+  String capabilityMissingWarning(String capabilities);
 
   /// No description provided for @testButton.
   ///

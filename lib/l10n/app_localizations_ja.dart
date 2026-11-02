@@ -1807,7 +1807,39 @@ class AppLocalizationsJa extends AppLocalizations {
   String get testTypeText => 'テキスト';
 
   @override
+  String get testTypeStreaming => 'ストリーム';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'ビジョン';
+
+  @override
+  String get testTypeAudio => '音声';
+
+  @override
+  String get catalogStatusSupported => '対応';
+
+  @override
+  String get catalogStatusAccessible => 'このアカウント';
+
+  @override
+  String get catalogStatusUntested => '未テスト';
+
+  @override
+  String get capabilityYes => 'あり';
+
+  @override
+  String get capabilityNo => 'なし';
+
+  @override
+  String get capabilityNotTested => '未テスト';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return '不足している機能: $capabilities';
+  }
 
   @override
   String get testButton => 'テスト';

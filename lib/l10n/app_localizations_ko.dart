@@ -1807,7 +1807,39 @@ class AppLocalizationsKo extends AppLocalizations {
   String get testTypeText => '텍스트';
 
   @override
+  String get testTypeStreaming => '스트림';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => '비전';
+
+  @override
+  String get testTypeAudio => '오디오';
+
+  @override
+  String get catalogStatusSupported => '지원';
+
+  @override
+  String get catalogStatusAccessible => '이 계정';
+
+  @override
+  String get catalogStatusUntested => '미테스트';
+
+  @override
+  String get capabilityYes => '있음';
+
+  @override
+  String get capabilityNo => '없음';
+
+  @override
+  String get capabilityNotTested => '미테스트';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return '없는 기능: $capabilities';
+  }
 
   @override
   String get testButton => '테스트';

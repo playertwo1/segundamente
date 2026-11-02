@@ -851,7 +851,24 @@
   "testConnectionSuccess": "Connection Successful",
   "testConnectionFailed": "Connection Failed",
   "testTypeText": "Text",
+  "testTypeStreaming": "Stream",
+  "testTypeJson": "JSON",
   "testTypeVision": "Vision",
+  "testTypeAudio": "Audio",
+  "catalogStatusSupported": "Supported",
+  "catalogStatusAccessible": "On this account",
+  "catalogStatusUntested": "Not tested",
+  "capabilityYes": "Yes",
+  "capabilityNo": "No",
+  "capabilityNotTested": "Not tested",
+  "capabilityMissingWarning": "Missing capability: {capabilities}",
+  "@capabilityMissingWarning": {
+    "placeholders": {
+      "capabilities": {
+        "type": "String"
+      }
+    }
+  },
   "testButton": "Test",
   "testing": "Testing...",
   "proxyUrlOptional": "Proxy URL (Optional)",

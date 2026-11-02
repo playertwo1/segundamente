@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:memex/domain/models/llm_config.dart';
+import 'package:memex/domain/models/model_catalog.dart';
 import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/data/services/openai_auth_service.dart';
@@ -13,6 +14,7 @@ import 'package:memex/ui/core/widgets/searchable_dropdown.dart';
 import 'package:memex/config/app_config.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/settings/widgets/bottom_primary_action_bar.dart';
+import 'package:memex/ui/settings/widgets/model_capability_matrix_view.dart';
 
 class ModelConfigEditPage extends StatefulWidget {
   final LLMConfig? config;
@@ -63,11 +65,12 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
 
   List<String> _fetchedModels = [];
   bool _isFetchingModels = false;
+  ModelCatalog? _catalog;
 
   // Model test state
   bool _isTesting = false;
   ModelTestResult? _testResult;
-  ModelTestType _testType = ModelTestType.text;
+  ModelCapability _testType = ModelCapability.text;
 
   @override
   void initState() {
@@ -117,14 +120,9 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
       } else if (_selectedType == LLMConfig.typeGeminiOauth) {
         _loadGeminiTokens();
       }
-      // Auto-fetch models if we have enough info
-      if (LLMConfig.supportsModelListing(_selectedType) &&
-          _baseUrlController.text.isNotEmpty &&
-          (!LLMConfig.requiresApiKey(_selectedType) ||
-              _apiKeyController.text.isNotEmpty)) {
-        // Delay to after first frame
-        WidgetsBinding.instance.addPostFrameCallback((_) => _fetchModels());
-      }
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _loadCatalog(fetch: true),
+      );
     }
 
     _animationController = AnimationController(
@@ -617,19 +615,75 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
   /// Returns the model options to show: fetched models if available, else recommended.
   /// Featured models are sorted to the top.
   /// Missing featured models are prepended even if not in the fetched list.
+  /// Manual ids stay in the list after a fetch that does not include them.
   List<String> _modelOptions() {
     final models = _fetchedModels.isNotEmpty
         ? _fetchedModels
         : _getRecommendedModels(_selectedType);
     final featured = LLMConfig.featuredModels(_selectedType);
-    if (featured.isEmpty) return models;
-    final missingFeatured = featured.where((m) => !models.contains(m)).toList();
-    final top = [
-      ...missingFeatured,
-      ...models.where((m) => featured.contains(m)),
-    ];
-    final rest = models.where((m) => !featured.contains(m)).toList();
-    return [...top, ...rest];
+    final listed = featured.isEmpty
+        ? models
+        : [
+            ...featured.where((m) => !models.contains(m)),
+            ...models.where((m) => featured.contains(m)),
+            ...models.where((m) => !featured.contains(m)),
+          ];
+    final manual = _catalog?.manualIdsOutside(listed) ?? const <String>[];
+    return [...listed, ...manual];
+  }
+
+  ModelAvailability? _availabilityFor(String modelId) {
+    return ModelCatalog.availabilityOf(
+      modelId: modelId,
+      recommended: _getRecommendedModels(_selectedType),
+      fetchedIds: _fetchedModels,
+    );
+  }
+
+  String? _availabilityLabel(String modelId) {
+    final l10n = UserStorage.l10n;
+    return switch (_availabilityFor(modelId)) {
+      ModelAvailability.supported => l10n.catalogStatusSupported,
+      ModelAvailability.accessible => l10n.catalogStatusAccessible,
+      ModelAvailability.untested => l10n.catalogStatusUntested,
+      null => null,
+    };
+  }
+
+  Future<void> _loadCatalog({bool fetch = false}) async {
+    final type = _selectedType;
+    final baseUrl = _baseUrlController.text.trim();
+    if (type.isEmpty) return;
+    final catalog = await UserStorage.loadModelCatalog(type, baseUrl);
+    if (!mounted ||
+        _selectedType != type ||
+        _baseUrlController.text.trim() != baseUrl) {
+      return;
+    }
+    setState(() {
+      _catalog = catalog;
+      if (catalog != null &&
+          catalog.fetchedIds.isNotEmpty &&
+          _fetchedModels.isEmpty) {
+        _fetchedModels = catalog.fetchedIds;
+      }
+    });
+    if (fetch &&
+        LLMConfig.supportsModelListing(type) &&
+        baseUrl.isNotEmpty &&
+        (!LLMConfig.requiresApiKey(type) ||
+            _apiKeyController.text.trim().isNotEmpty)) {
+      await _fetchModels();
+    }
+  }
+
+  Future<void> _rememberCatalog(ModelCatalog catalog) async {
+    _catalog = catalog;
+    try {
+      await UserStorage.saveModelCatalog(catalog);
+    } catch (e) {
+      // The model config itself is stored separately. A cache miss is non-fatal.
+    }
   }
 
   bool _isKnownMultimodalModel(String modelId) =>
@@ -660,6 +714,16 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
         apiKey: apiKey,
       );
       if (mounted) {
+        if (models.isNotEmpty) {
+          final catalog = (_catalog ??
+                  ModelCatalog.empty(
+                    providerType: _selectedType,
+                    baseUrl: _baseUrlController.text.trim(),
+                  ))
+              .rememberFetch(models, DateTime.now().toUtc());
+          await _rememberCatalog(catalog);
+        }
+        if (!mounted) return;
         setState(() {
           _fetchedModels = models;
           _isFetchingModels = false;
@@ -722,6 +786,20 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
       testConfig,
       testType: _testType,
     );
+
+    if (result.verdict != CapabilityVerdict.unknown) {
+      final catalog = (_catalog ??
+              ModelCatalog.empty(
+                providerType: _selectedType,
+                baseUrl: _baseUrlController.text.trim(),
+              ))
+          .rememberVerdict(
+        _modelIdController.text,
+        _testType,
+        result.verdict,
+      );
+      await _rememberCatalog(catalog);
+    }
 
     if (mounted) {
       setState(() {
@@ -891,6 +969,15 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
     }
 
     await MemexRouter().saveLLMConfigs(configs);
+    if (_selectedType.isNotEmpty) {
+      final catalog = (_catalog ??
+              ModelCatalog.empty(
+                providerType: _selectedType,
+                baseUrl: _baseUrlController.text.trim(),
+              ))
+          .rememberManual(_modelIdController.text);
+      await _rememberCatalog(catalog);
+    }
     if (mounted) Navigator.pop(context, newConfig.key);
   }
 
@@ -1056,34 +1143,71 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Single row: chips + test button
-          Row(
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
             children: [
               _buildTestTypeChip(
                 label: UserStorage.l10n.testTypeText,
                 icon: Icons.text_fields_rounded,
-                selected: _testType == ModelTestType.text,
+                selected: _testType == ModelCapability.text,
                 onTap: _isTesting
                     ? null
                     : () => setState(() {
-                          _testType = ModelTestType.text;
+                          _testType = ModelCapability.text;
                           _testResult = null;
                         }),
               ),
-              const SizedBox(width: 6),
+              _buildTestTypeChip(
+                label: UserStorage.l10n.testTypeStreaming,
+                icon: Icons.stream_rounded,
+                selected: _testType == ModelCapability.streaming,
+                onTap: _isTesting
+                    ? null
+                    : () => setState(() {
+                          _testType = ModelCapability.streaming;
+                          _testResult = null;
+                        }),
+              ),
+              _buildTestTypeChip(
+                label: UserStorage.l10n.testTypeJson,
+                icon: Icons.data_object_rounded,
+                selected: _testType == ModelCapability.json,
+                onTap: _isTesting
+                    ? null
+                    : () => setState(() {
+                          _testType = ModelCapability.json;
+                          _testResult = null;
+                        }),
+              ),
               _buildTestTypeChip(
                 label: UserStorage.l10n.testTypeVision,
                 icon: Icons.image_rounded,
-                selected: _testType == ModelTestType.vision,
+                selected: _testType == ModelCapability.vision,
                 onTap: _isTesting
                     ? null
                     : () => setState(() {
-                          _testType = ModelTestType.vision;
+                          _testType = ModelCapability.vision;
                           _testResult = null;
                         }),
               ),
-              const Spacer(),
-              SizedBox(
+              _buildTestTypeChip(
+                label: UserStorage.l10n.testTypeAudio,
+                icon: Icons.mic_rounded,
+                selected: _testType == ModelCapability.audio,
+                onTap: _isTesting
+                    ? null
+                    : () => setState(() {
+                          _testType = ModelCapability.audio;
+                          _testResult = null;
+                        }),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: SizedBox(
                 height: 32,
                 child: FilledButton.icon(
                   onPressed: canTest && !_isTesting ? _testConnection : null,
@@ -1114,7 +1238,11 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
                   ),
                 ),
               ),
-            ],
+            ),
+          const SizedBox(height: 10),
+          ModelCapabilityMatrixView(
+            matrix: _catalog?.matrixFor(_modelIdController.text) ??
+                ModelCapabilityMatrix.unknown(),
           ),
           // Results
           if (_testResult != null) ...[
@@ -1269,6 +1397,11 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
         labelText: UserStorage.l10n.baseUrlLabel,
         border: const OutlineInputBorder(),
       ),
+      onChanged: (_) {
+        _fetchedModels = [];
+        _catalog = null;
+        _loadCatalog();
+      },
       validator: (value) {
         if (value == null || value.isEmpty) {
           return UserStorage.l10n.required;
@@ -1367,6 +1500,7 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
                   setState(() => _selectedType = value ?? '');
                   _checkChanges();
                   _fetchedModels = [];
+                  _catalog = null;
                   if (value != null && value.isNotEmpty) {
                     // Reset Model ID to first recommended
                     final recommended = _getRecommendedModels(value);
@@ -1391,10 +1525,7 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
                     } else if (value == LLMConfig.typeGeminiOauth) {
                       _loadGeminiTokens();
                     }
-                    // Auto-fetch models for providers that don't need API key
-                    if (!LLMConfig.requiresApiKey(value)) {
-                      _fetchModels();
-                    }
+                    _loadCatalog(fetch: !LLMConfig.requiresApiKey(value));
                   }
                 },
               ),
@@ -1667,6 +1798,19 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
                     ),
                   ),
                 ),
+                if (_availabilityLabel(_modelIdController.text) != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6, left: 4),
+                    child: Text(
+                      _availabilityLabel(_modelIdController.text)!,
+                      key: const ValueKey('model_catalog_status'),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF475569),
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
                 if (_selectedType == LLMConfig.typeOpenAiOauth &&
                     _isProModel(_modelIdController.text))
                   Padding(

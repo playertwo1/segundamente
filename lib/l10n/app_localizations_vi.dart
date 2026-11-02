@@ -1841,7 +1841,39 @@ class AppLocalizationsVi extends AppLocalizations {
   String get testTypeText => 'Văn bản';
 
   @override
+  String get testTypeStreaming => 'Luồng';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Hình ảnh';
+
+  @override
+  String get testTypeAudio => 'Âm thanh';
+
+  @override
+  String get catalogStatusSupported => 'Được hỗ trợ';
+
+  @override
+  String get catalogStatusAccessible => 'Trên tài khoản này';
+
+  @override
+  String get catalogStatusUntested => 'Chưa thử';
+
+  @override
+  String get capabilityYes => 'Có';
+
+  @override
+  String get capabilityNo => 'Không';
+
+  @override
+  String get capabilityNotTested => 'Chưa thử';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'Thiếu khả năng: $capabilities';
+  }
 
   @override
   String get testButton => 'Kiểm tra';

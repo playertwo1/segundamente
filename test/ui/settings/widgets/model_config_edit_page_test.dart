@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/config/app_flavor.dart';
 import 'package:memex/domain/models/llm_config.dart';
+import 'package:memex/domain/models/model_catalog.dart';
 import 'package:memex/l10n/app_localizations.dart';
 import 'package:memex/ui/settings/widgets/model_config_edit_page.dart';
 import 'package:memex/utils/user_storage.dart';
@@ -251,6 +252,80 @@ void main() {
         (config) => config.type == LLMConfig.typeDeepSeek,
       );
       expect(savedConfig.key, 'deepseek');
+    });
+  });
+
+  group('ModelConfigEditPage catalog', () {
+    testWidgets('keeps a manual model id and a custom base URL', (
+      tester,
+    ) async {
+      const source = LLMConfig(
+        key: 'manual-model',
+        type: LLMConfig.typeChatCompletion,
+        modelId: 'gpt-5.6-sol',
+        apiKey: 'sk-test',
+        baseUrl: 'https://api.openai.com/v1',
+      );
+      await UserStorage.saveLLMConfigs([
+        LLMConfig.createDefaultClientConfig(),
+        source,
+      ]);
+      await UserStorage.saveLLMConsent(
+        true,
+        providerType: LLMConfig.typeChatCompletion,
+      );
+
+      await tester.pumpWidget(
+        buildTestableWidget(const ModelConfigEditPage(config: source)),
+      );
+      await tester.pump();
+
+      expect(
+        find.byKey(const ValueKey('model_catalog_status')),
+        findsOneWidget,
+      );
+      expect(find.text(UserStorage.l10n.catalogStatusSupported), findsOneWidget);
+      expect(
+        LLMConfig.recommendedModels(LLMConfig.typeChatCompletion),
+        isNot(contains('my-manual-model')),
+      );
+
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'gpt-5.6-sol'),
+        'my-manual-model',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'https://api.openai.com/v1'),
+        'https://llm.example.test/v1',
+      );
+      await tester.pump();
+
+      expect(find.text(UserStorage.l10n.catalogStatusUntested), findsOneWidget);
+
+      final save = find.byKey(
+        const ValueKey('model_config_bottom_save_button'),
+      );
+      await tester.ensureVisible(save);
+      await tester.tap(save);
+      await tester.pump(const Duration(milliseconds: 500));
+
+      final configs = await UserStorage.getLLMConfigs();
+      final saved = configs.firstWhere((config) => config.key == 'manual-model');
+      expect(saved.modelId, 'my-manual-model');
+      expect(saved.baseUrl, 'https://llm.example.test/v1');
+
+      final catalog = await UserStorage.loadModelCatalog(
+        LLMConfig.typeChatCompletion,
+        'https://llm.example.test/v1',
+      );
+      expect(catalog?.manualIds, contains('my-manual-model'));
+      expect(
+        catalog?.statusOf(
+          'my-manual-model',
+          LLMConfig.recommendedModels(LLMConfig.typeChatCompletion),
+        ),
+        ModelAvailability.untested,
+      );
     });
   });
 }

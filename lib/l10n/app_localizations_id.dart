@@ -1863,7 +1863,39 @@ class AppLocalizationsId extends AppLocalizations {
   String get testTypeText => 'Teks';
 
   @override
+  String get testTypeStreaming => 'Stream';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Vision';
+
+  @override
+  String get testTypeAudio => 'Audio';
+
+  @override
+  String get catalogStatusSupported => 'Didukung';
+
+  @override
+  String get catalogStatusAccessible => 'Di akun ini';
+
+  @override
+  String get catalogStatusUntested => 'Belum diuji';
+
+  @override
+  String get capabilityYes => 'Ya';
+
+  @override
+  String get capabilityNo => 'Tidak';
+
+  @override
+  String get capabilityNotTested => 'Belum diuji';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'Kemampuan yang kurang: $capabilities';
+  }
 
   @override
   String get testButton => 'Tes';

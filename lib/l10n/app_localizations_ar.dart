@@ -1836,7 +1836,39 @@ class AppLocalizationsAr extends AppLocalizations {
   String get testTypeText => 'نص';
 
   @override
+  String get testTypeStreaming => 'بث';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'رؤية';
+
+  @override
+  String get testTypeAudio => 'صوت';
+
+  @override
+  String get catalogStatusSupported => 'مدعوم';
+
+  @override
+  String get catalogStatusAccessible => 'في هذا الحساب';
+
+  @override
+  String get catalogStatusUntested => 'لم يُختبر';
+
+  @override
+  String get capabilityYes => 'نعم';
+
+  @override
+  String get capabilityNo => 'لا';
+
+  @override
+  String get capabilityNotTested => 'لم يُختبر';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'قدرة ناقصة: $capabilities';
+  }
 
   @override
   String get testButton => 'اختبار';

@@ -23,6 +23,9 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Contexto: o usuário não usa chave de API. O fork reaproveita o `client_id` dos CLIs oficiais (Codex e Gemini) para OAuth.
 - Decisão e motivo: manter esses dois logins no MVP, com risco registrado (podem quebrar ou violar termos; testar na F1-04). A Anthropic não permite login Claude.ai em apps de terceiros (code.claude.com/docs/en/legal-and-compliance, lido em 2026-11-02), então Claude fica com chave de API opcional.
 - Descartado: fluxo próprio de login Claude.ai.
+- Risco de termos, registrado na F1-04 em 2026-11-02: o login da OpenAI é PKCE com o client_id público do Codex CLI (`app_EMoamEEZ73f0CkXaXp7hrann`), emissor `https://auth.openai.com` e redirect `http://localhost:1455/auth/callback`. O do Gemini usa o client do Gemini CLI e o redirect `http://localhost:8085/oauth2callback`. Esses clientes pertencem aos CLIs oficiais. A OpenAI e o Google podem revogar o fluxo, trocar o client ou tratar o uso fora do CLI como fora dos termos. A Segunda Mente não tem um client OAuth próprio. Se o login quebrar, a alternativa do MVP é chave de API.
+- `gemini_auth_service.dart` também traz um client secret. Esse valor não entra em documento, log, estado nem chat.
+- O login em si não foi executado, nem no emulador nem no S25. Esta nota não prova que o login funciona.
 
 ## D-007 — Voz do MVP
 - Contexto: o fork tem STT local por sherpa-onnx (SenseVoice zh/en/ja/ko/yue) e STT na nuvem, que envia o áudio ao modelo configurado. Não há TTS.

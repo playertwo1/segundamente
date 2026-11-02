@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 import 'package:memex/utils/logger.dart';
 import 'package:memex/domain/models/llm_config.dart';
+import 'package:memex/domain/models/model_catalog.dart';
 import 'package:memex/domain/models/agent_config.dart';
 import 'package:memex/domain/models/location_context_config.dart';
 import 'package:dart_agent_core/dart_agent_core.dart';
@@ -323,6 +324,7 @@ class UserStorage {
 
   static const String _keyLLMConfigs = 'llm_client_configs';
   static const String _keyDefaultLLMConfigKey = 'default_llm_config_key';
+  static const String _keyModelCatalogs = 'model_catalog_v1';
 
   /// Get stored LLM config list. Creates default config if none.
   static Future<List<LLMConfig>> getLLMConfigs() async {
@@ -374,6 +376,55 @@ class UserStorage {
     } catch (e) {
       throw Exception(UserStorage.l10n.saveLlmConfigFailed(e));
     }
+  }
+
+  /// Cached model lists. A version mismatch drops the cache instead of guessing.
+  static Future<ModelCatalog?> loadModelCatalog(
+    String providerType,
+    String baseUrl,
+  ) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_keyModelCatalogs);
+      if (raw == null || raw.isEmpty) return null;
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map || decoded['version'] != ModelCatalog.storeVersion) {
+        return null;
+      }
+      final buckets = decoded['buckets'];
+      if (buckets is! Map) return null;
+      final bucket = buckets[ModelCatalog.cacheKey(providerType, baseUrl)];
+      if (bucket is! Map) return null;
+      return ModelCatalog.fromJson(Map<String, dynamic>.from(bucket));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<void> saveModelCatalog(ModelCatalog catalog) async {
+    final prefs = await SharedPreferences.getInstance();
+    final buckets = <String, dynamic>{};
+    final raw = prefs.getString(_keyModelCatalogs);
+    if (raw != null && raw.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(raw);
+        if (decoded is Map &&
+            decoded['version'] == ModelCatalog.storeVersion &&
+            decoded['buckets'] is Map) {
+          buckets.addAll(Map<String, dynamic>.from(decoded['buckets'] as Map));
+        }
+      } catch (e) {
+        // The old cache is unreadable. Replace it with this catalog.
+      }
+    }
+    buckets[catalog.cacheKeyValue] = catalog.toJson();
+    await prefs.setString(
+      _keyModelCatalogs,
+      jsonEncode({
+        'version': ModelCatalog.storeVersion,
+        'buckets': buckets,
+      }),
+    );
   }
 
   /// Get the globally selected default LLM config key.

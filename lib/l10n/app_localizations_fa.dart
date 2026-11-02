@@ -1850,7 +1850,39 @@ class AppLocalizationsFa extends AppLocalizations {
   String get testTypeText => 'متن';
 
   @override
+  String get testTypeStreaming => 'جریان';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'بینایی';
+
+  @override
+  String get testTypeAudio => 'صدا';
+
+  @override
+  String get catalogStatusSupported => 'پشتیبانی‌شده';
+
+  @override
+  String get catalogStatusAccessible => 'در این حساب';
+
+  @override
+  String get catalogStatusUntested => 'آزمایش نشده';
+
+  @override
+  String get capabilityYes => 'بله';
+
+  @override
+  String get capabilityNo => 'خیر';
+
+  @override
+  String get capabilityNotTested => 'آزمایش نشده';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'قابلیت موجود نیست: $capabilities';
+  }
 
   @override
   String get testButton => 'آزمون';

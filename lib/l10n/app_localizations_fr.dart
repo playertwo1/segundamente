@@ -1879,7 +1879,39 @@ class AppLocalizationsFr extends AppLocalizations {
   String get testTypeText => 'Texte';
 
   @override
+  String get testTypeStreaming => 'Flux';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Vision';
+
+  @override
+  String get testTypeAudio => 'Audio';
+
+  @override
+  String get catalogStatusSupported => 'Pris en charge';
+
+  @override
+  String get catalogStatusAccessible => 'Sur ce compte';
+
+  @override
+  String get catalogStatusUntested => 'Non testé';
+
+  @override
+  String get capabilityYes => 'Oui';
+
+  @override
+  String get capabilityNo => 'Non';
+
+  @override
+  String get capabilityNotTested => 'Non testé';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'Capacité manquante : $capabilities';
+  }
 
   @override
   String get testButton => 'Tester';

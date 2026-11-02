@@ -1862,7 +1862,39 @@ class AppLocalizationsTr extends AppLocalizations {
   String get testTypeText => 'Metin';
 
   @override
+  String get testTypeStreaming => 'Akış';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Görüş';
+
+  @override
+  String get testTypeAudio => 'Ses';
+
+  @override
+  String get catalogStatusSupported => 'Desteklenen';
+
+  @override
+  String get catalogStatusAccessible => 'Bu hesapta';
+
+  @override
+  String get catalogStatusUntested => 'Test edilmedi';
+
+  @override
+  String get capabilityYes => 'Evet';
+
+  @override
+  String get capabilityNo => 'Hayır';
+
+  @override
+  String get capabilityNotTested => 'Test edilmedi';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'Eksik yetenek: $capabilities';
+  }
 
   @override
   String get testButton => 'Test';

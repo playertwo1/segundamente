@@ -1791,7 +1791,39 @@ class AppLocalizationsZh extends AppLocalizations {
   String get testTypeText => '文本';
 
   @override
+  String get testTypeStreaming => '流式';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => '视觉';
+
+  @override
+  String get testTypeAudio => '音频';
+
+  @override
+  String get catalogStatusSupported => '支持';
+
+  @override
+  String get catalogStatusAccessible => '账号可用';
+
+  @override
+  String get catalogStatusUntested => '未测试';
+
+  @override
+  String get capabilityYes => '有';
+
+  @override
+  String get capabilityNo => '无';
+
+  @override
+  String get capabilityNotTested => '未测试';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return '缺少能力：$capabilities';
+  }
 
   @override
   String get testButton => '测试';
@@ -5012,7 +5044,39 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get testTypeText => '文字';
 
   @override
+  String get testTypeStreaming => '流式';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => '視覺';
+
+  @override
+  String get testTypeAudio => '音訊';
+
+  @override
+  String get catalogStatusSupported => '支援';
+
+  @override
+  String get catalogStatusAccessible => '帳號可用';
+
+  @override
+  String get catalogStatusUntested => '未測試';
+
+  @override
+  String get capabilityYes => '有';
+
+  @override
+  String get capabilityNo => '無';
+
+  @override
+  String get capabilityNotTested => '未測試';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return '缺少能力：$capabilities';
+  }
 
   @override
   String get testButton => '測試';

@@ -1844,7 +1844,39 @@ class AppLocalizationsTh extends AppLocalizations {
   String get testTypeText => 'ข้อความ';
 
   @override
+  String get testTypeStreaming => 'สตรีม';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Vision';
+
+  @override
+  String get testTypeAudio => 'เสียง';
+
+  @override
+  String get catalogStatusSupported => 'รองรับ';
+
+  @override
+  String get catalogStatusAccessible => 'ในบัญชีนี้';
+
+  @override
+  String get catalogStatusUntested => 'ยังไม่ทดสอบ';
+
+  @override
+  String get capabilityYes => 'มี';
+
+  @override
+  String get capabilityNo => 'ไม่มี';
+
+  @override
+  String get capabilityNotTested => 'ยังไม่ทดสอบ';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'ความสามารถที่ขาด: $capabilities';
+  }
 
   @override
   String get testButton => 'ทดสอบ';

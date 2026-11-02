@@ -1876,7 +1876,39 @@ class AppLocalizationsEs extends AppLocalizations {
   String get testTypeText => 'Texto';
 
   @override
+  String get testTypeStreaming => 'Transmisión';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Visión';
+
+  @override
+  String get testTypeAudio => 'Audio';
+
+  @override
+  String get catalogStatusSupported => 'Compatible';
+
+  @override
+  String get catalogStatusAccessible => 'En esta cuenta';
+
+  @override
+  String get catalogStatusUntested => 'Sin probar';
+
+  @override
+  String get capabilityYes => 'Sí';
+
+  @override
+  String get capabilityNo => 'No';
+
+  @override
+  String get capabilityNotTested => 'Sin probar';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'Falta capacidad: $capabilities';
+  }
 
   @override
   String get testButton => 'Probar';

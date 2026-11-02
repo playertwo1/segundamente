@@ -836,7 +836,24 @@
   "testConnectionSuccess": "连接成功",
   "testConnectionFailed": "连接失败",
   "testTypeText": "文本",
+  "testTypeStreaming": "流式",
+  "testTypeJson": "JSON",
   "testTypeVision": "视觉",
+  "testTypeAudio": "音频",
+  "catalogStatusSupported": "支持",
+  "catalogStatusAccessible": "账号可用",
+  "catalogStatusUntested": "未测试",
+  "capabilityYes": "有",
+  "capabilityNo": "无",
+  "capabilityNotTested": "未测试",
+  "capabilityMissingWarning": "缺少能力：{capabilities}",
+  "@capabilityMissingWarning": {
+    "placeholders": {
+      "capabilities": {
+        "type": "String"
+      }
+    }
+  },
   "testButton": "测试",
   "testing": "测试中...",
   "proxyUrlOptional": "代理 URL (可选)",

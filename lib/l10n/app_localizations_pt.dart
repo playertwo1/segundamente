@@ -1863,7 +1863,39 @@ class AppLocalizationsPt extends AppLocalizations {
   String get testTypeText => 'Texto';
 
   @override
+  String get testTypeStreaming => 'Stream';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Visão';
+
+  @override
+  String get testTypeAudio => 'Áudio';
+
+  @override
+  String get catalogStatusSupported => 'Suportado';
+
+  @override
+  String get catalogStatusAccessible => 'Nesta conta';
+
+  @override
+  String get catalogStatusUntested => 'Não testado';
+
+  @override
+  String get capabilityYes => 'Sim';
+
+  @override
+  String get capabilityNo => 'Não';
+
+  @override
+  String get capabilityNotTested => 'Não testado';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'Capacidade ausente: $capabilities';
+  }
 
   @override
   String get testButton => 'Testar';

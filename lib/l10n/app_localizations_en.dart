@@ -1845,7 +1845,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get testTypeText => 'Text';
 
   @override
+  String get testTypeStreaming => 'Stream';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'Vision';
+
+  @override
+  String get testTypeAudio => 'Audio';
+
+  @override
+  String get catalogStatusSupported => 'Supported';
+
+  @override
+  String get catalogStatusAccessible => 'On this account';
+
+  @override
+  String get catalogStatusUntested => 'Not tested';
+
+  @override
+  String get capabilityYes => 'Yes';
+
+  @override
+  String get capabilityNo => 'No';
+
+  @override
+  String get capabilityNotTested => 'Not tested';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'Missing capability: $capabilities';
+  }
 
   @override
   String get testButton => 'Test';

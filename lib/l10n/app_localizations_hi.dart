@@ -1850,7 +1850,39 @@ class AppLocalizationsHi extends AppLocalizations {
   String get testTypeText => 'पाठ';
 
   @override
+  String get testTypeStreaming => 'स्ट्रीम';
+
+  @override
+  String get testTypeJson => 'JSON';
+
+  @override
   String get testTypeVision => 'विज़न';
+
+  @override
+  String get testTypeAudio => 'ऑडियो';
+
+  @override
+  String get catalogStatusSupported => 'समर्थित';
+
+  @override
+  String get catalogStatusAccessible => 'इस खाते में';
+
+  @override
+  String get catalogStatusUntested => 'जाँचा नहीं';
+
+  @override
+  String get capabilityYes => 'हाँ';
+
+  @override
+  String get capabilityNo => 'नहीं';
+
+  @override
+  String get capabilityNotTested => 'जाँचा नहीं';
+
+  @override
+  String capabilityMissingWarning(String capabilities) {
+    return 'क्षमता नहीं: $capabilities';
+  }
 
   @override
   String get testButton => 'परीक्षण करें';
