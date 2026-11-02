@@ -1,6 +1,7 @@
 import 'package:memex/utils/logger.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
+import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/data/services/api_exception.dart';
 import 'package:memex/utils/time_context.dart';
 
@@ -191,6 +192,10 @@ Future<bool> deleteChatSessionEndpoint(String sessionId) async {
     }
 
     await _chatStorage.deleteSession(userId, sessionId);
+    await SessionReportService().deleteDerivatives(
+      userId: userId,
+      sessionId: sessionId,
+    );
     _logger.info('Session physically deleted: $sessionId');
     return true;
   } catch (e) {

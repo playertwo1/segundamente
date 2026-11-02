@@ -1566,5 +1566,6 @@
   },
   "sendLeavesDeviceTitle": "Dieser Text verlässt das Telefon",
   "noTimestampsFound": "Keine Zeitstempel gefunden",
-  "pdfImportUnsupported": "PDF wird nicht importiert"
+  "pdfImportUnsupported": "PDF wird nicht importiert",
+  "importTranscriptFile": "Transkript importieren"
 }

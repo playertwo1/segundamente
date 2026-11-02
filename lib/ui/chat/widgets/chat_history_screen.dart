@@ -6,7 +6,11 @@ import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
+import 'package:memex/data/repositories/memex_router.dart';
+import 'package:memex/ui/chat/view_models/session_report_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/agent_chat_dialog.dart';
+import 'package:memex/ui/chat/widgets/session_report_screen.dart';
+import 'package:memex/ui/chat/widgets/transcript_file_import_button.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 
 bool _isSameCalendarDay(DateTime a, DateTime b) =>
@@ -101,6 +105,19 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
     }
   }
 
+  void _openReport(String sessionId) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => SessionReportScreen(
+          viewModel: SessionReportViewModel(
+            router: MemexRouter(),
+            sessionId: sessionId,
+          ),
+        ),
+      ),
+    );
+  }
+
   void _openSession(ChatViewModel vm, String sessionId) {
     showGeneralDialog(
       context: context,
@@ -143,6 +160,11 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
             elevation: 0,
             centerTitle: true,
             leading: const AppBackButton(),
+            actions: [
+              TranscriptFileImportButton(
+                onStored: () => widget.viewModel.loadSessions(),
+              ),
+            ],
           ),
           body: vm.isLoading
               ? Center(child: AgentLogoLoading())
@@ -286,6 +308,14 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: 12),
+                                      IconButton(
+                                        key: ValueKey(
+                                          'open_session_report_$sessionId',
+                                        ),
+                                        tooltip: UserStorage.l10n.openSessionReport,
+                                        icon: const Icon(Icons.article_outlined),
+                                        onPressed: () => _openReport(sessionId),
+                                      ),
                                       IconButton(
                                         icon: Icon(
                                           Icons.delete_outline,

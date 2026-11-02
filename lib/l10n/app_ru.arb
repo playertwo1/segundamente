@@ -1566,5 +1566,6 @@
   },
   "sendLeavesDeviceTitle": "Этот текст покидает телефон",
   "noTimestampsFound": "Метки времени не найдены",
-  "pdfImportUnsupported": "PDF не импортируется"
+  "pdfImportUnsupported": "PDF не импортируется",
+  "importTranscriptFile": "Импортировать расшифровку"
 }

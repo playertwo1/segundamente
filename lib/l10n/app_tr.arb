@@ -1564,5 +1564,6 @@
   "authorizationTimedOut": "Yetkilendirme zaman aşımına uğradı",
   "sendLeavesDeviceTitle": "Bu metin telefondan çıkar",
   "noTimestampsFound": "Zaman damgası bulunamadı",
-  "pdfImportUnsupported": "PDF içe aktarılmaz"
+  "pdfImportUnsupported": "PDF içe aktarılmaz",
+  "importTranscriptFile": "Transkripti içe aktar"
 }

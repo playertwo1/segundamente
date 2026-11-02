@@ -3373,4 +3373,85 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get pdfImportUnsupported => 'Không nhập PDF';
+
+  @override
+  String get importTranscriptFile => 'Nhập bản ghi';
+
+  @override
+  String get openSessionReport => 'Open report';
+
+  @override
+  String get sessionReportTitle => 'Session report';
+
+  @override
+  String get reportKindFree => 'Free';
+
+  @override
+  String get reportKindMeeting => 'Meeting';
+
+  @override
+  String get reportKindBrainstorm => 'Brainstorm';
+
+  @override
+  String get reportKindJournal => 'Journal';
+
+  @override
+  String get reportKindStudy => 'Study';
+
+  @override
+  String get reportKindCustom => 'Custom';
+
+  @override
+  String get reportCustomName => 'Report name';
+
+  @override
+  String get reportGenerate => 'Generate draft';
+
+  @override
+  String get reportUnconfirmed => 'Unconfirmed';
+
+  @override
+  String get reportApproved => 'Approved';
+
+  @override
+  String get reportDiscarded => 'Discarded';
+
+  @override
+  String get reportApprove => 'Approve';
+
+  @override
+  String get reportDiscard => 'Discard';
+
+  @override
+  String get reportEdit => 'Edit';
+
+  @override
+  String get reportSourceTitle => 'Source excerpt';
+
+  @override
+  String get reportSearchHint => 'Search items';
+
+  @override
+  String get reportDefinitiveTask => 'Definitive task';
+
+  @override
+  String get reportSectionSummary => 'Summary';
+
+  @override
+  String get reportSectionIdea => 'Ideas';
+
+  @override
+  String get reportSectionOpportunity => 'Opportunities';
+
+  @override
+  String get reportSectionDecision => 'Decisions';
+
+  @override
+  String get reportSectionTask => 'Tasks';
+
+  @override
+  String get reportSectionFollowUp => 'Follow-ups';
+
+  @override
+  String get reportSectionQuestion => 'Questions';
 }

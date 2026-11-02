@@ -1,11 +1,11 @@
 # STATE — ponto de retomada
 
-**Atualizado:** 2026-11-02 · **Fase ativa:** F2 — Chat, voz e importação · **Estado:** IN_PROGRESS
+**Atualizado:** 2026-11-02 · **Fase ativa:** F3 — Extração e relatório · **Estado:** IN_PROGRESS
 
-A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua `IN_PROGRESS`: faltam resposta real de dois provedores e o login OAuth. O dono autorizou abrir a F2 em 2026-11-02 com esses dois portões abertos. O portão da F2 não fecha: os critérios 1, 2 e 3 no S25 estão `NOT_RUN`.
+A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua `IN_PROGRESS`: faltam resposta real de dois provedores e o login OAuth. A F2 continua `IN_PROGRESS`: faltam o TXT real de ~50 min, o S25 e a voz. O dono autorizou abrir a F3 em 2026-11-02 com esses três portões abertos. O portão da F3 não fecha: a amostra de 53 min e uma resposta real de modelo estão `NOT_RUN`.
 
 ## O que existe hoje (confirmado)
-- Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). `origin/main` está em `790e8b8`, 5 commits à frente do upstream `6143923`. A F1 está publicada. A F2 está no working tree, ainda sem commit.
+- Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). `origin/main` estava em `e8b30b1`, sobre a F1 `790e8b8`. A primeira leva da F2 está publicada. O botão de escolher um TXT e o relatório local da F3 entram neste commit. O portão da F3 continua aberto.
 - No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`) e Gemini (`gemini_auth_service.dart`); Claude só por chave de API (`lib/domain/models/llm_config.dart`).
 - Planejamento: `PROJECT.md`, `ROADMAP.md`, `docs/DECISIONS.md`, `docs/questionario/`.
 
@@ -39,7 +39,7 @@ A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua 
 ## Evidência da F2 (2026-11-02)
 - F2-01 `DONE` com limite explícito. Uma segunda instância `ChatSessionStorage.forTesting` leu `conversa que sobrevive` nos mesmos arquivos. Não foi morte do processo do app nem o emulador.
 - F2-02 `NOT_RUN`. Sem demonstração no S25 e sem TTS novo. SenseVoice não foi trocado.
-- F2-03 `IN_PROGRESS`. O parser cobre relógio sozinho, `Locutor 1 00:01:02`, `화자 1 (1:05)`, `[00:02:03] Locutor 2` e intervalo `00:00:10,000 --> 00:00:14,120` (usa o início). O cabeçalho vira título. Não há um TXT real de ~50 min neste ambiente.
+- F2-03 `IN_PROGRESS`. O parser cobre relógio sozinho, `Locutor 1 00:01:02`, `화자 1 (1:05)`, `[00:02:03] Locutor 2` e intervalo `00:00:10,000 --> 00:00:14,120` (usa o início). O cabeçalho vira título. A lista de conversas tem o botão de escolher um `.txt`: a prévia mostra o texto normalizado, cancelar não grava e confirmar passa os bytes originais. O teste usou o texto curto `00:01` / `olá`. Não há um TXT real de ~50 min neste ambiente, nem execução no S25.
 - F2-04 `DONE`. Depois de normalizar `00:01\r\n  olá  \r\n`, `original.bin` continua igual aos bytes de entrada. O texto normalizado é outro arquivo: `[00:00:01]\nolá`.
 - F2-05 `NOT_RUN`. Nenhuma foto foi analisada num provedor.
 - F2-06 `DONE` para colar; PDF `NOT_RUN`. O texto `nota colada sem relógio` só virou sessão com confirmação. Bytes que começam com `%PDF` não são lidos nem gravados. Nenhum PDF real foi aberto.
@@ -50,6 +50,28 @@ A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua 
   - `test/ui/chat/widgets/send_confirmation_view_test.dart`
   - `test/data/services/chat_session_storage_test.dart`
 - `flutter analyze` e a suíte inteira não foram reexecutados.
+- Publicada em `e8b30b1` (`feat(import): prévia de envio, parser de TXT e original imutável`). Esse commit não inclui o botão de escolher arquivo.
+- Botão de arquivo, neste commit. Comando: `flutter test --reporter compact` nos quatro arquivos abaixo. Saída: `00:35 +14: All tests passed!`
+  - `test/ui/chat/widgets/transcript_file_import_button_test.dart`
+  - `test/ui/chat/widgets/send_confirmation_view_test.dart`
+  - `test/domain/models/transcript_import_test.dart`
+  - `test/data/services/transcript_import_service_test.dart`
+- O `flutter test` reescreveu `analysis_options.yaml`. A alteração foi revertida com `git checkout` e não entra no próximo commit. `android/gradle.properties` não mudou.
+
+## Evidência da F3 (2026-11-02)
+- Aberta por pedido do dono, com a F0, o portão da F1 e o portão da F2 ainda abertos. A fase fica `IN_PROGRESS`. O dono aprovou o commit em 2026-11-02. O portão não fecha.
+- F3-01 `DONE` no arquivo local. Esquema versão 1 em `lib/domain/models/session_report.dart`. O relatório fica em `SessionReports/<sessionId>/report.json`, fora do SQLite. A versão 0 migra; a versão 2 lança `FormatException`. Não há um objeto separado chamado Topic: sessão, trechos e itens (resumo, ideia, oportunidade, decisão, tarefa, encaminhamento, dúvida) cobrem o extrator.
+- F3-02 `IN_PROGRESS`. O JSON do modelo é validado no fixture curto `00:01` / `fechar o escopo` e `00:02` / `mandar o resumo`. Trecho fora do segmento, relógio diferente e decisão dentro de brainstorm são recusados. O modelo não grava responsável, prazo nem status confirmado. Chamada real de modelo: `NOT_RUN`. Sessão real e amostra de 53 min: `NOT_RUN`.
+- F3-03 `DONE` no mesmo fixture. Os seis tipos geram títulos distintos: livre, reunião, brainstorm, diário, estudo e o nome customizado `Conversa com o Rafael`. Reunião traz decisão e não traz dúvida; estudo é o inverso. O segundo item de brainstorm é oportunidade; o de reunião é encaminhamento.
+- F3-04 `DONE` no fixture. Tocar a decisão `fechar o escopo` abre o trecho exato e o relógio `00:00:01`.
+- F3-05 `DONE` no fixture. A tarefa chega `não confirmado`, com `não identificado` e `não informado`, mesmo se o JSON do modelo manda `approved`, `Ana` e `amanhã`. A marca de tarefa definitiva só aparece depois do toque em aprovar.
+- F3-06 `DONE` no fixture. Editar o item para `enviar depois` mantém o trecho `mandar o resumo` e os bytes de `original.bin`. A busca por `fechar` esconde o outro item. Item descartado sai da busca. Item aprovado impede um rascunho novo (`StateError`) e o tipo continua `reuniao`. Excluir a sessão apaga `report.json` e a sessão, e deixa `original.bin` igual.
+- Comando: `flutter test --reporter compact` nos três arquivos abaixo. Saída: `00:04 +15: All tests passed!`
+  - `test/domain/models/session_report_test.dart`
+  - `test/data/services/session_report_service_test.dart`
+  - `test/ui/chat/widgets/session_report_view_test.dart`
+- `flutter analyze` e a suíte inteira não foram reexecutados.
+- Este `flutter test` reescreveu `analysis_options.yaml` de novo (`build/**`, `android/**`, `ios/**`). Revertido com `git checkout`. `android/gradle.properties` não mudou.
 
 ## Toolchain (ambiente local, fora do repo)
 - Flutter em `C:\Users\notefael\tools\flutter`, fora do PATH: usar `C:\Users\notefael\tools\flutter\bin\flutter`. `flutter config --jdk-dir` aponta para `C:\Users\notefael\AppData\Local\Programs\jdk-17` (o Java 25 padrão quebra o Gradle 8.14).
@@ -57,13 +79,14 @@ A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua 
 - O Gradle instalou sozinho o Android SDK Platform 34. As demais licenças do SDK seguem não aceitas.
 
 ## Última atividade
-- 2026-11-02: F1 publicada em `790e8b8`. F2 aberta por pedido do dono: prévia do texto que sai do telefone, parser de transcrição, original imutável e sessão só depois da confirmação. Sem chamada real de provedor, sem TXT de 50 min e sem o S25.
+- 2026-11-02: commit do botão de TXT e da F3, aprovado pelo dono. Relatório local em arquivo, validação de JSON, tipos, trecho-fonte, confirmação, edição, busca e exclusão do derivado. Sem chamada real de modelo, sem amostra de 53 min e sem o S25.
 
 ## Próxima ação
-- O portão da F2 continua aberto até os critérios 1, 2 e 3 no S25. F2-03 espera um TXT real de ~50 min. F2-02 e F2-05 estão `NOT_RUN`. A F1 continua aberta por uma resposta real de OpenAI e de Gemini. A F0 continua aberta pelo S25 (D-009). O commit desta F2 espera aprovação do dono.
+- O portão da F3 continua aberto até o critério 6 na amostra de 53 min. F3-02 espera uma saída real de modelo. A F2 continua aberta até os critérios 1, 2 e 3 no S25; F2-03 espera um TXT real de ~50 min; F2-02 e F2-05 estão `NOT_RUN`. A F1 continua aberta por uma resposta real de OpenAI e de Gemini. A F0 continua aberta pelo S25 (D-009). O dono pediu a F4 depois deste commit. Os portões da F0, da F1, da F2 e da F3 continuam abertos.
 
 ## Bloqueios e aprovações humanas
-- S25 Ultra adiado pelo dono (D-009). Sem chave de API e sem endpoint local neste ambiente. Sem TXT real de ~50 min. Commit e push da F2 esperam aprovação.
+- S25 Ultra adiado pelo dono (D-009). Sem chave de API e sem endpoint local neste ambiente. Sem TXT real de ~50 min e sem amostra de 53 min. O commit e o push de `e8b30b1` já foram feitos. O dono aprovou o commit do botão de TXT e da F3. Não emendar `e8b30b1`. O push deste commit espera um sim separado.
 
 ## Divergências entre roadmap e implementação
-- A F1 começou com a F0 ainda aberta, por pedido do dono. A F2 começou com a F0 e o portão da F1 ainda abertos, também por pedido do dono. O S25 segue `NOT_RUN` e não foi tratado como `PASS`.
+- A F1 começou com a F0 ainda aberta, por pedido do dono. A F2 começou com a F0 e o portão da F1 ainda abertos, também por pedido do dono. A F3 começou com a F0, a F1 e a F2 ainda abertas, pelo mesmo pedido. O S25 segue `NOT_RUN` e não foi tratado como `PASS`.
+- O esquema da F3 não tem um tipo Topic separado. Os itens e as seções do relatório cobrem o extrator. O relatório é arquivo, não linha só no SQLite.

@@ -1897,6 +1897,11 @@ class FileSystemService {
     return path.join(getWorkspacePath(userId), 'TranscriptImports');
   }
 
+  /// Derived session reports. The transcript original stays elsewhere.
+  String getSessionReportsPath(String userId) {
+    return path.join(getWorkspacePath(userId), 'SessionReports');
+  }
+
   /// GetKnowledgeInsightsdirectory path
   String getKnowledgeInsightsPath(String userId) {
     return path.join(getWorkspacePath(userId), 'KnowledgeInsights');

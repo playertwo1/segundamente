@@ -1566,5 +1566,6 @@
   },
   "sendLeavesDeviceTitle": "Ce texte quitte le téléphone",
   "noTimestampsFound": "Aucun horodatage trouvé",
-  "pdfImportUnsupported": "Le PDF n'est pas importé"
+  "pdfImportUnsupported": "Le PDF n'est pas importé",
+  "importTranscriptFile": "Importer la transcription"
 }

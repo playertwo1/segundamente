@@ -60,19 +60,19 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F2-06 | Texto digitado/colado como sessão; PDF de entrada se couber | P2 | F2-01 | DONE | Colar texto cria sessão; PDF `NOT_RUN` aceito se cortado |
 | F2-07 | Tela de envio: mostrar o conteúdo que sai do aparelho e pedir confirmação | P0 | F2-03 | DONE | Nada é enviado sem passar por ela |
 
-**Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra.
+**Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` na lista de conversas está no working tree e não fecha a F2-03: falta o TXT real de ~50 min.
 
 ## F3 — Extração e relatório
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
 |---|---|---|---|---|---|
-| F3-01 | Esquema versionado (Session, Segment, Insight, Task, Topic) independente de provedor | P0 | F2 | BACKLOG | Esquema + migração testada |
-| F3-02 | Extrator estruturado (JSON validado): resumo, ideias, oportunidades, decisões, tarefas, follow-ups, dúvidas | P0 | F3-01 | BACKLOG | Saída validada contra o esquema em sessão real |
-| F3-03 | Tipos de relatório (livre, reunião, brainstorm, diário, estudo) e relatório customizado | P1 | F3-02 | BACKLOG | Cada tipo gera relatório distinto |
-| F3-04 | Rastreabilidade: cada item aponta para trecho e timestamp; abrir o trecho-fonte | P0 | F3-02 | BACKLOG | Clicar numa decisão abre o trecho original |
-| F3-05 | Confirmação humana: itens `não confirmado` até aprovar; "não identificado/não informado" para responsável e prazo ausentes | P0 | F3-02 | BACKLOG | Teste: nada vira tarefa definitiva sem confirmação |
-| F3-06 | Editar/aprovar/descartar itens sem perder o texto original; busca simples e exclusão com derivados | P1 | F3-05 | BACKLOG | Edição preserva original; excluir sessão remove derivados |
+| F3-01 | Esquema versionado (Session, Segment, Insight, Task, Topic) independente de provedor | P0 | F2 | DONE | Esquema + migração testada |
+| F3-02 | Extrator estruturado (JSON validado): resumo, ideias, oportunidades, decisões, tarefas, follow-ups, dúvidas | P0 | F3-01 | IN_PROGRESS | Saída validada contra o esquema em sessão real |
+| F3-03 | Tipos de relatório (livre, reunião, brainstorm, diário, estudo) e relatório customizado | P1 | F3-02 | DONE | Cada tipo gera relatório distinto |
+| F3-04 | Rastreabilidade: cada item aponta para trecho e timestamp; abrir o trecho-fonte | P0 | F3-02 | DONE | Clicar numa decisão abre o trecho original |
+| F3-05 | Confirmação humana: itens `não confirmado` até aprovar; "não identificado/não informado" para responsável e prazo ausentes | P0 | F3-02 | DONE | Teste: nada vira tarefa definitiva sem confirmação |
+| F3-06 | Editar/aprovar/descartar itens sem perder o texto original; busca simples e exclusão com derivados | P1 | F3-05 | DONE | Edição preserva original; excluir sessão remove derivados |
 
-**Portão F3:** critério 6 + a amostra de 53 min não perde pontos centrais nem timestamps.
+**Portão F3:** critério 6 + a amostra de 53 min não perde pontos centrais nem timestamps. O esquema e a tela entram no commit do botão de TXT e da F3. A amostra de 53 min e uma resposta real de modelo continuam `NOT_RUN`, então o portão não fecha. A F3 foi aberta com os portões da F0, da F1 e da F2 ainda abertos.
 
 ## F4 — Exportação
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |

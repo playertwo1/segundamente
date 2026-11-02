@@ -1566,5 +1566,6 @@
   },
   "sendLeavesDeviceTitle": "Teks ini keluar dari ponsel",
   "noTimestampsFound": "Tidak ada stempel waktu",
-  "pdfImportUnsupported": "PDF tidak diimpor"
+  "pdfImportUnsupported": "PDF tidak diimpor",
+  "importTranscriptFile": "Impor transkrip"
 }

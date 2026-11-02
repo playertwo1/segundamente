@@ -3412,4 +3412,85 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get pdfImportUnsupported => 'PDF não é importado';
+
+  @override
+  String get importTranscriptFile => 'Importar transcrição';
+
+  @override
+  String get openSessionReport => 'Abrir relatório';
+
+  @override
+  String get sessionReportTitle => 'Relatório da sessão';
+
+  @override
+  String get reportKindFree => 'Livre';
+
+  @override
+  String get reportKindMeeting => 'Reunião';
+
+  @override
+  String get reportKindBrainstorm => 'Brainstorm';
+
+  @override
+  String get reportKindJournal => 'Diário';
+
+  @override
+  String get reportKindStudy => 'Estudo';
+
+  @override
+  String get reportKindCustom => 'Personalizado';
+
+  @override
+  String get reportCustomName => 'Nome do relatório';
+
+  @override
+  String get reportGenerate => 'Gerar rascunho';
+
+  @override
+  String get reportUnconfirmed => 'Não confirmado';
+
+  @override
+  String get reportApproved => 'Confirmado';
+
+  @override
+  String get reportDiscarded => 'Descartado';
+
+  @override
+  String get reportApprove => 'Confirmar item';
+
+  @override
+  String get reportDiscard => 'Descartar';
+
+  @override
+  String get reportEdit => 'Editar';
+
+  @override
+  String get reportSourceTitle => 'Trecho de origem';
+
+  @override
+  String get reportSearchHint => 'Buscar itens';
+
+  @override
+  String get reportDefinitiveTask => 'Tarefa definitiva';
+
+  @override
+  String get reportSectionSummary => 'Resumo';
+
+  @override
+  String get reportSectionIdea => 'Ideias';
+
+  @override
+  String get reportSectionOpportunity => 'Oportunidades';
+
+  @override
+  String get reportSectionDecision => 'Decisões';
+
+  @override
+  String get reportSectionTask => 'Tarefas';
+
+  @override
+  String get reportSectionFollowUp => 'Encaminhamentos';
+
+  @override
+  String get reportSectionQuestion => 'Dúvidas';
 }

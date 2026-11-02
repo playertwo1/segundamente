@@ -1566,5 +1566,6 @@
   },
   "sendLeavesDeviceTitle": "यह पाठ फ़ोन से बाहर जाता है",
   "noTimestampsFound": "कोई टाइमस्टैम्प नहीं मिला",
-  "pdfImportUnsupported": "PDF आयात नहीं होता"
+  "pdfImportUnsupported": "PDF आयात नहीं होता",
+  "importTranscriptFile": "ट्रांसक्रिप्ट आयात करें"
 }

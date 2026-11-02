@@ -1564,5 +1564,6 @@
   "authorizationTimedOut": "การอนุญาตหมดเวลา",
   "sendLeavesDeviceTitle": "ข้อความนี้จะออกจากโทรศัพท์",
   "noTimestampsFound": "ไม่พบเวลา",
-  "pdfImportUnsupported": "ไม่นำเข้า PDF"
+  "pdfImportUnsupported": "ไม่นำเข้า PDF",
+  "importTranscriptFile": "นำเข้าถอดความ"
 }

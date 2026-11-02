@@ -40,6 +40,8 @@ import 'package:memex/utils/logger.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/data/services/chat_service.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
+import 'package:memex/data/services/session_report_service.dart';
+import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/data/services/file_system_service.dart';
 import 'package:memex/data/services/local_task_executor.dart';
 import 'package:memex/data/services/global_event_bus.dart';
@@ -1161,6 +1163,91 @@ class MemexRouter {
       _logger.severe('Failed to delete chat session: $e');
       return false;
     }
+  }
+
+  Future<Result<SessionReport?>> loadSessionReport(String sessionId) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      return SessionReportService().load(userId: userId, sessionId: sessionId);
+    });
+  }
+
+  Future<Result<SessionReport>> draftSessionReport({
+    required String sessionId,
+    required ReportKind kind,
+    required String? customTitle,
+  }) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      return SessionReportService().draft(
+        userId: userId,
+        sessionId: sessionId,
+        kind: kind,
+        customTitle: customTitle,
+      );
+    });
+  }
+
+  Future<Result<SessionReport>> applySessionReportJson({
+    required String sessionId,
+    required ReportKind kind,
+    required String? customTitle,
+    required Map<String, dynamic> json,
+  }) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      return SessionReportService().applyModelJson(
+        userId: userId,
+        sessionId: sessionId,
+        kind: kind,
+        customTitle: customTitle,
+        json: json,
+      );
+    });
+  }
+
+  Future<Result<SessionReport>> editSessionReportItem({
+    required String sessionId,
+    required String itemId,
+    required String text,
+    required String assignee,
+    required String due,
+  }) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      return SessionReportService().editItem(
+        userId: userId,
+        sessionId: sessionId,
+        itemId: itemId,
+        text: text,
+        assignee: assignee,
+        due: due,
+      );
+    });
+  }
+
+  Future<Result<SessionReport>> setSessionReportItemStatus({
+    required String sessionId,
+    required String itemId,
+    required ReportItemStatus status,
+  }) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      return SessionReportService().setStatus(
+        userId: userId,
+        sessionId: sessionId,
+        itemId: itemId,
+        status: status,
+      );
+    });
+  }
+
+  Future<String> _reportUserId() async {
+    final userId = await UserStorage.getUserId();
+    if (userId == null || userId.isEmpty) {
+      throw StateError('user missing');
+    }
+    return userId;
   }
 
   Future<Result<List<CharacterModel>>> fetchCharacters() async {

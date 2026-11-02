@@ -1566,5 +1566,6 @@
   },
   "sendLeavesDeviceTitle": "このテキストは端末の外に出ます",
   "noTimestampsFound": "タイムスタンプが見つかりません",
-  "pdfImportUnsupported": "PDFは取り込みません"
+  "pdfImportUnsupported": "PDFは取り込みません",
+  "importTranscriptFile": "文字起こしを読み込む"
 }

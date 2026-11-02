@@ -1566,5 +1566,6 @@
   "authorizationTimedOut": "Ủy quyền đã hết hạn",
   "sendLeavesDeviceTitle": "Đoạn chữ này rời khỏi điện thoại",
   "noTimestampsFound": "Không thấy mốc thời gian",
-  "pdfImportUnsupported": "Không nhập PDF"
+  "pdfImportUnsupported": "Không nhập PDF",
+  "importTranscriptFile": "Nhập bản ghi"
 }

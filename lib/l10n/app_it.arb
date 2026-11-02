@@ -1564,5 +1564,6 @@
   "authorizationTimedOut": "Autorizzazione scaduta",
   "sendLeavesDeviceTitle": "Questo testo esce dal telefono",
   "noTimestampsFound": "Nessun timestamp trovato",
-  "pdfImportUnsupported": "Il PDF non viene importato"
+  "pdfImportUnsupported": "Il PDF non viene importato",
+  "importTranscriptFile": "Importa trascrizione"
 }

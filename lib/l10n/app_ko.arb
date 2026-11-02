@@ -1566,5 +1566,6 @@
   },
   "sendLeavesDeviceTitle": "이 텍스트는 휴대폰 밖으로 나갑니다",
   "noTimestampsFound": "타임스탬프가 없습니다",
-  "pdfImportUnsupported": "PDF는 가져오지 않습니다"
+  "pdfImportUnsupported": "PDF는 가져오지 않습니다",
+  "importTranscriptFile": "받아쓰기 가져오기"
 }

@@ -3265,6 +3265,87 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pdfImportUnsupported => '不导入 PDF';
+
+  @override
+  String get importTranscriptFile => '导入转写';
+
+  @override
+  String get openSessionReport => '打开报告';
+
+  @override
+  String get sessionReportTitle => '会话报告';
+
+  @override
+  String get reportKindFree => '自由';
+
+  @override
+  String get reportKindMeeting => '会议';
+
+  @override
+  String get reportKindBrainstorm => '头脑风暴';
+
+  @override
+  String get reportKindJournal => '日记';
+
+  @override
+  String get reportKindStudy => '学习';
+
+  @override
+  String get reportKindCustom => '自定义';
+
+  @override
+  String get reportCustomName => '报告名称';
+
+  @override
+  String get reportGenerate => '生成草稿';
+
+  @override
+  String get reportUnconfirmed => '未确认';
+
+  @override
+  String get reportApproved => '已确认';
+
+  @override
+  String get reportDiscarded => '已丢弃';
+
+  @override
+  String get reportApprove => '确认';
+
+  @override
+  String get reportDiscard => '丢弃';
+
+  @override
+  String get reportEdit => '编辑';
+
+  @override
+  String get reportSourceTitle => '来源片段';
+
+  @override
+  String get reportSearchHint => '搜索条目';
+
+  @override
+  String get reportDefinitiveTask => '确定任务';
+
+  @override
+  String get reportSectionSummary => '摘要';
+
+  @override
+  String get reportSectionIdea => '想法';
+
+  @override
+  String get reportSectionOpportunity => '机会';
+
+  @override
+  String get reportSectionDecision => '决定';
+
+  @override
+  String get reportSectionTask => '任务';
+
+  @override
+  String get reportSectionFollowUp => '跟进';
+
+  @override
+  String get reportSectionQuestion => '疑问';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -6532,4 +6613,85 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get pdfImportUnsupported => '不匯入 PDF';
+
+  @override
+  String get importTranscriptFile => '匯入轉寫';
+
+  @override
+  String get openSessionReport => '開啟報告';
+
+  @override
+  String get sessionReportTitle => '工作階段報告';
+
+  @override
+  String get reportKindFree => '自由';
+
+  @override
+  String get reportKindMeeting => '會議';
+
+  @override
+  String get reportKindBrainstorm => '腦力激盪';
+
+  @override
+  String get reportKindJournal => '日記';
+
+  @override
+  String get reportKindStudy => '學習';
+
+  @override
+  String get reportKindCustom => '自訂';
+
+  @override
+  String get reportCustomName => '報告名稱';
+
+  @override
+  String get reportGenerate => '產生草稿';
+
+  @override
+  String get reportUnconfirmed => '未確認';
+
+  @override
+  String get reportApproved => '已確認';
+
+  @override
+  String get reportDiscarded => '已捨棄';
+
+  @override
+  String get reportApprove => '確認項目';
+
+  @override
+  String get reportDiscard => '捨棄';
+
+  @override
+  String get reportEdit => '編輯';
+
+  @override
+  String get reportSourceTitle => '來源片段';
+
+  @override
+  String get reportSearchHint => '搜尋項目';
+
+  @override
+  String get reportDefinitiveTask => '確定任務';
+
+  @override
+  String get reportSectionSummary => '摘要';
+
+  @override
+  String get reportSectionIdea => '想法';
+
+  @override
+  String get reportSectionOpportunity => '機會';
+
+  @override
+  String get reportSectionDecision => '決定';
+
+  @override
+  String get reportSectionTask => '任務';
+
+  @override
+  String get reportSectionFollowUp => '後續';
+
+  @override
+  String get reportSectionQuestion => '疑問';
 }

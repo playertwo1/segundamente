@@ -6093,6 +6093,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PDF is not imported'**
   String get pdfImportUnsupported;
+
+  /// No description provided for @importTranscriptFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Import transcript'**
+  String get importTranscriptFile;
+
+  /// No description provided for @openSessionReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Open report'**
+  String get openSessionReport;
+
+  /// No description provided for @sessionReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Session report'**
+  String get sessionReportTitle;
+
+  /// No description provided for @reportKindFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get reportKindFree;
+
+  /// No description provided for @reportKindMeeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting'**
+  String get reportKindMeeting;
+
+  /// No description provided for @reportKindBrainstorm.
+  ///
+  /// In en, this message translates to:
+  /// **'Brainstorm'**
+  String get reportKindBrainstorm;
+
+  /// No description provided for @reportKindJournal.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal'**
+  String get reportKindJournal;
+
+  /// No description provided for @reportKindStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Study'**
+  String get reportKindStudy;
+
+  /// No description provided for @reportKindCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get reportKindCustom;
+
+  /// No description provided for @reportCustomName.
+  ///
+  /// In en, this message translates to:
+  /// **'Report name'**
+  String get reportCustomName;
+
+  /// No description provided for @reportGenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate draft'**
+  String get reportGenerate;
+
+  /// No description provided for @reportUnconfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unconfirmed'**
+  String get reportUnconfirmed;
+
+  /// No description provided for @reportApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get reportApproved;
+
+  /// No description provided for @reportDiscarded.
+  ///
+  /// In en, this message translates to:
+  /// **'Discarded'**
+  String get reportDiscarded;
+
+  /// No description provided for @reportApprove.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get reportApprove;
+
+  /// No description provided for @reportDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get reportDiscard;
+
+  /// No description provided for @reportEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get reportEdit;
+
+  /// No description provided for @reportSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Source excerpt'**
+  String get reportSourceTitle;
+
+  /// No description provided for @reportSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search items'**
+  String get reportSearchHint;
+
+  /// No description provided for @reportDefinitiveTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Definitive task'**
+  String get reportDefinitiveTask;
+
+  /// No description provided for @reportSectionSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get reportSectionSummary;
+
+  /// No description provided for @reportSectionIdea.
+  ///
+  /// In en, this message translates to:
+  /// **'Ideas'**
+  String get reportSectionIdea;
+
+  /// No description provided for @reportSectionOpportunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Opportunities'**
+  String get reportSectionOpportunity;
+
+  /// No description provided for @reportSectionDecision.
+  ///
+  /// In en, this message translates to:
+  /// **'Decisions'**
+  String get reportSectionDecision;
+
+  /// No description provided for @reportSectionTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get reportSectionTask;
+
+  /// No description provided for @reportSectionFollowUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-ups'**
+  String get reportSectionFollowUp;
+
+  /// No description provided for @reportSectionQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get reportSectionQuestion;
 }
 
 class _AppLocalizationsDelegate
