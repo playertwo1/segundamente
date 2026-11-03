@@ -1067,6 +1067,9 @@ class _AgentChatDialogState extends State<AgentChatDialog>
   }
 
   void _requestPhotoSuggestions() {
+    // Sugestões de fotos recentes desativadas: a faixa saiu do chat.
+    return;
+    // ignore: dead_code
     if (_isPhotoPickerActive || _photoSuggestionLoadFuture != null) return;
 
     late final Future<void> loadFuture;
@@ -1100,53 +1103,6 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         _requestPhotoSuggestions();
       }
     }
-  }
-
-  bool _isSuggestionClusterSelected(List<EnhancedPhoto> cluster) {
-    return cluster.isNotEmpty &&
-        cluster.every(
-          (photo) => _allSelectedImages.any(
-            (image) => image.path == photo.xFile.path,
-          ) || (_galleryAttachments?.items.any(
-              (item) => item.assetId == photo.entity.id) ?? false),
-        );
-  }
-
-  void _togglePhotoSuggestionCluster(List<EnhancedPhoto> cluster) {
-    if (cluster.isEmpty) return;
-
-    if (_isSuggestionClusterSelected(cluster)) {
-      setState(() {
-        for (final photo in cluster) {
-          _selectedImages
-              .removeWhere((image) => image.path == photo.xFile.path);
-          _originalFilenames.remove(photo.xFile.path);
-          for (final item
-              in _galleryAttachments?.items ?? <SelectedPhotoAttachment>[]) {
-            if (item.assetId == photo.entity.id ||
-                item.prepared?.path == photo.xFile.path) {
-              _galleryAttachments!.remove(item);
-            }
-          }
-        }
-      });
-      return;
-    }
-
-    setState(() {
-      for (final photo in cluster) {
-        final alreadySelected =
-            _allSelectedImages.any((image) => image.path == photo.xFile.path) ||
-                (_galleryAttachments?.items
-                        .any((item) => item.assetId == photo.entity.id) ??
-                    false);
-        if (alreadySelected) continue;
-
-        // Keep the original EXIF/GPS-carrying file from assetToXFile().
-        _selectedImages.add(photo.xFile);
-        _originalFilenames[photo.xFile.path] = photo.xFile.name;
-      }
-    });
   }
 
   void _recordSentImageHashes(
@@ -2266,123 +2222,6 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     return _buildSuperAgentInput();
   }
 
-  Widget _buildPhotoSuggestionRow() {
-    final showStatus = shouldShowSuperAgentPhotoSuggestionStatus(
-      isLoading: _isLoadingPhotoSuggestions,
-      hasSuggestions: _photoSuggestionClusters.isNotEmpty,
-      hasLoadedSuggestions: _hasLoadedPhotoSuggestions,
-    );
-
-    return SizedBox(
-      key: superAgentPhotoSuggestionSlotKey,
-      height: superAgentPhotoSuggestionSlotHeight,
-      child: Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: _photoSuggestionClusters.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 8),
-            itemBuilder: (context, index) {
-              return _buildPhotoSuggestionChip(_photoSuggestionClusters[index]);
-            },
-          ),
-          if (showStatus) _buildPhotoSuggestionStatus(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPhotoSuggestionStatus() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Row(
-        children: [
-          Icon(
-            Icons.photo_library_outlined,
-            size: 18,
-            color: AppColors.primary.withValues(alpha: 0.55),
-          ),
-          const SizedBox(width: 10),
-          Flexible(
-            child: Text(
-              _agentChat.findingRecentPhotos,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppColors.textTertiary,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPhotoSuggestionChip(List<EnhancedPhoto> cluster) {
-    final isSelected = _isSuggestionClusterSelected(cluster);
-
-    return GestureDetector(
-      onTap: () => _togglePhotoSuggestionCluster(cluster),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(
-            color: isSelected
-                ? AppColors.primary.withValues(alpha: 0.45)
-                : const Color(0xFFE2E8F0),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ...cluster.take(5).map(
-                  (photo) => Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 6),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: SizedBox(
-                        width: 46,
-                        height: 46,
-                        child: AssetEntityImage(
-                          photo.entity,
-                          fit: BoxFit.cover,
-                          isOriginal: false,
-                          thumbnailSize: const ThumbnailSize.square(120),
-                          thumbnailFormat: ThumbnailFormat.jpeg,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-            if (cluster.length > 5)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(end: 6),
-                child: Text(
-                  '+${cluster.length - 5}',
-                  style: const TextStyle(
-                    color: AppColors.textTertiary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            const SizedBox(width: 2),
-            Icon(
-              isSelected ? Icons.check_circle : Icons.add_circle_outline,
-              size: 20,
-              color: isSelected ? AppColors.primary : const Color(0xFFCBD5E1),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildSuperAgentInput() {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -2394,8 +2233,6 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildPhotoSuggestionRow(),
-          const SizedBox(height: 10),
           if (!_canSubmitAttachments)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),

@@ -7,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:memex/data/services/photo_attachment_service.dart';
 import 'package:memex/data/services/native_photo_picker_service.dart';
-import 'package:memex/data/services/photo_suggestion_service.dart';
-import 'package:memex/domain/models/native_photo_selection.dart';
 import 'package:memex/ui/chat/view_models/photo_attachments_viewmodel.dart';
 import 'package:memex/ui/core/widgets/reliable_asset_picker.dart';
 
@@ -113,69 +111,6 @@ void main() {
     } finally {
       debugDefaultTargetPlatformOverride = null;
     }
-  });
-
-  testWidgets(
-      'recommended photo selected through native picker can be deselected by asset ID',
-      (tester) async {
-    final original = Completer<Map<String, Object>>();
-    final png = base64Decode(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=');
-    final released = <String>[];
-    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        NativePhotoPickerService.channel, (call) async {
-      switch (call.method) {
-        case 'thumbnail':
-          return png;
-        case 'prepareOriginal':
-          return original.future;
-        case 'release':
-          released.add(call.arguments['id'] as String);
-          return null;
-      }
-      return null;
-    });
-    const photoChannel = MethodChannel('com.fluttercandies/photo_manager');
-    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        photoChannel,
-        (call) async =>
-            call.method == 'getTitleAsync' ? 'suggestion.jpg' : png);
-    addTearDown(() {
-      tester.binding.defaultBinaryMessenger
-          .setMockMethodCallHandler(NativePhotoPickerService.channel, null);
-      tester.binding.defaultBinaryMessenger
-          .setMockMethodCallHandler(photoChannel, null);
-    });
-    final vm = PhotoAttachmentsViewModel.forTesting(
-        loader: (_) async => throw StateError('No library export expected'));
-    vm.addNativePhotos(
-        [const NativePhotoSelection(id: 'native-copy', assetId: 'same-photo')]);
-    final suggestion = EnhancedPhoto(
-        entity:
-            AssetEntity(id: 'same-photo', typeInt: 1, width: 100, height: 100),
-        xFile: XFile('/different/suggestion.jpg'),
-        time: DateTime(2026, 10, 30));
-    await _pumpDialogFrame(tester,
-        dialog: AgentChatDialog(
-            photoAttachmentsForTesting: vm,
-            photoSuggestionsForTesting: [
-              [suggestion]
-            ],
-            initialDraftText: 'keep draft'));
-    await tester.pump(const Duration(milliseconds: 600));
-    expect(find.byIcon(Icons.check_circle), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.check_circle));
-    await tester.pump();
-    expect(find.byIcon(Icons.add_circle_outline), findsOneWidget);
-    expect(vm.items, isEmpty);
-    expect(released, ['native-copy']);
-    original.complete(
-        {'path': '/native/export.heic', 'originalName': 'export.heic'});
-    await tester.pump();
-    expect(vm.items, isEmpty);
-    expect(find.text('keep draft'), findsOneWidget);
-    await tester.pumpWidget(const SizedBox.shrink());
-    vm.dispose();
   });
 
   testWidgets('attach menu offers camera, gallery, TXT, PDF and audio',
@@ -920,24 +855,6 @@ void main() {
       );
 
       expect(find.byType(AgentLogoLoading), findsNothing);
-    });
-
-    testWidgets('reserves the photo suggestion slot on the first frame', (
-      tester,
-    ) async {
-      await _pumpDialogFrame(tester);
-
-      final slotFinder = find.byKey(superAgentPhotoSuggestionSlotKey);
-
-      expect(slotFinder, findsOneWidget);
-      expect(
-        tester.getSize(slotFinder).height,
-        superAgentPhotoSuggestionSlotHeight,
-      );
-      expect(
-        find.text(UserStorage.l10n.agentChat.findingRecentPhotos),
-        findsOneWidget,
-      );
     });
 
     testWidgets('renders selected images through the cached image widget', (
