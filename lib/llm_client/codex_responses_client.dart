@@ -334,14 +334,11 @@ Map<String, dynamic> _createRequestBody(
             'file_data': 'data:${part.mimeType};base64,${part.base64Data}',
           });
         } else if (part is AudioPart) {
-          String format = 'wav';
-          if (part.mimeType.toLowerCase().contains('mp3') ||
-              part.mimeType.toLowerCase().contains('mpeg')) {
-            format = 'mp3';
-          }
+          // O backend ChatGPT/OAuth responde 400 "Audio input is not available";
+          // um áudio no histórico travaria todas as chamadas seguintes.
           contentList.add({
-            'type': 'input_audio',
-            'input_audio': {'data': part.base64Data, 'format': format},
+            'type': 'input_text',
+            'text': '[audio omitted: not supported by this provider]',
           });
         }
       }

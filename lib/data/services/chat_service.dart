@@ -9,7 +9,7 @@ import 'package:logging/logging.dart';
 import 'package:memex/agent/memex_skill_host_agent/memex_skill_host_agent.dart';
 import 'package:memex/agent/run_mode/agent_run_mode.dart';
 import 'package:memex/agent/pure_skill_host_agent/pure_skill_host_agent.dart';
-import 'package:memex/utils/audio_converter.dart';
+import 'package:memex/data/services/speech_transcription_service.dart';
 import 'package:memex/agent/state_util.dart';
 import 'package:memex/agent/super_agent/super_agent.dart';
 import 'package:memex/agent/super_agent/subagent/delegate_progress.dart';
@@ -944,27 +944,28 @@ class ChatService {
         ),
       ];
       for (final file in files) {
-        var path = file['path'];
+        final path = file['path'];
         if (path == null) continue;
-        var mime = file['mime'] ?? 'application/octet-stream';
-        // O backend só aceita wav/mp3; converte m4a, aac, ogg etc.
-        if (mime.startsWith('audio/') &&
-            mime != 'audio/wav' &&
-            mime != 'audio/mpeg') {
-          final wav = await AudioConverter.toWav16kMono(path);
-          if (wav == null) {
-            userContentParts.add(TextPart(
-                'Audio ${file['name'] ?? path} could not be converted.'));
-            continue;
+        final mime = file['mime'] ?? 'application/octet-stream';
+        if (mime.startsWith('audio/')) {
+          // O ChatGPT por OAuth não aceita áudio: envia só a transcrição.
+          String? transcript;
+          try {
+            transcript = await SpeechTranscriptionService.instance
+                .transcribeFile(path, skipLengthCheck: true);
+          } catch (e) {
+            _logger.warning('Audio transcription failed: $e');
           }
-          path = wav;
-          mime = 'audio/wav';
+          userContentParts.add(TextPart(
+            transcript == null || transcript.trim().isEmpty
+                ? 'Audio ${file['name'] ?? path} could not be transcribed.'
+                : 'Transcript of audio ${file['name'] ?? path}:\n$transcript',
+          ));
+          continue;
         }
         final data = base64Encode(await File(path).readAsBytes());
         userContentParts.add(TextPart('Attached file: ${file['name'] ?? path}'));
-        userContentParts.add(mime.startsWith('audio/')
-            ? AudioPart(data, mime)
-            : DocumentPart(data, mime));
+        userContentParts.add(DocumentPart(data, mime));
       }
       final inlinedImageFileNames = <String>[];
       for (var i = 0; i < preparedImages.length; i++) {
