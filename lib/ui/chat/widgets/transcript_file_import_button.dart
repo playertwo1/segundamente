@@ -48,11 +48,15 @@ class TranscriptFileImportButton extends StatefulWidget {
     this.pickBytes = pickTranscriptTxtBytes,
     this.store = storeConfirmedTranscript,
     this.onStored,
+    this.onConfirmed,
   });
 
   final Future<List<int>?> Function() pickBytes;
   final Future<bool> Function(TranscriptImport source) store;
   final Future<void> Function()? onStored;
+
+  /// Receives the confirmed text, e.g. to send it into the open chat.
+  final void Function(String text)? onConfirmed;
 
   @override
   State<TranscriptFileImportButton> createState() =>
@@ -82,6 +86,7 @@ class _TranscriptFileImportButtonState
       if (!mounted || !saved) return;
       ToastHelper.showSuccess(context, UserStorage.l10n.dataImportSuccess);
       await widget.onStored?.call();
+      widget.onConfirmed?.call(batch.outgoingText);
     } catch (error, stackTrace) {
       _logger.severe(
         'Transcript file was not stored: $error',

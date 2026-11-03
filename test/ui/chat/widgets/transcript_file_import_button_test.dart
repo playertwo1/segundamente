@@ -21,6 +21,7 @@ void main() {
     required Future<List<int>?> Function() pickBytes,
     required Future<bool> Function(TranscriptImport source) store,
     Future<void> Function()? onStored,
+    void Function(String text)? onConfirmed,
   }) {
     return tester.pumpWidget(
       MaterialApp(
@@ -33,6 +34,7 @@ void main() {
                 pickBytes: pickBytes,
                 store: store,
                 onStored: onStored,
+                onConfirmed: onConfirmed,
               ),
             ],
           ),
@@ -91,6 +93,7 @@ void main() {
     final bytes = utf8.encode('00:01\nolá');
     final stored = <TranscriptImport>[];
     var refreshes = 0;
+    final sent = <String>[];
     await pump(
       tester,
       pickBytes: () async => bytes,
@@ -101,6 +104,7 @@ void main() {
       onStored: () async {
         refreshes += 1;
       },
+      onConfirmed: sent.add,
     );
 
     await tester.tap(find.byKey(const ValueKey('import_transcript_file')));
@@ -112,6 +116,7 @@ void main() {
     expect(stored.single.originalBytes, bytes);
     expect(stored.single.normalizedText, '[00:00:01]\nolá');
     expect(refreshes, 1);
+    expect(sent, ['[00:00:01]\nolá']);
     expect(find.text(UserStorage.l10n.dataImportSuccess), findsOneWidget);
   });
 

@@ -2476,7 +2476,9 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                             icon: Icons.photo_library,
                             onTap: () => _pickImage(ImageSource.gallery),
                           ),
-                          const TranscriptFileImportButton(),
+                          TranscriptFileImportButton(
+                            onConfirmed: (text) => _sendMessage(text),
+                          ),
                           if (_showRunModeSelector) _buildRunModeChip(),
                         ],
                       ),
