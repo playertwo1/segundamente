@@ -4,6 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/domain/models/transcript_import.dart';
 
 void main() {
+  test('decodes UTF-16 with BOM and keeps the original bytes', () {
+    const raw = 'Conteúdo\n00:01 olá';
+    final be = <int>[0xFE, 0xFF, for (final u in raw.codeUnits) ...[u >> 8, u & 255]];
+    final le = <int>[0xFF, 0xFE, for (final u in raw.codeUnits) ...[u & 255, u >> 8]];
+    for (final bytes in [be, le]) {
+      final parsed = TranscriptImport.parse(bytes);
+      expect(parsed.kind, TranscriptKind.text);
+      expect(parsed.outgoingText, contains('Conteúdo'));
+      expect(parsed.originalBytes, bytes);
+    }
+  });
+
   test('keeps Samsung-style clocks and leaves the header as a title', () {
     const raw = 'Reunião\n'
         '\n'
