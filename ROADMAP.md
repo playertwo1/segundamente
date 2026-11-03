@@ -43,7 +43,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F1-01 | Model Registry: catálogo por provedor, cache/versionamento, status (suportado / acessível pela conta / não testado) | P0 | F0 | DONE | Testes unitários + tela de seleção |
 | F1-02 | Model ID personalizado e base URL customizável | P0 | F1-01 | IN_PROGRESS | Modelo fora da lista padrão selecionado por ID manual e respondendo |
 | F1-03 | Teste de conexão e matriz de capacidades por adaptador (texto, streaming, JSON, visão, áudio) | P0 | F1-01 | IN_PROGRESS | Resposta real de OpenAI e Gemini; aviso quando falta capacidade |
-| F1-04 | Verificar OAuth OpenAI/Gemini (client_id dos CLIs oficiais) e registrar risco de termos | P1 | F0-05 | IN_PROGRESS | Login funcionando no S25 + nota de risco em `docs/DECISIONS.md` |
+| F1-04 | Verificar OAuth OpenAI/Gemini (client_id dos CLIs oficiais) e registrar risco de termos | P1 | F0-05 | DONE (OpenAI; Gemini BLOCKED) | Login funcionando no S25 + nota de risco em `docs/DECISIONS.md` |
 | F1-05 | Claude por chave de API (opcional) e endpoint compatível/local | P2 | F1-02 | NOT_RUN | Uma chamada real de cada, ou `NOT_RUN` justificado |
 | F1-06 | Troca de provedor sem perder histórico | P0 | F1-01 | DONE | Conversa mantida após trocar de modelo |
 
