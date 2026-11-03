@@ -42,6 +42,41 @@ Future<bool> storeConfirmedTranscript(TranscriptImport source) async {
   );
 }
 
+/// Picks one `.txt`, asks for confirmation, stores the original and reports
+/// the confirmed text through [onConfirmed].
+Future<void> importTranscriptFile(
+  BuildContext context, {
+  Future<List<int>?> Function() pickBytes = pickTranscriptTxtBytes,
+  Future<bool> Function(TranscriptImport source) store =
+      storeConfirmedTranscript,
+  Future<void> Function()? onStored,
+  void Function(String text)? onConfirmed,
+}) async {
+  try {
+    final bytes = await pickBytes();
+    if (bytes == null || !context.mounted) return;
+    final source = TranscriptImport.parse(bytes);
+    final batch = TranscriptBatch([source]);
+    final accepted = await showSendConfirmationDialog(
+      context: context,
+      outgoingText: batch.outgoingText,
+      timestampsFound: batch.timestampsFound,
+      pdfUnsupported: batch.pdfUnsupported,
+    );
+    if (!accepted || !context.mounted) return;
+    final saved = await store(source);
+    if (!context.mounted || !saved) return;
+    ToastHelper.showSuccess(context, UserStorage.l10n.dataImportSuccess);
+    await onStored?.call();
+    onConfirmed?.call(batch.outgoingText);
+  } catch (error, stackTrace) {
+    _logger.severe('Transcript file was not stored: $error', error, stackTrace);
+    if (context.mounted) {
+      ToastHelper.showError(context, UserStorage.l10n.operationFailed(error));
+    }
+  }
+}
+
 class TranscriptFileImportButton extends StatefulWidget {
   const TranscriptFileImportButton({
     super.key,
@@ -70,38 +105,14 @@ class _TranscriptFileImportButtonState
   Future<void> _import() async {
     if (_busy) return;
     setState(() => _busy = true);
-    try {
-      final bytes = await widget.pickBytes();
-      if (bytes == null || !mounted) return;
-      final source = TranscriptImport.parse(bytes);
-      final batch = TranscriptBatch([source]);
-      final accepted = await showSendConfirmationDialog(
-        context: context,
-        outgoingText: batch.outgoingText,
-        timestampsFound: batch.timestampsFound,
-        pdfUnsupported: batch.pdfUnsupported,
-      );
-      if (!accepted || !mounted) return;
-      final saved = await widget.store(source);
-      if (!mounted || !saved) return;
-      ToastHelper.showSuccess(context, UserStorage.l10n.dataImportSuccess);
-      await widget.onStored?.call();
-      widget.onConfirmed?.call(batch.outgoingText);
-    } catch (error, stackTrace) {
-      _logger.severe(
-        'Transcript file was not stored: $error',
-        error,
-        stackTrace,
-      );
-      if (mounted) {
-        ToastHelper.showError(
-          context,
-          UserStorage.l10n.operationFailed(error),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
+    await importTranscriptFile(
+      context,
+      pickBytes: widget.pickBytes,
+      store: widget.store,
+      onStored: widget.onStored,
+      onConfirmed: widget.onConfirmed,
+    );
+    if (mounted) setState(() => _busy = false);
   }
 
   @override

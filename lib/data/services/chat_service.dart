@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dart_agent_core/dart_agent_core.dart';
 import 'package:dio/dio.dart' show CancelToken;
@@ -376,6 +377,7 @@ class ChatService {
     List<Map<String, String>>? refs,
     List<XFile> images = const [],
     Map<String, String>? imageOriginalFilenames,
+    List<Map<String, String>> files = const [],
     bool isQuickQuery = false,
     String runMode = 'auto',
   }) async* {
@@ -412,7 +414,7 @@ class ChatService {
       return;
     }
 
-    if (trimmedMessage.isEmpty && preparedImages.isEmpty) {
+    if (trimmedMessage.isEmpty && preparedImages.isEmpty && files.isEmpty) {
       yield ChatErrorEvent(turnId, chatErrorEmptyMessage());
       return;
     }
@@ -420,6 +422,7 @@ class ChatService {
     final sessionContent = _buildSessionUserContent(
       trimmedMessage,
       preparedImages,
+      files,
     );
 
     // 1. Session Management
@@ -509,6 +512,7 @@ class ChatService {
           'scene_id': sceneId,
           'refs': refs,
           'images': preparedImages.map((image) => image.toTaskJson()).toList(),
+          'files': files,
           'is_quick_query': isQuickQuery,
           'run_mode': runMode,
           'user_message_time': userMessageTime.toIso8601String(),
@@ -561,6 +565,7 @@ class ChatService {
     final sceneId = payload['scene_id'] as String?;
     final refs = _decodeRefs(payload['refs']);
     final preparedImages = _decodePreparedImages(payload['images']);
+    final files = _decodeRefs(payload['files']) ?? const [];
     final isQuickQuery = payload['is_quick_query'] as bool? ?? false;
     final runMode = payload['run_mode'] as String? ?? 'auto';
     final userMessageTime =
@@ -594,6 +599,7 @@ class ChatService {
       sceneId: sceneId,
       refs: refs,
       preparedImages: preparedImages,
+      files: files,
       isQuickQuery: isQuickQuery,
       runMode: runMode,
       userMessageTime: userMessageTime,
@@ -613,6 +619,7 @@ class ChatService {
     required String? sceneId,
     required List<Map<String, String>>? refs,
     required List<AgentImageAttachment> preparedImages,
+    required List<Map<String, String>> files,
     required bool isQuickQuery,
     required String runMode,
     required DateTime userMessageTime,
@@ -931,10 +938,20 @@ class ChatService {
         TextPart(combinedReminder),
         TextPart(
           message.isEmpty
-              ? 'User sent ${preparedImages.length} image attachment(s).'
+              ? 'User sent ${preparedImages.length + files.length} attachment(s).'
               : message,
         ),
       ];
+      for (final file in files) {
+        final path = file['path'];
+        if (path == null) continue;
+        final mime = file['mime'] ?? 'application/octet-stream';
+        final data = base64Encode(await File(path).readAsBytes());
+        userContentParts.add(TextPart('Attached file: ${file['name'] ?? path}'));
+        userContentParts.add(mime.startsWith('audio/')
+            ? AudioPart(data, mime)
+            : DocumentPart(data, mime));
+      }
       final inlinedImageFileNames = <String>[];
       for (var i = 0; i < preparedImages.length; i++) {
         final image = preparedImages[i];
@@ -1026,9 +1043,12 @@ class ChatService {
   List<Map<String, dynamic>> _buildSessionUserContent(
     String message,
     List<AgentImageAttachment> images,
+    List<Map<String, String>> files,
   ) {
     return [
       if (message.isNotEmpty) {'type': 'text', 'text': message},
+      for (final file in files)
+        {'type': 'text', 'text': '[Anexo: ${file['name'] ?? file['path']}]'},
       for (final image in images)
         {
           'type': 'image_url',

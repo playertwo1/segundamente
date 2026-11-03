@@ -327,6 +327,12 @@ Map<String, dynamic> _createRequestBody(
             'image_url': _convertBase64ToUrl(part.base64Data, part.mimeType),
             if (part.detail != null) 'detail': part.detail,
           });
+        } else if (part is DocumentPart) {
+          contentList.add({
+            'type': 'input_file',
+            'filename': 'document.pdf',
+            'file_data': 'data:${part.mimeType};base64,${part.base64Data}',
+          });
         } else if (part is AudioPart) {
           String format = 'wav';
           if (part.mimeType.toLowerCase().contains('mp3') ||

@@ -1600,5 +1600,9 @@
   "followUpsTitle": "Encaminhamentos",
   "openFollowUps": "Encaminhamentos",
   "followUpsEmpty": "Nenhum encaminhamento aprovado",
-  "followUpsSearchHint": "Buscar nos relatórios"
+  "followUpsSearchHint": "Buscar nos relatórios",
+  "addAttachment": "Anexar",
+  "attachGallery": "Galeria",
+  "attachPdf": "PDF",
+  "attachAudio": "Áudio"
 }

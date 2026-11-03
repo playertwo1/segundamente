@@ -3367,6 +3367,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get followUpsSearchHint => '搜索报告';
+
+  @override
+  String get addAttachment => '添加附件';
+
+  @override
+  String get attachGallery => '相册';
+
+  @override
+  String get attachPdf => 'PDF';
+
+  @override
+  String get attachAudio => '音频';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

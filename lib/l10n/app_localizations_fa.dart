@@ -3489,4 +3489,16 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get followUpsSearchHint => 'Search reports';
+
+  @override
+  String get addAttachment => 'Attach';
+
+  @override
+  String get attachGallery => 'Gallery';
+
+  @override
+  String get attachPdf => 'PDF';
+
+  @override
+  String get attachAudio => 'Audio';
 }

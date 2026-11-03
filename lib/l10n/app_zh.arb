@@ -1561,5 +1561,9 @@
   "followUpsTitle": "跟进",
   "openFollowUps": "跟进",
   "followUpsEmpty": "没有已确认的跟进",
-  "followUpsSearchHint": "搜索报告"
+  "followUpsSearchHint": "搜索报告",
+  "addAttachment": "添加附件",
+  "attachGallery": "相册",
+  "attachPdf": "PDF",
+  "attachAudio": "音频"
 }

@@ -6297,6 +6297,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search reports'**
   String get followUpsSearchHint;
+
+  /// No description provided for @addAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach'**
+  String get addAttachment;
+
+  /// No description provided for @attachGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get attachGallery;
+
+  /// No description provided for @attachPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF'**
+  String get attachPdf;
+
+  /// No description provided for @attachAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get attachAudio;
 }
 
 class _AppLocalizationsDelegate

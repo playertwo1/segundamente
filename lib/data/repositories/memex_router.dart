@@ -1543,6 +1543,7 @@ class MemexRouter {
     List<Map<String, String>>? refs,
     List<XFile> images = const [],
     Map<String, String>? imageOriginalFilenames,
+    List<Map<String, String>> files = const [],
     bool isQuickQuery = false,
     String runMode = 'auto',
   }) async* {
@@ -1556,6 +1557,7 @@ class MemexRouter {
       refs: refs,
       images: images,
       imageOriginalFilenames: imageOriginalFilenames,
+      files: files,
       isQuickQuery: isQuickQuery,
       runMode: runMode,
     );

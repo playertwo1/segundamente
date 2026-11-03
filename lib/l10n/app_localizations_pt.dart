@@ -3514,4 +3514,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get followUpsSearchHint => 'Buscar nos relatórios';
+
+  @override
+  String get addAttachment => 'Anexar';
+
+  @override
+  String get attachGallery => 'Galeria';
+
+  @override
+  String get attachPdf => 'PDF';
+
+  @override
+  String get attachAudio => 'Áudio';
 }

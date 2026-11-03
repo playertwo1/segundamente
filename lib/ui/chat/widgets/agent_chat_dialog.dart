@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:memex/ui/chat/widgets/transcript_file_import_button.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -541,6 +542,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
   final FocusNode _messageFocusNode = FocusNode();
   final ImagePicker _imagePicker = ImagePicker();
   final List<XFile> _selectedImages = [];
+  // PDF/audio picked for the next send: {path, name, mime}.
+  final List<Map<String, String>> _attachedFiles = [];
   PhotoAttachmentsViewModel? _galleryAttachments;
   bool get _canSubmitAttachments => _galleryAttachments?.canSubmit ?? true;
   List<XFile> get _allSelectedImages => [
@@ -1175,8 +1178,9 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     String message, {
     List<XFile> images = const [],
     Map<String, String>? imageOriginalFilenames,
+    List<Map<String, String>> files = const [],
   }) {
-    if (message.trim().isEmpty && images.isEmpty) return false;
+    if (message.trim().isEmpty && images.isEmpty && files.isEmpty) return false;
 
     final queueBehindActiveRun = shouldQueueSuperAgentSend(
       isStreaming: _isStreaming,
@@ -1206,6 +1210,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
       );
       _isStreaming = true;
       _messageController.clear();
+      _attachedFiles.clear();
       if (images.isNotEmpty) {
         _selectedImages.clear();
         _galleryAttachments?.clear();
@@ -1224,6 +1229,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
       refs: refs,
       images: images,
       imageOriginalFilenames: imageOriginalFilenames,
+      files: files,
       isQuickQuery: _runMode == AgentRunMode.readOnly,
       runMode: _runMode.wireName,
     );
@@ -1523,6 +1529,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
       message,
       images: images,
       imageOriginalFilenames: imageOriginalFilenames,
+      files: List.of(_attachedFiles),
     );
     if (didSend) {
       unawaited(_maybeExplainAndRequestNotificationPermission());
@@ -2423,6 +2430,27 @@ class _AgentChatDialogState extends State<AgentChatDialog>
             ),
             const SizedBox(height: 10),
           ],
+          if (_attachedFiles.isNotEmpty) ...[
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                for (final file in _attachedFiles)
+                  InputChip(
+                    avatar: Icon(
+                      file['mime']!.startsWith('audio/')
+                          ? Icons.audiotrack
+                          : Icons.picture_as_pdf,
+                      size: 18,
+                    ),
+                    label: Text(file['name']!),
+                    onDeleted: () =>
+                        setState(() => _attachedFiles.remove(file)),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
+          ],
           Container(
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
             decoration: BoxDecoration(
@@ -2461,26 +2489,20 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                 Row(
                   children: [
                     Expanded(
-                      child: Wrap(
-                        spacing: 12,
-                        runSpacing: 8,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          _buildInputIconButton(
-                            key: const ValueKey('super_agent_camera_button'),
-                            icon: Icons.camera_alt,
-                            onTap: () => _pickImage(ImageSource.camera),
-                          ),
-                          _buildInputIconButton(
-                            key: const ValueKey('super_agent_gallery_button'),
-                            icon: Icons.photo_library,
-                            onTap: () => _pickImage(ImageSource.gallery),
-                          ),
-                          TranscriptFileImportButton(
-                            onConfirmed: (text) => _sendMessage(text),
-                          ),
-                          if (_showRunModeSelector) _buildRunModeChip(),
-                        ],
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: 12,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            _buildInputIconButton(
+                              key: const ValueKey('super_agent_attach_button'),
+                              icon: Icons.add,
+                              onTap: _showAttachMenu,
+                            ),
+                            if (_showRunModeSelector) _buildRunModeChip(),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -2725,6 +2747,75 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         );
       },
     );
+  }
+
+  Future<void> _showAttachMenu() async {
+    final l10n = UserStorage.l10n;
+    Widget tile(String key, IconData icon, String label, VoidCallback run) =>
+        ListTile(
+          key: ValueKey(key),
+          leading: Icon(icon),
+          title: Text(label),
+          onTap: () {
+            Navigator.pop(context);
+            run();
+          },
+        );
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            tile('attach_camera', Icons.camera_alt, l10n.camera,
+                () => _pickImage(ImageSource.camera)),
+            tile('attach_gallery', Icons.photo_library, l10n.attachGallery,
+                () => _pickImage(ImageSource.gallery)),
+            tile(
+                'attach_txt',
+                Icons.upload_file,
+                l10n.importTranscriptFile,
+                () => importTranscriptFile(
+                      context,
+                      onConfirmed: (text) => _sendMessage(text),
+                    )),
+            tile('attach_pdf', Icons.picture_as_pdf, l10n.attachPdf,
+                () => _pickAttachment(FileType.custom, const ['pdf'])),
+            tile('attach_audio', Icons.audiotrack, l10n.attachAudio,
+                () => _pickAttachment(FileType.audio, null)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static const _audioMimes = {
+    'mp3': 'audio/mpeg',
+    'wav': 'audio/wav',
+    'm4a': 'audio/mp4',
+    'aac': 'audio/aac',
+    'ogg': 'audio/ogg',
+    'opus': 'audio/ogg',
+    'flac': 'audio/flac',
+  };
+
+  Future<void> _pickAttachment(FileType type, List<String>? extensions) async {
+    final result = await FilePicker.platform.pickFiles(
+      type: type,
+      allowedExtensions: extensions,
+    );
+    final file = result?.files.single;
+    final path = file?.path;
+    if (file == null || path == null || !mounted) return;
+    final ext = file.name.split('.').last.toLowerCase();
+    setState(() => _attachedFiles.add({
+          'path': path,
+          'name': file.name,
+          'mime': ext == 'pdf'
+              ? 'application/pdf'
+              : _audioMimes[ext] ?? 'audio/mpeg',
+        }));
   }
 
   Widget _buildInputIconButton({

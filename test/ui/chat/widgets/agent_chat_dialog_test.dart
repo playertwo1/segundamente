@@ -82,8 +82,7 @@ void main() {
               photoAttachmentsForTesting: vm,
               initialDraftText: 'keep my draft'));
       await tester.pump(const Duration(milliseconds: 600));
-      await tester
-          .tap(find.byKey(const ValueKey('super_agent_gallery_button')));
+      await _tapGalleryFromMenu(tester);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
       expect(pickerCalls, 1);
@@ -179,12 +178,21 @@ void main() {
     vm.dispose();
   });
 
-  testWidgets('input bar offers the TXT transcript import button',
+  testWidgets('attach menu offers camera, gallery, TXT, PDF and audio',
       (tester) async {
     await _pumpDialogFrame(tester, dialog: const AgentChatDialog());
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.byKey(const ValueKey('import_transcript_file')),
-        findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('super_agent_attach_button')));
+    await tester.pumpAndSettle();
+    for (final key in [
+      'attach_camera',
+      'attach_gallery',
+      'attach_txt',
+      'attach_pdf',
+      'attach_audio',
+    ]) {
+      expect(find.byKey(ValueKey(key)), findsOneWidget, reason: key);
+    }
   });
 
   testWidgets(
@@ -223,7 +231,7 @@ void main() {
           ],
         ));
     await tester.pump(const Duration(milliseconds: 600));
-    await tester.tap(find.byKey(const ValueKey('super_agent_gallery_button')));
+    await _tapGalleryFromMenu(tester);
     await tester.pump();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -282,7 +290,7 @@ void main() {
           ],
         ));
     await tester.pump(const Duration(milliseconds: 600));
-    await tester.tap(find.byKey(const ValueKey('super_agent_gallery_button')));
+    await _tapGalleryFromMenu(tester);
     await tester.pump();
     await tester.pump();
     expect(find.text(UserStorage.l10n.selectedPhotosPreparationFailed),
@@ -1065,11 +1073,7 @@ void main() {
       expect(find.byTooltip(UserStorage.l10n.chatHistory), findsNothing);
       expect(find.byIcon(Icons.mic), findsNothing);
       expect(
-        find.byKey(const ValueKey('super_agent_camera_button')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const ValueKey('super_agent_gallery_button')),
+        find.byKey(const ValueKey('super_agent_attach_button')),
         findsOneWidget,
       );
       expect(
@@ -1266,6 +1270,12 @@ Future<void> _pumpDialog(
     mediaQueryData: mediaQueryData,
   );
   await tester.pumpAndSettle();
+}
+
+Future<void> _tapGalleryFromMenu(WidgetTester tester) async {
+  await tester.tap(find.byKey(const ValueKey('super_agent_attach_button')));
+  await tester.pumpAndSettle();
+  await tester.tap(find.byKey(const ValueKey('attach_gallery')));
 }
 
 Future<void> _pumpDialogFrame(
