@@ -104,6 +104,7 @@ void openSuperAgentDialog(
   String? initialDraftText,
   List<XFile> initialImages = const [],
   Map<String, String> initialImageOriginalFilenames = const {},
+  List<Map<String, String>> initialFiles = const [],
   String? sceneId,
   List<Map<String, String>>? initialRefs,
 }) {
@@ -122,6 +123,7 @@ void openSuperAgentDialog(
         initialDraftText: initialDraftText,
         initialImages: initialImages,
         initialImageOriginalFilenames: initialImageOriginalFilenames,
+        initialFiles: initialFiles,
       );
     },
   );
@@ -133,6 +135,7 @@ Widget buildSuperAgentDialogSessionGate({
   String? initialDraftText,
   List<XFile> initialImages = const [],
   Map<String, String> initialImageOriginalFilenames = const {},
+  List<Map<String, String>> initialFiles = const [],
   String? sceneId,
   List<Map<String, String>>? initialRefs,
 }) {
@@ -160,6 +163,7 @@ Widget buildSuperAgentDialogSessionGate({
         initialDraftText: initialDraftText,
         initialImages: initialImages,
         initialImageOriginalFilenames: initialImageOriginalFilenames,
+        initialFiles: initialFiles,
       );
     },
   );

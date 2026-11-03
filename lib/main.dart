@@ -887,12 +887,14 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     String? initialDraftText,
     List<XFile> initialImages = const [],
     Map<String, String> initialImageOriginalFilenames = const {},
+    List<Map<String, String>> initialFiles = const [],
   }) {
     openSuperAgentDialog(
       context,
       initialDraftText: initialDraftText,
       initialImages: initialImages,
       initialImageOriginalFilenames: initialImageOriginalFilenames,
+      initialFiles: initialFiles,
     );
   }
 
@@ -1484,6 +1486,11 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       if (!mounted) return;
       if (sharedPathsArePlainText(importPaths)) {
         await _confirmAndStorePlainText(importPaths);
+        return;
+      }
+      final attachments = chatAttachmentsFromPaths(importPaths);
+      if (attachments != null) {
+        _openSuperAgentDialog(initialFiles: attachments);
         return;
       }
       final confirmed = await _confirmSharedFileImport();

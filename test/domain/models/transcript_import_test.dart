@@ -4,6 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/domain/models/transcript_import.dart';
 
 void main() {
+  test('shared audio and PDF become chat attachments, other files do not', () {
+    final files = chatAttachmentsFromPaths(
+      ['/x/Voz 260914_170715.m4a', '/docs/a.PDF'],
+    );
+    expect(files, [
+      {'path': '/x/Voz 260914_170715.m4a', 'name': 'Voz 260914_170715.m4a', 'mime': 'audio/mp4'},
+      {'path': '/docs/a.PDF', 'name': 'a.PDF', 'mime': 'application/pdf'},
+    ]);
+    expect(chatAttachmentsFromPaths(['/x/backup.zip']), isNull);
+    expect(chatAttachmentsFromPaths(['/x/a.m4a', '/x/b.zip']), isNull);
+  });
+
   test('decodes UTF-16 with BOM and keeps the original bytes', () {
     const raw = 'Conteúdo\n00:01 olá';
     final be = <int>[0xFE, 0xFF, for (final u in raw.codeUnits) ...[u >> 8, u & 255]];

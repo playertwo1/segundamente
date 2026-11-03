@@ -114,6 +114,31 @@ bool sharedPathsArePlainText(List<String> paths) {
   return true;
 }
 
+const _audioMimes = {
+  'mp3': 'audio/mpeg',
+  'wav': 'audio/wav',
+  'm4a': 'audio/mp4',
+  'aac': 'audio/aac',
+  'ogg': 'audio/ogg',
+  'opus': 'audio/ogg',
+  'flac': 'audio/flac',
+};
+
+/// Maps shared PDF/audio paths to chat attachments ({path, name, mime}), or
+/// null when any path is neither, so other shares keep their import flow.
+List<Map<String, String>>? chatAttachmentsFromPaths(List<String> paths) {
+  if (paths.isEmpty) return null;
+  final files = <Map<String, String>>[];
+  for (final path in paths) {
+    final name = path.replaceAll('\\', '/').split('/').last.trim();
+    final ext = name.contains('.') ? name.split('.').last.toLowerCase() : '';
+    final mime = ext == 'pdf' ? 'application/pdf' : _audioMimes[ext];
+    if (mime == null) return null;
+    files.add({'path': path, 'name': name, 'mime': mime});
+  }
+  return files;
+}
+
 const _pdfSignature = [0x25, 0x50, 0x44, 0x46];
 
 final _clock = RegExp(

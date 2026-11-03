@@ -466,6 +466,7 @@ class AgentChatDialog extends StatefulWidget {
   final String? initialDraftText;
   final List<XFile> initialImages;
   final Map<String, String> initialImageOriginalFilenames;
+  final List<Map<String, String>> initialFiles;
   @visibleForTesting
   final List<ChatDisplayItem> initialItems;
   @visibleForTesting
@@ -493,6 +494,7 @@ class AgentChatDialog extends StatefulWidget {
     this.initialDraftText,
     this.initialImages = const [],
     this.initialImageOriginalFilenames = const {},
+    this.initialFiles = const [],
     this.initialItems = const [],
     this.initialIsLoadingAgent = false,
     this.initialTokenUsage,
@@ -620,6 +622,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     _messageController.addListener(_handleDraftTextChanged);
     _scrollController.addListener(_handleHistoryScroll);
     _selectedImages.addAll(widget.initialImages);
+    _attachedFiles.addAll(widget.initialFiles);
     _originalFilenames.addAll(
       initialOriginalFilenamesForSelectedImages(
         widget.initialImages,
