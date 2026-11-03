@@ -6,7 +6,7 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 
 ## O que existe hoje (confirmado)
 - Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). Antes deste envio, `origin/main` está em `db7bc1d`, sobre a F2 `e8b30b1` e a F1 `790e8b8`. A F4 é `969d177`. A F5 é `e1f6c9f`. Este commit é a F6. O dono aprovou o push dos três. Os portões da F3, da F4, da F5 e da F6 continuam abertos.
-- No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`) e Gemini (`gemini_auth_service.dart`); Claude só por chave de API (`lib/domain/models/llm_config.dart`).
+- No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`), Gemini (`gemini_auth_service.dart`, bloqueado pelo Google, D-013) e Claude (`claude_auth_service.dart`, `67389b4`, conflita com D-005 e espera decisão, D-015). Claude por chave de API continua em `lib/domain/models/llm_config.dart`.
 - Planejamento: `PROJECT.md`, `ROADMAP.md`, `docs/DECISIONS.md`, `docs/questionario/`.
 
 ## Evidência da F0 (2026-11-02/2026-11-03; Windows 11, Flutter 3.47.9 stable, Dart 3.13.7, JDK 17, Samsung Galaxy S25 Ultra)
@@ -38,11 +38,16 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 
 ## Evidência da F2 (2026-11-02)
 - F2-01 `DONE` com limite explícito. Uma segunda instância `ChatSessionStorage.forTesting` leu `conversa que sobrevive` nos mesmos arquivos. Não foi morte do processo do app nem o emulador.
-- F2-02 `NOT_RUN`. Sem demonstração no S25 e sem TTS novo. SenseVoice não foi trocado.
+- F2-02 `IN_PROGRESS`. 2026-11-03, S25: a fala pt-BR foi transcrita no microfone do chat pelo endpoint do ChatGPT (D-011). Falta a resposta em áudio (TTS do Android) e a nota de qualidade. SenseVoice não foi trocado.
 - F2-03 `IN_PROGRESS`. O parser cobre relógio sozinho, `Locutor 1 00:01:02`, `화자 1 (1:05)`, `[00:02:03] Locutor 2` e intervalo `00:00:10,000 --> 00:00:14,120` (usa o início). O cabeçalho vira título. A lista de conversas tem o botão de escolher um `.txt`: a prévia mostra o texto normalizado, cancelar não grava e confirmar passa os bytes originais. O teste usou o texto curto `00:01` / `olá`. Não há um TXT real de ~50 min neste ambiente, nem execução no S25. 2026-11-03, S25: o botão de TXT está na barra de entrada do chat (`c68bbbe`). Um `.txt` do WhatsApp em UTF-16 com BOM abriu, confirmou e chegou ao agente (`3ae7ceb`, `5515855`). Falta o TXT real de ~50 min do Gravador da Samsung; sua codificação é desconhecida.
 - F2-04 `DONE`. Depois de normalizar `00:01\r\n  olá  \r\n`, `original.bin` continua igual aos bytes de entrada. O texto normalizado é outro arquivo: `[00:00:01]\nolá`.
 - F2-05 `NOT_RUN`. Nenhuma foto foi analisada num provedor.
-- F2-08 `IN_PROGRESS`. 2026-11-03, S25: o botão "+" do chat reúne câmera, galeria, TXT, PDF e áudio, e o Compartilhar de TXT, PDF e áudio abre o chat com o anexo. PDF: o ChatGPT por OAuth leu o arquivo (`input_file`). Áudio: `BLOCKED` por esse caminho, o backend responde `400 Audio input is not available`; o app agora só envia a transcrição do recurso de voz, mas a transcrição local (SenseVoice) provavelmente não cobre português. Alternativa não testada: chave de API do Gemini (AI Studio) só para transcrição. O app ficou só em inglês e português (`73feb20`), e os modelos `gpt-6-luna`, `gpt-6.1-sol` e `gpt-6.1-terra` entram sempre na lista do OAuth, sem confirmação de que existem no backend.
+- F2-08 `DONE`. 2026-11-03, S25: o botão "+" do chat reúne câmera, galeria, TXT, PDF e áudio, sem faixa de fotos recentes (`513ee30`). PDF: o ChatGPT por OAuth leu o arquivo (`input_file`).
+- F2-09 `IN_PROGRESS`. O canal de chat do ChatGPT nunca recebe áudio (`400 Audio input is not available`, D-011). O áudio anexado ou gravado é transcrito por `POST chatgpt.com/backend-api/transcribe` com o token do OAuth e só o texto vai ao modelo (`bb5b807`, `05582e5`). Testado com curl e em áudio pt-BR curto. Falta um `.m4a` real de 1 a 2 min no S25, depois ~50 min; limite de tamanho e duração desconhecido.
+- F2-10 `IN_PROGRESS`. Compartilhar TXT abre o chat com o texto (validado no S25). PDF e áudio compartilhados: `NOT_RUN`.
+- F1-07 `IN_PROGRESS`. `gpt-6-luna`, `gpt-6.1-sol` e `gpt-6.1-terra` entram sempre na lista do OAuth da OpenAI; `gpt-6-luna` respondeu `400` só por causa do áudio, o resto não foi confirmado. Os IDs são `NOT_RUN`.
+- F1-08 `BLOCKED`. Decisão do dono sobre o login OAuth do Claude (D-015).
+- O app ficou só em inglês e português (D-012, `73feb20`). O último APK instalado no S25 não é o do commit `513ee30`: o aparelho estava desconectado.
 - F2-06 `DONE` para colar; PDF `NOT_RUN`. O texto `nota colada sem relógio` só virou sessão com confirmação. Bytes que começam com `%PDF` não são lidos nem gravados. Nenhum PDF real foi aberto.
 - F2-07 `DONE` no caminho de texto. A tela mostra o texto exato, inclusive espaços. Cancelar não confirma e não grava. Compartilhar só `.txt` e colar da área de transferência passam por essa tela. Outros tipos de arquivo continuam no diálogo genérico, que não mostra o conteúdo.
 - Comando: `flutter test --reporter compact` nos quatro arquivos abaixo. Saída: `00:50 +22: All tests passed!`
@@ -120,9 +125,11 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 - O Gradle instalou sozinho o Android SDK Platform 34. As demais licenças do SDK seguem não aceitas.
 
 ## Última atividade
-- 2026-11-02: o dono pediu commit e push da F4, da F5 e da F6. Este commit é a F6: busca de texto, painel de encaminhamentos aprovados e `revisions.json`. Semântica, tópicos e o "por quê" continuam `NOT_RUN`.
+- 2026-11-03: roadmap detalhado com F1-07/08, F2-08 a F2-10 e F6-05 a F6-08 (ideias do Memos, D-014); ideias do Daedalus Echo em F2-11, F3-07 e F6-09 a F6-11 (D-016, `ec80d43`). Decisões D-011 a D-016 em `docs/DECISIONS.md`. Nenhuma dessas tarefas novas tem código.
+- 2026-11-02: o dono pediu commit e push da F4, da F5 e da F6 (busca de texto, painel de encaminhamentos aprovados e `revisions.json`). Semântica, tópicos e o "por quê" continuam `NOT_RUN`.
 
 ## Próxima ação
+- Validar o áudio no S25 (F2-09): `.m4a` curto, depois ~50 min. Depois, o TXT real de ~50 min do Samsung (F2-03), o compartilhamento de PDF e áudio (F2-10), os IDs GPT-6 (F1-07) e a decisão D-015. Ordem sugerida das novas: F3-07, F2-11, F6-11, F6-09; F6-08, F6-05, F6-06, F6-07.
 - O portão da F6 continua aberto. Semântica, tópicos e o "por quê" continuam `NOT_RUN`. A F5 continua aberta (`AUDIT RESULT: FAIL`). A F4 continua aberta até o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F3 continua aberta até a amostra de 53 min e uma saída real de modelo. A F2 continua aberta até os critérios 1, 2 e 3 no S25; F2-03 espera um TXT real de ~50 min; F2-02 e F2-05 estão `NOT_RUN`. A F1 continua aberta por uma resposta real de OpenAI e de Gemini. A F0 continua aberta pelo S25 (D-009). Não começar a F7.
 
 ## Bloqueios e aprovações humanas
