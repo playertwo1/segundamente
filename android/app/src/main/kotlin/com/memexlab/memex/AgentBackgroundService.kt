@@ -61,17 +61,20 @@ class AgentBackgroundService : Service() {
         createNotificationChannel()
 
         if (intent == null) {
+            ensureForegroundBeforeStop(intent)
             clearAndStop(startId)
             return START_NOT_STICKY
         }
 
         if (intent.action == ACTION_STOP) {
+            ensureForegroundBeforeStop(intent)
             clearAndStop(startId)
             return START_NOT_STICKY
         }
 
         val state = intent.getStringExtra("state") ?: "active"
         if (state == "completed" || state == "idle") {
+            ensureForegroundBeforeStop(intent)
             clearAndStop(startId)
             return START_NOT_STICKY
         }
@@ -300,6 +303,13 @@ class AgentBackgroundService : Service() {
         }
         lastStatusIntent = pausedIntent
         startForegroundCompat(buildNotification(pausedIntent, "paused"))
+    }
+
+    private fun ensureForegroundBeforeStop(intent: Intent?) {
+        try {
+            startForegroundCompat(buildNotification(intent, "idle"))
+        } catch (_: Throwable) {
+        }
     }
 
     private fun startForegroundCompat(notification: Notification) {

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/data/services/app_action_service.dart';
+import 'package:memex/data/services/local_server_service.dart';
 
 void main() {
   late DateTime now;
@@ -162,6 +163,32 @@ void main() {
 
       expect(service.handleDeepLink('memex://unknown_action'), isFalse);
       expect(service.handleDeepLink('https://example.com/quick_note'), isFalse);
+      Uri? openAiUri;
+      Uri? geminiUri;
+      LocalServerService.setAuthCallback((uri) {
+        openAiUri = uri;
+        return 'ok';
+      });
+      LocalServerService.setGeminiAuthCallback((uri) {
+        geminiUri = uri;
+        return 'ok';
+      });
+      expect(
+        service.handleDeepLink(
+          'http://localhost:1455/auth/callback?code=abc&state=123',
+        ),
+        isTrue,
+      );
+      expect(openAiUri?.queryParameters['code'], 'abc');
+      expect(
+        service.handleDeepLink(
+          'http://localhost:8085/oauth2callback?code=xyz&state=456',
+        ),
+        isTrue,
+      );
+      expect(geminiUri?.queryParameters['code'], 'xyz');
+      LocalServerService.clearAuthCallback();
+      LocalServerService.clearGeminiAuthCallback();
 
       expect(service.consumeIfPending(), isNull);
       expect(service.hasPendingAction, isFalse);

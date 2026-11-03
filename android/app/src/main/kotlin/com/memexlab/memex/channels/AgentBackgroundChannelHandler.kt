@@ -64,6 +64,11 @@ object AgentBackgroundChannelHandler {
 
     private fun startOrUpdateService(context: Context, call: MethodCall) {
         val args = call.arguments as? Map<*, *> ?: emptyMap<String, Any?>()
+        val state = args["state"] as? String ?: "active"
+        if (state == "completed" || state == "idle") {
+            AgentBackgroundService.clear(context)
+            return
+        }
         val intent = Intent(context, AgentBackgroundService::class.java).apply {
             action = AgentBackgroundService.ACTION_UPDATE
             putExtra("state", args["state"] as? String ?: "active")
@@ -89,6 +94,11 @@ object AgentBackgroundChannelHandler {
 
     private fun finishService(context: Context, call: MethodCall) {
         val args = call.arguments as? Map<*, *> ?: emptyMap<String, Any?>()
+        val state = args["state"] as? String ?: "active"
+        if (state == "completed" || state == "idle") {
+            AgentBackgroundService.clear(context)
+            return
+        }
         when (args["state"] as? String) {
             "completed", "idle" -> AgentBackgroundService.clear(context)
             else -> startOrUpdateService(context, call)

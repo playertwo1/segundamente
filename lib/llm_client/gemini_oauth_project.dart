@@ -66,6 +66,11 @@ class GeminiOAuthProject {
     try {
       final payload = await _loadCodeAssist(accessToken);
       if (payload == null) return null;
+      // Sem tokens: só tier/projeto/elegibilidade, para diagnosticar contas sem projeto.
+      _logger.info('loadCodeAssist: currentTier=${payload['currentTier']} '
+          'allowedTiers=${payload['allowedTiers']} '
+          'ineligible=${payload['ineligibleTiers']} '
+          'project=${payload['cloudaicompanionProject']}');
 
       // Already has a managed project
       final managedProject = payload['cloudaicompanionProject'] as String?;

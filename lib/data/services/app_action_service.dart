@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
+import 'package:memex/data/services/local_server_service.dart';
 import 'package:memex/utils/logger.dart';
 
 /// Dispatches app-level actions from platform entry points.
@@ -69,6 +70,11 @@ class AppActionService {
   bool handleDeepLink(String rawLink) {
     final action = actionFromDeepLink(rawLink);
     if (action == null) {
+      final uri = Uri.tryParse(rawLink.trim());
+      if (uri != null && LocalServerService.handleCallbackUri(uri)) {
+        _logger.info('Dispatched OAuth callback deep link: ${uri.path}');
+        return true;
+      }
       _logger.info('Ignoring unsupported app deep link: $rawLink');
       return false;
     }

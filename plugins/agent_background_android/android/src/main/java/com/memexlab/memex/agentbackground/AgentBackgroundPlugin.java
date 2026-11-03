@@ -67,6 +67,11 @@ public final class AgentBackgroundPlugin implements FlutterPlugin, MethodChannel
 
   private void startOrUpdateService(MethodCall call) {
     Map<?, ?> args = call.arguments instanceof Map ? (Map<?, ?>) call.arguments : null;
+    String state = stringArg(args, "state", "active");
+    if ("completed".equals(state) || "idle".equals(state)) {
+      clearService();
+      return;
+    }
     Intent intent = serviceIntent(ACTION_UPDATE);
     putStringExtra(intent, args, "state", "active");
     putStringExtra(intent, args, "title", "Memex Agent");
@@ -87,7 +92,12 @@ public final class AgentBackgroundPlugin implements FlutterPlugin, MethodChannel
 
   private void finishService(MethodCall call) {
     Map<?, ?> args = call.arguments instanceof Map ? (Map<?, ?>) call.arguments : null;
-    String state = stringArg(args, "state", "");
+    String state = stringArg(args, "state", "active");
+    if ("completed".equals(state) || "idle".equals(state)) {
+      clearService();
+      return;
+    }
+    state = stringArg(args, "state", "");
     if ("completed".equals(state) || "idle".equals(state)) {
       clearService();
       return;
