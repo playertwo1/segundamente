@@ -207,6 +207,9 @@ Mesmas regras comuns de cima. Ordem sugerida: F1-09, F3-08, F2-13, F2-12; a F3-0
 - Faz: o modelo recebe `{"words":[{id,text}]}` e devolve só `replace` em `/words/N/text`; o aplicador recusa qualquer outra operação, índice fora da lista ou mudança de `id`. Em dúvida, não troca. O resultado é uma terceira versão ao lado do original e do normalizado (F2-04). A transcrição do Samsung não tem palavras separadas, então a unidade seria o trecho; isso precisa ser medido antes.
 - Não faz: reescrever, resumir nem traduzir.
 
+### Ordem geral das tarefas novas
+Primeiro fechar o que está `IN_PROGRESS` com prova no S25 (F2-09, F2-10, F2-03, F1-07). Depois, nesta ordem: F1-09, F3-08, F3-07, F2-13, F2-11, F2-12, F6-11, F6-08, F6-05, F6-09, F6-06. Ficam para depois de medir ou decidir: F3-09, F6-10, F6-07 e F1-08 (decisão do dono, D-015). Motivo: F1-09 e F3-08 mexem no que o dono já usa todo dia (transcrição e resumo); as de F6 dependem de tags e busca.
+
 ## Fases futuras (bloqueadas até o MVP)
 - **F7:** voz contínua full duplex; ponte opcional com Claude Code/Codex CLI oficiais no PC (única via aceita para assinatura Claude); modelos locais (Ollama).
 - **F8:** NotebookLM — Via A (exportar para Google Docs), depois B (conector comunitário, opt-in), C (API empresarial só se justificar).

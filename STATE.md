@@ -126,11 +126,12 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 - O Gradle instalou sozinho o Android SDK Platform 34. As demais licenças do SDK seguem não aceitas.
 
 ## Última atividade
+- 2026-11-03: ideias do anarlog em F1-09, F2-12, F2-13, F3-08 e F3-09 (D-018, `eb0747e`). Segue sem código nessas tarefas. Fila geral das novas em `ROADMAP.md`, seção "Ordem geral das tarefas novas".
 - 2026-11-03: roadmap detalhado com F1-07/08, F2-08 a F2-10 e F6-05 a F6-08 (ideias do Memos, D-014); ideias do Daedalus Echo em F2-11, F3-07 e F6-09 a F6-11 (D-016, `ec80d43`). Decisões D-011 a D-016 em `docs/DECISIONS.md`. Nenhuma dessas tarefas novas tem código.
 - 2026-11-02: o dono pediu commit e push da F4, da F5 e da F6 (busca de texto, painel de encaminhamentos aprovados e `revisions.json`). Semântica, tópicos e o "por quê" continuam `NOT_RUN`.
 
 ## Próxima ação
-- Validar o áudio no S25 (F2-09): `.m4a` curto, depois ~50 min. Depois, o TXT real de ~50 min do Samsung (F2-03), o compartilhamento de PDF e áudio (F2-10), os IDs GPT-6 (F1-07) e a decisão D-015. Ordem sugerida das novas: F3-07, F2-11, F6-11, F6-09; F6-08, F6-05, F6-06, F6-07.
+- Validar o áudio no S25 (F2-09): `.m4a` curto, depois ~50 min. Depois, o TXT real de ~50 min do Samsung (F2-03), o compartilhamento de PDF e áudio (F2-10), os IDs GPT-6 (F1-07) e a decisão D-015. Depois, as tarefas novas na ordem do `ROADMAP.md` ("Ordem geral das tarefas novas"): F1-09, F3-08, F3-07, F2-13, F2-11, F2-12, F6-11, F6-08, F6-05, F6-09, F6-06, F6-07; F3-09, F6-10 e F6-07 só depois de medir.
 - O portão da F6 continua aberto. Semântica, tópicos e o "por quê" continuam `NOT_RUN`. A F5 continua aberta (`AUDIT RESULT: FAIL`). A F4 continua aberta até o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F3 continua aberta até a amostra de 53 min e uma saída real de modelo. A F2 continua aberta até os critérios 1, 2 e 3 no S25; F2-03 espera um TXT real de ~50 min; F2-02 e F2-05 estão `NOT_RUN`. A F1 continua aberta por uma resposta real de OpenAI e de Gemini. A F0 continua aberta pelo S25 (D-009). Não começar a F7.
 
 ## Bloqueios e aprovações humanas
