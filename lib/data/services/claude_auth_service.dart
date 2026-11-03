@@ -108,18 +108,53 @@ class ClaudeAuthService {
           final title = l10n.oauthSuccessTitle;
           final msg = l10n.oauthSuccessMessage;
           return '''
+            <!DOCTYPE html>
             <html>
               <head>
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <title>$title</title>
+                <style>
+                  body {
+                    margin: 0;
+                    height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    background: #0f172a;
+                    color: #f8fafc;
+                  }
+                  .card {
+                    background: #1e293b;
+                    border-radius: 20px;
+                    padding: 32px 24px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+                    max-width: 320px;
+                    text-align: center;
+                    border: 1px solid rgba(255,255,255,0.1);
+                  }
+                  .icon { font-size: 44px; margin-bottom: 12px; }
+                  h2 { margin: 0 0 8px; font-size: 20px; color: #f8fafc; }
+                  p { margin: 6px 0 20px; font-size: 14px; color: #94a3b8; line-height: 1.4; }
+                  .btn {
+                    display: inline-block;
+                    background: #d97706;
+                    color: #ffffff;
+                    font-weight: 600;
+                    padding: 12px 20px;
+                    border-radius: 12px;
+                    text-decoration: none;
+                    font-size: 15px;
+                  }
+                </style>
               </head>
-              <body style="margin:0;height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;background:#f9fafb;color:#0f172a;">
-                <div style="background:#fff;border-radius:16px;padding:24px 20px;box-shadow:0 10px 30px rgba(15,23,42,0.08);max-width:320px;text-align:center;">
-                  <div style="font-size:32px;margin-bottom:12px;">✅</div>
-                  <h2 style="margin:0 0 8px;font-size:20px;">$title</h2>
-                  <p style="margin:4px 0;font-size:14px;color:#4b5563;">$msg</p>
-                  <script>setTimeout(function() { window.close(); }, 800);</script>
+              <body>
+                <div class="card">
+                  <div class="icon">✅</div>
+                  <h2>$title</h2>
+                  <p>$msg</p>
+                  <a class="btn" href="memex://">Voltar ao Segunda Mente</a>
                 </div>
               </body>
             </html>
@@ -320,7 +355,20 @@ class ClaudeAuthService {
           options.headers['Authorization'] = 'Bearer $token';
           options.headers['anthropic-beta'] =
               'claude-code-20250219,oauth-2025-04-20,interleaved-thinking-2025-05-14';
-          options.headers['User-Agent'] = 'claude-cli/2.1.310 (external, cli)';
+          options.headers['User-Agent'] = 'claude-cli/2.1.296 (external, cli)';
+          final promptId = DateTime.now().millisecondsSinceEpoch.toString();
+          options.headers['x-anthropic-billing-header'] =
+              'cc_version=2.1.296.406; cc_entrypoint=sdk-cli; cch=00000; cc_prompt_id=$promptId; cc_turn_origin=sdk; cc_prompt_index=0; cc_turn_index=1;';
+
+          if (options.data is Map) {
+            final dataMap = options.data as Map;
+            if (dataMap['model'] is String) {
+              var m = dataMap['model'] as String;
+              m = m.replaceAll('-5.5', '-5-5').replaceAll('-4.5', '-4-5');
+              dataMap['model'] = m;
+            }
+          }
+
           return handler.next(options);
         },
       ),

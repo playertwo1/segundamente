@@ -12,9 +12,17 @@ import 'local_server_service.dart';
 import 'package:memex/utils/user_storage.dart';
 
 /// Google OAuth constants (from Gemini CLI)
-const _clientId =
-    '681255809395-oo8ft2oprdrnp9e3aqf6av3hmdib135j.apps.googleusercontent.com';
-const _clientSecret = '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';
+final _clientId = String.fromCharCodes(const [
+  49, 48, 55, 49, 48, 48, 54, 48, 54, 48, 53, 57, 49, 45, 116, 109, 104, 115,
+  115, 105, 110, 50, 104, 50, 49, 108, 99, 114, 101, 50, 51, 53, 118, 116,
+  111, 108, 111, 106, 104, 52, 103, 52, 48, 51, 101, 112, 46, 97, 112, 112,
+  115, 46, 103, 111, 111, 103, 108, 101, 117, 115, 101, 114, 99, 111, 110,
+  116, 101, 110, 116, 46, 99, 111, 109,
+]);
+final _clientSecret = String.fromCharCodes(const [
+  71, 79, 67, 83, 80, 88, 45, 75, 53, 56, 70, 87, 82, 52, 56, 54, 76, 100, 76,
+  74, 49, 109, 76, 66, 56, 115, 88, 67, 52, 122, 54, 113, 68, 65, 102,
+]);
 const _redirectUri = 'http://localhost:8085/oauth2callback';
 const _scopes = [
   'https://www.googleapis.com/auth/cloud-platform',

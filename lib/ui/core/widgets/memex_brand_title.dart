@@ -14,30 +14,19 @@ class MemexBrandTitle extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'Meme',
-                style: GoogleFonts.bricolageGrotesque(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0,
-                  height: 1,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              TextSpan(
-                text: 'x',
-                style: GoogleFonts.bricolageGrotesque(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0,
-                  height: 1,
-                  color: AppColors.primary,
-                ),
-              ),
-            ],
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.asset('assets/icon.png', width: 32, height: 32),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          'Segunda Mente',
+          style: GoogleFonts.bricolageGrotesque(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0,
+            height: 1,
+            color: AppColors.textPrimary,
           ),
         ),
         if (badgeLabel != null) ...[

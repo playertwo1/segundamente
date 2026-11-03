@@ -6,11 +6,11 @@ import 'package:logging/logging.dart';
 
 import '../data/services/gemini_auth_service.dart';
 
-const _codeAssistEndpoint = 'https://cloudcode-pa.googleapis.com';
+const _codeAssistEndpoint = 'https://daily-cloudcode-pa.googleapis.com';
 const _codeAssistHeaders = {
   'X-Goog-Api-Client': 'gl-node/22.17.0',
   'Client-Metadata':
-      'ideType=IDE_UNSPECIFIED,platform=PLATFORM_UNSPECIFIED,pluginType=GEMINI',
+      'ideType=ANTIGRAVITY,platform=PLATFORM_UNSPECIFIED,pluginType=GEMINI',
 };
 
 final Logger _logger = Logger('GeminiOAuthProject');
@@ -28,7 +28,7 @@ class GeminiOAuthProject {
             ? 'ios'
             : Platform.operatingSystem;
     final arch = Platform.version.contains('arm') ? 'arm64' : 'x64';
-    return 'GeminiCLI/1.0.0/gemini-code-assist ($os; $arch)';
+    return 'antigravity/1.0.0 ($os; $arch)';
   }
 
   /// Returns a valid project ID, resolving via loadCodeAssist if needed.
@@ -73,7 +73,13 @@ class GeminiOAuthProject {
           'project=${payload['cloudaicompanionProject']}');
 
       // Already has a managed project
-      final managedProject = payload['cloudaicompanionProject'] as String?;
+      String? managedProject;
+      final rawProject = payload['cloudaicompanionProject'];
+      if (rawProject is String && rawProject.isNotEmpty) {
+        managedProject = rawProject;
+      } else if (rawProject is Map && rawProject['id'] is String) {
+        managedProject = rawProject['id'] as String;
+      }
       if (managedProject != null && managedProject.isNotEmpty) {
         return managedProject;
       }
@@ -115,7 +121,7 @@ class GeminiOAuthProject {
         return [];
       }
       final projectId = await ensureProjectId();
-      final url = '$_codeAssistEndpoint/v1internal:retrieveUserQuota';
+      const url = '$_codeAssistEndpoint/v1internal:retrieveUserQuota';
       final response = await http.post(
         Uri.parse(url),
         headers: _headers(accessToken),
@@ -129,7 +135,7 @@ class GeminiOAuthProject {
       }
 
       final data = jsonDecode(response.body) as Map<String, dynamic>;
-      final buckets = data['quotaBuckets'] as List? ?? const [];
+      final buckets = data['quotaBuckets'] as List? ?? data['buckets'] as List? ?? const [];
       final models = <String>{};
 
       for (final bucket in buckets) {
@@ -156,13 +162,13 @@ class GeminiOAuthProject {
 
   static Future<Map<String, dynamic>?> _loadCodeAssist(
       String accessToken) async {
-    final url = '$_codeAssistEndpoint/v1internal:loadCodeAssist';
+    const url = '$_codeAssistEndpoint/v1internal:loadCodeAssist';
     final response = await http.post(
       Uri.parse(url),
       headers: _headers(accessToken),
       body: jsonEncode({
         'metadata': {
-          'ideType': 'IDE_UNSPECIFIED',
+          'ideType': 'ANTIGRAVITY',
           'platform': 'PLATFORM_UNSPECIFIED',
           'pluginType': 'GEMINI',
         }
@@ -179,14 +185,14 @@ class GeminiOAuthProject {
   }
 
   static Future<String?> _onboardUser(String accessToken, String tierId) async {
-    final url = '$_codeAssistEndpoint/v1internal:onboardUser';
+    const url = '$_codeAssistEndpoint/v1internal:onboardUser';
     final response = await http.post(
       Uri.parse(url),
       headers: _headers(accessToken),
       body: jsonEncode({
         'tierId': tierId,
         'metadata': {
-          'ideType': 'IDE_UNSPECIFIED',
+          'ideType': 'ANTIGRAVITY',
           'platform': 'PLATFORM_UNSPECIFIED',
           'pluginType': 'GEMINI',
         }
@@ -219,9 +225,11 @@ class GeminiOAuthProject {
     }
 
     if (payload['done'] == true) {
-      final projectId = (payload['response']
-          as Map?)?['cloudaicompanionProject']?['id'] as String?;
-      return projectId;
+      final resp = payload['response'] as Map?;
+      final proj = resp?['cloudaicompanionProject'];
+      if (proj is String) return proj;
+      if (proj is Map && proj['id'] is String) return proj['id'] as String;
+      return null;
     }
 
     return null;

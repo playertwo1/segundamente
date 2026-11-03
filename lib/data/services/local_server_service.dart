@@ -50,23 +50,10 @@ class LocalServerService {
   }
 
   static Future<HttpServer> _bindLoopback(int port) async {
-    try {
-      return await HttpServer.bind(
-        InternetAddress.anyIPv6,
-        port,
-        v6Only: false,
-        shared: true,
-      );
-    } catch (_) {
-      return await HttpServer.bind(
-        InternetAddress.loopbackIPv4,
-        port,
-        shared: true,
-      );
-    }
-  }
-
-  static void _noop() {
+    return await HttpServer.bind(
+      InternetAddress.loopbackIPv4,
+      port,
+    );
   }
 
   static Future<void> start() async {

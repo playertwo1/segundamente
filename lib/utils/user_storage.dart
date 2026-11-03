@@ -18,6 +18,7 @@ import '../l10n/app_localizations_ext.dart';
 import 'package:memex/data/services/event_bus_service.dart';
 import 'package:memex/data/services/openai_auth_service.dart';
 import 'package:memex/data/services/gemini_auth_service.dart';
+import 'package:memex/data/services/claude_auth_service.dart';
 import 'package:memex/domain/models/task_exceptions.dart';
 import 'package:memex/llm_client/codex_responses_client.dart';
 import 'package:memex/llm_client/gemini_oauth_client.dart';
@@ -768,6 +769,20 @@ class UserStorage {
           proxyUrl: proxyUrl,
         );
         break;
+      case LLMConfig.typeClaudeOauth:
+        final token = await ClaudeAuthService.getValidAccessToken();
+        if (token == null) {
+          throw InvalidModelConfigException('Claude OAuth not authorized.');
+        }
+        client = ClaudeClient(
+          apiKey: '',
+          baseUrl: llmConfig.baseUrl.isNotEmpty
+              ? llmConfig.baseUrl
+              : 'https://api.anthropic.com',
+          client: ClaudeAuthService.createOAuthDio(proxyUrl),
+          proxyUrl: proxyUrl,
+        );
+        break;
       case LLMConfig.typeBedrockClaude:
         final extra = llmConfig.extra;
         final accessKeyId = extra['accessKeyId'] as String? ?? '';
@@ -836,9 +851,20 @@ class UserStorage {
             'Unknown LLM type: ${llmConfig.type}');
     }
 
+    var effectiveModel = llmConfig.modelId;
+    if (llmConfig.type == LLMConfig.typeClaudeOauth ||
+        llmConfig.type == LLMConfig.typeClaude) {
+      effectiveModel = effectiveModel
+          .replaceAll('claude-haiku-5.5', 'claude-haiku-5-5')
+          .replaceAll('claude-sonnet-5.5', 'claude-sonnet-5-5')
+          .replaceAll('claude-opus-5.5', 'claude-opus-5-5')
+          .replaceAll('-5.5', '-5-5')
+          .replaceAll('-4.5', '-4-5');
+    }
+
     // Create ModelConfig
     final modelConfig = ModelConfig(
-      model: llmConfig.modelId,
+      model: effectiveModel,
       maxTokens: llmConfig.maxTokens,
       temperature: llmConfig.temperature,
       topP: llmConfig.topP,

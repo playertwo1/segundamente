@@ -7,7 +7,8 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 ## O que existe hoje (confirmado)
 - Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). Antes deste envio, `origin/main` está em `db7bc1d`, sobre a F2 `e8b30b1` e a F1 `790e8b8`. A F4 é `969d177`. A F5 é `e1f6c9f`. Este commit é a F6. O dono aprovou o push dos três. Os portões da F3, da F4, da F5 e da F6 continuam abertos.
 - No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`), Gemini (`gemini_auth_service.dart`, bloqueado pelo Google, D-013) e Claude (`claude_auth_service.dart`, `67389b4`, conflita com D-005 e espera decisão, D-015). Claude por chave de API continua em `lib/domain/models/llm_config.dart`.
-- Planejamento: `PROJECT.md`, `ROADMAP.md`, `docs/DECISIONS.md`, `docs/questionario/`.
+- Planejamento: [índice](docs/INDEX.md), [PROJECT.md](PROJECT.md), [ROADMAP.md](ROADMAP.md), [DESIGN.md](DESIGN.md), [decisões](docs/DECISIONS.md), `docs/questionario/`.
+- Design visual AMOLED v3 aprovado em 2026-11-03 (D-017), com dez pranchas em `.impeccable-mobile/references/amoled-v3-ios/`. F5-04 continua `NOT_RUN`: nenhuma tela foi implementada ou validada no aparelho.
 
 ## Evidência da F0 (2026-11-02/2026-11-03; Windows 11, Flutter 3.47.9 stable, Dart 3.13.7, JDK 17, Samsung Galaxy S25 Ultra)
 - F0-01 `DONE`: `git remote -v` mostra `upstream=memex-lab/memex`; commit base do Memex = `6143923e7b2237520b7143f4e5aae88822788aa4`.
@@ -98,7 +99,7 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 - F5-01 `IN_PROGRESS`. Checklist dos 7 critérios em `docs/F5-01-checklist.md`. Cada critério no S25 Ultra está `NOT_RUN`.
 - F5-02 `IN_PROGRESS`. Nota em `docs/F5-02-privacidade.md`. O log de sucesso da OpenAI não imprime mais access token, refresh token nem ID token. A falha dedicada da troca de código, na OpenAI e no Gemini, registra só o status HTTP. O `catch` ainda grava a exceção. O teste `openai_auth_log_test.dart` recusa `${tokenResponse.body}` e `${response.body}` e ainda exige `jsonDecode(tokenResponse.body)`. Tokens e `apiKey` continuam em `SharedPreferences`. Uma passagem sem histórico corrigiu a frase que punha a `apiKey` do Gemini no cabeçalho: nessa lista de modelos a chave vai na query `key=`.
 - F5-03 `IN_PROGRESS`. Nota em `docs/F5-03-medicoes.md`. Fixture sintético de 1500 segmentos (50 min, um a cada 2 s): parse 15 ms. Exportação de 100 itens nos três formatos: 25 ms. Não é o TXT do Samsung. A lista de histórico e o aparelho estão `NOT_RUN`. Nenhum código de desempenho foi mudado.
-- F5-04 `NOT_RUN`. Sem capturas e sem mudança visual.
+- F5-04 `NOT_RUN`. Direção aprovada em D-017 e `DESIGN.md`; as pranchas estão em `.impeccable-mobile/references/amoled-v3-ios/`. Sem mudança visual no app, capturas antes/depois ou validação de acessibilidade.
 - F5-05 `IN_PROGRESS`. `docs/reviews/F5.md` termina em `AUDIT RESULT: FAIL` por causa do S25 e do armazenamento em claro. Atribuições de licença continuam em `docs/F0-04-licencas.md`. Não há `LicensePage` em `lib/`.
 - Comando: `flutter test --reporter expanded` nos dois arquivos abaixo. Saída: `F5-03 parse_ms=15 segments=1500`, `F5-03 export_ms=25 items=100`, `00:00 +3: All tests passed!`
   - `test/data/services/openai_auth_log_test.dart`

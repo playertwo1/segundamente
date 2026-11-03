@@ -7,6 +7,7 @@ import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/data/services/openai_auth_service.dart';
 import 'package:memex/data/services/gemini_auth_service.dart';
+import 'package:memex/data/services/claude_auth_service.dart';
 import 'package:memex/data/services/model_list_service.dart';
 import 'package:memex/data/services/model_test_service.dart';
 import 'package:memex/utils/toast_helper.dart';
@@ -56,6 +57,7 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
   bool _isObscureApiKey = true;
   Map<String, dynamic>? _openAiTokens;
   Map<String, dynamic>? _geminiTokens;
+  Map<String, dynamic>? _claudeTokens;
   bool _isAuthDialogShowing = false;
   bool _authFlowCompleted = false;
   bool _appResumedDuringAuth = false;
@@ -119,6 +121,8 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
         _loadOpenAiTokens();
       } else if (_selectedType == LLMConfig.typeGeminiOauth) {
         _loadGeminiTokens();
+      } else if (_selectedType == LLMConfig.typeClaudeOauth) {
+        _loadClaudeTokens();
       }
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => _loadCatalog(fetch: true),
@@ -215,6 +219,15 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
     if (mounted) {
       setState(() {
         _geminiTokens = tokens;
+      });
+    }
+  }
+
+  Future<void> _loadClaudeTokens() async {
+    final tokens = await ClaudeAuthService.getSavedTokens();
+    if (mounted) {
+      setState(() {
+        _claudeTokens = tokens;
       });
     }
   }
@@ -397,6 +410,69 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
     );
   }
 
+  void _startClaudeAuth() async {
+    if (!await _confirmAndroidOAuthHint()) return;
+    _authFlowCompleted = false;
+    _appResumedDuringAuth = false;
+    ClaudeAuthService.startAuthFlow(
+      onStart: () {
+        _isAuthDialogShowing = true;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 16),
+                  Text(
+                    UserStorage.l10n.authorizing,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black87,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ).then((_) {
+          _isAuthDialogShowing = false;
+        });
+      },
+      onSuccess: (email) {
+        _authFlowCompleted = true;
+        _dismissAuthDialog();
+        if (mounted) {
+          ToastHelper.showSuccess(
+            context,
+            UserStorage.l10n.authorizedAs(email),
+          );
+          _loadClaudeTokens();
+        }
+      },
+      onError: (error) {
+        _authFlowCompleted = true;
+        _dismissAuthDialog();
+        if (mounted) {
+          ToastHelper.showError(
+            context,
+            UserStorage.l10n.authFailed(error.toString()),
+          );
+        }
+      },
+    );
+  }
+
   Widget _buildOpenAiAuthSection() {
     final l10n = UserStorage.l10n;
     final bool isAuthorized = _openAiTokens != null;
@@ -529,6 +605,86 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
     );
   }
 
+  Widget _buildClaudeAuthSection() {
+    final l10n = UserStorage.l10n;
+    final bool isAuthorized = _claudeTokens != null;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                isAuthorized ? Icons.check_circle : Icons.info_outline,
+                color: isAuthorized ? Colors.green : Colors.orange,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                isAuthorized ? l10n.authorized : l10n.unauthorized,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isAuthorized ? Colors.green : Colors.orange,
+                ),
+              ),
+              if (isAuthorized &&
+                  _claudeTokens?['email'] != null &&
+                  (_claudeTokens!['email'] as String).isNotEmpty) ...[
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    _claudeTokens!['email'] as String,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _startClaudeAuth,
+              icon: const Icon(Icons.login),
+              label: Text(
+                isAuthorized ? l10n.reAuthorize : 'Authorize with Claude',
+              ),
+            ),
+          ),
+          if (isAuthorized)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: TextButton.icon(
+                  onPressed: () async {
+                    await ClaudeAuthService.clearTokens();
+                    _loadClaudeTokens();
+                  },
+                  icon: const Icon(Icons.logout, color: Colors.red),
+                  label: Text(
+                    UserStorage.l10n.clearAuth,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
   bool _isProModel(String model) => LLMConfig.isChatgptProModel(model);
 
   List<String> _getRecommendedModels(String type) =>
@@ -548,6 +704,7 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
       ],
       l10n.providerGroupAnthropic: [
         _ProviderEntry(LLMConfig.typeClaude, l10n.providerClaudeApiKey),
+        const _ProviderEntry(LLMConfig.typeClaudeOauth, 'Claude (OAuth)'),
         _ProviderEntry(LLMConfig.typeBedrockClaude, l10n.providerBedrockSecret),
       ],
       l10n.providerGroupGoogle: [
@@ -989,6 +1146,7 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
       LLMConfig.typeResponses => 'openai-responses',
       LLMConfig.typeOpenAiOauth => 'chatgpt',
       LLMConfig.typeClaude => 'claude',
+      LLMConfig.typeClaudeOauth => 'claude-oauth',
       LLMConfig.typeBedrockClaude => 'bedrock',
       LLMConfig.typeGemini => 'gemini',
       LLMConfig.typeGeminiOauth => 'gemini-oauth',
@@ -1388,7 +1546,8 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
   bool get _showsBaseUrlField =>
       _selectedType != LLMConfig.typeBedrockClaude &&
       _selectedType != LLMConfig.typeOpenAiOauth &&
-      _selectedType != LLMConfig.typeGeminiOauth;
+      _selectedType != LLMConfig.typeGeminiOauth &&
+      _selectedType != LLMConfig.typeClaudeOauth;
 
   Widget _buildBaseUrlField() {
     return TextFormField(
@@ -1524,6 +1683,8 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
                       _loadOpenAiTokens();
                     } else if (value == LLMConfig.typeGeminiOauth) {
                       _loadGeminiTokens();
+                    } else if (value == LLMConfig.typeClaudeOauth) {
+                      _loadClaudeTokens();
                     }
                     _loadCatalog(fetch: !LLMConfig.requiresApiKey(value));
                   }
@@ -1556,6 +1717,9 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
                   const SizedBox(height: 16),
                 ] else if (_selectedType == LLMConfig.typeGeminiOauth) ...[
                   _buildGeminiAuthSection(),
+                  const SizedBox(height: 16),
+                ] else if (_selectedType == LLMConfig.typeClaudeOauth) ...[
+                  _buildClaudeAuthSection(),
                   const SizedBox(height: 16),
                 ] else if (_selectedType == LLMConfig.typeBedrockClaude) ...[
                   // Bedrock-specific fields

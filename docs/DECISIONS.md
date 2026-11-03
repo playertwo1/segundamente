@@ -20,6 +20,7 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-014 | 2026-11-03 | Ideias do Memos: quatro entram na F6 (F6-05 a F6-08); o resto fica fora | ACCEPTED |
 | D-015 | 2026-11-03 | Login OAuth do Claude entrou no código e conflita com D-005 | PROPOSED |
 | D-016 | 2026-11-03 | Ideias do Daedalus Echo: Whisper local multilíngue, extrator de tarefas robusto, recuperação por tópicos, agenda; o resto fica fora | ACCEPTED |
+| D-017 | 2026-11-03 | Direção visual móvel AMOLED, editorial e sem barra inferior persistente | ACCEPTED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -86,3 +87,10 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Cuidado que o Echo mostra: o Whisper dele é `base.en`, só inglês, com o idioma fixo em `en`, e o Universal Sentence Encoder é centrado em inglês. Para português é preciso um modelo Whisper multilíngue e um embedder que cubra português. Nenhum dos dois foi medido.
 - Fora do MVP: Gemma 3 1B local (555 MB, qualidade em pt-BR desconhecida; fica na F7 com Ollama), conversa por voz mãos-livres (F7), mapa global de tópicos (Ideias futuras).
 - Descartado: copiar a arquitetura offline total. O nosso produto usa o modelo que o dono escolheu (D-002, D-004).
+
+## D-017 — Direção visual móvel
+- Contexto: em 2026-11-03 o dono aprovou a versão v3 das referências AMOLED após comparar com interfaces oficiais do Apple Journal, Day One e Things.
+- Decisão: usar fundo preto AMOLED, texto marfim e cinza, âmbar/cobre como acento, composição editorial com listas abertas e divisores finos, tipografia compacta com escala do sistema preservada e ícones coerentes com rótulos. A navegação global não terá barra inferior persistente; os destinos ficam no menu do cabeçalho e em ações contextuais. O chat terá acesso explícito com “Conversar” e “Conversar com a Segunda Mente”.
+- Fonte de implementação: [DESIGN.md](../DESIGN.md) e as dez pranchas em `.impeccable-mobile/references/amoled-v3-ios/`.
+- Limite: a decisão aprova a direção visual, não declara a implementação pronta. Antes de mudar o roteamento, mapear o menu às rotas existentes; manter acessibilidade, fluxos atuais e testes de widget. F5-04 permanece `NOT_RUN` até o código e a validação no S25.
+- Descartado: a exploração v1/v2 com paleta azul e navegação inferior pesada.

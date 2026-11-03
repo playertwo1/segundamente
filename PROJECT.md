@@ -2,6 +2,8 @@
 
 Fork Android independente do [Memex](https://github.com/memex-lab/memex) (Flutter, GPL-3.0). Nome do projeto no doc de visão: "Segunda Memória". Decisões: [docs/questionario/2026-11-02-segunda-memoria.md](docs/questionario/2026-11-02-segunda-memoria.md).
 
+Direção visual aprovada: [DESIGN.md](DESIGN.md) · [índice de documentação e referências](docs/INDEX.md).
+
 ## Problema
 Pensamentos, ideias e conversas se perdem. Falta um app pessoal para conversar por texto/voz, importar transcrições (TXT do Gravador Samsung) e fotos, gerar relatórios fiéis com evidências e exportá-los, sem perder o histórico ao trocar de modelo de IA.
 

@@ -10,11 +10,11 @@ import 'gemini_oauth_project.dart';
 import 'package:memex/llm_client/codex_responses_client.dart'
     show configureProxy;
 
-const _codeAssistEndpoint = 'https://cloudcode-pa.googleapis.com';
+const _codeAssistEndpoint = 'https://daily-cloudcode-pa.googleapis.com';
 const _codeAssistHeaders = {
   'X-Goog-Api-Client': 'gl-node/22.17.0',
   'Client-Metadata':
-      'ideType=IDE_UNSPECIFIED,platform=PLATFORM_UNSPECIFIED,pluginType=GEMINI',
+      'ideType=ANTIGRAVITY,platform=PLATFORM_UNSPECIFIED,pluginType=GEMINI',
 };
 
 /// LLM client that uses Google OAuth + Cloud Code Assist API (free Gemini CLI tier).
@@ -53,12 +53,28 @@ class GeminiOAuthClient extends LLMClient {
     };
   }
 
+  static String normalizeModel(String model) {
+    switch (model) {
+      case 'gemini-3.6-flash':
+      case 'gemini-3.5-flash':
+      case 'gemini-2.0-flash':
+        return 'gemini-2.5-flash';
+      case 'gemini-3.5-flash-lite':
+        return 'gemini-3.1-flash-lite';
+      case 'gemini-3.1-pro-preview':
+        return 'gemini-2.5-pro';
+      default:
+        return model;
+    }
+  }
+
   /// Wraps a standard Gemini request body into the Code Assist envelope.
   Future<Map<String, dynamic>> _wrapRequest(
     Map<String, dynamic> geminiBody,
     String model,
   ) async {
     final projectId = await GeminiOAuthProject.ensureProjectId();
+    final effectiveModel = normalizeModel(model);
     // Strip 'model' from inner request (Code Assist sets it at top level)
     final inner = Map<String, dynamic>.from(geminiBody)..remove('model');
     // Normalize system_instruction -> systemInstruction
@@ -69,7 +85,7 @@ class GeminiOAuthClient extends LLMClient {
     _stripThoughtParts(inner);
     return {
       'project': projectId,
-      'model': model,
+      'model': effectiveModel,
       'request': inner,
     };
   }
@@ -107,71 +123,65 @@ class GeminiOAuthClient extends LLMClient {
     bool? jsonOutput,
     CancelToken? cancelToken,
   }) async {
-    final model = modelConfig.model;
-    final geminiBody = _createGeminiBody(messages,
-        tools: tools,
-        toolChoice: toolChoice,
-        modelConfig: modelConfig,
-        jsonOutput: jsonOutput);
-    final wrappedBody = await _wrapRequest(geminiBody, model);
-    const url = '$_codeAssistEndpoint/v1internal:generateContent';
+    final aggregatedText = StringBuffer();
+    final aggregatedThought = StringBuffer();
+    final functionCalls = <FunctionCall>[];
+    final audioOutputs = <ModelAudioPart>[];
+    ModelUsage? finalUsage;
+    String? finalStopReason;
+    String? finalResponseId;
+    Map<String, dynamic>? finalMetadata;
 
-    int retryCount = 0;
-    int currentDelayMs = initialRetryDelayMs;
+    final streamResponse = await stream(
+      messages,
+      tools: tools,
+      toolChoice: toolChoice,
+      modelConfig: modelConfig,
+      jsonOutput: jsonOutput,
+      cancelToken: cancelToken,
+    );
 
-    while (true) {
-      try {
-        final headers = await _buildHeaders();
-        final response = await _client.post(
-          url,
-          data: wrappedBody,
-          options: Options(
-            sendTimeout: timeout,
-            receiveTimeout: timeout,
-            headers: headers,
-            validateStatus: (_) => true,
-          ),
-          cancelToken: cancelToken,
-        );
+    await for (final msg in streamResponse) {
+      final chunk = msg.modelMessage;
+      if (chunk == null) continue;
 
-        if (response.statusCode == 200) {
-          final data = _unwrapResponse(response.data);
-          final msg = _parseResponse(data, modelConfig);
-          if (msg == null) {
-            if (retryCount < maxRetries) {
-              await _waitRetry('No candidates', retryCount, currentDelayMs);
-              retryCount++;
-              currentDelayMs = (currentDelayMs * 2).clamp(0, maxRetryDelayMs);
-              continue;
-            }
-            throw Exception('Gemini OAuth returned no candidates');
-          }
-          return msg;
-        }
-
-        if (response.statusCode == 429 ||
-            (response.statusCode != null && response.statusCode! >= 500)) {
-          if (retryCount < maxRetries) {
-            await _waitRetry(
-                'status ${response.statusCode}', retryCount, currentDelayMs);
-            retryCount++;
-            currentDelayMs = (currentDelayMs * 2).clamp(0, maxRetryDelayMs);
-            continue;
-          }
-        }
-        throw Exception(
-            'Gemini OAuth error: ${response.statusCode} ${response.data}');
-      } on DioException catch (e) {
-        if (retryCount < maxRetries) {
-          await _waitRetry(
-              'DioException: ${e.message}', retryCount, currentDelayMs);
-          retryCount++;
-          currentDelayMs = (currentDelayMs * 2).clamp(0, maxRetryDelayMs);
-          continue;
-        }
-        rethrow;
+      if (chunk.textOutput != null && chunk.textOutput!.isNotEmpty) {
+        aggregatedText.write(chunk.textOutput!);
+      }
+      if (chunk.thought != null && chunk.thought!.isNotEmpty) {
+        aggregatedThought.write(chunk.thought!);
+      }
+      if (chunk.functionCalls.isNotEmpty) {
+        functionCalls.addAll(chunk.functionCalls);
+      }
+      if (chunk.audioOutputs.isNotEmpty) {
+        audioOutputs.addAll(chunk.audioOutputs);
+      }
+      if (chunk.usage != null) {
+        finalUsage = chunk.usage;
+      }
+      if (chunk.stopReason != null) {
+        finalStopReason = chunk.stopReason;
+      }
+      if (chunk.responseId != null) {
+        finalResponseId = chunk.responseId;
+      }
+      if (chunk.metadata != null) {
+        finalMetadata = chunk.metadata;
       }
     }
+
+    return ModelMessage(
+      textOutput: aggregatedText.isEmpty ? null : aggregatedText.toString(),
+      thought: aggregatedThought.isEmpty ? null : aggregatedThought.toString(),
+      functionCalls: functionCalls.isEmpty ? [] : functionCalls,
+      audioOutputs: audioOutputs,
+      usage: finalUsage,
+      model: modelConfig.model,
+      responseId: finalResponseId,
+      stopReason: finalStopReason,
+      metadata: finalMetadata,
+    );
   }
 
   @override
@@ -302,24 +312,6 @@ class GeminiOAuthClient extends LLMClient {
     _logger.warning(
         'GeminiOAuth: $reason. Retrying in ${delayMs}ms... (attempt ${retryCount + 1}/$maxRetries)');
     await Future.delayed(Duration(milliseconds: delayMs));
-  }
-
-  /// Unwrap Code Assist envelope: `{response: <gemini_response>}` -> inner response.
-  Map<String, dynamic> _unwrapResponse(dynamic data) {
-    if (data is Map<String, dynamic> && data.containsKey('response')) {
-      return data['response'] as Map<String, dynamic>;
-    }
-    if (data is Map<String, dynamic>) return data;
-    if (data is String) {
-      try {
-        final parsed = jsonDecode(data) as Map<String, dynamic>;
-        if (parsed.containsKey('response')) {
-          return parsed['response'] as Map<String, dynamic>;
-        }
-        return parsed;
-      } catch (_) {}
-    }
-    return {};
   }
 }
 

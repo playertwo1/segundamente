@@ -68,8 +68,10 @@ object AppActionChannelHandler {
         if (uri.scheme.equals("http", ignoreCase = true) &&
             (uri.host.equals("localhost", ignoreCase = true) || uri.host == "127.0.0.1")
         ) {
-            return (uri.port == 1455 && (uri.path?.startsWith("/auth/callback") == true || uri.path?.startsWith("/callback") == true)) ||
-                (uri.port == 8085 && uri.path?.startsWith("/oauth2callback") == true)
+            val port = uri.port
+            val path = uri.path ?: ""
+            return ((port == 1455 || port == -1) && (path.startsWith("/auth/callback") || path.startsWith("/callback"))) ||
+                ((port == 8085 || port == -1) && path.startsWith("/oauth2callback"))
         }
         return false
     }

@@ -100,3 +100,11 @@ android/app/*.jks
 # Local deploy scripts
 deploy_ios.sh
 deploy_android.sh
+.impeccable-mobile/*
+!.impeccable-mobile/references/
+.impeccable-mobile/references/*
+!.impeccable-mobile/references/amoled-v3-ios/
+.impeccable-mobile/references/amoled-v3-ios/*
+!.impeccable-mobile/references/amoled-v3-ios/*.png
+!.impeccable-mobile/references/amoled-v3-ios/README.md
+!.impeccable-mobile/QA-REPORT.md

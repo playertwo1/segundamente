@@ -43,6 +43,8 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
         return l10n.providerChatGptOauth;
       case LLMConfig.typeClaude:
         return l10n.providerClaudeApiKey;
+      case LLMConfig.typeClaudeOauth:
+        return 'Anthropic Claude (OAuth)';
       case LLMConfig.typeBedrockClaude:
         return l10n.providerBedrockSecret;
       case LLMConfig.typeGemini:

@@ -173,6 +173,9 @@ class LLMConfig {
       case typeClaude:
       case typeClaudeOauth:
         return const {
+          'claude-sonnet-5-5',
+          'claude-opus-5-5',
+          'claude-haiku-5-5',
           'claude-fable-5',
           'claude-opus-5',
           'claude-sonnet-5',
@@ -184,8 +187,15 @@ class LLMConfig {
           'anthropic.claude-sonnet-5',
         };
       case typeGemini:
-      case typeGeminiOauth:
         return const {'gemini-3.6-flash', 'gemini-3.1-pro-preview'};
+      case typeGeminiOauth:
+        return const {
+          'gemini-2.5-flash',
+          'gemini-3.1-flash-lite',
+          'gemini-2.5-pro',
+          'claude-sonnet-5-5-high',
+          'claude-opus-5-5-high',
+        };
       case typeKimi:
         return const {'kimi-k3', 'kimi-k2.7-code'};
       case typeQwen:
@@ -237,12 +247,20 @@ class LLMConfig {
   static List<String> recommendedModels(String type) {
     switch (type) {
       case typeGemini:
-      case typeGeminiOauth:
         return const [
           'gemini-3.6-flash',
           'gemini-3.1-pro-preview',
           'gemini-3.5-flash',
           'gemini-3.5-flash-lite',
+        ];
+      case typeGeminiOauth:
+        return const [
+          'gemini-2.5-flash',
+          'gemini-3.1-flash-lite',
+          'gemini-2.5-pro',
+          'claude-sonnet-5-5-high',
+          'claude-opus-5-5-high',
+          'gemini-3.6-flash',
         ];
       case typeChatCompletion:
         return const [
@@ -272,6 +290,9 @@ class LLMConfig {
       case typeClaude:
       case typeClaudeOauth:
         return const [
+          'claude-sonnet-5-5',
+          'claude-opus-5-5',
+          'claude-haiku-5-5',
           'claude-fable-5',
           'claude-opus-5',
           'claude-sonnet-5',
