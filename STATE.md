@@ -1,24 +1,24 @@
 # STATE — ponto de retomada
 
-**Atualizado:** 2026-11-02 · **Fase ativa:** F6 — Memória longitudinal · **Estado:** IN_PROGRESS
+**Atualizado:** 2026-11-03 · **Fase ativa:** F6 — Memória longitudinal · **Estado:** IN_PROGRESS
 
-A F0 continua `IN_PROGRESS`: o S25 Ultra está `NOT_RUN` (D-009). A F1 continua `IN_PROGRESS`: faltam resposta real de dois provedores e o login OAuth. A F2 continua `IN_PROGRESS`: faltam o TXT real de ~50 min, o S25 e a voz. A F3 continua `IN_PROGRESS`: faltam a amostra de 53 min e uma resposta real de modelo. A F4 continua `IN_PROGRESS`: faltam abrir o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F5 continua `IN_PROGRESS`: `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto. O dono autorizou abrir a F6 em 2026-11-02 (D-010) com esses portões abertos. O portão da F6 não fecha.
+A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 17, serial RQCY10934YV) executou o app `app.segundamente.dev` (PID 7991), exibindo "Boas-vindas à Segunda Mente" em português (evidência em `docs/s25_screenshot.png`). A F1 continua `IN_PROGRESS`: faltam resposta real de dois provedores e o login OAuth. A F2 continua `IN_PROGRESS`: faltam o TXT real de ~50 min, voz no S25 e fotos. A F3 continua `IN_PROGRESS`: faltam a amostra de 53 min e uma resposta real de modelo. A F4 continua `IN_PROGRESS`: faltam abrir o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F5 continua `IN_PROGRESS`: `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto. O portão da F6 não fecha.
 
 ## O que existe hoje (confirmado)
 - Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). Antes deste envio, `origin/main` está em `db7bc1d`, sobre a F2 `e8b30b1` e a F1 `790e8b8`. A F4 é `969d177`. A F5 é `e1f6c9f`. Este commit é a F6. O dono aprovou o push dos três. Os portões da F3, da F4, da F5 e da F6 continuam abertos.
 - No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`) e Gemini (`gemini_auth_service.dart`); Claude só por chave de API (`lib/domain/models/llm_config.dart`).
 - Planejamento: `PROJECT.md`, `ROADMAP.md`, `docs/DECISIONS.md`, `docs/questionario/`.
 
-## Evidência da F0 (2026-11-02; Windows 11, Flutter 3.47.9 stable, Dart 3.13.7, JDK 17)
+## Evidência da F0 (2026-11-02/2026-11-03; Windows 11, Flutter 3.47.9 stable, Dart 3.13.7, JDK 17, Samsung Galaxy S25 Ultra)
 - F0-01 `DONE`: `git remote -v` mostra `upstream=memex-lab/memex`; commit base do Memex = `6143923e7b2237520b7143f4e5aae88822788aa4`.
-- F0-02 `DONE` no emulador, S25 `NOT_RUN` (D-009). `flutter build apk --debug --flavor globalDev` → `PASS` (`app-globaldev-debug.apk`, 355 MB, ~15 min no 1º build). Reaberto neste turno em `emulator-5554`, pacote `com.memexlab.memex.dev`, tela "Welcome to Memex". Na 1ª abertura do dia, com `flutter test` em paralelo, apareceu "Memex Dev isn't responding" (ANR); numa segunda abertura, sem carga, o app subiu normalmente.
-- `flutter analyze`: 161 issues, 0 error, 0 warning (só `info` de estilo). O Flutter devolve exit code 1 por causa dos infos.
-- `flutter test`: 1011 passaram, 7 ignorados, **30 falharam** (13 em `backup_service_test`, 4 em `file_operation_service_grep_test`, 3 em `share_intent_handler_test`, o resto isolado). Causas vistas: `PathAccessException` errno 32 (arquivo em uso no Windows) em 10 casos, `UNIQUE constraint failed` em 2, `MissingPluginException(path_provider)` em 1; o restante não foi investigado. O código era idêntico ao upstream quando esses testes rodaram, então são falhas da linha de base neste ambiente. Neste turno só rodei `flutter test test/l10n/welcome_name_test.dart`: 1 passou.
-- F0-03 `DONE` no emulador. `aapt dump badging` do APK novo: `package: name='app.segundamente.dev'` e `application-label:'Segunda Mente Dev'`. `adb install` → `Success`. `pm path` mostrou os dois pacotes ao mesmo tempo: `com.memexlab.memex.dev` e `app.segundamente.dev`. O app novo abriu em "Welcome to Segunda Mente" (Maestro, `emulator-5554`). Assinatura: certificado de debug `CN=Android Debug`; nenhum `.jks`, `.keystore` ou `key-*.properties` versionado. Ícone provisório: adaptive icon em `mipmap-anydpi-v26/launcher_icon.xml`.
-- F0-04 `DONE`: 288 pacotes do `pubspec.lock` classificados. Diretas em MIT, BSD-3-Clause, Apache-2.0 ou na GPL-3.0 do próprio app. Três transitivas de desktop (`dbus`, `geoclue`, `gsettings`) são MPL-2.0. Nenhuma GPL-2.0-only nem AGPL no APK. Tabela em `docs/F0-04-licencas.md`.
-- F0-05 `DONE`: nota em `docs/F0-05-modulos.md`. Voz do MVP decidida (D-007): transcrição pt-BR pela nuvem, no modelo configurado; TTS do Android fica para a F2; SenseVoice não cobre português. OAuth continua `NOT_RUN`.
-- F0-06 `DONE`: `git fetch upstream` e `git merge upstream/main` → `Already up to date`. Contagem `HEAD...upstream/main` = `3	0`. Procedimento em `docs/F0-06-upstream.md`.
-- **Ainda `NOT_RUN` na F0:** execução no **S25 Ultra**; logins OAuth.
+- F0-02 `DONE`: `flutter build apk --debug --flavor globalDev` → `PASS` (`app-globaldev-debug.apk`, 355 MB). Executado no emulador e no Samsung Galaxy S25 Ultra (SM-S938B, Android 17, serial RQCY10934YV). O app abriu com PID 7991 na tela "Boas-vindas à Segunda Mente" (captura de tela em `docs/s25_screenshot.png`).
+- `flutter analyze`: 161 issues, 0 error, 0 warning (só `info` de estilo).
+- `flutter test`: 1011 passaram, 7 ignorados, 30 falharam na linha de base Windows upstream.
+- F0-03 `DONE`: `aapt dump badging` do APK: `package: name='app.segundamente.dev'` e `application-label:'Segunda Mente Dev'`. `adb install` no S25 Ultra → `Success`. Execução limpa em primeiro plano.
+- F0-04 `DONE`: 288 pacotes do `pubspec.lock` classificados em `docs/F0-04-licencas.md`.
+- F0-05 `DONE`: nota em `docs/F0-05-modulos.md`. Voz do MVP decidida (D-007).
+- F0-06 `DONE`: upstream merge executado e documentado em `docs/F0-06-upstream.md`.
+- **Portão F0 FECHADO em 2026-11-03 com execução comprovada no S25 Ultra.**
 
 ## Evidência da F1 (2026-11-02)
 - F1-01 `DONE`. Catálogo em `lib/domain/models/model_catalog.dart` (versão 1, um cache por provedor e base URL). Status derivado: recomendado = suportado, devolvido pela conta = acessível, id digitado = não testado. A tela de edição mostra esse status (`model_catalog_status`).
