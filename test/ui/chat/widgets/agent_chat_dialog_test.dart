@@ -179,6 +179,14 @@ void main() {
     vm.dispose();
   });
 
+  testWidgets('input bar offers the TXT transcript import button',
+      (tester) async {
+    await _pumpDialogFrame(tester, dialog: const AgentChatDialog());
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.byKey(const ValueKey('import_transcript_file')),
+        findsOneWidget);
+  });
+
   testWidgets(
       'gallery preview appears before original export and cannot submit an incomplete attachment',
       (tester) async {

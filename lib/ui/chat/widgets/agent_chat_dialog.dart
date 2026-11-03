@@ -1,3 +1,4 @@
+import 'package:memex/ui/chat/widgets/transcript_file_import_button.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
@@ -2459,24 +2460,25 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    _buildInputIconButton(
-                      key: const ValueKey('super_agent_camera_button'),
-                      icon: Icons.camera_alt,
-                      onTap: () => _pickImage(ImageSource.camera),
-                    ),
-                    const SizedBox(width: 12),
-                    _buildInputIconButton(
-                      key: const ValueKey('super_agent_gallery_button'),
-                      icon: Icons.photo_library,
-                      onTap: () => _pickImage(ImageSource.gallery),
-                    ),
-                    const SizedBox(width: 12),
                     Expanded(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: _showRunModeSelector
-                            ? _buildRunModeChip()
-                            : const SizedBox.shrink(),
+                      child: Wrap(
+                        spacing: 12,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          _buildInputIconButton(
+                            key: const ValueKey('super_agent_camera_button'),
+                            icon: Icons.camera_alt,
+                            onTap: () => _pickImage(ImageSource.camera),
+                          ),
+                          _buildInputIconButton(
+                            key: const ValueKey('super_agent_gallery_button'),
+                            icon: Icons.photo_library,
+                            onTap: () => _pickImage(ImageSource.gallery),
+                          ),
+                          const TranscriptFileImportButton(),
+                          if (_showRunModeSelector) _buildRunModeChip(),
+                        ],
                       ),
                     ),
                     const SizedBox(width: 12),
