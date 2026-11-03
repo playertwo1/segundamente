@@ -351,6 +351,9 @@ class OpenAiAuthService {
 
     // Allowed models whitelist (from opencode codex.ts)
     const allowedModels = {
+      'gpt-6-luna',
+      'gpt-6.1-sol',
+      'gpt-6.1-terra',
       'gpt-5.6',
       'gpt-5.6-sol',
       'gpt-5.6-terra',
@@ -376,6 +379,19 @@ class OpenAiAuthService {
         });
       }
     });
+
+    // O catálogo remoto pode não listar os modelos mais novos; força a presença.
+    for (final id in const ['gpt-6-luna', 'gpt-6.1-sol', 'gpt-6.1-terra']) {
+      if (!finalModels.any((m) => m['id'] == id)) {
+        finalModels.add({
+          'id': id,
+          'name': id.toUpperCase(),
+          'limit': {'context': 400000, 'input': 272000, 'output': 128000},
+          'reasoning': true,
+          'cost': 0,
+        });
+      }
+    }
 
     // Manually inject gpt-5.3-codex if not present (same as opencode)
     if (!finalModels.any((m) => m['id'] == 'gpt-5.3-codex')) {

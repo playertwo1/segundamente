@@ -102,7 +102,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
         'q': query,
         'format': 'json',
         'limit': '10',
-        'accept-language': 'zh',
+        'accept-language': UserStorage.localeNotifier.value.languageCode,
       });
 
       final response = await http.get(uri, headers: {

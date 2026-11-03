@@ -3,7 +3,7 @@ import 'package:memex/data/services/agent_activity_service.dart';
 import 'package:memex/data/services/agent_background_status.dart';
 import 'package:memex/data/services/agent_foreground_task_tracker.dart';
 import 'package:memex/data/services/local_task_executor.dart';
-import 'package:memex/l10n/app_localizations_zh.dart';
+import 'package:memex/l10n/app_localizations_pt.dart';
 
 void main() {
   group('AgentBackgroundStatus', () {
@@ -236,19 +236,19 @@ void main() {
           processing: 1,
           retrying: 1,
         ),
-        labels: AgentBackgroundStatusLabels.fromL10n(AppLocalizationsZh()),
+        labels: AgentBackgroundStatusLabels.fromL10n(AppLocalizationsPt()),
         now: DateTime(2026, 1, 1),
       );
 
       expect(status.title, 'Memex Agent');
-      expect(status.stage, '处理中');
-      expect(status.detail, '正在处理 4 个后台任务。');
-      expect(status.summary, '正在处理 4 个后台任务。');
-      expect(status.taskSummary, '执行中 1，排队中 2，重试中 1');
-      expect(status.statusText, '执行中 1，排队中 2，重试中 1');
+      expect(status.stage, 'Processando');
+      expect(status.detail, 'Processando 4 tarefa(s) na fila.');
+      expect(status.summary, 'Processando 4 tarefa(s) na fila.');
+      expect(status.taskSummary, 'Executando 1, pendentes 2, nova tentativa 1');
+      expect(status.statusText, 'Executando 1, pendentes 2, nova tentativa 1');
       expect(
         status.toPlatformMap(),
-        containsPair('statusText', '执行中 1，排队中 2，重试中 1'),
+        containsPair('statusText', 'Executando 1, pendentes 2, nova tentativa 1'),
       );
     });
 

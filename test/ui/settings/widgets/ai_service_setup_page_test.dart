@@ -16,7 +16,7 @@ void main() {
 
   setUp(() async {
     AppFlavor.init('global');
-    SharedPreferences.setMockInitialValues({'language': 'zh'});
+    SharedPreferences.setMockInitialValues({'language': 'en'});
     await UserStorage.initL10n();
   });
 
@@ -49,7 +49,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.textContaining('Super Agent'), findsNothing);
-    expect(find.textContaining('单个 Agent'), findsNothing);
+    expect(find.textContaining('individual agents'), findsNothing);
     expect(find.text(UserStorage.l10n.modelRolesTitle), findsNothing);
     expect(find.text(UserStorage.l10n.textModelRoleTitle), findsNothing);
     expect(

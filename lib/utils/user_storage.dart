@@ -100,8 +100,6 @@ class UserStorage {
 
   /// Locales that have corresponding l10n files (must match app_localizations_ext).
   static const Locale fallbackLocale = Locale('en');
-  static const Locale traditionalChineseLocale =
-      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant');
   static const List<Locale> supportedLocales = supportedLanguageLocales;
   static const List<String> supportedLanguageCodes = supportedLanguageTags;
 
@@ -154,14 +152,6 @@ class UserStorage {
       if (localeTag(supported) == localeTag(normalized)) {
         return supported;
       }
-    }
-
-    if (normalized.languageCode == 'zh' &&
-        (normalized.scriptCode == 'Hant' ||
-            normalized.countryCode == 'TW' ||
-            normalized.countryCode == 'HK' ||
-            normalized.countryCode == 'MO')) {
-      return traditionalChineseLocale;
     }
 
     for (final supported in supportedLocales) {
@@ -485,7 +475,7 @@ class UserStorage {
         return PlatformDispatcher.instance.locale;
       }
 
-      // Parse locale string (format: "zh", "zh_Hant", or "zh_Hant_TW").
+      // Parse locale string (format: "pt" or "pt_BR").
       return localeFromTag(languageString);
     } catch (e) {
       return PlatformDispatcher

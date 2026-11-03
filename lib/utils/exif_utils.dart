@@ -1,3 +1,4 @@
+import 'package:memex/utils/user_storage.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:exif/exif.dart';
@@ -201,7 +202,7 @@ class ExifUtils {
         "lat": latitude.toString(),
         "lon": longitude.toString(),
         "format": "json",
-        "accept-language": "zh",
+        "accept-language": UserStorage.localeNotifier.value.languageCode,
       });
 
       // Nominatim requires User-Agent header

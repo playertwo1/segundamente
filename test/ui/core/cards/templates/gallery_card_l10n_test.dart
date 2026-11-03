@@ -67,36 +67,18 @@ void main() {
     expect(find.text(UserStorage.l10n.sketchContent), findsOneWidget);
   });
 
-  test('Spanish template gallery uses localized labels', () async {
-    await initLocale('es');
+  test('Portuguese template gallery uses localized labels', () async {
+    await initLocale('pt');
     final sections = UserStorage.l10n.timelineTemplateGallerySections;
-    expect(sections.first.items.first.label, contains('Clásica'));
+    expect(sections.first.title, 'Em geral');
+    expect(sections.first.items.first.label, contains('Cartão Clássico'));
     expect(sections.first.items.first.label, isNot(contains('Classic Card')));
-  });
-
-  test('Arabic template gallery uses localized section titles', () async {
-    await initLocale('ar');
-    final sections = UserStorage.l10n.timelineTemplateGallerySections;
-    expect(sections.first.title, 'عام');
-    expect(sections.first.items.first.label, contains('البطاقة'));
-  });
-
-  test('Japanese template gallery uses localized insight titles', () async {
-    await initLocale('ja');
     final items = UserStorage.l10n.insightTemplateGalleryItems;
-    expect(items.first.data['title'], '今日のタイムライン');
-  });
-
-  test('Italian template gallery is localized', () async {
-    await initLocale('it');
-    final sections = UserStorage.l10n.timelineTemplateGallerySections;
-    expect(sections.first.title, 'Generale');
-    expect(sections.first.items.first.label, contains('Scheda classica'));
-    expect(sections.first.items.first.label, isNot(contains('Classic Card')));
+    expect(items.first.data['title'], 'Linha do tempo de hoje');
   });
 
   test('localized multiline gallery content contains real newlines', () async {
-    await initLocale('it');
+    await initLocale('pt');
     final textual = UserStorage.l10n.timelineTemplateGallerySections[1];
     final snippet = textual.items.first.data['text'] as String;
     final article = textual.items[1].data['body'] as String;

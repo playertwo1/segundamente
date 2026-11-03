@@ -15,8 +15,8 @@ void main() {
   });
 
   test('day labels use the active locale weekday name', () async {
-    await initializeDateFormatting('zh');
-    await UserStorage.setLocale(const Locale('zh'));
+    await initializeDateFormatting('pt');
+    await UserStorage.setLocale(const Locale('pt'));
 
     final (label, subLabel) = getPeriodLabels('2026-08-27', 'days');
     expect(subLabel, isNot(equals('Thursday')));
@@ -24,8 +24,8 @@ void main() {
   });
 
   test('month labels use the active locale month name', () async {
-    await initializeDateFormatting('zh');
-    await UserStorage.setLocale(const Locale('zh'));
+    await initializeDateFormatting('pt');
+    await UserStorage.setLocale(const Locale('pt'));
 
     final (label, subLabel) = getPeriodLabels('2026-08', 'months');
     expect(label, isNot(equals('August 2026')));

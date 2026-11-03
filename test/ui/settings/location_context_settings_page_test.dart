@@ -293,14 +293,15 @@ void main() {
     expect(config.enabled, isFalse);
   });
 
-  testWidgets('renders localized Chinese labels', (WidgetTester tester) async {
-    await pumpLocationSettingsPage(tester, language: 'zh');
+  testWidgets('renders localized Portuguese labels',
+      (WidgetTester tester) async {
+    await pumpLocationSettingsPage(tester, language: 'pt');
 
-    expect(find.text('位置上下文'), findsOneWidget);
-    expect(find.text('为对话附加当前位置'), findsOneWidget);
-    expect(find.text('逆地理编码服务商'), findsOneWidget);
-    expect(find.text('上下文粒度'), findsOneWidget);
-    expect(find.text('已保存'), findsOneWidget);
+    expect(find.text('Contexto de localização'), findsOneWidget);
+    expect(find.text('Anexar localização atual ao chat'), findsOneWidget);
+    expect(find.text(UserStorage.l10n.reverseGeocodingProvider), findsOneWidget);
+    expect(find.text(UserStorage.l10n.contextGranularity), findsOneWidget);
+    expect(find.text(UserStorage.l10n.saved), findsOneWidget);
   });
 
   testWidgets('enabling location context does not request permission', (

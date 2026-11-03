@@ -13,13 +13,13 @@ void main() {
     await UserStorage.initL10n();
   });
 
-  test('week labels use German week label', () async {
-    await initializeDateFormatting('de');
-    await UserStorage.setLocale(const Locale('de'));
+  test('week labels use the Portuguese week label', () async {
+    await initializeDateFormatting('pt');
+    await UserStorage.setLocale(const Locale('pt'));
 
     final (label, subLabel) = getPeriodLabels('2026-W10', 'weeks');
 
-    expect(label, contains('Woche'));
+    expect(label, contains('Semana'));
     expect(label, contains('10'));
     expect(subLabel, isNotEmpty);
   });

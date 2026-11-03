@@ -133,6 +133,9 @@ class LLMConfig {
 
   /// Models that require a ChatGPT Pro/Plus subscription (OpenAI OAuth only).
   static const Set<String> chatgptProOnlyModels = {
+    'gpt-6-luna',
+    'gpt-6.1-sol',
+    'gpt-6.1-terra',
     'gpt-5.6',
     'gpt-5.6-sol',
     'gpt-5.6-terra',
@@ -158,9 +161,9 @@ class LLMConfig {
         };
       case typeOpenAiOauth:
         return const {
-          'gpt-5.6-sol',
-          'gpt-5.6-terra',
-          'gpt-5.6-luna',
+          'gpt-6.1-sol',
+          'gpt-6.1-terra',
+          'gpt-6-luna',
         };
       case typeClaude:
         return const {

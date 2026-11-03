@@ -12,7 +12,7 @@ void main() {
             children: [
               const Expanded(child: Text('Choose Language')),
               LanguageValueButton(
-                localeTag: 'ru',
+                localeTag: 'pt',
                 compact: true,
                 onTap: () {},
               ),
@@ -22,9 +22,9 @@ void main() {
       ),
     );
 
-    expect(find.text('Русский'), findsOneWidget);
-    expect(find.text('Russian'), findsNothing);
-    expect(find.text('RU'), findsNothing);
+    expect(find.text('Português'), findsOneWidget);
+    expect(find.text('Portuguese'), findsNothing);
+    expect(find.text('PT'), findsNothing);
     expect(find.byIcon(Icons.translate_outlined), findsNothing);
   });
 
@@ -61,27 +61,19 @@ void main() {
     expect(find.byType(TextField), findsNothing);
     expect(find.byIcon(Icons.check_rounded), findsOneWidget);
     expect(find.text('EN'), findsNothing);
-    expect(find.text('RU'), findsNothing);
+    expect(find.text('PT'), findsNothing);
 
     await tester.scrollUntilVisible(
-      find.text('Bahasa Indonesia'),
+      find.text('Português'),
       200,
       scrollable: find.byType(Scrollable).last,
     );
 
-    expect(find.text('Bahasa Indonesia'), findsOneWidget);
+    expect(find.text('Português'), findsOneWidget);
 
-    await tester.scrollUntilVisible(
-      find.text('Русский'),
-      200,
-      scrollable: find.byType(Scrollable).last,
-    );
-
-    expect(find.text('Русский'), findsOneWidget);
-
-    await tester.tap(find.text('Русский'));
+    await tester.tap(find.text('Português'));
     await tester.pumpAndSettle();
 
-    expect(selectedTag, 'ru');
+    expect(selectedTag, 'pt');
   });
 }

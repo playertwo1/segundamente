@@ -180,7 +180,7 @@ class GeocodingService {
           'lat': latitude.toString(),
           'lon': longitude.toString(),
           'format': 'json',
-          'accept-language': 'zh',
+          'accept-language': UserStorage.localeNotifier.value.languageCode,
           'addressdetails': '1',
         },
       );

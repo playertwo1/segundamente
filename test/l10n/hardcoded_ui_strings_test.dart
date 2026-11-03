@@ -8,17 +8,17 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    SharedPreferences.setMockInitialValues({'language': 'zh'});
+    SharedPreferences.setMockInitialValues({'language': 'pt'});
     await UserStorage.initL10n();
   });
 
   test('comment author labels resolve from l10n', () {
-    expect(UserStorage.l10n.commentAuthorUser, '用户');
-    expect(UserStorage.l10n.commentAuthorAi, 'AI');
-    expect(UserStorage.l10n.authorizationCancelled, '授权已取消');
-    expect(UserStorage.l10n.timelineWeekNumberLabel('12'), '第 12 周');
-    expect(UserStorage.l10n.eventCardDefaultTitle, '事件');
-    expect(UserStorage.l10n.memoryNoLongTermYet, '还没有长期记忆。');
+    expect(UserStorage.l10n.commentAuthorUser, 'Usuário');
+    expect(UserStorage.l10n.commentAuthorAi, 'IA');
+    expect(UserStorage.l10n.authorizationCancelled, 'Autorização cancelada');
+    expect(UserStorage.l10n.timelineWeekNumberLabel('12'), 'Semana 12');
+    expect(UserStorage.l10n.eventCardDefaultTitle, 'Evento');
+    expect(UserStorage.l10n.memoryNoLongTermYet, 'Ainda não há memórias de longo prazo.');
   });
 
   test('replyDisplayNameFor falls back to localized AI label', () {

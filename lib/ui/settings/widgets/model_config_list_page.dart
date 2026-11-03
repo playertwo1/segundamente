@@ -505,15 +505,18 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
                                         : Colors.orange,
                                   ),
                                   const SizedBox(width: 4),
-                                  Text(
-                                    config.isValid
-                                        ? UserStorage.l10n.configured
-                                        : UserStorage.l10n.apiKeyNotSet,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: config.isValid
-                                          ? Colors.green
-                                          : Colors.orange,
+                                  Flexible(
+                                    child: Text(
+                                      config.isValid
+                                          ? UserStorage.l10n.configured
+                                          : UserStorage.l10n.apiKeyNotSet,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: config.isValid
+                                            ? Colors.green
+                                            : Colors.orange,
+                                      ),
                                     ),
                                   ),
                                 ],

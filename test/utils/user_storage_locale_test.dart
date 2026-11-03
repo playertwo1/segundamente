@@ -5,100 +5,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('UserStorage locale resolution', () {
-    test('keeps supported German locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('de'));
+    test('keeps supported English and Portuguese locales', () {
+      for (final code in ['en', 'pt']) {
+        final locale = UserStorage.resolveToSupportedLocale(Locale(code));
 
-      expect(locale.languageCode, 'de');
-    });
-
-    test('keeps supported Japanese locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('ja'));
-
-      expect(locale.languageCode, 'ja');
-    });
-
-    test('keeps supported Spanish locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('es'));
-
-      expect(locale.languageCode, 'es');
-    });
-
-    test('keeps supported Portuguese locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('pt'));
-
-      expect(locale.languageCode, 'pt');
-    });
-
-    test('keeps supported French locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('fr'));
-
-      expect(locale.languageCode, 'fr');
-    });
-
-    test('keeps supported Korean locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('ko'));
-
-      expect(locale.languageCode, 'ko');
-    });
-
-    test('keeps supported Hindi locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('hi'));
-
-      expect(locale.languageCode, 'hi');
-    });
-
-    test('keeps supported Indonesian locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('id'));
-
-      expect(locale.languageCode, 'id');
-    });
-
-    test('keeps supported Arabic locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('ar'));
-
-      expect(locale.languageCode, 'ar');
-    });
-
-    test('keeps supported Russian locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('ru'));
-
-      expect(locale.languageCode, 'ru');
-    });
-
-    test('keeps supported Italian locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('it'));
-
-      expect(locale.languageCode, 'it');
-    });
-
-    test('keeps supported Traditional Chinese locale', () {
-      final locale = UserStorage.resolveToSupportedLocale(
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
-      );
-
-      expect(UserStorage.localeTag(locale), 'zh_Hant');
-    });
-
-    test('resolves Traditional Chinese regions to zh_Hant', () {
-      final locale = UserStorage.resolveToSupportedLocale(
-        const Locale('zh', 'TW'),
-      );
-
-      expect(UserStorage.localeTag(locale), 'zh_Hant');
+        expect(locale.languageCode, code);
+      }
     });
 
     test('parses locale tags with script codes', () {
-      final locale = UserStorage.localeFromTag('zh_Hant');
+      final locale = UserStorage.localeFromTag('sr_Latn');
 
-      expect(locale.languageCode, 'zh');
-      expect(locale.scriptCode, 'Hant');
-      expect(UserStorage.localeTag(locale), 'zh_Hant');
+      expect(locale.languageCode, 'sr');
+      expect(locale.scriptCode, 'Latn');
+      expect(UserStorage.localeTag(locale), 'sr_Latn');
     });
 
-    test('falls back unsupported locales to English', () {
-      final locale = UserStorage.resolveToSupportedLocale(const Locale('nl'));
-
-      expect(locale.languageCode, 'en');
+    test('falls back removed and unsupported locales to English', () {
+      for (final locale in [
+        const Locale('nl'),
+        const Locale('de'),
+        const Locale('zh'),
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+      ]) {
+        expect(UserStorage.resolveToSupportedLocale(locale).languageCode, 'en');
+      }
     });
   });
 
