@@ -64,6 +64,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F2-08 | Menu único "+" no chat: câmera, galeria, TXT, PDF e áudio; sem faixa de fotos recentes | P1 | F2-01 | DONE | Menu no S25; PDF anexado foi lido pelo ChatGPT; TXT importado chegou ao agente |
 | F2-09 | Áudio anexado ou compartilhado vira texto pt-BR (D-011) e só o texto vai ao modelo | P0 | F2-08 | IN_PROGRESS | `.m4a` real de 1 a 2 min transcrito no S25; depois ~50 min. Anotar limite de tamanho e duração |
 | F2-10 | Compartilhar TXT, PDF e áudio com o app abre o chat com o anexo | P1 | F2-08 | IN_PROGRESS | TXT validado no S25; PDF e áudio compartilhados `NOT_RUN` |
+| F2-11 | Transcrição local com Whisper multilíngue (`pt`) pelo `sherpa_onnx` que o app já tem, como caminho offline e reserva do D-011 | P1 | F2-09 | READY | Mesmo áudio transcrito pelo endpoint e pelo Whisper local; tempo e pico de memória de 50 min no S25; escolha entre `base` e `small` registrada com a taxa de erro anotada |
 
 **Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` está no commit `db7bc1d`, em `origin/main`, e não fecha a F2-03: falta o TXT real de ~50 min.
 
@@ -76,6 +77,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F3-04 | Rastreabilidade: cada item aponta para trecho e timestamp; abrir o trecho-fonte | P0 | F3-02 | DONE | Clicar numa decisão abre o trecho original |
 | F3-05 | Confirmação humana: itens `não confirmado` até aprovar; "não identificado/não informado" para responsável e prazo ausentes | P0 | F3-02 | DONE | Teste: nada vira tarefa definitiva sem confirmação |
 | F3-06 | Editar/aprovar/descartar itens sem perder o texto original; busca simples e exclusão com derivados | P1 | F3-05 | DONE | Edição preserva original; excluir sessão remove derivados |
+| F3-07 | Extrator de tarefas robusto: exemplos negativos no prompt, deduplicação contra o histórico, saída inválida sem nota em branco | P1 | F3-02 | READY | Testes por caso (ver F3-07 abaixo); em sessão real, nenhuma tarefa repetida nem narração virou tarefa |
 
 **Portão F3:** critério 6 + a amostra de 53 min não perde pontos centrais nem timestamps. O esquema e a tela entram no commit do botão de TXT e da F3. A amostra de 53 min e uma resposta real de modelo continuam `NOT_RUN`, então o portão não fecha. A F3 foi aberta com os portões da F0, da F1 e da F2 ainda abertos.
 
@@ -120,6 +122,9 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F6-06 | Filtros por propriedade e visões salvas | P1 | F6-01 | READY | Testes do extrator e do filtro; no S25, uma visão salva "tarefas abertas" reaplica e lista só os itens certos |
 | F6-07 | Prévia de links (título, descrição, imagem), desligada por padrão | P2 | F5-02 | BACKLOG | Testes do parser e do bloqueio de endereços privados; no S25, com a opção ligada, uma URL colada mostra a prévia |
 | F6-08 | Mapa de atividade no calendário (intensidade por dia) | P2 | F5 | READY | Teste dos níveis; captura do S25 com dias de intensidades diferentes |
+| F6-09 | Recuperação para perguntas sobre sessões: sementes por busca de texto, mais sessões irmãs por tópico, com orçamento de caracteres e piso de relevância | P1 | F6-01, F6-05 | BACKLOG | Testes da expansão; no S25, uma pergunta fora do assunto não traz nenhuma sessão |
+| F6-10 | Embeddings no aparelho para busca por significado em português | P2 | F6-09 | BACKLOG | Modelo multilíngue medido em pt-BR contra a busca de texto; tamanho, tempo e memória no S25. Sem medida, continua `BACKLOG` |
+| F6-11 | "Adicionar à agenda" nos encaminhamentos com data | P2 | F6-02 | READY | Intent `ACTION_INSERT` do calendário, sem permissão nova; no S25, o evento chega pré-preenchido |
 
 **Portão F6:** busca semântica entre sessões, tópicos, "o que mudou e por quê?", painel de encaminhamentos e histórico de versões. Aberto em 2026-11-02 (D-010) com os portões da F0 à F5 ainda abertos. A busca feita é texto local. Semântica, tópicos e o "por quê" continuam `NOT_RUN`. O MVP não está pronto.
 
@@ -146,6 +151,27 @@ Regras comuns: cada uma entra com testes (`AGENTS.md`), em commit próprio; text
 - Não faz: visão anual nem sequência de dias (streak), que ficam para depois.
 - Pronto quando: a função de nível tem teste por faixa; o dia selecionado e o de hoje continuam legíveis; o texto do dia tem contraste nos níveis altos.
 
+### Definição das tarefas vindas do Daedalus Echo (D-016)
+Mesmas regras comuns de cima. Ordem sugerida: F3-07, F2-11, F6-11, F6-09. A F6-10 só depois de medir.
+
+**F2-11 — Whisper multilíngue local**
+- Faz: troca ou soma ao `WhisperService` um modelo Whisper multilíngue em int8 (`language = "pt"`, `task = "transcribe"`), com download explícito e tamanho mostrado. Áudio longo vai em janelas de 30 s, decodificado em pedaços para não carregar 50 min de PCM de uma vez (~190 MB em float a 16 kHz). Cada janela guarda o tempo de início, para os timestamps da F3-04 (aproximados, de 30 s).
+- Não faz: tradução, separação de falantes (diarização) e timestamps por palavra.
+- Pronto quando: o pt-BR sai com acentos; o áudio de 50 min não estoura a memória; o resultado entra no mesmo caminho do TXT importado (prévia e confirmação antes de enviar ao modelo).
+
+**F3-07 — Extrator de tarefas robusto**
+- Faz: o prompt (em pt) pede só compromissos de quem fala, com exemplos do que NÃO é tarefa (narração do que está fazendo, comentário sobre o app, fato passado, opinião). Limite de 10 por sessão, 15 palavras cada, "nenhuma" quando não houver. Remove cercas ```json da resposta. Deduplicação contra o histórico: texto normalizado igual; um contido no outro só se o menor tiver 8 ou mais caracteres; mesmas palavras úteis após tirar palavras vazias do português. "ligar para o pai" não é duplicata de "ligar para a mãe e o pai".
+- Saída que não dá para interpretar nunca vira nota em branco: o título e a prévia vêm da primeira linha com texto do próprio conteúdo.
+- Pronto quando: há um teste por regra acima, mais os casos pt-BR; nada vira tarefa definitiva sem confirmação (F3-05 continua valendo).
+
+**F6-09 — Recuperação por tópicos**
+- Faz: a busca de texto dá as sementes; sessões que compartilham tópico ou tag com elas entram em seguida, ordenadas por tópicos em comum e depois pela data, até o orçamento de caracteres. As sementes nunca saem. Pergunta sem nenhuma semente acima do piso não traz sessão nenhuma, para uma conversa sobre outro assunto não receber nota alheia.
+- Não faz: embeddings (F6-10) nem grafo visual.
+
+**F6-11 — Adicionar à agenda**
+- Faz: botão no encaminhamento aprovado que abre o app de calendário do Android com título e descrição preenchidos e 1 hora de duração, pelo intent `ACTION_INSERT`. Não pede permissão de agenda e não grava nada sozinho.
+- Não faz: ler a agenda nem sincronizar.
+
 ## Fases futuras (bloqueadas até o MVP)
 - **F7:** voz contínua full duplex; ponte opcional com Claude Code/Codex CLI oficiais no PC (única via aceita para assinatura Claude); modelos locais (Ollama).
 - **F8:** NotebookLM — Via A (exportar para Google Docs), depois B (conector comunitário, opt-in), C (API empresarial só se justificar).
@@ -153,8 +179,11 @@ Regras comuns: cada uma entra com testes (`AGENTS.md`), em commit próprio; text
 ## Ideias futuras (não autorizadas)
 | Ideia | Quando reavaliar |
 |---|---|
-| Referências de UX/relatórios: AnythingLLM Mobile, Meet2Notes, Open Notebook, Memos, Khoj, Daedalus Echo | Ao iniciar F2/F3, copiando só padrões ou módulos de licença compatível |
+| Referências de UX/relatórios: AnythingLLM Mobile, Meet2Notes, Open Notebook, Memos (revisado em D-014), Khoj, Daedalus Echo (revisado em D-016) | Ao iniciar F2/F3, copiando só padrões ou módulos de licença compatível |
 | Graphiti/Omi (memória temporal) | Só se F6 provar necessidade |
+| Mapa global de tópicos (grafo visual das sessões), do Daedalus Echo | Depois da F6-05 e da F6-09, se tópicos ficarem difíceis de navegar em lista |
+| Gemma 3 1B local (MediaPipe) e conversa por voz mãos-livres com resposta falada | F7, junto de Ollama; medir antes a qualidade em pt-BR |
+| Backup versionado automático que inclui as configurações padrão | Ao revisar o backup do app; o Echo corrigiu esse furo na v1.2.2 |
 | Biblioteca de anexos (tela com todas as fotos, PDFs e áudios importados), do Memos | Depois da F2-09 e da F6-05, se achar arquivos ficar difícil |
 | Chave de API do Gemini (AI Studio) como reserva da transcrição de áudio | Se o endpoint do ChatGPT (D-011) cair ou limitar o tamanho |
 
@@ -162,3 +191,4 @@ Regras comuns: cada uma entra com testes (`AGENTS.md`), em commit próprio; text
 - 2026-11-02 — escopo do MVP, fases e Claude por chave de API: ver [docs/DECISIONS.md](docs/DECISIONS.md).
 - 2026-11-02 — a F6 começa com o MVP aberto: D-010. A F7 e a F8 continuam bloqueadas.
 - 2026-11-03 — D-011 (áudio pelo endpoint de transcrição), D-012 (só en e pt), D-013 (Gemini OAuth bloqueado), D-014 (ideias do Memos na F6) e D-015 (login Claude pendente).
+- 2026-11-03 — D-016 (ideias do Daedalus Echo: F2-11, F3-07, F6-09 a F6-11).

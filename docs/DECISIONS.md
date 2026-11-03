@@ -19,6 +19,7 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-013 | 2026-11-03 | Gemini por OAuth bloqueado pelo Google; não usar credenciais nem identidade de outro produto | ACCEPTED |
 | D-014 | 2026-11-03 | Ideias do Memos: quatro entram na F6 (F6-05 a F6-08); o resto fica fora | ACCEPTED |
 | D-015 | 2026-11-03 | Login OAuth do Claude entrou no código e conflita com D-005 | PROPOSED |
+| D-016 | 2026-11-03 | Ideias do Daedalus Echo: Whisper local multilíngue, extrator de tarefas robusto, recuperação por tópicos, agenda; o resto fica fora | ACCEPTED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -78,3 +79,10 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 ## D-015 — Login OAuth do Claude (pendente)
 - Contexto: o commit `67389b4` trouxe `claude_auth_service.dart` e `typeClaudeOauth`, feitos por outro processo. D-005 diz que não haverá login Claude.ai por assinatura em app de terceiros, por causa dos termos da Anthropic.
 - Decisão necessária do dono: remover o login, ou revogar D-005 com a leitura atual dos termos. Enquanto isso ele não faz parte do MVP e não deve ser usado.
+
+## D-016 — Ideias do Daedalus Echo
+- Contexto: `DaedalusApps/daedalus-echo` (MIT, Kotlin e Compose, 12 estrelas, último push em 2026-08-25) é um gravador 100% local: Whisper por sherpa-onnx, Gemma 3 1B por MediaPipe, embeddings com Universal Sentence Encoder, busca por significado, tarefas extraídas e mapa de tópicos. Foram lidos o README, o CHANGELOG, `ModelConfig.kt`, `TranscriptionService.kt`, `EmbeddingService.kt`, `GraphRetrieval.kt`, `TodoExtraction.kt` e `CalendarIntegration.kt`. Nada foi executado.
+- Decisão e motivo: entram só ideias, nenhum código (outra linguagem e outra arquitetura). Entram: Whisper multilíngue local (F2-11), extrator de tarefas robusto com deduplicação (F3-07), recuperação por tópicos com piso de relevância (F6-09) e "adicionar à agenda" (F6-11). Os embeddings no aparelho ficam como F6-10 `BACKLOG`.
+- Cuidado que o Echo mostra: o Whisper dele é `base.en`, só inglês, com o idioma fixo em `en`, e o Universal Sentence Encoder é centrado em inglês. Para português é preciso um modelo Whisper multilíngue e um embedder que cubra português. Nenhum dos dois foi medido.
+- Fora do MVP: Gemma 3 1B local (555 MB, qualidade em pt-BR desconhecida; fica na F7 com Ollama), conversa por voz mãos-livres (F7), mapa global de tópicos (Ideias futuras).
+- Descartado: copiar a arquitetura offline total. O nosso produto usa o modelo que o dono escolheu (D-002, D-004).
