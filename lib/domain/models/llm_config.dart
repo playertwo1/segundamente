@@ -9,6 +9,7 @@ class LLMConfig {
   static const String typeResponses = 'responses';
   static const String typeBedrockClaude = 'bedrock_claude';
   static const String typeClaude = 'claude';
+  static const String typeClaudeOauth = 'claude_oauth';
   static const String typeOpenAiOauth = 'openai_oauth';
 
   // Chinese LLM providers & aggregators
@@ -36,6 +37,8 @@ class LLMConfig {
         return 'ChatGPT (OAuth)';
       case typeClaude:
         return 'Anthropic Claude (API Key)';
+      case typeClaudeOauth:
+        return 'Anthropic Claude (OAuth)';
       case typeBedrockClaude:
         return 'AWS Bedrock Claude';
       case typeGemini:
@@ -100,6 +103,8 @@ class LLMConfig {
         return 'ChatGPT Pro/Plus';
       case typeClaude:
         return 'Anthropic';
+      case typeClaudeOauth:
+        return 'Claude (OAuth)';
       case typeBedrockClaude:
         return 'Bedrock Claude';
       case typeGemini:
@@ -166,6 +171,7 @@ class LLMConfig {
           'gpt-6-luna',
         };
       case typeClaude:
+      case typeClaudeOauth:
         return const {
           'claude-fable-5',
           'claude-opus-5',
@@ -264,6 +270,7 @@ class LLMConfig {
           'gpt-5.3-codex',
         ];
       case typeClaude:
+      case typeClaudeOauth:
         return const [
           'claude-fable-5',
           'claude-opus-5',
@@ -353,6 +360,7 @@ class LLMConfig {
     switch (type) {
       case typeOpenAiOauth:
       case typeGeminiOauth:
+      case typeClaudeOauth:
       case typeBedrockClaude:
       case typeOllama:
         return false;
@@ -412,6 +420,7 @@ class LLMConfig {
       case typeGeminiOauth:
         return id.startsWith('gemini-');
       case typeClaude:
+      case typeClaudeOauth:
       case typeBedrockClaude:
         return id.contains('claude-3') ||
             id.contains('claude-fable') ||
@@ -480,6 +489,7 @@ class LLMConfig {
       case typeGemini:
         return 'https://generativelanguage.googleapis.com/v1beta';
       case typeClaude:
+      case typeClaudeOauth:
         return 'https://api.anthropic.com';
       case typeChatCompletion:
       case typeResponses:
@@ -522,6 +532,7 @@ class LLMConfig {
       case typeResponses:
         return 'e.g. {\n  "reasoning_effort": "medium"\n}';
       case typeClaude:
+      case typeClaudeOauth:
       case typeBedrockClaude:
         return 'e.g. {\n  "thinking": {\n    "type": "enabled",\n    "budget_tokens": N\n  }\n}\nor {\n  "thinking": {\n    "type": "adaptive"\n  }\n}';
       default:

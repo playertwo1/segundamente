@@ -78,6 +78,16 @@
                 <data
                     android:scheme="http"
                     android:host="localhost"
+                    android:port="1455"
+                    android:pathPrefix="/callback" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="localhost"
                     android:port="8085"
                     android:pathPrefix="/oauth2callback" />
             </intent-filter>

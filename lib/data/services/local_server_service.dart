@@ -38,6 +38,7 @@ class LocalServerService {
       }
     }
     if (uri.path == '/auth/callback' ||
+        uri.path == '/callback' ||
         uri.path == '/cancel' ||
         uri.port == 1455) {
       if (_authCallback != null) {

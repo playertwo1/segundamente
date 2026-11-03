@@ -68,7 +68,7 @@ object AppActionChannelHandler {
         if (uri.scheme.equals("http", ignoreCase = true) &&
             (uri.host.equals("localhost", ignoreCase = true) || uri.host == "127.0.0.1")
         ) {
-            return (uri.port == 1455 && uri.path?.startsWith("/auth/callback") == true) ||
+            return (uri.port == 1455 && (uri.path?.startsWith("/auth/callback") == true || uri.path?.startsWith("/callback") == true)) ||
                 (uri.port == 8085 && uri.path?.startsWith("/oauth2callback") == true)
         }
         return false

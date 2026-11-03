@@ -34,6 +34,7 @@ class AppConfig {
     LLMConfig.typeOpenAiOauth,
     // Anthropic
     LLMConfig.typeClaude,
+    LLMConfig.typeClaudeOauth,
     LLMConfig.typeBedrockClaude,
     // Google
     LLMConfig.typeGemini,
