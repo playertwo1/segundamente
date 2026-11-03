@@ -1536,6 +1536,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     );
     if (!mounted || !saved) return;
     ToastHelper.showSuccess(context, UserStorage.l10n.dataImportSuccess);
+    // O texto já foi confirmado; abre o chat com ele pronto para enviar.
+    _openSuperAgentDialog(
+      initialDraftText: TranscriptBatch(sources).outgoingText,
+    );
   }
 
   Future<bool> _askSendConfirmation(TranscriptBatch batch) {
