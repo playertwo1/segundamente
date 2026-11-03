@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:http/http.dart' as http;
+import 'package:memex/llm_client/codex_responses_client.dart';
 import 'package:dart_agent_core/dart_agent_core.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
@@ -188,7 +191,13 @@ Rules:
 - Do not add introductions, labels, translations, summaries, notes, or quotes.
 - Preserve the spoken language as-is.
 - If the audio contains no recognizable speech, return <transcript></transcript>.''';
-    final response = await resources.client.generate([
+    final client = resources.client;
+    // O canal /codex recusa áudio ("Audio input is not available"); o ChatGPT
+    // usa um endpoint próprio de transcrição, que aceita o mesmo token OAuth.
+    if (client is CodexResponsesClient) {
+      return transcribeViaChatGpt(client, bytes, mimeType: mimeType);
+    }
+    final response = await client.generate([
       SystemMessage(systemPrompt),
       UserMessage([TextPart(prompt), AudioPart(base64Encode(bytes), mimeType)]),
     ], modelConfig: resources.modelConfig);
@@ -197,6 +206,49 @@ Rules:
       text: _normalizeCloudTranscript(response.textOutput),
       usage: response.usage,
       model: response.model,
+    );
+  }
+
+  @visibleForTesting
+  Future<SpeechTranscriptionResult> transcribeViaChatGpt(
+    CodexResponsesClient client,
+    List<int> bytes, {
+    required String mimeType,
+  }) async {
+    final ext = switch (mimeType) {
+      'audio/wav' => 'wav',
+      'audio/mp4' || 'audio/m4a' => 'm4a',
+      'audio/aac' => 'aac',
+      'audio/ogg' => 'ogg',
+      _ => 'mp3',
+    };
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse('https://chatgpt.com/backend-api/transcribe'),
+    )
+      ..headers.addAll({
+        'Authorization': 'Bearer ${client.accessToken}',
+        'originator': 'memex',
+        'User-Agent': 'memex/0.0.1 (darwin 24.3.0; arm64)',
+        if (client.accountId != null) 'ChatGPT-Account-Id': client.accountId!,
+      })
+      ..files.add(http.MultipartFile.fromBytes(
+        'file',
+        bytes,
+        filename: 'audio.$ext',
+      ));
+    final response =
+        await http.Client().send(request).timeout(const Duration(minutes: 5));
+    if (response.statusCode != 200) {
+      throw Exception('ChatGPT transcribe failed: ${response.statusCode}');
+    }
+    // Sem charset no cabeçalho o http decodifica como Latin-1; força UTF-8.
+    final body = utf8.decode(await response.stream.toBytes());
+    final text = (jsonDecode(body) as Map<String, dynamic>)['text'];
+    return SpeechTranscriptionResult(
+      text: text is String ? text.trim() : null,
+      usage: null,
+      model: 'chatgpt-transcribe',
     );
   }
 
