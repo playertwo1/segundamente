@@ -21,6 +21,7 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-015 | 2026-11-03 | Login OAuth do Claude entrou no código e conflita com D-005 | PROPOSED |
 | D-016 | 2026-11-03 | Ideias do Daedalus Echo: Whisper local multilíngue, extrator de tarefas robusto, recuperação por tópicos, agenda; o resto fica fora | ACCEPTED |
 | D-017 | 2026-11-03 | Direção visual móvel AMOLED, editorial e sem barra inferior persistente | ACCEPTED |
+| D-018 | 2026-11-03 | Ideias do anarlog: prompts de resumo, correção conservadora, dicionário, legenda SRT/VTT e transparência dos provedores; o resto fica fora | ACCEPTED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -94,3 +95,11 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Fonte de implementação: [DESIGN.md](../DESIGN.md) e as dez pranchas em `.impeccable-mobile/references/amoled-v3-ios/`.
 - Limite: a decisão aprova a direção visual, não declara a implementação pronta. Antes de mudar o roteamento, mapear o menu às rotas existentes; manter acessibilidade, fluxos atuais e testes de widget. F5-04 permanece `NOT_RUN` até o código e a validação no S25.
 - Descartado: a exploração v1/v2 com paleta azul e navegação inferior pesada.
+
+
+## D-018 — Ideias do anarlog
+- Contexto: `fastrepl/anarlog` (antes Hyprnote; MIT; Tauri, React e Rust; ~9,8 mil estrelas; último push em 2026-11-01) é um bloco de notas de reunião local, alternativa ao Granola. Foram lidos o README, a documentação (`docs/*.mdx`), a lista de crates e os prompts de `crates/template-app/assets` (`enhance`, `title`, `transcript-patch`, `chat`). Nada foi executado.
+- Decisão e motivo: entram só ideias; o código é Rust e Tauri para desktop, e o nosso é Flutter. Entram: tela que mostra qual provedor transcreve e qual resume (F1-09), importação de legenda `.srt` e `.vtt` (F2-12), dicionário de termos (F2-13), regras de prompt do resumo com regenerar (F3-08) e correção conservadora da transcrição (F3-09).
+- Licença: o anarlog é MIT e o nosso fork é GPL-3.0, então copiar texto de prompt é permitido com o aviso de licença. Preferimos reescrever em português e testar com as nossas amostras. O diretório `enterprise/` tem licença comercial e não pode ser usado.
+- Fora: captura do áudio do sistema e do PC (o Android não permite), calendário e contatos do Google e do Outlook, sincronização, compartilhamento e cobrança (Supabase e Stripe), importação do histórico de outros apps, ditado global e a licença enterprise. O app de celular deles não foi lido.
+- Ficam em ideias futuras: separar falantes (diarização e voiceprint, modelos pesados), CLI e servidor MCP (F7) e detecção do idioma do resumo (hoje o app tem só en e pt).

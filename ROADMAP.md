@@ -48,6 +48,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F1-06 | Troca de provedor sem perder histórico | P0 | F1-01 | DONE | Conversa mantida após trocar de modelo |
 | F1-07 | Modelos `gpt-6-luna`, `gpt-6.1-sol`, `gpt-6.1-terra` sempre na lista do OAuth da OpenAI | P1 | F1-03 | IN_PROGRESS | Resposta real de cada ID no S25; se o ID não existir, o erro aparece claro e o ID manual (F1-02) resolve |
 | F1-08 | Decidir o login OAuth do Claude (D-015) | P1 | F1-04 | BLOCKED | Decisão do dono registrada; código removido ou D-005 revisada |
+| F1-09 | Mostrar nas configurações qual provedor faz a transcrição e qual faz o resumo e o chat, e para onde cada um envia dados | P1 | F1-03, F2-09 | READY | Teste de widget com OAuth do ChatGPT, chave de API e modelo local; no S25, a tela mostra o endpoint `transcribe` ao usar o ChatGPT |
 
 **Portão F1:** F1-01, F1-02, F1-03, F1-06 `DONE`; dois provedores respondendo.
 
@@ -65,6 +66,8 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F2-09 | Áudio anexado ou compartilhado vira texto pt-BR (D-011) e só o texto vai ao modelo | P0 | F2-08 | IN_PROGRESS | `.m4a` real de 1 a 2 min transcrito no S25; depois ~50 min. Anotar limite de tamanho e duração |
 | F2-10 | Compartilhar TXT, PDF e áudio com o app abre o chat com o anexo | P1 | F2-08 | IN_PROGRESS | TXT validado no S25; PDF e áudio compartilhados `NOT_RUN` |
 | F2-11 | Transcrição local com Whisper multilíngue (`pt`) pelo `sherpa_onnx` que o app já tem, como caminho offline e reserva do D-011 | P1 | F2-09 | READY | Mesmo áudio transcrito pelo endpoint e pelo Whisper local; tempo e pico de memória de 50 min no S25; escolha entre `base` e `small` registrada com a taxa de erro anotada |
+| F2-12 | Importar legenda `.srt` e `.vtt` como TXT com relógio | P2 | F2-03 | READY | Testes do parser com os dois formatos; no S25, um `.srt` abre a prévia com os relógios |
+| F2-13 | Dicionário de termos do usuário (nomes, siglas, produtos) usado nos prompts | P1 | F3-08 | READY | Teste de que a lista entra no prompt e é limitada; no S25, um nome próprio sai certo no resumo |
 
 **Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` está no commit `db7bc1d`, em `origin/main`, e não fecha a F2-03: falta o TXT real de ~50 min.
 
@@ -78,6 +81,8 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F3-05 | Confirmação humana: itens `não confirmado` até aprovar; "não identificado/não informado" para responsável e prazo ausentes | P0 | F3-02 | DONE | Teste: nada vira tarefa definitiva sem confirmação |
 | F3-06 | Editar/aprovar/descartar itens sem perder o texto original; busca simples e exclusão com derivados | P1 | F3-05 | DONE | Edição preserva original; excluir sessão remove derivados |
 | F3-07 | Extrator de tarefas robusto: exemplos negativos no prompt, deduplicação contra o histórico, saída inválida sem nota em branco | P1 | F3-02 | READY | Testes por caso (ver F3-07 abaixo); em sessão real, nenhuma tarefa repetida nem narração virou tarefa |
+| F3-08 | Regras de prompt do resumo (sem abertura genérica, notas do usuário, próximos passos com dono e prazo explícitos), regenerar e título vazio | P1 | F3-02 | READY | Testes por regra; no S25, regenerar muda o formato sem perder o original |
+| F3-09 | Correção conservadora da transcrição: o modelo só troca o texto de palavras já existentes, em arquivo separado do original | P2 | F2-04, F3-08 | BACKLOG | Testes do aplicador de correção; uma troca fora das regras é recusada e o original continua igual bit a bit |
 
 **Portão F3:** critério 6 + a amostra de 53 min não perde pontos centrais nem timestamps. O esquema e a tela entram no commit do botão de TXT e da F3. A amostra de 53 min e uma resposta real de modelo continuam `NOT_RUN`, então o portão não fecha. A F3 foi aberta com os portões da F0, da F1 e da F2 ainda abertos.
 
@@ -178,6 +183,30 @@ Mesmas regras comuns de cima. Ordem sugerida: F3-07, F2-11, F6-11, F6-09. A F6-1
 - Faz: botão no encaminhamento aprovado que abre o app de calendário do Android com título e descrição preenchidos e 1 hora de duração, pelo intent `ACTION_INSERT`. Não pede permissão de agenda e não grava nada sozinho.
 - Não faz: ler a agenda nem sincronizar.
 
+### Definição das tarefas vindas do anarlog (D-018)
+Mesmas regras comuns de cima. Ordem sugerida: F1-09, F3-08, F2-13, F2-12; a F3-09 só depois de F3-08 provada no S25.
+
+**F1-09 — Provedor de cada etapa**
+- Faz: duas linhas nas configurações, "Transcrição" e "Resumo e conversa", com o provedor e o modelo ativos e uma frase do que sai do aparelho. Hoje o áudio vai ao endpoint `transcribe` do ChatGPT (D-011) enquanto o chat usa o modelo escolhido, e isso não aparece em lugar nenhum.
+- Não faz: trocar de provedor por etapa; é só mostrar.
+
+**F2-12 — Legenda `.srt` e `.vtt`**
+- Faz: aceita as duas extensões no seletor e no Compartilhar. O parser de TXT já lê o intervalo `00:00:10,000 --> 00:00:14,120`; falta tirar a linha de número do `.srt`, o cabeçalho `WEBVTT` e as marcas `<v Nome>` do `.vtt`. Passa pela mesma prévia e confirmação (F2-07).
+- Não faz: criar áudio nem separar falantes.
+
+**F2-13 — Dicionário de termos**
+- Faz: lista editável (máx. 100 termos) guardada no aparelho e enviada nos prompts de resumo e de correção como "grafias corretas". Aparece na prévia de envio (F2-07), porque é conteúdo que sai do aparelho.
+- Não faz: garantir que o endpoint de transcrição use a lista; ele não tem esse parâmetro conhecido (não testado).
+
+**F3-08 — Regras de prompt do resumo**
+- Faz: o prompt (em pt, escrito por nós a partir do `enhance` do anarlog) manda: não abrir com "Visão geral" ou "Participantes"; guardar detalhes concretos; respeitar negrito e `###` do usuário como importantes; separar notas de antes e de durante a sessão; "Próximos passos" no fim só com dono e prazo explícitos (F3-05 continua mandando); responder só o markdown, sem comentário; termos técnicos ficam em inglês. O título sai só em texto simples, e conteúdo vazio devolve o marcador `<EMPTY>`, que vira "Sem título" em vez de nota em branco.
+- Regenerar: botão que refaz o resumo com outro tipo ou modelo; o anterior fica guardado até o novo ser aceito. "Mais curto" e "Mais longo" pelo chat.
+- Pronto quando: há um teste por regra e um caso pt-BR com texto de STT ruim.
+
+**F3-09 — Correção conservadora da transcrição**
+- Faz: o modelo recebe `{"words":[{id,text}]}` e devolve só `replace` em `/words/N/text`; o aplicador recusa qualquer outra operação, índice fora da lista ou mudança de `id`. Em dúvida, não troca. O resultado é uma terceira versão ao lado do original e do normalizado (F2-04). A transcrição do Samsung não tem palavras separadas, então a unidade seria o trecho; isso precisa ser medido antes.
+- Não faz: reescrever, resumir nem traduzir.
+
 ## Fases futuras (bloqueadas até o MVP)
 - **F7:** voz contínua full duplex; ponte opcional com Claude Code/Codex CLI oficiais no PC (única via aceita para assinatura Claude); modelos locais (Ollama).
 - **F8:** NotebookLM — Via A (exportar para Google Docs), depois B (conector comunitário, opt-in), C (API empresarial só se justificar).
@@ -190,6 +219,9 @@ Mesmas regras comuns de cima. Ordem sugerida: F3-07, F2-11, F6-11, F6-09. A F6-1
 | Mapa global de tópicos (grafo visual das sessões), do Daedalus Echo | Depois da F6-05 e da F6-09, se tópicos ficarem difíceis de navegar em lista |
 | Gemma 3 1B local (MediaPipe) e conversa por voz mãos-livres com resposta falada | F7, junto de Ollama; medir antes a qualidade em pt-BR |
 | Backup versionado automático que inclui as configurações padrão | Ao revisar o backup do app; o Echo corrigiu esse furo na v1.2.2 |
+| Separar falantes (diarização e voiceprint, como o anarlog) | Se o Gravador da Samsung deixar de entregar o nome do locutor; medir o modelo no S25 antes |
+| CLI e servidor MCP para outros agentes lerem as sessões | F7, junto da ponte com Claude Code e Codex |
+| Idioma do resumo escolhido pela fala mais usada | Se voltarmos a ter mais de dois idiomas (D-012) |
 | Biblioteca de anexos (tela com todas as fotos, PDFs e áudios importados), do Memos | Depois da F2-09 e da F6-05, se achar arquivos ficar difícil |
 | Chave de API do Gemini (AI Studio) como reserva da transcrição de áudio | Se o endpoint do ChatGPT (D-011) cair ou limitar o tamanho |
 
@@ -198,4 +230,5 @@ Mesmas regras comuns de cima. Ordem sugerida: F3-07, F2-11, F6-11, F6-09. A F6-1
 - 2026-11-02 — a F6 começa com o MVP aberto: D-010. A F7 e a F8 continuam bloqueadas.
 - 2026-11-03 — D-011 (áudio pelo endpoint de transcrição), D-012 (só en e pt), D-013 (Gemini OAuth bloqueado), D-014 (ideias do Memos na F6) e D-015 (login Claude pendente).
 - 2026-11-03 — D-016 (ideias do Daedalus Echo: F2-11, F3-07, F6-09 a F6-11).
+- 2026-11-03 — D-018 (ideias do anarlog: F1-09, F2-12, F2-13, F3-08, F3-09).
 - 2026-11-03 — D-017: direção visual móvel AMOLED aprovada; aplicação permanece em F5-04 `NOT_RUN`.
