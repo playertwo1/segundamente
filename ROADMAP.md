@@ -46,6 +46,8 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F1-04 | Verificar OAuth OpenAI/Gemini (client_id dos CLIs oficiais) e registrar risco de termos | P1 | F0-05 | DONE (OpenAI; Gemini BLOCKED) | Login funcionando no S25 + nota de risco em `docs/DECISIONS.md` |
 | F1-05 | Claude por chave de API (opcional) e endpoint compatível/local | P2 | F1-02 | NOT_RUN | Uma chamada real de cada, ou `NOT_RUN` justificado |
 | F1-06 | Troca de provedor sem perder histórico | P0 | F1-01 | DONE | Conversa mantida após trocar de modelo |
+| F1-07 | Modelos `gpt-6-luna`, `gpt-6.1-sol`, `gpt-6.1-terra` sempre na lista do OAuth da OpenAI | P1 | F1-03 | IN_PROGRESS | Resposta real de cada ID no S25; se o ID não existir, o erro aparece claro e o ID manual (F1-02) resolve |
+| F1-08 | Decidir o login OAuth do Claude (D-015) | P1 | F1-04 | BLOCKED | Decisão do dono registrada; código removido ou D-005 revisada |
 
 **Portão F1:** F1-01, F1-02, F1-03, F1-06 `DONE`; dois provedores respondendo.
 
@@ -53,12 +55,15 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
 |---|---|---|---|---|---|
 | F2-01 | Chat de texto com histórico persistente | P0 | F1 | DONE | Conversa sobrevive a reiniciar o app |
-| F2-02 | Voz em turnos: microfone → transcrição → resposta → áudio opcional (pt-BR) | P0 | F0-05, F2-01 | NOT_RUN | Demonstração no S25; qualidade de pt-BR anotada |
+| F2-02 | Voz em turnos: microfone → transcrição → resposta → áudio opcional (pt-BR) | P0 | F0-05, F2-01 | IN_PROGRESS | Fala pt-BR transcrita no S25 (feito, via D-011); falta a resposta em áudio (TTS do Android) e a nota de qualidade |
 | F2-03 | Importar TXT do Samsung via Compartilhar (ACTION_SEND) e seleção de arquivo, com pré-visualização | P0 | F2-01 | IN_PROGRESS | TXT real de ~50 min aberto sem copiar/colar; timestamps preservados |
 | F2-04 | Normalização reversível do texto (original imutável, versão normalizada separada) | P1 | F2-03 | DONE | Teste: original idêntico bit a bit após normalizar |
 | F2-05 | Anexar fotos/imagens (JPG/PNG; HEIC avaliado) e analisar em provedor com visão | P0 | F1-03, F2-01 | NOT_RUN | Foto analisada em um provedor; aviso nos sem visão |
 | F2-06 | Texto digitado/colado como sessão; PDF de entrada se couber | P2 | F2-01 | DONE | Colar texto cria sessão; PDF `NOT_RUN` aceito se cortado |
 | F2-07 | Tela de envio: mostrar o conteúdo que sai do aparelho e pedir confirmação | P0 | F2-03 | DONE | Nada é enviado sem passar por ela |
+| F2-08 | Menu único "+" no chat: câmera, galeria, TXT, PDF e áudio; sem faixa de fotos recentes | P1 | F2-01 | DONE | Menu no S25; PDF anexado foi lido pelo ChatGPT; TXT importado chegou ao agente |
+| F2-09 | Áudio anexado ou compartilhado vira texto pt-BR (D-011) e só o texto vai ao modelo | P0 | F2-08 | IN_PROGRESS | `.m4a` real de 1 a 2 min transcrito no S25; depois ~50 min. Anotar limite de tamanho e duração |
+| F2-10 | Compartilhar TXT, PDF e áudio com o app abre o chat com o anexo | P1 | F2-08 | IN_PROGRESS | TXT validado no S25; PDF e áudio compartilhados `NOT_RUN` |
 
 **Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` está no commit `db7bc1d`, em `origin/main`, e não fecha a F2-03: falta o TXT real de ~50 min.
 
@@ -111,8 +116,35 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F6-02 | Painel de encaminhamentos aprovados | P0 | F3 | IN_PROGRESS | Lista conferida no aparelho |
 | F6-03 | O que mudou e por quê, com histórico de versões | P0 | F3 | IN_PROGRESS | Diferença e motivo registrados |
 | F6-04 | Tópicos e projetos | P1 | F6-01 | NOT_RUN | Entidade própria, ligada às sessões |
+| F6-05 | Tags hierárquicas (`#area/projeto`) com árvore e contagem | P1 | F5 | READY | Testes do cálculo da árvore e da lista; no S25, `#trabalho/reuniao` aparece sob `trabalho` com contagem somada |
+| F6-06 | Filtros por propriedade e visões salvas | P1 | F6-01 | READY | Testes do extrator e do filtro; no S25, uma visão salva "tarefas abertas" reaplica e lista só os itens certos |
+| F6-07 | Prévia de links (título, descrição, imagem), desligada por padrão | P2 | F5-02 | BACKLOG | Testes do parser e do bloqueio de endereços privados; no S25, com a opção ligada, uma URL colada mostra a prévia |
+| F6-08 | Mapa de atividade no calendário (intensidade por dia) | P2 | F5 | READY | Teste dos níveis; captura do S25 com dias de intensidades diferentes |
 
 **Portão F6:** busca semântica entre sessões, tópicos, "o que mudou e por quê?", painel de encaminhamentos e histórico de versões. Aberto em 2026-11-02 (D-010) com os portões da F0 à F5 ainda abertos. A busca feita é texto local. Semântica, tópicos e o "por quê" continuam `NOT_RUN`. O MVP não está pronto.
+
+### Definição das tarefas F6-05 a F6-08 (D-014)
+Regras comuns: cada uma entra com testes (`AGENTS.md`), em commit próprio; texto em `en` e `pt`; nada muda dados já gravados sem migração testada. Ordem sugerida: F6-08, F6-05, F6-06, F6-07.
+
+**F6-05 — Tags hierárquicas**
+- Faz: o separador `/` define níveis (`trabalho/reuniao`). A árvore mostra cada nó com a contagem dos cartões do nó mais a dos filhos. Tocar num nó filtra a lista. Tags sem `/` continuam raízes, sem migração.
+- Não faz: renomear ou mover tags em lote, nem ligar a árvore ao P.A.R.A. (isso é da F6-04).
+- Pronto quando: pai soma filhos; tag sem `/` fica na raiz; nó sem cartões some; a árvore abre e fecha na tela.
+
+**F6-06 — Filtros por propriedade e visões salvas**
+- Faz: propriedades derivadas do texto do cartão ou relatório: tem link, tem tarefa, tem tarefa aberta (`- [ ]`), tem código. Filtro combinável com texto, tag e data. Visão salva = nome + filtro, guardada em arquivo JSON local no workspace, com renomear e apagar.
+- Não faz: linguagem de consulta aberta (como o CEL do Memos) e sincronização entre aparelhos.
+- Pronto quando: o extrator acerta nos casos de borda (link dentro de código, tarefa marcada vs aberta); o filtro combina as condições com E; a visão persiste ao reiniciar o app.
+
+**F6-07 — Prévia de links**
+- Faz: ao ligar a opção (padrão desligada, critério 7), busca `title`, `og:description` e `og:image` da URL, com cache local e limite de tempo e tamanho.
+- Segurança: só `http` e `https`; recusar `localhost`, endereços privados e redirecionamentos para eles; sem cookies nem cabeçalhos do usuário. A busca revela ao site que o aparelho abriu a URL, e isso precisa estar escrito na opção.
+- Não faz: busca automática de todas as URLs antigas, nem imagem de prévia salva sem pedido.
+
+**F6-08 — Mapa de atividade**
+- Faz: no calendário mensal, o fundo de cada dia usa 5 níveis pela contagem de cartões (0, 1, 2, 3 a 4, 5 ou mais). A contagem já existe (`CalendarDay.total`).
+- Não faz: visão anual nem sequência de dias (streak), que ficam para depois.
+- Pronto quando: a função de nível tem teste por faixa; o dia selecionado e o de hoje continuam legíveis; o texto do dia tem contraste nos níveis altos.
 
 ## Fases futuras (bloqueadas até o MVP)
 - **F7:** voz contínua full duplex; ponte opcional com Claude Code/Codex CLI oficiais no PC (única via aceita para assinatura Claude); modelos locais (Ollama).
@@ -123,7 +155,10 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 |---|---|
 | Referências de UX/relatórios: AnythingLLM Mobile, Meet2Notes, Open Notebook, Memos, Khoj, Daedalus Echo | Ao iniciar F2/F3, copiando só padrões ou módulos de licença compatível |
 | Graphiti/Omi (memória temporal) | Só se F6 provar necessidade |
+| Biblioteca de anexos (tela com todas as fotos, PDFs e áudios importados), do Memos | Depois da F2-09 e da F6-05, se achar arquivos ficar difícil |
+| Chave de API do Gemini (AI Studio) como reserva da transcrição de áudio | Se o endpoint do ChatGPT (D-011) cair ou limitar o tamanho |
 
 ## Mudanças de escopo
 - 2026-11-02 — escopo do MVP, fases e Claude por chave de API: ver [docs/DECISIONS.md](docs/DECISIONS.md).
 - 2026-11-02 — a F6 começa com o MVP aberto: D-010. A F7 e a F8 continuam bloqueadas.
+- 2026-11-03 — D-011 (áudio pelo endpoint de transcrição), D-012 (só en e pt), D-013 (Gemini OAuth bloqueado), D-014 (ideias do Memos na F6) e D-015 (login Claude pendente).

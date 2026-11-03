@@ -14,6 +14,11 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-008 | 2026-11-02 | Docs de planejamento vivem na `main` do fork; só os arquivos úteis do kit ideias_standard | ACCEPTED |
 | D-009 | 2026-11-02 | Até o S25 Ultra estar conectado, o emulador é o aparelho de prova da F0 | ACCEPTED |
 | D-010 | 2026-11-02 | A F6 pode começar com os portões da F0 à F5 ainda abertos | ACCEPTED |
+| D-011 | 2026-11-03 | Áudio: transcrição pelo endpoint do ChatGPT; o canal de chat nunca recebe áudio | ACCEPTED |
+| D-012 | 2026-11-03 | O app tem só inglês e português | ACCEPTED |
+| D-013 | 2026-11-03 | Gemini por OAuth bloqueado pelo Google; não usar credenciais nem identidade de outro produto | ACCEPTED |
+| D-014 | 2026-11-03 | Ideias do Memos: quatro entram na F6 (F6-05 a F6-08); o resto fica fora | ACCEPTED |
+| D-015 | 2026-11-03 | Login OAuth do Claude entrou no código e conflita com D-005 | PROPOSED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -47,3 +52,29 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Contexto: D-003 deixa a F6 bloqueada até o MVP. Em 2026-11-02 o dono pediu para avançar depois dos commits da F4 e da F5.
 - Decisão e motivo: a F6 pode começar. O MVP não fecha. D-003 continua valendo para o que é o MVP e para manter a F7 e a F8 bloqueadas. Busca semântica, tópicos e o "por quê" não entram sem um modelo. A busca deste passo é texto local nos relatórios.
 - Descartado: marcar o MVP como pronto para desbloquear a fase.
+
+
+## D-011 — Áudio pelo ChatGPT
+- Contexto: em 2026-11-03, no S25, o canal `chatgpt.com/backend-api/codex` respondeu `400 Audio input is not available` com `gpt-5.6-sol` e com `gpt-6-luna`. Um áudio gravado no histórico da conversa repetia o erro em todas as chamadas seguintes.
+- Decisão e motivo: o canal de chat nunca recebe áudio (`CodexResponsesClient` troca por uma nota de texto). A transcrição usa `POST chatgpt.com/backend-api/transcribe` com o mesmo token do OAuth, e só o texto vai ao modelo. Testado em 2026-11-03 com um áudio pt-BR sintético: devolveu a frase correta. Isso cumpre D-007 (STT na nuvem pelo modelo configurado) sem depender do SenseVoice.
+- Risco: o endpoint não é documentado e pode mudar ou ser bloqueado. Duração e tamanho máximos não foram medidos; a gravação de ~50 min é `NOT_RUN`.
+- Descartado: enviar o áudio no canal de chat; chave de API do Gemini só para áudio (fica como reserva se o endpoint cair).
+
+## D-012 — Idiomas
+- Decisão e motivo: o app tem só inglês (`en`) e português (`pt`). As outras 16 línguas, incluindo o chinês, saíram do código, das galerias de cartão e dos testes (commit `73feb20`). Texto em outro idioma cai no inglês. Pedido do dono, que usa só pt-BR.
+- As buscas de local pedem nomes no idioma do app, e não mais em chinês.
+- Descartado: manter as demais línguas como reserva.
+
+## D-013 — Gemini por OAuth
+- Contexto: `loadCodeAssist` devolveu `UNSUPPORTED_CLIENT` para o client_id do Gemini CLI e só oferece `standard-tier`, que exige projeto GCP próprio. A conta é Google AI Pro, sem projeto.
+- Decisão e motivo: Gemini por OAuth fica `BLOCKED`. Não usar o Client ID e o Secret do Antigravity nem se identificar como `ideType=ANTIGRAVITY`: é credencial de outro produto num repositório público e contorna um bloqueio deliberado do Google. O GitHub também barrou o push por proteção de segredos. Esse trabalho está só na branch local `wip-gemini-antigravity`.
+- Alternativa não testada: chave de API do AI Studio.
+
+## D-014 — Ideias do Memos
+- Contexto: `usememos/memos` (MIT, Go e React, self-hosted, 64 mil estrelas) foi comparado com o app em 2026-11-03. Só o README, o CONTEXT.md e os arquivos `.proto` foram lidos.
+- Decisão e motivo: entram na F6 quatro ideias que cabem no produto local de uma pessoa: tags hierárquicas (F6-05), filtros por propriedade e visões salvas (F6-06), prévia de links (F6-07) e mapa de atividade (F6-08). Só as ideias são aproveitadas, nenhum código.
+- Fora: espaços e colaboração, comentários, reações, links públicos, vários usuários, servidor/Docker/API/webhooks/MCP, Web Clipper e bot do Telegram (o Compartilhar do Android cobre o mesmo uso). Biblioteca de anexos fica em Ideias futuras.
+
+## D-015 — Login OAuth do Claude (pendente)
+- Contexto: o commit `67389b4` trouxe `claude_auth_service.dart` e `typeClaudeOauth`, feitos por outro processo. D-005 diz que não haverá login Claude.ai por assinatura em app de terceiros, por causa dos termos da Anthropic.
+- Decisão necessária do dono: remover o login, ou revogar D-005 com a leitura atual dos termos. Enquanto isso ele não faz parte do MVP e não deve ser usado.
