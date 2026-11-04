@@ -23,6 +23,25 @@ void main() {
     expect(find.byType(DiceBearAvatar), findsNothing);
   });
 
+  testWidgets('CharacterAvatar draws a bundled portrait from the app assets', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: CharacterAvatar(
+          avatar: 'asset://characters/curador.png',
+          name: 'Curador',
+        ),
+      ),
+    );
+
+    final image = tester.widget<Image>(find.byType(Image));
+    expect(
+        (image.image as AssetImage).assetName, 'assets/characters/curador.png');
+    expect(find.byType(LocalImage), findsNothing);
+    expect(find.byType(DiceBearAvatar), findsNothing);
+  });
+
   testWidgets('DiceBearAvatar shows a stable placeholder for empty seeds', (
     tester,
   ) async {

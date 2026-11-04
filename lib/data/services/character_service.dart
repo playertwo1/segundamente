@@ -17,7 +17,7 @@ class CharacterService {
 
   /// Bump this whenever new default characters need to be seeded to existing users.
   /// New users get all characters from l10n.defaultCharacters at once.
-  static const int _currentSeedVersion = 4;
+  static const int _currentSeedVersion = 5;
   static const String _seedVersionFile = '.characters_seed_version';
 
   /// Migrations: version -> list of character IDs to seed for existing users.
@@ -247,9 +247,32 @@ class CharacterService {
       if (v == 4) {
         await _removeRetiredDefaultCharacters(userId, charsPath);
       }
+      if (v == 5) {
+        await _useBundledPortraits(userId, charsPath);
+      }
     }
 
     await _writeSeedVersion(charsPath, _currentSeedVersion);
+  }
+
+  /// Seed 4 stored the id as a DiceBear seed. Swap it for the bundled
+  /// portrait only while the avatar is still that seed, so a picture the user
+  /// chose stays.
+  Future<void> _useBundledPortraits(String userId, String charsPath) async {
+    for (final id in _personalCharacterIds) {
+      final charFile = File(p.join(charsPath, '$id.yaml'));
+      if (!await charFile.exists()) continue;
+      try {
+        final doc = loadYaml(await charFile.readAsString());
+        final charData = jsonDecode(jsonEncode(doc)) as Map<String, dynamic>;
+        if (charData['avatar'] != id) continue;
+        charData['avatar'] = '${AvatarMediaService.bundledAssetPrefix}'
+            'characters/$id.png';
+        await _fileSystem.writeYamlFile(charFile.path, charData);
+      } catch (e) {
+        _logger.warning('Could not set portrait for $id: $e');
+      }
+    }
   }
 
   Future<void> _removeRetiredDefaultCharacters(

@@ -2105,7 +2105,7 @@ class TimelineCardDetailTemplateSection extends StatelessWidget {
             child: IgnorePointer(
               child: NativeCardFactory.build(
                 templateId: config.templateId,
-                data: config.data,
+                data: _withoutRepeatedTitle(config.data, detail.title),
                 title: detail.title,
                 status: detail.status,
                 overrideTitle: false,
@@ -2115,6 +2115,17 @@ class TimelineCardDetailTemplateSection extends StatelessWidget {
       ],
     );
   }
+}
+
+/// The detail header already shows the card title; a saved template whose own
+/// title is the same text would print it a second time right below.
+Map<String, dynamic> _withoutRepeatedTitle(
+  Map<String, dynamic> data,
+  String cardTitle,
+) {
+  final saved = data['title'];
+  if (saved is! String || saved.trim() != cardTitle.trim()) return data;
+  return {...data}..remove('title');
 }
 
 class TimelineCardDetailBodySection extends StatelessWidget {

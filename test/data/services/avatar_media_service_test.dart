@@ -26,6 +26,27 @@ void main() {
     }
   });
 
+  test('bundled portraits are images, never workspace paths or DiceBear seeds',
+      () {
+    const avatar = 'asset://characters/curador.png';
+
+    expect(AvatarMediaService.isBundledAsset(avatar), isTrue);
+    expect(AvatarMediaService.isImageAvatar(avatar), isTrue);
+    expect(AvatarMediaService.isRelativeImagePath(avatar), isFalse);
+    expect(AvatarMediaService.isDiceBearSeed(avatar), isFalse);
+    expect(
+      AvatarMediaService.bundledAssetKey(avatar),
+      'assets/characters/curador.png',
+    );
+    expect(
+      AvatarMediaService.resolveAvatarPath(
+        avatar,
+        fileSystemService: FileSystemService.instance,
+      ),
+      avatar,
+    );
+  });
+
   test('recognizes all imported image extensions as avatar image paths', () {
     for (final ext in const [
       'png',

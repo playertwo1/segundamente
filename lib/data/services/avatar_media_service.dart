@@ -14,6 +14,18 @@ class AvatarMediaService {
 
   static const _diceBearTimeout = Duration(seconds: 10);
 
+  /// Portraits shipped inside the app, e.g. `asset://characters/curador.png`.
+  static const bundledAssetPrefix = 'asset://';
+
+  static bool isBundledAsset(String? avatar) {
+    return avatar?.trim().startsWith(bundledAssetPrefix) ?? false;
+  }
+
+  /// Flutter asset key for a bundled avatar, e.g. `assets/characters/x.png`.
+  static String bundledAssetKey(String avatar) {
+    return 'assets/${avatar.trim().substring(bundledAssetPrefix.length)}';
+  }
+
   static bool isImageAvatar(String? avatar) {
     final value = avatar?.trim();
     if (value == null || value.isEmpty) return false;
@@ -34,6 +46,7 @@ class AvatarMediaService {
     final value = avatar.trim();
     if (value.isEmpty || p.isAbsolute(value)) return false;
     if (value.startsWith('fs://') || _isRemoteUri(value)) return false;
+    if (isBundledAsset(value)) return false;
     return hasSupportedImageExtension(value);
   }
 

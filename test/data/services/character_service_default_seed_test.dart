@@ -83,6 +83,53 @@ enabled: true
     expect(ids, hasLength(16));
   });
 
+  test('seed 5 swaps the seed avatar for the bundled portrait only', () async {
+    final userId = 'portrait_user_${DateTime.now().microsecondsSinceEpoch}';
+    final charsPath = CharacterService.instance.getCharactersPath(userId);
+    await Directory(charsPath).create(recursive: true);
+    await File(p.join(charsPath, '.characters_seed_version'))
+        .writeAsString('4');
+    await File(p.join(charsPath, 'curador.yaml')).writeAsString(
+      '''
+name: Curador
+tags: []
+persona: "x"
+avatar: "curador"
+enabled: true
+''',
+    );
+    await File(p.join(charsPath, 'tradutor.yaml')).writeAsString(
+      '''
+name: Tradutor
+tags: []
+persona: "x"
+avatar: "workspace/_u/_System/media/mine.png"
+enabled: true
+''',
+    );
+
+    final curador =
+        await CharacterService.instance.getCharacter(userId, 'curador');
+    final tradutor =
+        await CharacterService.instance.getCharacter(userId, 'tradutor');
+
+    expect(curador!.avatar, 'asset://characters/curador.png');
+    expect(tradutor!.avatar, endsWith('mine.png'));
+    expect(tradutor.avatar, isNot(startsWith('asset://')));
+  });
+
+  test('every default portrait is a declared asset that exists', () {
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    expect(pubspec, contains('- assets/characters/'));
+
+    for (final data in UserStorage.l10n.defaultCharacters) {
+      final avatar = data['avatar'] as String;
+      expect(avatar, startsWith('asset://characters/'), reason: avatar);
+      final file = File('assets/${avatar.substring('asset://'.length)}');
+      expect(file.existsSync(), isTrue, reason: file.path);
+    }
+  });
+
   test('new users get exactly the 15 personal characters', () async {
     final userId = 'fresh_user_${DateTime.now().microsecondsSinceEpoch}';
     final ids = (await CharacterService.instance.getAllCharacters(userId))

@@ -44,6 +44,19 @@ class CharacterAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (AvatarMediaService.isBundledAsset(avatar)) {
+      return ClipOval(
+        child: Image.asset(
+          AvatarMediaService.bundledAssetKey(avatar!),
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          semanticLabel: name,
+          errorBuilder: (_, __, ___) => _fallbackDiceBear(),
+        ),
+      );
+    }
+
     if (isImageAvatar(avatar)) {
       return ClipOval(
         child: SizedBox(

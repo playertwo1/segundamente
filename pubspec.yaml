@@ -114,6 +114,7 @@ flutter:
     - assets/icon.png
     - assets/icons/
     - assets/fluent_emoji/
+    - assets/characters/
     - assets/silero_vad.onnx
     - assets/jieba_dict.txt
     # Offline Google Fonts used by AppTheme / brand title / quote cards.

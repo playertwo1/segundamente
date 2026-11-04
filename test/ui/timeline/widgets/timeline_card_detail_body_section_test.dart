@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/domain/models/card_detail_model.dart';
 import 'package:memex/domain/models/card_model.dart';
+import 'package:memex/l10n/app_localizations.dart';
 import 'package:memex/ui/timeline/widgets/timeline_card_detail_screen.dart';
+import 'package:memex/utils/user_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('shows saved native card data before the original fact',
@@ -54,6 +57,46 @@ void main() {
             .dy,
       ),
     );
+  });
+
+  testWidgets('does not repeat the card title that the header already shows',
+      (tester) async {
+    SharedPreferences.setMockInitialValues({'language': 'en'});
+    await UserStorage.initL10n();
+
+    Future<void> pump(String savedTitle) {
+      return tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: TimelineCardDetailTemplateSection(
+                detail: _detail(
+                  rawContent: 'texto',
+                  title: 'Título do cartão',
+                  uiConfigs: [
+                    UiConfig(
+                      templateId: 'event',
+                      data: {
+                        'title': savedTitle,
+                        'start_time': '2026-03-10T14:00:00',
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    await pump('Título do cartão');
+    expect(find.text('Título do cartão'), findsNothing);
+
+    await pump('Outro título do evento');
+    expect(find.text('Outro título do evento'), findsOneWidget);
   });
 
   testWidgets('ignores structured card content and preserves raw fact text',
@@ -164,10 +207,11 @@ CardDetailModel _detail({
   required String rawContent,
   required List<UiConfig> uiConfigs,
   List<String> tags = const [],
+  String title = '端午的温馨家常晚餐和太顺杨梅',
 }) {
   return CardDetailModel(
     id: '2026/06/20.md#ts_2',
-    title: '端午的温馨家常晚餐和太顺杨梅',
+    title: title,
     timestamp: DateTime(2026, 6, 20),
     address: '',
     tags: tags,
