@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:http/http.dart' as http;
+import 'package:memex/utils/audio_converter.dart';
 import 'package:memex/llm_client/codex_responses_client.dart';
 import 'package:dart_agent_core/dart_agent_core.dart';
 import 'package:logging/logging.dart';
@@ -161,7 +162,11 @@ class SpeechTranscriptionService {
     final file = File(audioPath);
     final bytes = await file.readAsBytes();
     final mimeType = _mimeTypeForPath(audioPath);
-    return _transcribeAudioBytesWithCloud(bytes, mimeType: mimeType);
+    return _transcribeAudioBytesWithCloud(
+      bytes,
+      mimeType: mimeType,
+      sourcePath: audioPath,
+    );
   }
 
   Future<AssetSafetyReport> _inspectAudioForTranscription(
@@ -207,6 +212,7 @@ class SpeechTranscriptionService {
   Future<SpeechTranscriptionResult> _transcribeAudioBytesWithCloud(
     List<int> bytes, {
     required String mimeType,
+    String? sourcePath,
   }) async {
     final resources = await UserStorage.getAgentLLMResources(
       AgentDefinitions.chatAgent,
@@ -228,6 +234,14 @@ Rules:
     // O canal /codex recusa áudio ("Audio input is not available"); o ChatGPT
     // usa um endpoint próprio de transcrição, que aceita o mesmo token OAuth.
     if (client is CodexResponsesClient) {
+      // O endpoint responde 500 a m4a/aac; WAV passa. Converte antes de enviar.
+      if (sourcePath != null && mimeType != 'audio/wav') {
+        final wavPath = await AudioConverter.toWav16kMono(sourcePath);
+        if (wavPath != null) {
+          final wavBytes = await File(wavPath).readAsBytes();
+          return transcribeViaChatGpt(client, wavBytes, mimeType: 'audio/wav');
+        }
+      }
       return transcribeViaChatGpt(client, bytes, mimeType: mimeType);
     }
     final response = await client.generate([
