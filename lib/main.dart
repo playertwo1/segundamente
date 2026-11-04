@@ -1811,6 +1811,11 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           onSelectTab: (tab) =>
               tab == 0 ? _handleTimelineTabTap() : _handleLibraryTabTap(),
           onOpenChat: _openSuperAgentDialog,
+          // Past sessions, where each one opens its report.
+          onOpenChatHistory: () => context.push(
+            AppRoutes.chatHistory,
+            extra: {'agentName': 'memex_agent'},
+          ),
           onOpenCalendar: () =>
               context.push(AppRoutes.calendar, extra: DateTime.now()),
           onOpenMemory: () => context.push(AppRoutes.memory),

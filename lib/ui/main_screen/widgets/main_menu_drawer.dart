@@ -11,6 +11,7 @@ class MainMenuDrawer extends StatelessWidget {
     required this.currentTab,
     required this.onSelectTab,
     required this.onOpenChat,
+    required this.onOpenChatHistory,
     required this.onOpenCalendar,
     required this.onOpenMemory,
     required this.onOpenActivity,
@@ -20,6 +21,7 @@ class MainMenuDrawer extends StatelessWidget {
   final int currentTab;
   final ValueChanged<int> onSelectTab;
   final VoidCallback onOpenChat;
+  final VoidCallback onOpenChatHistory;
   final VoidCallback onOpenCalendar;
   final VoidCallback onOpenMemory;
   final VoidCallback onOpenActivity;
@@ -80,6 +82,11 @@ class MainMenuDrawer extends StatelessWidget {
               icon: Icons.chat_bubble_outline,
               label: l10n.navChat,
               onTap: close(onOpenChat),
+            ),
+            _MenuItem(
+              icon: Icons.history,
+              label: l10n.chatHistory,
+              onTap: close(onOpenChatHistory),
             ),
             _MenuItem(
               icon: Icons.settings_outlined,

@@ -60,6 +60,7 @@ void main() {
           currentTab: 0,
           onSelectTab: (_) {},
           onOpenChat: () {},
+          onOpenChatHistory: () {},
           onOpenCalendar: () {},
           onOpenMemory: () {},
           onOpenActivity: () {},
