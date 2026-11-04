@@ -5,6 +5,57 @@ import 'package:memex/domain/models/card_model.dart';
 import 'package:memex/ui/timeline/widgets/timeline_card_detail_screen.dart';
 
 void main() {
+  testWidgets('shows saved native card data before the original fact',
+      (tester) async {
+    final detail = _detail(
+      rawContent: 'Dormir por volta das 23h e acordar descansado.',
+      uiConfigs: const [
+        UiConfig(
+          templateId: 'metric',
+          data: {'value': 7.8, 'unit': 'h', 'label': 'média diária'},
+        ),
+        UiConfig(
+          templateId: 'classic_card',
+          data: {'content': 'duplicate raw fact'},
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                TimelineCardDetailTemplateSection(detail: detail),
+                TimelineCardDetailBodySection(detail: detail),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('7.8 h', findRichText: true), findsOneWidget);
+    expect(find.text('média diária'), findsOneWidget);
+    expect(find.text('duplicate raw fact'), findsNothing);
+    expect(
+      find.textContaining('Dormir por volta das 23h', findRichText: true),
+      findsOneWidget,
+    );
+    expect(
+      tester.getTopLeft(find.text('7.8 h', findRichText: true)).dy,
+      lessThan(
+        tester
+            .getTopLeft(
+              find.textContaining('Dormir por volta das 23h',
+                  findRichText: true),
+            )
+            .dy,
+      ),
+    );
+  });
+
   testWidgets('ignores structured card content and preserves raw fact text',
       (tester) async {
     final detail = _detail(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
+import 'package:memex/utils/user_storage.dart';
 
 class RoutineCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -11,100 +11,88 @@ class RoutineCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String habitName = data['habit_name'] ?? 'Routine';
-    final int streak = (data['streak'] as num?)?.toInt() ?? 0;
-    final List<bool> history =
-        (data['history'] as List<dynamic>?)?.cast<bool>() ??
-            List.filled(7, false);
+    final habitName = data['habit_name'] as String? ?? '';
+    final streak = (data['streak'] as num?)?.toInt() ?? 0;
+    final rawHistory = data['history'];
+    final allHistory = rawHistory is List
+        ? rawHistory.map((value) => value == true).toList()
+        : List<bool>.filled(7, false);
+    final history = allHistory.length > 7
+        ? allHistory.sublist(allHistory.length - 7)
+        : allHistory;
+    final today = DateUtils.dateOnly(DateTime.now());
+    final narrowWeekdays = MaterialLocalizations.of(context).narrowWeekdays;
 
     return GlassCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header: streak label + icon
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'CURRENT STREAK',
-                    style: GoogleFonts.inter(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textTertiary,
-                      letterSpacing: 0.6,
-                    ),
+              Expanded(
+                child: Text(
+                  habitName,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
                   ),
-                  const SizedBox(height: 6),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        '$streak',
-                        style: GoogleFonts.inter(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        'DAYS',
-                        style: GoogleFonts.inter(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Container(
-                width: 44,
-                height: 44,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.background,
                 ),
-                child: const Center(
-                  child: Icon(Icons.replay, color: AppColors.primary, size: 22),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                UserStorage.l10n.routineStreakDays(streak),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
-
-          // History bars
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: history.map((completed) {
-              return Container(
-                width: 8,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: completed ? AppColors.primary : AppColors.divider,
-                  borderRadius: BorderRadius.circular(4),
+            children: [
+              for (var index = 0; index < history.length; index++)
+                Column(
+                  children: [
+                    Text(
+                      narrowWeekdays[today
+                              .subtract(
+                                Duration(days: history.length - index - 1),
+                              )
+                              .weekday %
+                          7],
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: history[index]
+                              ? AppColors.primary
+                              : AppColors.divider,
+                        ),
+                      ),
+                      child: history[index]
+                          ? const Icon(
+                              Icons.check,
+                              size: 13,
+                              color: AppColors.primary,
+                            )
+                          : null,
+                    ),
+                  ],
                 ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 14),
-
-          // Habit name
-          Text(
-            habitName,
-            style: const TextStyle(
-              fontFamily: 'PingFang SC',
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textPrimary,
-            ),
+            ],
           ),
         ],
       ),

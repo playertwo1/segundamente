@@ -6,7 +6,9 @@ import 'package:memex/utils/user_storage.dart';
 import 'knowledge_directory_page.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/memex_brand_title.dart';
+import 'package:memex/ui/core/widgets/editorial_scaffold.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
+import 'knowledge_file_page.dart';
 
 /// Knowledge base page. Receives [viewModel] from parent (Compass-style).
 class KnowledgeBaseScreen extends StatefulWidget {
@@ -97,20 +99,35 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                 : SingleChildScrollView(
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildParaGrid(context, vm),
+                        _buildGuidesSection(context, vm),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: _buildParaGrid(context, vm),
+                        ),
                         if (vm.additionalRootFolders.isNotEmpty ||
                             vm.rootLevelFiles.isNotEmpty) ...[
                           const SizedBox(height: 16),
-                          _buildAdditionalRootItems(context, vm),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: _buildAdditionalRootItems(context, vm),
+                          ),
                         ],
                         const SizedBox(height: 32),
-                        _buildRecentChangesHeader(),
-                        const SizedBox(height: 8),
-                        _buildRecentChangesList(vm),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildRecentChangesHeader(),
+                              const SizedBox(height: 8),
+                              _buildRecentChangesList(vm),
+                            ],
+                          ),
+                        ),
                         const SizedBox(
                             height: 160), // Bottom padding for nav bar
                       ],
@@ -119,6 +136,63 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildGuidesSection(
+    BuildContext context,
+    KnowledgeBaseViewModel vm,
+  ) {
+    final guideFolders = vm.additionalRootFolders.where((item) {
+      final label = '${item['name'] ?? ''} ${item['path'] ?? ''}'.toLowerCase();
+      return label.contains('guia') || label.contains('guide');
+    }).toList();
+    final guideFiles = _guideFiles(vm);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        EditorialSectionLabel(UserStorage.l10n.guides),
+        if (guideFolders.isEmpty && guideFiles.isEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+            child: Text(
+              UserStorage.l10n.noGuidesSaved,
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ),
+        ...guideFolders.map((item) {
+          final name = (item['name'] ?? item['path'] ?? '').toString();
+          final path = (item['path'] ?? name).toString();
+          return EditorialRow(
+            title: name,
+            leading: const Icon(Icons.folder_outlined),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => _navigateToFolder(context, path: path),
+          );
+        }),
+        ...guideFiles.map((item) {
+          final name = (item['name'] ?? item['path'] ?? '').toString();
+          final path = (item['path'] ?? name).toString();
+          return EditorialRow(
+            title: isLegacyGuideName(name)
+                ? UserStorage.l10n.userGuideTitle
+                : name,
+            subtitle: UserStorage.l10n.markdownFileType,
+            leading: const Icon(Icons.description_outlined),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => KnowledgeFilePage(filePath: path),
+              ),
+            ),
+          );
+        }),
+      ],
     );
   }
 
@@ -183,10 +257,21 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
     return Column(
       children: [
         ...vm.additionalRootFolders
+            .where((folder) => !_isGuideItem(folder))
             .map((folder) => _buildRootFolderCard(context, folder)),
-        ...vm.rootLevelFiles.map((file) => KnowledgeFileCard(item: file)),
+        ...vm.rootLevelFiles
+            .where((file) => !_isGuideItem(file))
+            .map((file) => KnowledgeFileCard(item: file)),
       ],
     );
+  }
+
+  List<Map<String, dynamic>> _guideFiles(KnowledgeBaseViewModel vm) =>
+      [...vm.rootLevelFiles, ...vm.resourcesFiles].where(_isGuideItem).toList();
+
+  bool _isGuideItem(Map<String, dynamic> item) {
+    final label = '${item['name'] ?? ''} ${item['path'] ?? ''}'.toLowerCase();
+    return label.contains('guia') || label.contains('guide');
   }
 
   Widget _buildRootFolderCard(
@@ -218,7 +303,11 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
   }
 
   Widget _buildRecentChangesList(KnowledgeBaseViewModel vm) {
-    if (vm.recentFiles.isEmpty) {
+    // Only files already listed under GUIAS are hidden here.
+    final guidePaths = _guideFiles(vm).map((f) => f['path']).toSet();
+    final recentFiles =
+        vm.recentFiles.where((file) => !guidePaths.contains(file['path']));
+    if (recentFiles.isEmpty) {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         alignment: Alignment.center,
@@ -229,8 +318,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
     }
 
     return Column(
-      children:
-          vm.recentFiles.map((file) => KnowledgeFileCard(item: file)).toList(),
+      children: recentFiles.map((file) => KnowledgeFileCard(item: file)).toList(),
     );
   }
 

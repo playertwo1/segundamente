@@ -20,7 +20,6 @@ class InsightTemplateGalleryPage extends StatelessWidget {
         title: Text(
           UserStorage.l10n.insightTemplateGalleryTitle,
           style: const TextStyle(
-            fontFamily: 'PingFang SC',
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,

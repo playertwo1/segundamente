@@ -20,33 +20,7 @@ class CompositionItem {
     );
   }
 
-  static Color _parseColor(dynamic colorStr) {
-    if (colorStr is String) {
-      // Basic hex parsing - assuming user provides #RRGGBB
-      if (colorStr.startsWith('#')) {
-        return Color(int.parse(colorStr.substring(1), radix: 16) + 0xFF000000);
-      }
-      // Simple named color fallback (extend as needed if agent uses names)
-      switch (colorStr.toLowerCase()) {
-        case 'purple':
-          return AppColors.primary;
-        case 'blue':
-          return const Color(0xFF3B82F6);
-        case 'green':
-          return AppColors.success;
-        case 'orange':
-          return const Color(0xFFF97316);
-        case 'red':
-          return AppColors.danger;
-        case 'grey':
-        case 'gray':
-          return AppColors.textTertiary;
-        case 'black':
-          return Colors.black;
-      }
-    }
-    return AppColors.textTertiary; // Default slate-400
-  }
+  static Color _parseColor(dynamic _) => AppColors.textSecondary;
 }
 
 class HeadlineItem {
@@ -96,16 +70,8 @@ class CompositionCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20), // Extra rounded per design
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05), // subtle shadow
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -121,7 +87,7 @@ class CompositionCard extends StatelessWidget {
                     child: Text(
                       title,
                       style: const TextStyle(
-                        fontFamily: 'PingFang SC',
+                        fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
@@ -136,7 +102,7 @@ class CompositionCard extends StatelessWidget {
                     Text(
                       badge!,
                       style: const TextStyle(
-                        fontFamily: 'PingFang SC',
+                        fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         height: 20 / 14,
@@ -154,7 +120,7 @@ class CompositionCard extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                     height: 1.3,
@@ -165,11 +131,8 @@ class CompositionCard extends StatelessWidget {
                     return TextSpan(
                       text: item.text,
                       style: TextStyle(
-                        color: item.color ?? AppColors.textPrimary,
-                        fontWeight:
-                            item.color != null && item.color != Colors.black
-                                ? FontWeight.bold
-                                : FontWeight.w600,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
                       ),
                     );
                   }).toList(),
@@ -194,13 +157,17 @@ class CompositionCard extends StatelessWidget {
                 height: 20,
                 child: Row(
                   children: [
-                    const Text('🔥', style: TextStyle(fontSize: 18)),
+                    const Icon(
+                      Icons.auto_awesome_outlined,
+                      size: 18,
+                      color: AppColors.textSecondary,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         footer!,
                         style: const TextStyle(
-                          fontFamily: 'PingFang SC',
+                          fontFamily: 'Inter',
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           height: 20 / 14,
@@ -223,21 +190,27 @@ class CompositionCard extends StatelessWidget {
 
   Widget _buildProgressBar() {
     if (items.isEmpty) return const SizedBox.shrink();
+    const palette = [
+      AppColors.textPrimary,
+      AppColors.textSecondary,
+      AppColors.textTertiary,
+      AppColors.divider,
+    ];
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(4),
       child: Container(
-        height: 24, // Thicker bar
-        color: AppColors.background, // Background track
+        height: 8,
+        color: AppColors.background,
         child: Row(
-          children: items.map((item) {
+          children: items.asMap().entries.map((entry) {
+            final index = entry.key;
+            final item = entry.value;
             final flex = (item.percentage * 10).round();
             if (flex <= 0) return const SizedBox.shrink();
             return Flexible(
               flex: flex,
-              child: Container(
-                color: item.color,
-              ),
+              child: Container(color: palette[index % palette.length]),
             );
           }).toList(),
         ),
@@ -247,12 +220,20 @@ class CompositionCard extends StatelessWidget {
 
   Widget _buildLegendGrid() {
     if (items.isEmpty) return const SizedBox.shrink();
+    const palette = [
+      AppColors.textPrimary,
+      AppColors.textSecondary,
+      AppColors.textTertiary,
+      AppColors.divider,
+    ];
 
     // Responsive 2-column layout usually works best for mobile
     return Wrap(
       spacing: 16,
       runSpacing: 12,
-      children: items.map((item) {
+      children: items.asMap().entries.map((entry) {
+        final index = entry.key;
+        final item = entry.value;
         // approx 45% width for 2 columns with spacing
         return FractionallySizedBox(
           widthFactor: 0.45,
@@ -263,7 +244,7 @@ class CompositionCard extends StatelessWidget {
                 width: 10,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: item.color,
+                  color: palette[index % palette.length],
                   shape: BoxShape.circle,
                 ),
               ),

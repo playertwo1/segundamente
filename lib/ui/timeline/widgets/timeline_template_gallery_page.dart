@@ -19,7 +19,6 @@ class TimelineTemplateGalleryPage extends StatelessWidget {
         title: Text(
           UserStorage.l10n.timelineTemplateGalleryTitle,
           style: const TextStyle(
-            fontFamily: 'PingFang SC',
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
@@ -243,7 +242,6 @@ class _TemplatePreviewPage extends StatelessWidget {
                         child: Text(
                           title,
                           style: const TextStyle(
-                            fontFamily: 'PingFang SC',
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
@@ -262,7 +260,6 @@ class _TemplatePreviewPage extends StatelessWidget {
                               .map((t) => Text(
                                     '#$t',
                                     style: const TextStyle(
-                                      fontFamily: 'PingFang SC',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
                                       color: AppColors.primary,

@@ -17,51 +17,36 @@ class LinkCard extends StatelessWidget {
 
     return GlassCard(
       onTap: onTap,
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          if (title != null && title.isNotEmpty) ...[
+            Text(
+              title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+                height: 1.35,
+              ),
+            ),
+            const SizedBox(height: 4),
+          ],
+          GestureDetector(
+            onTap: url.isNotEmpty ? () => _openUrl(url) : null,
+            child: Row(
               children: [
-                if (title != null)
-                  Text(
-                    title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                      height: 1.3,
-                    ),
-                  ),
-                const SizedBox(height: 8),
-                GestureDetector(
-                  onTap: url.isNotEmpty ? () => _openUrl(url) : null,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF0F9FF),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Icon(Icons.link,
-                            size: 12, color: Color(0xFF0284C7)),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        domain.toUpperCase(),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF0284C7),
-                        ),
-                      ),
-                    ],
+                const Icon(Icons.link, size: 16, color: AppColors.primary),
+                const SizedBox(width: 6),
+                Text(
+                  domain,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],

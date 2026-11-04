@@ -10,7 +10,7 @@ class PersonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String name = data['name'] ?? 'Unknown';
+    final String name = data['name'] ?? '';
     final String? avatarUrl = data['image_url'];
     final String? relation = data['relation'];
     final String? status = data['status']; // Online, Busy, etc.
@@ -28,9 +28,12 @@ class PersonCard extends StatelessWidget {
                 backgroundImage:
                     avatarUrl != null ? NetworkImage(avatarUrl) : null,
                 child: avatarUrl == null
-                    ? Text(name.substring(0, 1).toUpperCase(),
-                        style: const TextStyle(
-                            fontSize: 24, color: AppColors.textTertiary))
+                    ? name.isEmpty
+                        ? const Icon(Icons.person_outline,
+                            color: AppColors.textTertiary)
+                        : Text(name[0].toUpperCase(),
+                            style: const TextStyle(
+                                fontSize: 24, color: AppColors.textTertiary))
                     : null,
               ),
               if (status != null)

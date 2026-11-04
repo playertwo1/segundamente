@@ -52,12 +52,24 @@ class MapCard extends StatelessWidget {
           loc.point.longitude.abs() <= 180;
     }).toList();
 
-    // Use WGS-84 coordinates directly (OSM tiles use WGS-84)
-    final hasLocations = validLocations.isNotEmpty;
+    if (validLocations.isEmpty) {
+      return SizedBox(
+        height: 120,
+        child: Center(
+          child: Text(
+            UserStorage.l10n.insightMapNoData,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ),
+      );
+    }
 
-    final initialCenter = hasLocations
-        ? validLocations.first.point
-        : const LatLng(31.2304, 121.4737); // Shanghai (approx)
+    // Use WGS-84 coordinates directly (OSM tiles use WGS-84)
+    final initialCenter = validLocations.first.point;
 
     // Conditional info panel: show if at least one info field is present
     final showInfo = (infoTitle != null && infoTitle!.isNotEmpty) ||
@@ -66,16 +78,9 @@ class MapCard extends StatelessWidget {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.background),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 16,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.divider),
       ),
       clipBehavior: Clip.antiAlias,
       child: Stack(
@@ -87,7 +92,7 @@ class MapCard extends StatelessWidget {
                 initialZoom: 11,
                 // Disable interaction in list view to prevent conflict with scrolling
                 // Only use bounds fit if we have multiple points to avoid infinite zoom on single point
-                initialCameraFit: (hasLocations && validLocations.length > 1)
+                initialCameraFit: validLocations.length > 1
                     ? CameraFit.bounds(
                         bounds: LatLngBounds.fromPoints(
                             validLocations.map((e) => e.point).toList()),
@@ -107,8 +112,8 @@ class MapCard extends StatelessWidget {
                             width: 40,
                             height: 40,
                             child: const Icon(
-                              Icons.location_on,
-                              color: AppColors.primary, // Unified color for now
+                              Icons.location_on_outlined,
+                              color: AppColors.textPrimary,
                               size: 40,
                             ),
                           ))
@@ -125,22 +130,16 @@ class MapCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.divider),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(
-                    Icons.map,
+                    Icons.map_outlined,
                     size: 16,
-                    color: AppColors.primary,
+                    color: AppColors.textSecondary,
                   ),
                   const SizedBox(width: 8),
                   Flexible(
@@ -169,15 +168,9 @@ class MapCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
-                  color: AppColors.cardBackground,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 16,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.divider),
                 ),
                 child: Row(
                   children: [
@@ -185,12 +178,12 @@ class MapCard extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.iconBgLight,
+                        color: AppColors.background,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
                         Icons.location_on_outlined,
-                        color: Color(0xFF3B82F6),
+                        color: AppColors.textSecondary,
                         size: 20,
                       ),
                     ),
@@ -249,12 +242,21 @@ class MapCard extends StatelessWidget {
           loc.point.longitude.abs() <= 180;
     }).toList();
 
-    // Use WGS-84 coordinates directly (OSM tiles use WGS-84)
-    final hasLocations = validLocations.isNotEmpty;
+    if (validLocations.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Text(
+          UserStorage.l10n.insightMapNoData,
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppColors.textSecondary,
+          ),
+        ),
+      );
+    }
 
-    final initialCenter = hasLocations
-        ? validLocations.first.point
-        : const LatLng(31.2304, 121.4737);
+    // Use WGS-84 coordinates directly (OSM tiles use WGS-84)
+    final initialCenter = validLocations.first.point;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,13 +276,10 @@ class MapCard extends StatelessWidget {
                 Container(
                   width: 48,
                   height: 48,
-                  decoration: BoxDecoration(
-                    color: AppColors.iconBgLight,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  decoration: const BoxDecoration(color: AppColors.surface),
                   child: const Icon(
                     Icons.map_outlined,
-                    color: AppColors.primary,
+                    color: AppColors.textSecondary,
                     size: 24,
                   ),
                 ),
@@ -323,16 +322,9 @@ class MapCard extends StatelessWidget {
         Container(
           height: 240, // Reduced height for details as requested
           decoration: BoxDecoration(
-            color: AppColors.cardBackground,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.background),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 16,
-                offset: const Offset(0, 2),
-              ),
-            ],
+            color: AppColors.background,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.divider),
           ),
           clipBehavior: Clip.antiAlias,
           child: FlutterMap(
@@ -341,7 +333,7 @@ class MapCard extends StatelessWidget {
               initialZoom: 11,
               // Enable full interaction in detail view
               // Only use bounds fit if we have multiple points to avoid infinite zoom on single point
-              initialCameraFit: (hasLocations && validLocations.length > 1)
+              initialCameraFit: validLocations.length > 1
                   ? CameraFit.bounds(
                       bounds: LatLngBounds.fromPoints(
                           validLocations.map((e) => e.point).toList()),
@@ -361,8 +353,8 @@ class MapCard extends StatelessWidget {
                           width: 40,
                           height: 40,
                           child: const Icon(
-                            Icons.location_on,
-                            color: AppColors.primary,
+                            Icons.location_on_outlined,
+                            color: AppColors.textPrimary,
                             size: 40,
                           ),
                         ))
@@ -379,7 +371,7 @@ class MapCard extends StatelessWidget {
             UserStorage.l10n.waypointPlaces,
             style: const TextStyle(
               fontSize: 17,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -390,12 +382,10 @@ class MapCard extends StatelessWidget {
             final name = location.name ?? UserStorage.l10n.unknownPlace;
 
             return Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.cardBackground,
-                border: Border.all(color: AppColors.background),
-                borderRadius: BorderRadius.circular(12),
+              constraints: const BoxConstraints(minHeight: 48),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: AppColors.divider)),
               ),
               child: Row(
                 children: [
@@ -403,10 +393,8 @@ class MapCard extends StatelessWidget {
                     width: 24,
                     height: 24,
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.background,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    decoration:
+                        const BoxDecoration(color: AppColors.background),
                     child: Text(
                       '${index + 1}',
                       style: const TextStyle(

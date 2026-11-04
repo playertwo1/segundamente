@@ -118,7 +118,7 @@ class MetricCard extends StatelessWidget {
   }
 
   Widget _buildGridItem(BuildContext context, Map<String, dynamic> itemData) {
-    final String title = itemData['title'] ?? 'Metric';
+    final String title = itemData['title'] ?? '';
 
     final num valueNum = itemData['value'] as num? ?? 0.0;
     String valueStr = valueNum % 1 == 0
@@ -279,7 +279,7 @@ class MetricCard extends StatelessWidget {
   }
 
   Widget _buildMetricRow(BuildContext context, Map<String, dynamic> itemData) {
-    final String title = itemData['title'] ?? 'Metric';
+    final String title = itemData['title'] ?? '';
 
     // Handle value formatting gracefully
     final num valueNum = itemData['value'] as num? ?? 0.0;

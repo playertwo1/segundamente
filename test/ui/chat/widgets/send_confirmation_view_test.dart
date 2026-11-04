@@ -94,4 +94,42 @@ void main() {
     expect(find.byKey(const ValueKey('send_pdf_unsupported')), findsOneWidget);
     expect(confirmed, 0);
   });
+
+  testWidgets('full-screen review shows the notes and sends only on Enviar',
+      (tester) async {
+    SharedPreferences.setMockInitialValues({'language': 'pt'});
+    await UserStorage.initL10n();
+    bool? answer;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () async => answer = await showSendConfirmationDialog(
+              context: context,
+              outgoingText: 'Planejamento de novembro',
+              timestampsFound: true,
+              pdfUnsupported: false,
+            ),
+            child: const Text('abrir'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('abrir'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Revisar antes de enviar'), findsOneWidget);
+    expect(find.text('Planejamento de novembro'), findsOneWidget);
+    expect(find.text('Nada será enviado sem sua confirmação.'), findsOneWidget);
+
+    await tester.tap(find.text('Voltar').last);
+    await tester.pumpAndSettle();
+    expect(answer, isFalse);
+
+    await tester.tap(find.text('abrir'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Enviar agora'));
+    await tester.pumpAndSettle();
+    expect(answer, isTrue);
+  });
 }

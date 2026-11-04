@@ -11,7 +11,7 @@
 6. Regras de código, camadas e testes do Memex: `AGENTS.md` (ele vence em conflito).
 
 ## Próxima prioridade
-F5V — Redesign visual da versão nova é a fase atual (D-022), começando pela F5V-01 (tema AMOLED e navegação no topo). A F5 segue aberta em paralelo: o que falta nela depende do S25. O desenho está aprovado em D-017 e documentado em [`DESIGN.md`](DESIGN.md), com dez pranchas no [índice](docs/INDEX.md#design-móvel). F5V não fecha os portões F0–F5.
+F5V — Redesign visual da versão nova é a fase atual (D-022). F5V-01 (tema AMOLED e navegação no topo) está em `REVIEW`; F5V-02, F5V-03 e F5V-04 seguem em andamento, e F5V-05 está `NOT_RUN` até a validação de acessibilidade e no S25. A F5 continua aberta em paralelo: o que falta nela depende do S25. A direção está aprovada em D-017 e documentada em [`DESIGN.md`](DESIGN.md), com 23 pranchas no [índice](docs/INDEX.md#design-móvel). F5V não fecha os portões F0–F5.
 
 Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE`. Prioridade: P0 bloqueia o fluxo principal · P1 sustenta o MVP · P2 melhoria · P3 futuro.
 
@@ -62,7 +62,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 |---|---|---|---|---|---|
 | F2-01 | Chat de texto com histórico persistente | P0 | F1 | DONE | Conversa sobrevive a reiniciar o app |
 | F2-02 | Voz em turnos: microfone → transcrição → resposta → áudio opcional (pt-BR) | P0 | F0-05, F2-01 | IN_PROGRESS | Fala pt-BR transcrita no S25 (feito, via D-011); falta a resposta em áudio (TTS do Android) e a nota de qualidade |
-| F2-03 | Importar TXT do Samsung via Compartilhar (ACTION_SEND) e seleção de arquivo, com pré-visualização | P0 | F2-01 | IN_PROGRESS | TXT real de ~50 min aberto sem copiar/colar; timestamps preservados |
+| F2-03 | Importar TXT do Samsung via Compartilhar (ACTION_SEND) e seleção de arquivo, com pré-visualização | P0 | F2-01 | IN_PROGRESS | TXT real de ~50 min aberto sem copiar/colar; timestamps preservados. O escopo atual aceita TXT; DOCX fica adiado até decisão de fase |
 | F2-04 | Normalização reversível do texto (original imutável, versão normalizada separada) | P1 | F2-03 | DONE | Teste: original idêntico bit a bit após normalizar |
 | F2-05 | Anexar fotos/imagens (JPG/PNG; HEIC avaliado) e analisar em provedor com visão | P0 | F1-03, F2-01 | NOT_RUN | Foto analisada em um provedor; aviso nos sem visão |
 | F2-06 | Texto digitado/colado como sessão; PDF de entrada se couber | P2 | F2-01 | DONE | Colar texto cria sessão; PDF `NOT_RUN` aceito se cortado |
@@ -74,7 +74,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F2-12 | Importar legenda `.srt` e `.vtt` como TXT com relógio | P2 | F2-03 | READY | Testes do parser com os dois formatos; no S25, um `.srt` abre a prévia com os relógios |
 | F2-13 | Dicionário de termos do usuário (nomes, siglas, produtos) usado nos prompts | P1 | F3-08 | READY | Teste de que a lista entra no prompt e é limitada; no S25, um nome próprio sai certo no resumo |
 
-**Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` está no commit `db7bc1d`, em `origin/main`, e não fecha a F2-03: falta o TXT real de ~50 min.
+**Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` está no commit `db7bc1d`, em `origin/main`, e não fecha a F2-03: falta o TXT real de ~50 min. A importação visual desta fase segue TXT; DOCX está adiado, pois a F2-03 não o permite.
 
 ## F3 — Extração e relatório
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
@@ -121,11 +121,13 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 |---|---|---|---|---|---|
 | F5V-01 | Atualizar tokens/tema AMOLED e navegação superior; remover a barra inferior persistente | P1 | D-017, D-022 | REVIEW | Rotas mapeadas; widget tests; captura da navegação |
 | F5V-02 | Aplicar a direção às telas de timeline, conhecimento, insights e memórias | P1 | F5V-01 | IN_PROGRESS | Estados principais cobertos por widget tests e capturas comparadas às referências |
-| F5V-03 | Atualizar entrada, conversa e acesso explícito “Conversar” | P1 | F5V-01 | IN_PROGRESS | Teste de navegação/ação do chat, estados de envio e captura |
-| F5V-04 | Atualizar calendário, detalhes, relatórios, configurações, modelos, agentes e backup | P1 | F5V-01 | READY | Widget tests dos comportamentos e capturas de cada família |
-| F5V-05 | Revisar estados vazios/erro, escala de texto, contraste, leitor de tela e validar no aparelho | P1 | F5V-02, F5V-03, F5V-04 | READY | Verificações de acessibilidade; capturas finais; validação no S25 quando disponível |
+| F5V-03 | Atualizar entrada, conversa, importação de TXT e acesso explícito “Conversar” | P1 | F5V-01 | IN_PROGRESS | Teste de navegação/ação do chat, estados de envio/importação e captura |
+| F5V-04 | Atualizar calendário, detalhes, compartilhamento, relatórios, configurações, modelos, agentes e backup | P1 | F5V-01 | IN_PROGRESS | Widget tests dos comportamentos e capturas de cada família |
+| F5V-05 | Revisar estados vazios/erro, escala de texto, contraste, leitor de tela e validar no aparelho | P1 | F5V-02, F5V-03, F5V-04 | NOT_RUN | Verificações de acessibilidade; capturas finais; validação no S25 quando disponível |
 
-**Direção e escopo:** seguir [`DESIGN.md`](DESIGN.md), D-017 e as dez pranchas em [`docs/INDEX.md`](docs/INDEX.md#design-móvel). Usar os temas/componentes existentes em `lib/ui/core/themes/` e mapear as rotas antes de alterar navegação. Toda interação nova precisa de widget test conforme `AGENTS.md`. F5V não altera nem fecha automaticamente os portões F0–F5.
+**Direção e escopo:** seguir [`DESIGN.md`](DESIGN.md), D-017 e as 23 pranchas em [`docs/INDEX.md`](docs/INDEX.md#design-móvel). Usar os temas/componentes existentes em `lib/ui/core/themes/` e mapear as rotas antes de alterar navegação. Toda interação nova precisa de widget test conforme `AGENTS.md`. F5V não altera nem fecha automaticamente os portões F0–F5.
+
+**Mapa das pranchas desta rodada:** 12/13 (tipos de cartão), 17 (variações de insight), 20 (tour e GUIAS) e a central de ações da 14 pertencem à F5V-02; 22 (importação TXT) pertence à F5V-03; 19 (prévia e compartilhamento) pertence à F5V-04. A prancha 17 usa as fábricas de insight existentes; o mapa geográfico exige coordenadas reais e não há suporte a grafo de conexões. A 20 reaproveita o tour e lê o guia sem editar `Memex Guide.md`. A 19 usa a folha nativa de compartilhamento e os recursos atuais do pôster. A 22 lista, pré-visualiza e importa TXT com estados de progresso/erro; DOCX segue adiado pela F2-03. Sem validação no S25, F5V-05 permanece `NOT_RUN`.
 
 ## Critérios de aceite do MVP (no Galaxy S25 Ultra, sem NotebookLM, PC ligado, Hermes ou serviço pago próprio)
 1. Conversar por texto e falar com o app com resposta opcional em áudio.

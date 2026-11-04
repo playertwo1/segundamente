@@ -12,6 +12,7 @@ import 'package:memex/ui/core/widgets/reliable_asset_picker.dart';
 
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -23,6 +24,7 @@ import 'package:memex/data/services/local_asset_server.dart';
 import 'package:memex/data/services/system_action_service.dart';
 import 'package:memex/db/app_database.dart';
 import 'package:memex/l10n/app_localizations.dart';
+import 'package:memex/ui/chat/view_models/voice_dictation_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/agent_chat_dialog.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
@@ -129,6 +131,96 @@ void main() {
     ]) {
       expect(find.byKey(ValueKey(key)), findsOneWidget, reason: key);
     }
+  });
+
+  testWidgets('mic button records, shows status and fills the text field',
+      (tester) async {
+    final audio = StreamController<Uint8List>();
+    addTearDown(audio.close);
+    final transcript = Completer<String?>();
+    final voice = VoiceDictationViewModel(
+      requestPermission: () async => true,
+      startStream: () async => audio.stream,
+      stopStream: () async {},
+      transcribe: (_) => transcript.future,
+    );
+    addTearDown(voice.dispose);
+    await _pumpDialogFrame(
+      tester,
+      dialog: AgentChatDialog(voiceDictationForTesting: voice),
+    );
+    await tester.pump(const Duration(milliseconds: 600));
+
+    final mic = find.byKey(const ValueKey('super_agent_mic_button'));
+    expect(mic, findsOneWidget);
+    expect(find.bySemanticsLabel('Record audio'), findsOneWidget);
+    expect(
+      tester
+          .getSemantics(mic)
+          .getSemanticsData()
+          .hasAction(SemanticsAction.tap),
+      isTrue,
+    );
+
+    await tester.tap(mic);
+    await tester.pump();
+    expect(find.text('Recording… tap the microphone to stop'), findsOneWidget);
+    expect(find.bySemanticsLabel('Stop and transcribe'), findsOneWidget);
+    expect(
+      tester
+          .getSemantics(mic)
+          .getSemanticsData()
+          .hasAction(SemanticsAction.tap),
+      isTrue,
+    );
+
+    audio.add(Uint8List.fromList([1, 0, 2, 0]));
+    await tester.pump();
+    await tester.tap(mic);
+    await tester.pump();
+    expect(find.text('Transcribing…'), findsOneWidget);
+    expect(
+      tester
+          .getSemantics(mic)
+          .getSemanticsData()
+          .hasAction(SemanticsAction.tap),
+      isFalse,
+    );
+
+    transcript.complete('comprar leite');
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.text('comprar leite'), findsOneWidget);
+    expect(
+        find.byKey(const ValueKey('super_agent_voice_status')), findsNothing);
+  });
+
+  testWidgets('mic button explains a denied microphone permission',
+      (tester) async {
+    final voice = VoiceDictationViewModel(
+      requestPermission: () async => false,
+      startStream: () async => const Stream<Uint8List>.empty(),
+      stopStream: () async {},
+      transcribe: (_) async => null,
+    );
+    addTearDown(voice.dispose);
+    await _pumpDialogFrame(
+      tester,
+      dialog: AgentChatDialog(voiceDictationForTesting: voice),
+    );
+    await tester.pump(const Duration(milliseconds: 600));
+
+    await tester.tap(find.byKey(const ValueKey('super_agent_mic_button')));
+    await tester.pump();
+    await tester.pump();
+
+    expect(
+      find.text(
+        "Microphone permission denied. Enable it in this app's settings.",
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets(

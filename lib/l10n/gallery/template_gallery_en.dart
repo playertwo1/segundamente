@@ -98,7 +98,7 @@ const timelineTemplateGallerySectionsEn = [
         title: 'Dusk moment',
         data: {
           'image_url': 'https://picsum.photos/600/400?random=30',
-          'location': 'The Bund · Shanghai',
+          'location': 'Ibirapuera Park · São Paulo',
         },
       ),
       TemplateGalleryItem(
@@ -212,7 +212,7 @@ const timelineTemplateGallerySectionsEn = [
         data: {
           'start_time': '2026-03-10T14:00:00',
           'end_time': '2026-03-10T16:00:00',
-          'location': 'Building A, Tech Park, Pudong New Area, Shanghai',
+          'location': 'Horizonte Room · Downtown, São Paulo',
         },
       ),
       TemplateGalleryItem(
@@ -275,7 +275,7 @@ const timelineTemplateGallerySectionsEn = [
         templateId: 'person',
         title: 'Contact',
         data: {
-          'name': 'Alex Zhang',
+          'name': 'Ana Martins',
           'relation': 'Product Manager',
           'status': 'online',
         },
@@ -285,10 +285,10 @@ const timelineTemplateGallerySectionsEn = [
         templateId: 'place',
         title: 'Favorite bookstore',
         data: {
-          'name': 'Tsutaya Bookstore · Jing’an Temple',
-          'address': '400 Taixing Rd, Jing’an District, Shanghai',
-          'lat': 31.2304,
-          'lng': 121.4537,
+          'name': 'Livraria Cultura · Conjunto Nacional',
+          'address': '2073 Paulista Avenue · São Paulo',
+          'lat': -23.5572,
+          'lng': -46.6603,
         },
       ),
       TemplateGalleryItem(
@@ -312,13 +312,13 @@ const timelineTemplateGallerySectionsEn = [
         templateId: 'transaction',
         title: 'Lunch spending',
         data: {
-          'merchant': 'Hutong Noodle House',
-          'amount': '¥ 68.00',
-          'location': 'Gulou Street, Beijing',
+          'merchant': 'Cantina Central',
+          'amount': r'R$ 68.00',
+          'location': 'Augusta Street · São Paulo',
           'items': [
-            {'name': 'Signature Zhajiangmian (large)', 'amount': '¥ 38'},
-            {'name': 'Marinated egg', 'amount': '¥ 8'},
-            {'name': 'Chilled Beijing yogurt', 'amount': '¥ 22'},
+            {'name': 'Daily special', 'amount': r'R$ 38.00'},
+            {'name': 'Fresh juice', 'amount': r'R$ 8.00'},
+            {'name': 'Dessert', 'amount': r'R$ 22.00'},
           ],
         },
       ),
@@ -531,11 +531,11 @@ const insightTemplateGalleryItemsEn = [
     data: {
       'title': 'Footprints',
       'locations': [
-        {'lat': 39.9042, 'lng': 116.4074, 'name': 'Beijing'},
-        {'lat': 31.2304, 'lng': 121.4737, 'name': 'Shanghai'},
+        {'lat': -23.5505, 'lng': -46.6333, 'name': 'São Paulo'},
+        {'lat': -22.9056, 'lng': -47.0608, 'name': 'Campinas'},
       ],
       'info_title': 'A tale of two cities',
-      'info_detail': 'Commuting between Beijing and Shanghai this week',
+      'info_detail': 'Between São Paulo and Campinas this week',
     },
   ),
   TemplateGalleryItem(

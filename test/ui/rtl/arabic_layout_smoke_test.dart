@@ -62,6 +62,7 @@ void main() {
           onOpenChat: () {},
           onOpenCalendar: () {},
           onOpenMemory: () {},
+          onOpenActivity: () {},
           onOpenProfile: () {},
         ),
       ),

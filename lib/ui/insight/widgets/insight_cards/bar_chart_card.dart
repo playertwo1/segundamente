@@ -58,16 +58,8 @@ class BarChartCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -78,10 +70,10 @@ class BarChartCard extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                  fontFamily: 'PingFang SC',
-                  fontSize: 18,
+                  fontFamily: 'Inter',
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  height: 28 / 18,
+                  height: 24 / 16,
                   letterSpacing: -0.44,
                   color: AppColors.textPrimary,
                 ),
@@ -94,7 +86,7 @@ class BarChartCard extends StatelessWidget {
               Text(
                 subtitle!,
                 style: const TextStyle(
-                  fontFamily: 'PingFang SC',
+                  fontFamily: 'Inter',
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   height: 20 / 14,
@@ -111,32 +103,24 @@ class BarChartCard extends StatelessWidget {
               final item = entry.value;
               final isLast = index == items.length - 1;
               final percent = (item.value / maxY).clamp(0.0, 1.0);
-              final barColor = item.color != null
-                  ? _parseColor(item.color!)
-                  : AppColors.primary;
+              final barColor = item.isHighlight
+                  ? AppColors.textPrimary
+                  : AppColors.textSecondary;
 
               return Padding(
                 padding: EdgeInsets.only(bottom: isLast ? 0 : 24),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Emoji icon container
+                    // Content emoji stays without a repeated surface.
                     if (item.icon != null) ...[
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: AppColors.iconBgLight,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: EmojiIcon(
-                            emoji: item.icon!,
-                            size: 20,
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: EmojiIcon(
+                          emoji: item.icon!,
+                          size: 20,
                         ),
                       ),
-                      const SizedBox(width: 12),
                     ],
 
                     // Label + bar + value
@@ -153,12 +137,12 @@ class BarChartCard extends StatelessWidget {
                                 Text(
                                   item.label,
                                   style: const TextStyle(
-                                    fontFamily: 'PingFang SC',
+                                    fontFamily: 'Inter',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                     height: 20 / 14,
                                     letterSpacing: -0.15,
-                                    color: Color(0xFF364153),
+                                    color: AppColors.textSecondary,
                                   ),
                                 ),
                                 Text(
@@ -210,26 +194,5 @@ class BarChartCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _parseColor(String colorStr) {
-    if (colorStr.isEmpty) return AppColors.primary;
-    try {
-      String hex = colorStr.replaceAll('#', '').trim();
-      final match = RegExp(r'^[0-9a-fA-F]{6,8}').firstMatch(hex);
-      if (match != null) {
-        hex = match.group(0)!;
-      } else {
-        return AppColors.primary;
-      }
-      if (hex.length == 6) {
-        return Color(int.parse(hex, radix: 16) + 0xFF000000);
-      } else if (hex.length == 8) {
-        return Color(int.parse(hex, radix: 16));
-      }
-    } catch (e) {
-      debugPrint('Error parsing color: $colorStr - $e');
-    }
-    return AppColors.primary;
   }
 }

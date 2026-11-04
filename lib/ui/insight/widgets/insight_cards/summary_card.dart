@@ -69,16 +69,8 @@ class SummaryCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +109,7 @@ class SummaryCard extends StatelessWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             height: 16 / 14,
-                            color: AppColors.primary,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -131,10 +123,10 @@ class SummaryCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontFamily: 'PingFang SC',
-                fontSize: 24,
+                fontFamily: 'Inter',
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
-                height: 32 / 24,
+                height: 28 / 20,
                 letterSpacing: 0.07,
                 color: AppColors.textPrimary,
               ),
@@ -145,9 +137,9 @@ class SummaryCard extends StatelessWidget {
             Text(
               date,
               style: GoogleFonts.inter(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w400,
-                height: 20 / 14,
+                height: 16 / 12,
                 letterSpacing: -0.15,
                 color: AppColors.textTertiary,
               ),
@@ -174,7 +166,7 @@ class SummaryCard extends StatelessWidget {
                     child: Text(
                       insightTitle,
                       style: const TextStyle(
-                        fontFamily: 'PingFang SC',
+                        fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textPrimary,
@@ -197,19 +189,14 @@ class SummaryCard extends StatelessWidget {
                   final isLast = index == metrics.length - 1;
 
                   return Expanded(
-                    child: Container(
-                      margin: EdgeInsetsDirectional.only(end: isLast ? 0 : 10),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      decoration: BoxDecoration(
-                        color: AppColors.background,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(end: isLast ? 0 : 10),
                       child: Column(
                         children: [
                           Text(
                             metric.label,
                             style: const TextStyle(
-                              fontFamily: 'PingFang SC',
+                              fontFamily: 'Inter',
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                               color: AppColors.textTertiary,
@@ -223,9 +210,7 @@ class SummaryCard extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               height: 32 / 24,
                               letterSpacing: 0.07,
-                              color: metric.color != null
-                                  ? _parseColor(metric.color!)
-                                  : AppColors.textPrimary,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ],
@@ -248,7 +233,7 @@ class SummaryCard extends StatelessWidget {
                           TextSpan(
                             text: highlightsTitle.split('(').first.trim(),
                             style: const TextStyle(
-                              fontFamily: 'PingFang SC',
+                              fontFamily: 'Inter',
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
@@ -258,7 +243,7 @@ class SummaryCard extends StatelessWidget {
                             TextSpan(
                               text: '  (${highlightsTitle.split('(').last}',
                               style: const TextStyle(
-                                fontFamily: 'PingFang SC',
+                                fontFamily: 'Inter',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
                                 color: AppColors.textTertiary,
@@ -284,7 +269,7 @@ class SummaryCard extends StatelessWidget {
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           height: 16 / 12,
-                          color: const Color(0xFF6A7282),
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ),
@@ -324,12 +309,5 @@ class SummaryCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _parseColor(String colorStr) {
-    if (colorStr.startsWith('#')) {
-      return Color(int.parse(colorStr.substring(1), radix: 16) + 0xFF000000);
-    }
-    return AppColors.primary;
   }
 }

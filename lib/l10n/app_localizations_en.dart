@@ -926,7 +926,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupProviderCredentialsDescription =>
-      'Add or edit OpenAI, Anthropic, DeepSeek, Gemini, OpenRouter, Ollama, or another compatible provider.';
+      'Add or edit OpenAI, Anthropic, Gemini, OpenRouter, Ollama, or another compatible provider.';
 
   @override
   String get modelRolesTitle => 'Choose primary model';
@@ -1001,7 +1001,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiServiceCustomModelDescription =>
-      'Choose this first if you already have an API key from OpenAI, Anthropic, DeepSeek, Gemini, or another provider.';
+      'Choose this first if you already have an API key from OpenAI, Anthropic, Gemini, or another provider.';
 
   @override
   String get enableAiService => 'Connect with Memex';
@@ -1642,7 +1642,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get keyIdLabel => 'Config ID';
 
   @override
-  String get keyIdHelper => 'Name this setup, such as deepseek or work-gpt.';
+  String get keyIdHelper => 'Name this setup, such as gemini or work-gpt.';
 
   @override
   String get required => 'Required';
@@ -2563,7 +2563,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoWelcome =>
-      'Welcome to Segunda Mente!\nLet\'s take a quick tour of what AI can do for your records.';
+      'Welcome to Segunda Mente!\nSee three ways to record, organize, and find your moments again.';
 
   @override
   String get demoTapAdd => 'Tap here to create your first record';
@@ -2592,7 +2592,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoDone => 'Start recording your life.';
 
   @override
-  String get demoStartTour => 'Start Tour';
+  String get demoStartTour => 'Start tour';
 
   @override
   String get demoGetStarted => 'Get Started';
@@ -3487,4 +3487,313 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get captureButtonLabel => 'Capture';
+
+  @override
+  String get lockUnlockTitle => 'Unlock Segunda Mente';
+
+  @override
+  String get lockConfirmIdentity =>
+      'Confirm your identity to see your records.';
+
+  @override
+  String get lockUseBiometrics => 'Use biometrics';
+
+  @override
+  String get lockUsePin => 'Use PIN';
+
+  @override
+  String get lockEnterPin => 'Enter your PIN';
+
+  @override
+  String lockWrongPin(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Wrong PIN · $count attempts left',
+      one: 'Wrong PIN · $count attempt left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lockForgotPin => 'I forgot my PIN';
+
+  @override
+  String get lockForgotPinTitle => 'The PIN cannot be recovered';
+
+  @override
+  String get lockForgotPinBody =>
+      'For security, the PIN cannot be reset here. If biometrics are on, use them to get in and change the PIN in Settings. Without biometrics, only clearing the app data in Android restores access, and that erases local records (restore a backup afterwards).';
+
+  @override
+  String get lockTempBlockedTitle => 'Access temporarily blocked';
+
+  @override
+  String get lockTempBlockedBody =>
+      'Try again in a moment to protect your records.';
+
+  @override
+  String lockAvailableIn(int seconds) {
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: 'Access returns in $seconds seconds',
+      one: 'Access returns in $seconds second',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lockDeleteDigit => 'Delete digit';
+
+  @override
+  String get lockBack => 'Back';
+
+  @override
+  String get locationContextSubtitle =>
+      'Use an approximate area to give your records context.';
+
+  @override
+  String get locationTestingTitle => 'Looking for an approximate position…';
+
+  @override
+  String get locationTestingHint => 'This can take a few seconds.';
+
+  @override
+  String get locationCancelTest => 'Cancel test';
+
+  @override
+  String get locationTestAgain => 'Test again';
+
+  @override
+  String get locationTestResultTitle => 'Test result';
+
+  @override
+  String get locationApproxNote =>
+      'Approximate location is used only as context when turned on.';
+
+  @override
+  String get locationOsmLine => 'Map and search: OpenStreetMap';
+
+  @override
+  String get activityMenu => 'Activity';
+
+  @override
+  String get activityHeading => 'Background activity';
+
+  @override
+  String get activityUpdatedNow => 'Updated just now';
+
+  @override
+  String get activitySectionRunning => 'Running';
+
+  @override
+  String get activitySectionFailed => 'Failed';
+
+  @override
+  String activityStartedAgo(Object elapsed) {
+    return 'started $elapsed ago';
+  }
+
+  @override
+  String activityRetryProgress(int count, int max) {
+    return 'Attempt $count of $max';
+  }
+
+  @override
+  String get activityFailedBody => 'Could not finish.';
+
+  @override
+  String get activityEmptyTitle => 'No recent activity';
+
+  @override
+  String get activityEmptyBody =>
+      'When Segunda Mente organizes records, you will see the progress here.';
+
+  @override
+  String get activityBackToTimeline => 'Back to the timeline';
+
+  @override
+  String get activityLoadFailed => 'Could not load the activity.';
+
+  @override
+  String get activityTaskAddRecord => 'Organize record';
+
+  @override
+  String get activityTaskChat => 'Reply in the conversation';
+
+  @override
+  String get activityTaskComment => 'Write a comment';
+
+  @override
+  String get activityTaskCharacter => 'Character activity';
+
+  @override
+  String get activityTaskOther => 'Background task';
+
+  @override
+  String get sendReviewTitle => 'Review before sending';
+
+  @override
+  String get sendNothingWithoutConfirm =>
+      'Nothing is sent without your confirmation.';
+
+  @override
+  String get sendBack => 'Back';
+
+  @override
+  String get sendNow => 'Send now';
+
+  @override
+  String get globalSearchTitle => 'Search';
+
+  @override
+  String get globalSearchHint => 'Search everything';
+
+  @override
+  String get globalSearchRecent => 'Recent searches';
+
+  @override
+  String get globalSearchClearRecent => 'Clear recent';
+
+  @override
+  String get globalSearchResults => 'Results';
+
+  @override
+  String globalSearchCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count records',
+      one: '$count record',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get globalSearchGroupCards => 'Cards';
+
+  @override
+  String get globalSearchGroupKnowledge => 'Knowledge';
+
+  @override
+  String get globalSearchNoResults => 'No records found';
+
+  @override
+  String get globalSearchNoResultsHint =>
+      'Try other terms or check the spelling.';
+
+  @override
+  String get globalSearchClearQuery => 'Clear search';
+
+  @override
+  String get globalSearchOpen => 'Search';
+
+  @override
+  String knowledgeReaderMeta(int minutes) {
+    return 'Knowledge · Markdown · $minutes min';
+  }
+
+  @override
+  String get knowledgeReaderShare => 'Share';
+
+  @override
+  String demoStepProgress(int step) {
+    return 'Step $step of 3';
+  }
+
+  @override
+  String get demoContinue => 'Continue';
+
+  @override
+  String get guides => 'Guides';
+
+  @override
+  String get noGuidesSaved => 'No guides saved';
+
+  @override
+  String get userGuideTitle => 'User guide';
+
+  @override
+  String get selectedFiles => 'Selected files';
+
+  @override
+  String get plainTextFile => 'Text file · TXT';
+
+  @override
+  String get reorderInsights => 'Reorder';
+
+  @override
+  String get insightEmptyTitle => 'No insights yet';
+
+  @override
+  String get insightEmptyBody =>
+      'Insights will appear here when they are generated from your records.';
+
+  @override
+  String get insightMapNoData => 'This insight has no locations to show yet.';
+
+  @override
+  String get viewActivity => 'View activity';
+
+  @override
+  String get importingTranscript => 'Importing transcript…';
+
+  @override
+  String get transcriptImportFailed => 'This transcript could not be saved.';
+
+  @override
+  String get markdownFileType => 'Markdown file';
+
+  @override
+  String sharePosterFormat(Object format) {
+    return 'Current format: $format';
+  }
+
+  @override
+  String sharePosterBranding(Object state) {
+    return 'Branding: $state';
+  }
+
+  @override
+  String get sharePosterVisible => 'shown';
+
+  @override
+  String get sharePosterHidden => 'hidden';
+
+  @override
+  String get sharedFromMemex => 'Shared from Segunda Mente';
+
+  @override
+  String get voiceStart => 'Record audio';
+
+  @override
+  String get voiceStop => 'Stop and transcribe';
+
+  @override
+  String get voiceRecording => 'Recording… tap the microphone to stop';
+
+  @override
+  String get voiceTranscribing => 'Transcribing…';
+
+  @override
+  String get voiceMicDenied =>
+      'Microphone permission denied. Enable it in this app\'s settings.';
+
+  @override
+  String get voiceNothingHeard => 'No speech was recognised. Try again.';
+
+  @override
+  String get youLabel => 'You';
+
+  @override
+  String routineStreakDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days streak',
+      one: '$count day streak',
+    );
+    return '$_temp0';
+  }
 }

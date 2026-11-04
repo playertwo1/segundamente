@@ -10,7 +10,7 @@ import 'package:memex/utils/share_service.dart';
 import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
-import 'package:memex/ui/core/widgets/back_button.dart';
+import 'package:memex/ui/core/widgets/editorial_scaffold.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 
 final _logger = getLogger('KnowledgeFilePage');
@@ -18,14 +18,17 @@ final _logger = getLogger('KnowledgeFilePage');
 class KnowledgeFilePage extends StatefulWidget {
   final String filePath;
 
-  const KnowledgeFilePage({super.key, required this.filePath});
+  /// Defaults to the app router; tests pass a fake.
+  final MemexRouter? router;
+
+  const KnowledgeFilePage({super.key, required this.filePath, this.router});
 
   @override
   State<KnowledgeFilePage> createState() => _KnowledgeFilePageState();
 }
 
 class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
-  final MemexRouter _memexRouter = MemexRouter();
+  late final MemexRouter _memexRouter = widget.router ?? MemexRouter();
   String _content = '';
   List<String> _factIds = [];
   List<TimelineCardModel> _sourceCards = [];
@@ -138,158 +141,167 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
     });
   }
 
+  /// Title of the reader: the first `# ` heading, else the file name.
+  String get _title {
+    if (isLegacyGuideName(path.basename(widget.filePath))) {
+      return UserStorage.l10n.userGuideTitle;
+    }
+    final match = RegExp(r'^#\s+(.+)$', multiLine: true).firstMatch(_content);
+    final heading = match?.group(1)?.trim();
+    if (heading != null && heading.isNotEmpty) return heading;
+    return path.basenameWithoutExtension(widget.filePath);
+  }
+
+  /// Body without the heading already shown as the page title.
+  String get _body {
+    final match = RegExp(r'^#\s+(.+)\n?', multiLine: true).firstMatch(_content);
+    if (match == null) return _content;
+    return _content.replaceRange(match.start, match.end, '');
+  }
+
+  int get _readingMinutes {
+    final words = RegExp(r'\S+').allMatches(_content).length;
+    return words <= 0 ? 1 : (words / 200).ceil();
+  }
+
+  MarkdownStyleSheet get _markdownStyle {
+    const body = TextStyle(
+      fontSize: 16,
+      height: 1.5,
+      color: AppColors.textPrimary,
+    );
+    return MarkdownStyleSheet(
+      p: body,
+      listBullet: body,
+      h1: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w700,
+        height: 1.3,
+        color: AppColors.textPrimary,
+      ),
+      h2: const TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        height: 1.3,
+        color: AppColors.textPrimary,
+      ),
+      h3: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        height: 1.3,
+        color: AppColors.textPrimary,
+      ),
+      a: const TextStyle(color: AppColors.primary),
+      blockquote: const TextStyle(
+        fontSize: 16,
+        height: 1.5,
+        color: AppColors.textSecondary,
+      ),
+      blockquoteDecoration: const BoxDecoration(
+        border: Border(left: BorderSide(color: AppColors.primary, width: 2)),
+      ),
+      blockquotePadding: const EdgeInsets.only(left: 12),
+      horizontalRuleDecoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.divider)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.cardBackground,
-      appBar: AppBar(
-        title: Text(path.basename(widget.filePath),
-            style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold)),
-        backgroundColor: AppColors.cardBackground,
-        elevation: 0,
-        leading: const AppBackButton(),
-        iconTheme: const IconThemeData(color: AppColors.textSecondary),
-        actions: [
-          IconButton(
-            key: const ValueKey('knowledge_file_download_button'),
-            tooltip: UserStorage.l10n.downloadFile,
-            onPressed: (_isLoading || _isDownloading) ? null : _downloadFile,
-            icon: _isDownloading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.download_rounded),
-          ),
-        ],
-      ),
+    final l10n = UserStorage.l10n;
+    return EditorialScaffold(
+      title:
+          _isLoading ? path.basenameWithoutExtension(widget.filePath) : _title,
+      subtitle: _isLoading ? null : l10n.knowledgeReaderMeta(_readingMinutes),
+      bottom: _isLoading
+          ? null
+          : TextButton.icon(
+              key: const ValueKey('knowledge_file_download_button'),
+              onPressed: _isDownloading ? null : _downloadFile,
+              style: TextButton.styleFrom(minimumSize: const Size(160, 48)),
+              icon: _isDownloading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(
+                      Icons.ios_share,
+                      color: AppColors.textPrimary,
+                    ),
+              label: Text(
+                l10n.knowledgeReaderShare,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
       body: _isLoading
           ? const Center(child: AgentLogoLoading())
           : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // File Content
+                  const Divider(height: 1, color: AppColors.divider),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 16),
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                     child: MarkdownBody(
-                      data: _preprocessMarkdown(_content),
+                      data: _preprocessMarkdown(_body),
                       selectable: true,
-                      styleSheet: MarkdownStyleSheet(
-                        h1: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            height: 1.5,
-                            letterSpacing: -0.5),
-                        h2: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            height: 1.5),
-                        p: const TextStyle(
-                            fontSize: 15,
-                            height: 1.8,
-                            color: AppColors.textSecondary),
-                        blockquote: const TextStyle(
-                            color: AppColors.primary,
-                            fontStyle: FontStyle.italic),
-                        blockquoteDecoration: BoxDecoration(
-                          color: AppColors.iconBgLight,
-                          borderRadius: BorderRadius.circular(8),
-                          border: const Border(
-                              left: BorderSide(
-                                  color: AppColors.primary, width: 4)),
-                        ),
-                      ),
+                      styleSheet: _markdownStyle,
                       onTapLink: (text, href, title) {
                         if (href != null && href.startsWith('fact:')) {
-                          final id = href.substring(5);
-                          _scrollToCardOrOpen(id);
+                          _scrollToCardOrOpen(href.substring(5));
                         }
                       },
                     ),
                   ),
-
-                  // Source Trace Section (only if exists)
                   if (_factIds.isNotEmpty) ...[
-                    const SizedBox(height: 24),
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(24)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    const Divider(height: 1, color: AppColors.divider),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                      child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 16),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    height: 1,
-                                    color: AppColors.divider, // Slate 200
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.link,
-                                          size: 12,
-                                          color: AppColors.textTertiary),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                          UserStorage.l10n.sourceTraceWithCount(
-                                              _uniqueFactIdCount),
-                                          style: const TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.textTertiary,
-                                              letterSpacing: 1.2)),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: 1,
-                                    color: AppColors.divider, // Slate 200
-                                  ),
-                                ),
-                              ],
+                          const Icon(
+                            Icons.link,
+                            size: 16,
+                            color: AppColors.textSecondary,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.sourceTraceWithCount(_uniqueFactIdCount),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              letterSpacing: 1,
+                              color: AppColors.textSecondary,
                             ),
                           ),
-                          _isLoadingCards
-                              ? const Center(
-                                  child: Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: CircularProgressIndicator(),
-                                ))
-                              : ListView.separated(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 0),
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: _sourceCards.length,
-                                  separatorBuilder: (c, i) =>
-                                      const SizedBox(height: 12),
-                                  itemBuilder: (context, index) {
-                                    final card = _sourceCards[index];
-                                    return _buildSourceCard(card);
-                                  },
-                                ),
-                          const SizedBox(height: 30), // Bottom padding
                         ],
                       ),
                     ),
+                    if (_isLoadingCards)
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    else
+                      ListView.separated(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _sourceCards.length,
+                        separatorBuilder: (c, i) => const SizedBox(height: 12),
+                        itemBuilder: (context, index) =>
+                            _buildSourceCard(_sourceCards[index]),
+                      ),
+                    const SizedBox(height: 24),
                   ],
                 ],
               ),
@@ -324,22 +336,19 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.divider, // Slate 300
+                  color: AppColors.textSecondary,
                   letterSpacing: 1.5,
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(Icons.circle,
-                  size: 4,
-                  color: Color(
-                      0xFFE2E8F0)), // Slate 200, slightly lighter separator
+              const Icon(Icons.circle, size: 4, color: AppColors.textSecondary),
               const SizedBox(width: 8),
               Text(
                 card.displayTime(UserStorage.l10n),
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.divider, // Slate 300
+                  color: AppColors.textSecondary,
                   letterSpacing: 1.5,
                 ),
               ),
@@ -373,3 +382,7 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
     );
   }
 }
+
+/// Seeded guide file names (EN and PT) shown under the neutral "Guia de uso".
+bool isLegacyGuideName(String name) =>
+    const {'memex guide.md', 'guia do memex.md'}.contains(name.toLowerCase());

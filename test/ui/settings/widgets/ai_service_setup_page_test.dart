@@ -147,6 +147,15 @@ void main() {
     );
   });
 
+  test('language setting search terms match supported locales', () {
+    final languageSetting = SettingsRegistry.allItems.firstWhere(
+      (item) => item.id == 'settings.language',
+    );
+
+    expect(languageSetting.keywords, isNot(contains('chinese')));
+    expect(languageSetting.keywords, isNot(contains('翻译')));
+  });
+
   testWidgets('official route opens the existing Memex auth flow', (
     tester,
   ) async {

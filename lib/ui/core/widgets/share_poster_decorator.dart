@@ -15,112 +15,47 @@ class SharePosterDecorator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.background,
-            AppColors.divider,
-          ],
-        ),
-      ),
-      padding: EdgeInsets.fromLTRB(24, 40, 24, showBranding ? 32 : 24),
+      color: AppColors.background,
+      padding: EdgeInsets.fromLTRB(20, 24, 20, showBranding ? 20 : 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 1. Core Content Area with floating premium shadow
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 24,
-                  offset: const Offset(0, 12),
-                ),
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.03),
-                  blurRadius: 40,
-                  offset: const Offset(0, 20),
-                ),
-              ],
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: content,
-          ),
-
-          // 2. Premium Attribution Footer (optional)
+          ClipRect(child: content),
           if (showBranding) ...[
-            const SizedBox(height: 32),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Left: Brand Section
-                  Row(
+            const SizedBox(height: 20),
+            const Divider(height: 1, color: AppColors.divider),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset('assets/icon.png', width: 32, height: 32),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(14),
-                          child: Image.asset('assets/icon.png',
-                              width: 48, height: 48),
+                      const Text(
+                        'Segunda Mente',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Gradient Text for Brand Name
-                          ShaderMask(
-                            blendMode: BlendMode.srcIn,
-                            shaderCallback: (bounds) => const LinearGradient(
-                              colors: [
-                                AppColors.primary,
-                                Color(0xFFA855F7),
-                                Color(0xFFEC4899),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ).createShader(bounds),
-                            child: const Text(
-                              'Segunda Mente',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: -0.5,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            UserStorage.l10n.appTagline,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.textSecondary,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        ],
+                      const SizedBox(height: 2),
+                      Text(
+                        UserStorage.l10n.appTagline,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ],

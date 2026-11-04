@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 
@@ -17,78 +16,47 @@ class QuoteCard extends StatelessWidget {
 
     return GlassCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 8),
-          // Opening quote
-          Text(
-            '\u201C',
-            style: GoogleFonts.imbue(
-              fontSize: 60,
-              fontWeight: FontWeight.w700,
-              height: 0.3,
-              color: AppColors.divider,
-            ),
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Container(
+        decoration: const BoxDecoration(
+          border: BorderDirectional(
+            start: BorderSide(color: AppColors.primary, width: 2),
           ),
-          const SizedBox(height: 8),
-
-          // Quote content
-          Text(
-            content,
-            style: GoogleFonts.inter(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              height: 1.5,
-              letterSpacing: 0.2,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          // Closing quote
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              '\u201D',
-              style: GoogleFonts.imbue(
-                fontSize: 60,
-                fontWeight: FontWeight.w700,
-                height: 0.3,
-                color: AppColors.divider,
+        ),
+        padding: const EdgeInsetsDirectional.only(start: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              content,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                height: 1.45,
+                color: AppColors.textPrimary,
               ),
             ),
-          ),
-
-          // Author + source
-          if (author != null || source != null) ...[
-            const SizedBox(height: 20),
-            if (author != null)
-              Text(
-                '— $author',
-                style: GoogleFonts.inter(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  height: 20 / 14,
-                  letterSpacing: -0.15,
-                  color: AppColors.textTertiary,
+            if (author != null || source != null) ...[
+              const SizedBox(height: 8),
+              if (author != null)
+                Text(
+                  author,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
-              ),
-            if (source != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Text(
+              if (source != null)
+                Text(
                   source,
-                  style: GoogleFonts.inter(
+                  style: const TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
                   ),
                 ),
-              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

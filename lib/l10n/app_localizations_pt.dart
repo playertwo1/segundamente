@@ -937,7 +937,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aiSetupProviderCredentialsDescription =>
-      'Adicione ou edite OpenAI, Anthropic, DeepSeek, Gemini, OpenRouter, Ollama ou outro provedor compatível.';
+      'Adicione ou edite OpenAI, Anthropic, Gemini, OpenRouter, Ollama ou outro provedor compatível.';
 
   @override
   String get modelRolesTitle => 'Escolha o modelo principal';
@@ -1016,7 +1016,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aiServiceCustomModelDescription =>
-      'Escolha isto primeiro se você já tem uma chave API da OpenAI, Anthropic, DeepSeek, Gemini ou outro provedor.';
+      'Escolha isto primeiro se você já tem uma chave API da OpenAI, Anthropic, Gemini ou outro provedor.';
 
   @override
   String get enableAiService => 'Conectar com Memex';
@@ -1174,26 +1174,26 @@ class AppLocalizationsPt extends AppLocalizations {
   String get organize => 'Organizar';
 
   @override
-  String get pkmCategoryProject => 'Project (projeto)';
+  String get pkmCategoryProject => 'Projetos';
 
   @override
   String get pkmCategoryProjectSubtitle => 'Curto prazo · Metas · Prazos';
 
   @override
-  String get pkmCategoryArea => 'Area (área)';
+  String get pkmCategoryArea => 'Áreas';
 
   @override
   String get pkmCategoryAreaSubtitle =>
       'Longo prazo · Responsabilidade · Padrões';
 
   @override
-  String get pkmCategoryResource => 'Resource (recurso)';
+  String get pkmCategoryResource => 'Recursos';
 
   @override
   String get pkmCategoryResourceSubtitle => 'Interesses · Inspiração · Reserva';
 
   @override
-  String get pkmCategoryArchive => 'Archive (arquivo)';
+  String get pkmCategoryArchive => 'Arquivo';
 
   @override
   String get pkmCategoryArchiveSubtitle => 'Concluído · Dormente · Referência';
@@ -1659,7 +1659,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get keyIdHelper =>
-      'Nomeie esta configuração, como deepseek ou work-gpt.';
+      'Nomeie esta configuração, como gemini ou work-gpt.';
 
   @override
   String get required => 'Obrigatório';
@@ -2585,7 +2585,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get demoWelcome =>
-      'Boas-vindas à Segunda Mente!\nVamos fazer uma tour rápida do que AI pode fazer pelos seus registros.';
+      'Boas-vindas à Segunda Mente!\nVeja três formas de registrar, organizar e reencontrar seus momentos.';
 
   @override
   String get demoTapAdd => 'Toque aqui para criar seu primeiro registro';
@@ -2615,7 +2615,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get demoDone => 'Comece a registrar sua vida.';
 
   @override
-  String get demoStartTour => 'Iniciar tour';
+  String get demoStartTour => 'Começar';
 
   @override
   String get demoGetStarted => 'Começar';
@@ -3518,4 +3518,315 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get captureButtonLabel => 'Registrar';
+
+  @override
+  String get lockUnlockTitle => 'Desbloquear a Segunda Mente';
+
+  @override
+  String get lockConfirmIdentity =>
+      'Confirme sua identidade para ver seus registros.';
+
+  @override
+  String get lockUseBiometrics => 'Usar biometria';
+
+  @override
+  String get lockUsePin => 'Usar PIN';
+
+  @override
+  String get lockEnterPin => 'Digite seu PIN';
+
+  @override
+  String lockWrongPin(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'PIN incorreto · $count tentativas restantes',
+      one: 'PIN incorreto · $count tentativa restante',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lockForgotPin => 'Esqueci meu PIN';
+
+  @override
+  String get lockForgotPinTitle => 'O PIN não tem recuperação';
+
+  @override
+  String get lockForgotPinBody =>
+      'Por segurança, o PIN não pode ser redefinido por aqui. Com a biometria ativa, entre por ela e troque o PIN em Configurações. Sem biometria, só limpar os dados do aplicativo no Android devolve o acesso, e isso apaga os registros locais (restaure um backup depois).';
+
+  @override
+  String get lockTempBlockedTitle => 'Acesso temporariamente bloqueado';
+
+  @override
+  String get lockTempBlockedBody =>
+      'Tente novamente em instantes para proteger seus registros.';
+
+  @override
+  String lockAvailableIn(int seconds) {
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: 'Acesso volta a ficar disponível em $seconds segundos',
+      one: 'Acesso volta a ficar disponível em $seconds segundo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lockDeleteDigit => 'Apagar dígito';
+
+  @override
+  String get lockBack => 'Voltar';
+
+  @override
+  String get locationContextSubtitle =>
+      'Use uma área aproximada para dar contexto aos seus registros.';
+
+  @override
+  String get locationTestingTitle => 'Buscando uma posição aproximada…';
+
+  @override
+  String get locationTestingHint => 'Isso pode levar alguns segundos.';
+
+  @override
+  String get locationCancelTest => 'Cancelar teste';
+
+  @override
+  String get locationTestAgain => 'Testar novamente';
+
+  @override
+  String get locationTestResultTitle => 'Resultado do teste';
+
+  @override
+  String get locationApproxNote =>
+      'A localização aproximada é usada apenas como contexto quando ativada.';
+
+  @override
+  String get locationOsmLine => 'Mapa e busca: OpenStreetMap';
+
+  @override
+  String get activityMenu => 'Atividade';
+
+  @override
+  String get activityHeading => 'Atividade em segundo plano';
+
+  @override
+  String get activityUpdatedNow => 'Atualizada agora';
+
+  @override
+  String get activitySectionRunning => 'Em execução';
+
+  @override
+  String get activitySectionFailed => 'Com erro';
+
+  @override
+  String activityStartedAgo(Object elapsed) {
+    return 'iniciado há $elapsed';
+  }
+
+  @override
+  String activityRetryProgress(int count, int max) {
+    return 'Tentativa $count de $max';
+  }
+
+  @override
+  String get activityFailedBody => 'Não foi possível concluir.';
+
+  @override
+  String get activityEmptyTitle => 'Nenhuma atividade recente';
+
+  @override
+  String get activityEmptyBody =>
+      'Quando a Segunda Mente organizar registros, você verá o andamento aqui.';
+
+  @override
+  String get activityBackToTimeline => 'Voltar à linha do tempo';
+
+  @override
+  String get activityLoadFailed => 'Não foi possível carregar a atividade.';
+
+  @override
+  String get activityTaskAddRecord => 'Organizar registro';
+
+  @override
+  String get activityTaskChat => 'Responder na conversa';
+
+  @override
+  String get activityTaskComment => 'Gerar comentário';
+
+  @override
+  String get activityTaskCharacter => 'Atividade do personagem';
+
+  @override
+  String get activityTaskOther => 'Tarefa em segundo plano';
+
+  @override
+  String get sendReviewTitle => 'Revisar antes de enviar';
+
+  @override
+  String get sendNothingWithoutConfirm =>
+      'Nada será enviado sem sua confirmação.';
+
+  @override
+  String get sendBack => 'Voltar';
+
+  @override
+  String get sendNow => 'Enviar agora';
+
+  @override
+  String get globalSearchTitle => 'Buscar';
+
+  @override
+  String get globalSearchHint => 'Buscar em tudo';
+
+  @override
+  String get globalSearchRecent => 'Buscas recentes';
+
+  @override
+  String get globalSearchClearRecent => 'Limpar recentes';
+
+  @override
+  String get globalSearchResults => 'Resultados';
+
+  @override
+  String globalSearchCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count registros',
+      one: '$count registro',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get globalSearchGroupCards => 'Cartões';
+
+  @override
+  String get globalSearchGroupKnowledge => 'Conhecimento';
+
+  @override
+  String get globalSearchNoResults => 'Nenhum registro encontrado';
+
+  @override
+  String get globalSearchNoResultsHint =>
+      'Tente outros termos ou confira a escrita.';
+
+  @override
+  String get globalSearchClearQuery => 'Limpar busca';
+
+  @override
+  String get globalSearchOpen => 'Buscar';
+
+  @override
+  String knowledgeReaderMeta(int minutes) {
+    return 'Conhecimento · Markdown · $minutes min';
+  }
+
+  @override
+  String get knowledgeReaderShare => 'Compartilhar';
+
+  @override
+  String demoStepProgress(int step) {
+    return 'Etapa $step de 3';
+  }
+
+  @override
+  String get demoContinue => 'Continuar';
+
+  @override
+  String get guides => 'Guias';
+
+  @override
+  String get noGuidesSaved => 'Nenhum guia salvo';
+
+  @override
+  String get userGuideTitle => 'Guia de uso';
+
+  @override
+  String get selectedFiles => 'Arquivos selecionados';
+
+  @override
+  String get plainTextFile => 'Arquivo de texto · TXT';
+
+  @override
+  String get reorderInsights => 'Reordenar';
+
+  @override
+  String get insightEmptyTitle => 'Ainda não há insights';
+
+  @override
+  String get insightEmptyBody =>
+      'Insights aparecerão aqui quando forem gerados a partir dos seus registros.';
+
+  @override
+  String get insightMapNoData =>
+      'Este insight ainda não tem locais para mostrar.';
+
+  @override
+  String get viewActivity => 'Ver atividade';
+
+  @override
+  String get importingTranscript => 'Importando transcrição…';
+
+  @override
+  String get transcriptImportFailed =>
+      'Não foi possível guardar esta transcrição.';
+
+  @override
+  String get markdownFileType => 'Arquivo Markdown';
+
+  @override
+  String sharePosterFormat(Object format) {
+    return 'Formato atual: $format';
+  }
+
+  @override
+  String sharePosterBranding(Object state) {
+    return 'Marca: $state';
+  }
+
+  @override
+  String get sharePosterVisible => 'exibida';
+
+  @override
+  String get sharePosterHidden => 'oculta';
+
+  @override
+  String get sharedFromMemex => 'Compartilhado pela Segunda Mente';
+
+  @override
+  String get voiceStart => 'Gravar áudio';
+
+  @override
+  String get voiceStop => 'Parar e transcrever';
+
+  @override
+  String get voiceRecording => 'Gravando… toque no microfone para parar';
+
+  @override
+  String get voiceTranscribing => 'Transcrevendo…';
+
+  @override
+  String get voiceMicDenied =>
+      'Sem permissão para usar o microfone. Ative-a nas configurações do aplicativo.';
+
+  @override
+  String get voiceNothingHeard => 'Não entendi nenhuma fala. Tente de novo.';
+
+  @override
+  String get youLabel => 'Você';
+
+  @override
+  String routineStreakDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dias seguidos',
+      one: '$count dia seguido',
+    );
+    return '$_temp0';
+  }
 }

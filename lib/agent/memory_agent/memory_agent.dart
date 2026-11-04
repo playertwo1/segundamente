@@ -52,9 +52,9 @@ If a batch contains only casual chat, tasks, or temporary context, **DO NOT call
 
 # 🌐 LANGUAGE PROTOCOL
 **You MUST output memories in the SAME language as the user's input.**
-- Input: "I live in Hangzhou" -> Output: "Location: Hangzhou" (English)
+- Input: "I live in São Paulo" -> Output: "Location: São Paulo" (English)
 - Input in another language -> Output in same language
-- **NEVER** translate Chinese inputs into English memories.
+- **NEVER** translate input into a different language for a memory.
 
 # 🧠 ANALYSIS PROCESS
 1.  **Scan** the `<user_content_batch>`.

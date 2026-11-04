@@ -11,7 +11,7 @@ class MoodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String moodName = data['mood_name'] ?? data['mood'] ?? 'Neutral';
+    final String moodName = data['mood_name'] ?? data['mood'] ?? '';
     final int intensity = (data['intensity'] as num?)?.toInt() ?? 5;
     final IconData moodIcon = _getMoodIcon(moodName);
 
@@ -40,7 +40,6 @@ class MoodCard extends StatelessWidget {
                 Text(
                   moodName,
                   style: const TextStyle(
-                    fontFamily: 'PingFang SC',
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
@@ -51,7 +50,6 @@ class MoodCard extends StatelessWidget {
                   Text(
                     data['trigger'],
                     style: const TextStyle(
-                      fontFamily: 'PingFang SC',
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textTertiary,

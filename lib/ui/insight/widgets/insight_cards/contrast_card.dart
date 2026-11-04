@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 
@@ -27,16 +26,8 @@ class ContrastCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,10 +37,10 @@ class ContrastCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontFamily: 'PingFang SC',
-                fontSize: 18,
+                fontFamily: 'Inter',
+                fontSize: 16,
                 fontWeight: FontWeight.w500,
-                height: 28 / 18,
+                height: 24 / 16,
                 letterSpacing: -0.15,
                 color: AppColors.textPrimary,
               ),
@@ -60,7 +51,7 @@ class ContrastCard extends StatelessWidget {
             Text(
               '\u201C${oldPerspective['content'] ?? ''}\u201D',
               style: const TextStyle(
-                fontFamily: 'PingFang SC',
+                fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 height: 20 / 14,
@@ -70,45 +61,40 @@ class ContrastCard extends StatelessWidget {
             ),
             const SizedBox(height: 14),
 
-            // New perspective box
+            // New perspective as an open editorial note.
             Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.iconBgLight,
-                borderRadius: BorderRadius.circular(16),
+              padding: const EdgeInsets.only(left: 12),
+              decoration: const BoxDecoration(
+                border: Border(left: BorderSide(color: AppColors.divider)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title row: emoji + text
-                  SizedBox(
-                    height: 20,
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/icon_edit_pen.svg',
-                          width: 16,
-                          height: 16,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            newPerspective['title'] ??
-                                UserStorage.l10n.newPerspective,
-                            style: const TextStyle(
-                              fontFamily: 'PingFang SC',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              height: 20 / 14,
-                              letterSpacing: -0.15,
-                              color: Color(0xFF155DFC),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.edit_outlined,
+                        size: 16,
+                        color: AppColors.textSecondary,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          newPerspective['title'] ??
+                              UserStorage.l10n.newPerspective,
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            height: 20 / 14,
+                            letterSpacing: -0.15,
+                            color: AppColors.textPrimary,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
 
@@ -116,12 +102,12 @@ class ContrastCard extends StatelessWidget {
                   Text(
                     newPerspective['content'] ?? '',
                     style: const TextStyle(
-                      fontFamily: 'PingFang SC',
+                      fontFamily: 'Inter',
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       height: 22.75 / 14,
                       letterSpacing: -0.15,
-                      color: Color(0xFF1E2939),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ],

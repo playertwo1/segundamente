@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/data/services/event_bus_service.dart';
 import 'package:memex/ui/character/view_models/persona_avatar_viewmodel.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
+import 'package:memex/ui/core/widgets/character_avatar.dart';
 import 'package:memex/ui/core/widgets/memex_brand_title.dart';
 import 'package:memex/ui/insight/view_models/insight_viewmodel.dart';
 import 'package:memex/ui/timeline/view_models/timeline_viewmodel.dart';
@@ -44,6 +46,13 @@ void main() {
     );
 
     expect(find.byType(MemexBrandTitle), findsOneWidget);
+    expect(find.byTooltip('Search'), findsOneWidget);
+    final userAvatar = tester.widget<CharacterAvatar>(
+      find.byWidgetPredicate(
+        (widget) => widget is CharacterAvatar && widget.size == 32,
+      ),
+    );
+    expect(userAvatar.backgroundColor, AppColors.textPrimary);
     timeline.notifyListeners();
     await tester.pump();
     expect(find.byType(MemexBrandTitle), findsOneWidget);

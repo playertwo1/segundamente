@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:memex/data/services/location_context_service.dart';
 import 'package:memex/domain/models/location_context_config.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
+import 'package:memex/ui/core/widgets/editorial_scaffold.dart';
 import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/utils/user_storage.dart';
 
@@ -38,6 +39,7 @@ class _LocationContextSettingsPageState
   bool _saving = false;
   bool _testing = false;
   bool _runningLocationAction = false;
+  int _testToken = 0;
   String? _testResult;
   CurrentLocationContext? _testContext;
 
@@ -84,7 +86,14 @@ class _LocationContextSettingsPageState
     }
   }
 
+  void _cancelTest() {
+    // The platform call cannot be aborted; its late answer is ignored.
+    _testToken++;
+    setState(() => _testing = false);
+  }
+
   Future<void> _testLocation() async {
+    final token = ++_testToken;
     setState(() {
       _testing = true;
       _testResult = null;
@@ -94,18 +103,18 @@ class _LocationContextSettingsPageState
       final loader = widget.loadCurrentContext ??
           LocationContextService.instance.getCurrentContext;
       final context = await loader(forceRefresh: true);
-      if (!mounted) return;
+      if (!mounted || token != _testToken) return;
       setState(() {
         _testResult = _formatLocationDebugResult(context);
         _testContext = context;
       });
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted || token != _testToken) return;
       setState(
         () => _testResult = UserStorage.l10n.locationTestFailed(e.toString()),
       );
     } finally {
-      if (mounted) {
+      if (mounted && token == _testToken) {
         setState(() => _testing = false);
       }
     }
@@ -229,13 +238,63 @@ class _LocationContextSettingsPageState
             onPressed: () => Navigator.pop(context, true),
             child: Text(
               UserStorage.l10n.discardButton,
-              style: const TextStyle(color: Colors.red),
+              style: const TextStyle(color: AppColors.danger),
             ),
           ),
         ],
       ),
     );
     return confirmed ?? false;
+  }
+
+  static const _granularities = [
+    LocationContextGranularity.city,
+    LocationContextGranularity.district,
+    LocationContextGranularity.neighborhood,
+    LocationContextGranularity.street,
+    LocationContextGranularity.full,
+  ];
+
+  String _granularityLabel(LocationContextGranularity g) {
+    final l10n = UserStorage.l10n;
+    switch (g) {
+      case LocationContextGranularity.city:
+        return l10n.granularityCity;
+      case LocationContextGranularity.district:
+        return l10n.granularityDistrict;
+      case LocationContextGranularity.neighborhood:
+        return l10n.granularityNeighborhood;
+      case LocationContextGranularity.street:
+        return l10n.granularityStreet;
+      case LocationContextGranularity.full:
+        return l10n.granularityFullAddress;
+    }
+  }
+
+  String _ttlLabel(int minutes) {
+    final l10n = UserStorage.l10n;
+    return minutes == 60 ? l10n.oneHour : l10n.minutesShort(minutes);
+  }
+
+  Future<void> _pickTtl() async {
+    final picked = await showModalBottomSheet<int>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final m in const [5, 15, 30, 60])
+              EditorialRow(
+                title: _ttlLabel(m),
+                selected: m == _config.ttlMinutes,
+                onTap: () => Navigator.pop(ctx, m),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (picked != null) _updateDraft(_config.copyWith(ttlMinutes: picked));
   }
 
   @override
@@ -250,199 +309,156 @@ class _LocationContextSettingsPageState
           Navigator.of(context).pop(result);
         }
       },
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        appBar: AppBar(
-          title: Text(l10n.locationContextTitle),
-          backgroundColor: AppColors.background,
-          surfaceTintColor: AppColors.background,
-        ),
-        bottomNavigationBar: _loading ? null : _saveBar(),
+      child: EditorialScaffold(
+        title: l10n.locationContextTitle,
+        subtitle: l10n.locationContextSubtitle,
+        bottom: _loading ? null : _saveBar(),
         body: _loading
             ? const Center(child: CircularProgressIndicator())
             : ListView(
-                padding: const EdgeInsets.all(16),
                 children: [
-                  _section(
-                    child: SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      secondary: const Icon(
-                        Icons.my_location_outlined,
-                        color: AppColors.primary,
-                      ),
-                      title: Text(l10n.locationContextAttachTitle),
-                      subtitle: Text(l10n.locationContextAttachDesc),
+                  const Divider(height: 1, color: AppColors.divider),
+                  EditorialRow(
+                    leading: const Icon(Icons.my_location_outlined),
+                    title: l10n.locationContextAttachTitle,
+                    subtitle: l10n.locationContextAttachDesc,
+                    trailing: Switch(
                       value: _config.enabled,
                       onChanged: (value) =>
                           _updateDraft(_config.copyWith(enabled: value)),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  _section(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.reverseGeocodingProvider,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        DropdownButtonFormField<GeocodingProvider>(
-                          key: ValueKey(_config.provider),
-                          initialValue: _config.provider,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            isDense: true,
-                          ),
-                          selectedItemBuilder: (_) => [
-                            const Text('OpenStreetMap / Nominatim'),
-                          ],
-                          items: [
-                            const DropdownMenuItem(
-                              value: GeocodingProvider.openStreetMap,
-                              child: Text('OpenStreetMap / Nominatim'),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            if (value == null) return;
-                            _updateDraft(_config.copyWith(provider: value));
-                          },
-                        ),
-                      ],
+                  EditorialSectionLabel(l10n.contextGranularity),
+                  const Divider(height: 1, color: AppColors.divider),
+                  for (final g in _granularities)
+                    EditorialRow(
+                      title: _granularityLabel(g),
+                      selected: _config.granularity == g,
+                      onTap: () =>
+                          _updateDraft(_config.copyWith(granularity: g)),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _section(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.contextGranularity,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        DropdownButtonFormField<LocationContextGranularity>(
-                          key: ValueKey(_config.granularity),
-                          initialValue: _config.granularity,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            isDense: true,
-                          ),
-                          items: [
-                            DropdownMenuItem(
-                              value: LocationContextGranularity.city,
-                              child: Text(l10n.granularityCity),
-                            ),
-                            DropdownMenuItem(
-                              value: LocationContextGranularity.district,
-                              child: Text(l10n.granularityDistrict),
-                            ),
-                            DropdownMenuItem(
-                              value: LocationContextGranularity.neighborhood,
-                              child: Text(l10n.granularityNeighborhood),
-                            ),
-                            DropdownMenuItem(
-                              value: LocationContextGranularity.street,
-                              child: Text(l10n.granularityStreet),
-                            ),
-                            DropdownMenuItem(
-                              value: LocationContextGranularity.full,
-                              child: Text(l10n.granularityFullAddress),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            if (value == null) return;
-                            _updateDraft(_config.copyWith(granularity: value));
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          l10n.locationFreshness,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        DropdownButtonFormField<int>(
-                          key: ValueKey(_config.ttlMinutes),
-                          initialValue: _config.ttlMinutes,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            isDense: true,
-                          ),
-                          items: [
-                            DropdownMenuItem(
-                              value: 5,
-                              child: Text(l10n.minutesShort(5)),
-                            ),
-                            DropdownMenuItem(
-                              value: 15,
-                              child: Text(l10n.minutesShort(15)),
-                            ),
-                            DropdownMenuItem(
-                              value: 30,
-                              child: Text(l10n.minutesShort(30)),
-                            ),
-                            DropdownMenuItem(
-                              value: 60,
-                              child: Text(l10n.oneHour),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            if (value == null) return;
-                            _updateDraft(_config.copyWith(ttlMinutes: value));
-                          },
-                        ),
-                      ],
+                  EditorialSectionLabel(l10n.locationFreshness),
+                  const Divider(height: 1, color: AppColors.divider),
+                  EditorialRow(
+                    leading: const Icon(Icons.schedule_outlined),
+                    title: _ttlLabel(_config.ttlMinutes),
+                    trailing: const Icon(
+                      Icons.chevron_right,
+                      color: AppColors.textSecondary,
                     ),
+                    onTap: _pickTtl,
                   ),
-                  const SizedBox(height: 16),
-                  _section(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FilledButton.icon(
-                          onPressed: _testing ? null : _testLocation,
-                          icon: _testing
-                              ? const SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Icon(Icons.location_searching),
-                          label: Text(l10n.testCurrentLocation),
-                        ),
-                        if (_testContext != null) ...[
-                          const SizedBox(height: 16),
-                          _locationStatusFeedback(_testContext!),
-                        ],
-                        if (_testResult != null) ...[
-                          const SizedBox(height: 12),
-                          SelectableText(
-                            _testResult!,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.textSecondary,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
+                  EditorialSectionLabel(l10n.reverseGeocodingProvider),
+                  const Divider(height: 1, color: AppColors.divider),
+                  EditorialRow(
+                    leading: const Icon(Icons.place_outlined),
+                    title: _providerLabel(_config.provider),
+                    subtitle: l10n.locationOsmLine,
                   ),
+                  const SizedBox(height: 8),
+                  _testArea(),
+                  const SizedBox(height: 24),
                 ],
               ),
       ),
+    );
+  }
+
+  Widget _testArea() {
+    final l10n = UserStorage.l10n;
+    if (_testing) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+        child: Column(
+          children: [
+            const SizedBox(
+              width: 56,
+              height: 56,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              l10n.locationTestingTitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.locationTestingHint,
+              style: const TextStyle(color: AppColors.textSecondary),
+            ),
+            TextButton(
+              onPressed: _cancelTest,
+              style: TextButton.styleFrom(minimumSize: const Size(160, 48)),
+              child: Text(
+                l10n.locationCancelTest,
+                style: const TextStyle(color: AppColors.primary, fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    final tested = _testContext != null || _testResult != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (_testContext != null) ...[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            child: Text(
+              l10n.locationTestResultTitle,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+            child: _locationStatusFeedback(_testContext!),
+          ),
+        ],
+        if (_testResult != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+            child: SelectableText(
+              _testResult!,
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppColors.textSecondary,
+                height: 1.4,
+              ),
+            ),
+          ),
+        const SizedBox(height: 8),
+        const Divider(height: 1, color: AppColors.divider),
+        EditorialRow(
+          leading: const Icon(Icons.location_searching),
+          title: tested ? l10n.locationTestAgain : l10n.testCurrentLocation,
+          titleColor: AppColors.primary,
+          onTap: _testLocation,
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+          child: Text(
+            l10n.locationApproxNote,
+            style: const TextStyle(
+              fontSize: 13,
+              color: AppColors.textSecondary,
+              height: 1.4,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -519,7 +535,7 @@ class _LocationContextSettingsPageState
     if (context.status == 'disabled') {
       return _LocationStatusFeedback(
         icon: Icons.location_disabled_outlined,
-        color: Colors.grey,
+        color: AppColors.textSecondary,
         title: l10n.locationStatusDisabledTitle,
         message: l10n.locationStatusDisabledBody,
       );
@@ -527,7 +543,7 @@ class _LocationContextSettingsPageState
     if (reason.contains('service is disabled')) {
       return _LocationStatusFeedback(
         icon: Icons.location_off_outlined,
-        color: Colors.orange,
+        color: AppColors.warning,
         title: l10n.locationStatusServiceDisabledTitle,
         message: l10n.locationStatusServiceDisabledBody,
         action: _LocationGuidanceAction.openLocationSettings,
@@ -538,7 +554,7 @@ class _LocationContextSettingsPageState
     if (reason.contains('permanently denied')) {
       return _LocationStatusFeedback(
         icon: Icons.app_settings_alt_outlined,
-        color: Colors.orange,
+        color: AppColors.warning,
         title: l10n.locationStatusPermissionForeverTitle,
         message: l10n.locationStatusPermissionForeverBody,
         action: _LocationGuidanceAction.openAppSettings,
@@ -560,7 +576,7 @@ class _LocationContextSettingsPageState
     if (context.isFresh && _looksApproximate(context)) {
       return _LocationStatusFeedback(
         icon: Icons.adjust_outlined,
-        color: Colors.orange,
+        color: AppColors.warning,
         title: l10n.locationStatusApproximateTitle,
         message: l10n.locationStatusApproximateBody,
         action: _LocationGuidanceAction.openAppSettings,
@@ -571,7 +587,7 @@ class _LocationContextSettingsPageState
     if (context.isFresh && context.address == null) {
       return _LocationStatusFeedback(
         icon: Icons.gps_fixed_outlined,
-        color: Colors.orange,
+        color: AppColors.warning,
         title: l10n.locationStatusGeocodeUnavailableTitle,
         message: l10n.locationStatusGeocodeUnavailableBody,
       );
@@ -579,7 +595,7 @@ class _LocationContextSettingsPageState
     if (context.isFresh) {
       return _LocationStatusFeedback(
         icon: Icons.check_circle_outline,
-        color: Colors.green,
+        color: AppColors.success,
         title: l10n.locationStatusSuccessTitle,
         message: l10n.locationStatusSuccessBody,
       );
@@ -587,7 +603,7 @@ class _LocationContextSettingsPageState
 
     return _LocationStatusFeedback(
       icon: Icons.info_outline,
-      color: Colors.orange,
+      color: AppColors.warning,
       title: l10n.locationStatusUnavailableTitle,
       message: l10n.locationStatusUnavailableBody,
     );
@@ -621,64 +637,21 @@ class _LocationContextSettingsPageState
   Widget _saveBar() {
     final l10n = UserStorage.l10n;
     final hasChanges = _hasChanges;
-    return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.textSecondary.withValues(alpha: 0.08),
-              blurRadius: 16,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          child: FilledButton.icon(
-            onPressed: hasChanges && !_saving ? _saveChanges : null,
-            icon: _saving
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : Icon(hasChanges ? Icons.save_outlined : Icons.check),
-            label: Text(
-              _saving
-                  ? '${l10n.save}...'
-                  : hasChanges
-                      ? l10n.save
-                      : l10n.saved,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _section({required Widget child}) {
-    final borderRadius = BorderRadius.circular(16);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: borderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.textSecondary.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Material(
-        color: AppColors.cardBackground,
-        borderRadius: borderRadius,
-        clipBehavior: Clip.antiAlias,
-        child: Padding(padding: const EdgeInsets.all(20), child: child),
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: FilledButton(
+        onPressed: hasChanges && !_saving ? _saveChanges : null,
+        child: _saving
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.onPrimary,
+                ),
+              )
+            : Text(hasChanges ? l10n.save : l10n.saved),
       ),
     );
   }

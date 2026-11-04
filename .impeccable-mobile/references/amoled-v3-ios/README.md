@@ -2,7 +2,7 @@
 
 Esta versão substitui as pranchas anteriores após a revisão do usuário. O conjunto foi refeito olhando capturas oficiais do Apple Journal, Day One e Things e usando-as como referência visual direta de hierarquia, densidade, espaçamento, cabeçalhos e listas. As capturas oficiais foram usadas durante a geração como inspiração, não foram copiadas para este repositório.
 
-**Estado:** direção visual aprovada pelo dono em 2026-11-03 (D-017); aplicação inicial do tema em andamento na fase F5V. As pranchas 11–14 ampliam a cobertura de captura, tipos de registro, perfil e avisos.
+**Estado:** direção visual aprovada pelo dono em 2026-11-03 (D-017); aplicação inicial do tema em andamento na fase F5V. As pranchas 11–23 ampliam a cobertura de captura, registros, perfil, bloqueio, busca, insights, atividade, compartilhamento, onboarding, leitura, importação e localização.
 
 ## Direção visual
 
@@ -40,6 +40,15 @@ Esta versão substitui as pranchas anteriores após a revisão do usuário. O co
 | `12-timeline-card-types.png` | Tarefa, evento, métrica, humor, pessoa, lugar, link e citação |
 | `13-timeline-card-types-2.png` | Galeria, transação, progresso, avaliação, rotina, conversa resumida e detalhe de métrica |
 | `14-companion-profile-states.png` | Chat com personagem, perfil em folha, central de ações e indicador do agente |
+| `15-app-lock.png` | Desbloqueio biométrico, PIN incorreto e bloqueio temporário |
+| `16-global-search.png` | Busca recente, resultados agrupados e estado sem resultados |
+| `17-insight-variants.png` | Insights em gráfico, mapa de conexões, timeline e narrativa |
+| `18-agent-activity.png` | Atividade de agentes em execução, erro e estado vazio |
+| `19-share-poster.png` | Prévia do pôster e folha de compartilhamento do sistema |
+| `20-welcome-tour.png` | Três passos do tour inicial e guia em Conhecimento |
+| `21-knowledge-reader.png` | Lista de guias e leitor de arquivo Markdown com metadados e ações |
+| `22-import-data.png` | Seleção DOCX/TXT, prévia, consentimento e progresso de importação |
+| `23-location-context.png` | Preferências de localização, teste e resultado via OpenStreetMap |
 
 ## Limites
 
@@ -51,3 +60,12 @@ São referências geradas, não capturas nem implementação do app. Textos e re
 - **12 — Tipos de registro (1):** todos os tipos usam a mesma linha editorial aberta; cada um ganha só um dado ou miniatura própria (por exemplo, métrica = número + mini-gráfico), sem caixa repetida.
 - **13 — Tipos de registro (2) e detalhe:** galerias usam uma faixa de miniaturas; progresso, avaliação e rotina usam indicadores compactos. O detalhe de métrica prioriza gráfico e origem, com Editar/Mover/Excluir como ações textuais.
 - **14 — Companheiro, perfil e avisos:** a conversa identifica o personagem; o perfil agrupa destinos em linhas; avisos mostram uma ação textual cada, enquanto “Organizando…” fica como indicador discreto separado do sino e do botão `+`.
+- **15 — Bloqueio do app:** biometria e PIN são caminhos explícitos; erro informa tentativas restantes e o bloqueio mostra o tempo de espera.
+- **16 — Busca global:** recentes ficam em linhas simples; resultados são agrupados por cartões, Conhecimento e Memória; busca vazia explica como continuar.
+- **17 — Variantes de insight:** gráfico mostra tendência; mapa, timeline e narrativa são formatos possíveis. A implementação atual não tem dados nem fábrica para um grafo de conexões; o mapa geográfico existente só aparece quando há coordenadas reais.
+- **18 — Atividade de agentes:** estados em execução e erro têm rótulo textual e ação; a tela vazia explica quando a atividade aparecerá.
+- **19 — Compartilhamento:** a prévia do pôster é mostrada antes da folha nativa; a implementação usa os controles atuais, sem incluir data, editar texto ou compartilhar por proximidade.
+- **20 — Tour:** três passos curtos explicam captura, organização e privacidade; o guia permanece encontrável em Conhecimento sem alterar o arquivo do usuário.
+- **21 — Leitor de Conhecimento:** Markdown é apresentado como leitura editorial com título, metadados, tags textuais e ações no rodapé.
+- **22 — Importação:** a referência mostra DOCX/TXT, mas a F2-03 atual permite somente TXT. A interface lista arquivos TXT, pede confirmação explícita e apresenta progresso/falha; DOCX fica adiado.
+- **23 — Localização:** granularidade, frescor, teste e resultado são configuráveis; mapa e busca identificam apenas OpenStreetMap.

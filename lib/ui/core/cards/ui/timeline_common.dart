@@ -126,7 +126,6 @@ class TimelineTag extends StatelessWidget {
     return Text(
       '#$label',
       style: TextStyle(
-        fontFamily: 'PingFang SC',
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: TimelineTheme.colors.primary,

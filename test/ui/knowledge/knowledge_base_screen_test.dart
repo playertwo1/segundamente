@@ -129,4 +129,83 @@ void main() {
     await tester.tap(find.byTooltip(UserStorage.l10n.navMenu));
     expect(menuTaps, 1);
   });
+
+  testWidgets('groups existing guide files without changing their content',
+      (tester) async {
+    final viewModel = KnowledgeBaseViewModel(router: MemexRouter())
+      ..categoryCounts = {
+        'Projects': 0,
+        'Areas': 0,
+        'Resources': 0,
+        'Archives': 0,
+      }
+      ..additionalRootFolders = [
+        {
+          'name': 'Guias',
+          'path': 'Guias',
+          'is_directory': true,
+          'item_count': 1,
+        },
+      ]
+      ..rootLevelFiles = [
+        {
+          'name': 'Anotação.md',
+          'path': 'Anotação.md',
+          'is_directory': false,
+        },
+      ]
+      ..resourcesFiles = [
+        {
+          'name': 'Memex Guide.md',
+          'path': 'Resources/Memex Guide.md',
+          'is_directory': false,
+        },
+      ]
+      ..recentFiles = [
+        {
+          'name': 'Memex Guide.md',
+          'path': 'Resources/Memex Guide.md',
+          'is_directory': false,
+        },
+      ];
+    addTearDown(viewModel.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp(home: KnowledgeBaseScreen(viewModel: viewModel)),
+    );
+
+    expect(find.text(UserStorage.l10n.guides.toUpperCase()), findsOneWidget);
+    expect(find.text(UserStorage.l10n.userGuideTitle), findsOneWidget);
+    expect(find.text('Memex Guide.md'), findsNothing);
+    expect(find.text('Guias'), findsOneWidget);
+    expect(find.text('Anotação.md'), findsOneWidget);
+    expect(find.text(UserStorage.l10n.noRecentChangesInThreeDays), findsOneWidget);
+    expect(find.text(UserStorage.l10n.noGuidesSaved), findsNothing);
+  });
+
+  testWidgets('recent files named like a guide stay listed outside GUIAS',
+      (tester) async {
+    final viewModel = KnowledgeBaseViewModel(router: MemexRouter())
+      ..categoryCounts = {
+        'Projects': 0,
+        'Areas': 0,
+        'Resources': 0,
+        'Archives': 0,
+      }
+      ..recentFiles = [
+        {
+          'name': 'Guia de viagem.md',
+          'path': 'Areas/Guia de viagem.md',
+          'is_directory': false,
+        },
+      ];
+    addTearDown(viewModel.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp(home: KnowledgeBaseScreen(viewModel: viewModel)),
+    );
+
+    expect(find.text('Guia de viagem.md'), findsOneWidget);
+    expect(find.text(UserStorage.l10n.noGuidesSaved), findsOneWidget);
+  });
 }

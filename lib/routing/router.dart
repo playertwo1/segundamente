@@ -2,6 +2,11 @@
 // Compass-aligned: GoRouter for declarative routing.
 // ViewModels are created in route builders and passed to screens.
 
+import 'package:memex/ui/knowledge/widgets/knowledge_file_page.dart';
+import 'package:memex/ui/search/view_models/global_search_viewmodel.dart';
+import 'package:memex/ui/search/widgets/global_search_screen.dart';
+import 'package:memex/ui/agent_activity/view_models/agent_activity_viewmodel.dart';
+import 'package:memex/ui/agent_activity/widgets/agent_activity_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +48,26 @@ GoRouter createAppRouter(
           onUserCreated: () {
             context.go(AppRoutes.home);
           },
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.search,
+        builder: (context, state) => GlobalSearchScreen(
+          viewModel: GlobalSearchViewModel(router: context.read<MemexRouter>()),
+          onOpenCard: (card) =>
+              context.push('${AppRoutes.timelineCardDetail}/${card.id}'),
+          onOpenFile: (path) => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => KnowledgeFilePage(filePath: path),
+            ),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.activity,
+        builder: (context, state) => AgentActivityScreen(
+          viewModel: AgentActivityViewModel(router: context.read<MemexRouter>()),
+          onBackToTimeline: () => context.go(AppRoutes.home),
         ),
       ),
       GoRoute(

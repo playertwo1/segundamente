@@ -19,6 +19,18 @@ class RouteMapCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (locations.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Text(
+          UserStorage.l10n.insightMapNoData,
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppColors.textSecondary,
+          ),
+        ),
+      );
+    }
     if (isDetail) {
       return _buildDetailCard(context);
     }
@@ -44,16 +56,9 @@ class RouteMapCard extends StatelessWidget {
       height: height,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.background),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 16,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: const Border(
+          bottom: BorderSide(color: AppColors.divider),
+        ),
       ),
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -62,24 +67,17 @@ class RouteMapCard extends StatelessWidget {
           // Header
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF3E8FF), // Light purple bg
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(
-                  Icons.near_me, // Or footprint icon
-                  color: Color(0xFF9333EA), // Purple
-                  size: 24,
-                ),
+              const Icon(
+                Icons.near_me_outlined,
+                color: AppColors.textSecondary,
+                size: 24,
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -99,10 +97,8 @@ class RouteMapCard extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(
-                    0xFFFAFAFA), // Light grey inner bg like dotted paper
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.background),
+                color: AppColors.background,
+                border: Border.all(color: AppColors.divider),
               ),
               child: CustomPaint(
                 painter: _RoutePainter(locations),
@@ -126,58 +122,71 @@ class _RoutePainter extends CustomPainter {
     if (locations.isEmpty) return;
 
     final paint = Paint()
-      ..color = const Color(0xFF8B5CF6) // Purple
+      ..color = AppColors.textPrimary
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
 
     final dotPaint = Paint()
-      ..color = const Color(0xFF8B5CF6)
+      ..color = AppColors.textPrimary
       ..style = PaintingStyle.fill;
 
     final whitePaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.background
       ..style = PaintingStyle.fill;
 
-    // Define generic layout points
-    // Start: Bottom Left (15%, 85%)
-    // End: Top Right (85%, 30%)
-    // Control points to make an S curve
+    final latitudes = locations.map((location) => location.point.latitude);
+    final longitudes = locations.map((location) => location.point.longitude);
+    final minLatitude = latitudes.reduce((a, b) => a < b ? a : b);
+    final maxLatitude = latitudes.reduce((a, b) => a > b ? a : b);
+    final minLongitude = longitudes.reduce((a, b) => a < b ? a : b);
+    final maxLongitude = longitudes.reduce((a, b) => a > b ? a : b);
+    const padding = 24.0;
+    final mapWidth =
+        (size.width - padding * 2).clamp(0.0, double.infinity).toDouble();
+    final mapHeight =
+        (size.height - padding * 2).clamp(0.0, double.infinity).toDouble();
+    final latitudeRange = maxLatitude - minLatitude;
+    final longitudeRange = maxLongitude - minLongitude;
+    final points = locations.map((location) {
+      final x = longitudeRange == 0
+          ? size.width / 2
+          : padding +
+              (location.point.longitude - minLongitude) /
+                  longitudeRange *
+                  mapWidth;
+      final y = latitudeRange == 0
+          ? size.height / 2
+          : padding +
+              (maxLatitude - location.point.latitude) /
+                  latitudeRange *
+                  mapHeight;
+      return Offset(x, y);
+    }).toList();
 
-    final startOffset = Offset(size.width * 0.15, size.height * 0.8);
-    final endOffset = Offset(size.width * 0.85, size.height * 0.35);
-
-    // Draw Dashed Path
     final path = Path();
-    path.moveTo(startOffset.dx, startOffset.dy);
-
-    // Simple cubic bezier from start to end
-    // Using literal control points for a smooth S-curve
-    path.cubicTo(
-      size.width * 0.4, size.height * 0.2, // CP1: High up
-      size.width * 0.6, size.height * 0.6, // CP2: Lower
-      endOffset.dx, endOffset.dy,
-    );
-
-    // Draw dashed line
+    path.moveTo(points.first.dx, points.first.dy);
+    for (final point in points.skip(1)) {
+      path.lineTo(point.dx, point.dy);
+    }
     _drawDashedPath(canvas, path, paint);
 
-    // Draw Start Point
-    canvas.drawCircle(startOffset, 6, dotPaint);
-    canvas.drawCircle(startOffset, 3, whitePaint); // Hollow effect look
-
-    // Draw labels
-    _drawLabel(canvas, locations.first.name ?? UserStorage.l10n.startPoint,
-        startOffset,
-        isStart: true);
-
-    // Draw End Point
-    canvas.drawCircle(endOffset, 8, dotPaint);
-
-    // Draw End Label (Bubble style)
+    for (var index = 0; index < points.length; index++) {
+      final point = points[index];
+      canvas.drawCircle(point, index == points.length - 1 ? 7 : 6, dotPaint);
+      if (index == 0) canvas.drawCircle(point, 3, whitePaint);
+    }
+    _drawLabel(
+      canvas,
+      locations.first.name ?? UserStorage.l10n.startPoint,
+      points.first,
+    );
     if (locations.length > 1) {
       _drawBubbleLabel(
-          canvas, locations.last.name ?? UserStorage.l10n.endPoint, endOffset);
+        canvas,
+        locations.last.name ?? UserStorage.l10n.endPoint,
+        points.last,
+      );
     }
   }
 
@@ -199,8 +208,7 @@ class _RoutePainter extends CustomPainter {
     }
   }
 
-  void _drawLabel(Canvas canvas, String text, Offset offset,
-      {bool isStart = false}) {
+  void _drawLabel(Canvas canvas, String text, Offset offset) {
     final textSpan = TextSpan(
       text: text,
       style: const TextStyle(
@@ -225,12 +233,7 @@ class _RoutePainter extends CustomPainter {
       const Radius.circular(12),
     );
 
-    final bgPaint = Paint()..color = Colors.white;
-    final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.05)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
-
-    canvas.drawRRect(bgRect.shift(const Offset(0, 2)), shadowPaint);
+    final bgPaint = Paint()..color = AppColors.surface;
     canvas.drawRRect(bgRect, bgPaint);
 
     textPainter.paint(canvas, Offset(x, y));
@@ -240,7 +243,7 @@ class _RoutePainter extends CustomPainter {
     final textSpan = TextSpan(
       text: text,
       style: const TextStyle(
-        color: Colors.white,
+        color: AppColors.textPrimary,
         fontSize: 12,
         fontWeight: FontWeight.bold,
       ),
@@ -262,7 +265,7 @@ class _RoutePainter extends CustomPainter {
       const Radius.circular(8),
     );
 
-    final bgPaint = Paint()..color = AppColors.primary; // Indigo bubble
+    final bgPaint = Paint()..color = AppColors.surface;
 
     canvas.drawRRect(bgRect, bgPaint);
 

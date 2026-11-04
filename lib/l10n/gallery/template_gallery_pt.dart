@@ -47,8 +47,7 @@ const timelineTemplateGallerySectionsPt = [
           'messages': [
             {
               'sender': 'Assistente de IA',
-              'text':
-                  'Você foi muito produtivo hoje! O que você fez?',
+              'text': 'Você foi muito produtivo hoje! O que você fez?',
               'isMe': false,
             },
             {
@@ -98,7 +97,7 @@ const timelineTemplateGallerySectionsPt = [
         title: 'Momento do crepúsculo',
         data: {
           'image_url': 'https://picsum.photos/600/400?random=30',
-          'location': 'Bund · Xangai',
+          'location': 'Parque Ibirapuera · São Paulo',
         },
       ),
       TemplateGalleryItem(
@@ -186,7 +185,8 @@ const timelineTemplateGallerySectionsPt = [
         data: {
           'mood_name': 'Excited',
           'intensity': 8,
-          'trigger': 'Novo projeto arrancou e a equipa está altamente motivada.',
+          'trigger':
+              'Novo projeto arrancou e a equipa está altamente motivada.',
         },
       ),
       TemplateGalleryItem(
@@ -212,7 +212,7 @@ const timelineTemplateGallerySectionsPt = [
         data: {
           'start_time': '2026-03-10T14:00:00',
           'end_time': '2026-03-10T16:00:00',
-          'location': 'Edifício A, Parque Tecnológico, Nova Área de Pudong, Xangai',
+          'location': 'Sala Horizonte · Centro, São Paulo',
         },
       ),
       TemplateGalleryItem(
@@ -235,7 +235,10 @@ const timelineTemplateGallerySectionsPt = [
           'subtasks': [
             {'title': 'Relatório de análise competitiva', 'completed': true},
             {'title': 'Síntese da entrevista do usuário', 'completed': true},
-            {'title': 'Primeiro rascunho do documento de requisitos', 'completed': false},
+            {
+              'title': 'Primeiro rascunho do documento de requisitos',
+              'completed': false
+            },
             {'title': 'Reunião de revisão do PRD', 'completed': false},
           ],
         },
@@ -275,7 +278,7 @@ const timelineTemplateGallerySectionsPt = [
         templateId: 'person',
         title: 'Contato',
         data: {
-          'name': 'Alex Zhang',
+          'name': 'Ana Martins',
           'relation': 'Gerente de Produto',
           'status': 'online',
         },
@@ -285,10 +288,10 @@ const timelineTemplateGallerySectionsPt = [
         templateId: 'place',
         title: 'Livraria favorita',
         data: {
-          'name': 'Livraria Tsutaya · Templo Jing\'an',
-          'address': '400 Taixing Rd, distrito de Jing\'an, Xangai',
-          'lat': 31.2304,
-          'lng': 121.4537,
+          'name': 'Livraria Cultura · Conjunto Nacional',
+          'address': 'Avenida Paulista, 2073 · São Paulo',
+          'lat': -23.5572,
+          'lng': -46.6603,
         },
       ),
       TemplateGalleryItem(
@@ -312,13 +315,13 @@ const timelineTemplateGallerySectionsPt = [
         templateId: 'transaction',
         title: 'Gastos com almoço',
         data: {
-          'merchant': 'Casa de macarrão Hutong',
-          'amount': '¥ 68.00',
-          'location': 'Rua Gulou, Pequim',
+          'merchant': 'Cantina Central',
+          'amount': r'R$ 68,00',
+          'location': 'Rua Augusta · São Paulo',
           'items': [
-            {'name': 'Assinatura Zhajiangmian (grande)', 'amount': '¥ 38'},
-            {'name': 'Ovo marinado', 'amount': '¥ 8'},
-            {'name': 'Iogurte gelado de Pequim', 'amount': '¥ 22'},
+            {'name': 'Prato do dia', 'amount': r'R$ 38,00'},
+            {'name': 'Suco natural', 'amount': r'R$ 8,00'},
+            {'name': 'Sobremesa', 'amount': r'R$ 22,00'},
           ],
         },
       ),
@@ -403,7 +406,10 @@ const insightTemplateGalleryItemsPt = [
         {'label': 'Sol', 'value': 6.5},
         {'label': 'seg', 'value': 7.5},
       ],
-      'highlight_info': {'title': '8,5 pontos', 'subtitle': 'Destaque de sexta-feira'},
+      'highlight_info': {
+        'title': '8,5 pontos',
+        'subtitle': 'Destaque de sexta-feira'
+      },
       'color': '#6366F1',
     },
   ),
@@ -499,7 +505,8 @@ const insightTemplateGalleryItemsPt = [
       'emotion': 'neutral',
       'context_section': {
         'title': 'Pensamento original',
-        'content': 'Estou muito ocupado e não tenho tempo para aprender coisas novas.',
+        'content':
+            'Estou muito ocupado e não tenho tempo para aprender coisas novas.',
         'icon': '😫'
       },
       'highlight_section': {
@@ -531,11 +538,11 @@ const insightTemplateGalleryItemsPt = [
     data: {
       'title': 'Pegadas',
       'locations': [
-        {'lat': 39.9042, 'lng': 116.4074, 'name': 'Beijing'},
-        {'lat': 31.2304, 'lng': 121.4737, 'name': 'Shanghai'},
+        {'lat': -23.5505, 'lng': -46.6333, 'name': 'São Paulo'},
+        {'lat': -22.9056, 'lng': -47.0608, 'name': 'Campinas'},
       ],
       'info_title': 'Uma história de duas cidades',
-      'info_detail': 'Viajando entre Pequim e Xangai esta semana',
+      'info_detail': 'Entre São Paulo e Campinas esta semana',
     },
   ),
   TemplateGalleryItem(

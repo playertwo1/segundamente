@@ -10,7 +10,6 @@ import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/ui/core/cards/native_widget_factory.dart';
 import 'package:memex/ui/core/widgets/html_webview_card.dart';
 import 'package:memex/utils/user_storage.dart';
-import 'package:memex/ui/insight/widgets/insight_preview_data.dart';
 
 /// Insight screen - global knowledge analytics. Receives [viewModel] from parent (Compass-style).
 class InsightScreen extends StatefulWidget {
@@ -89,37 +88,28 @@ class _InsightScreenState extends State<InsightScreen> {
 
   Widget _buildPinButton(InsightViewModel vm, KnowledgeInsightCard item) {
     final isPinning = vm.pinningIds.contains(item.id);
-    return GestureDetector(
-      onTap: () => _onTogglePin(vm, item),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: isPinning
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                ),
-              )
-            : Icon(
-                item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-                size: 20,
-                color:
-                    item.isPinned ? AppColors.primary : AppColors.textTertiary,
+    return IconButton(
+      tooltip: item.isPinned
+          ? UserStorage.l10n.unpinned
+          : UserStorage.l10n.pinnedStyle,
+      onPressed: isPinning ? null : () => _onTogglePin(vm, item),
+      constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+      icon: isPinning
+          ? const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(AppColors.textPrimary),
               ),
-      ),
+            )
+          : Icon(
+              item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+              size: 20,
+              color:
+                  item.isPinned ? AppColors.primary : AppColors.textSecondary,
+            ),
     );
   }
 
@@ -131,96 +121,65 @@ class _InsightScreenState extends State<InsightScreen> {
           color: Colors.black.withValues(alpha: 0.6),
           child: Stack(
             children: [
-              // Center actions
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Sort Button
-                    GestureDetector(
-                      onTap: () {
-                        vm.setActiveCardId(null);
-                        vm.setReordering(true);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.warning,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(
-                                0xFFF59E0B,
-                              ).withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              spreadRadius: 2,
-                            ),
-                          ],
+                    SizedBox(
+                      width: 140,
+                      child: TextButton.icon(
+                        onPressed: () {
+                          vm.setActiveCardId(null);
+                          vm.setReordering(true);
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.textPrimary,
+                          minimumSize: const Size(140, 56),
                         ),
-                        child: const Icon(
-                          Icons.sort,
-                          color: Colors.white,
-                          size: 32,
-                        ),
+                        icon: const Icon(Icons.swap_vert_outlined),
+                        label: Text(UserStorage.l10n.reorderInsights),
                       ),
                     ),
-                    const SizedBox(width: 32), // Spacing between buttons
-                    // Delete Button
-                    GestureDetector(
-                      onTap: () => _onDeleteCard(vm, item),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.danger,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(
-                                0xFFEF4444,
-                              ).withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              spreadRadius: 2,
-                            ),
-                          ],
+                    const SizedBox(width: 12),
+                    SizedBox(
+                      width: 140,
+                      child: TextButton.icon(
+                        onPressed: vm.isDeleting
+                            ? null
+                            : () => _onDeleteCard(vm, item),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.textPrimary,
+                          minimumSize: const Size(140, 56),
                         ),
-                        child: vm.isDeleting
+                        icon: vm.isDeleting
                             ? const SizedBox(
-                                width: 24,
-                                height: 24,
+                                width: 20,
+                                height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white,
-                                  ),
+                                  color: AppColors.textPrimary,
                                 ),
                               )
-                            : const Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                                size: 32,
-                              ),
+                            : const Icon(Icons.delete_outline),
+                        label: Text(UserStorage.l10n.delete),
                       ),
                     ),
                   ],
                 ),
               ),
-              // Top-right cancel button
               Positioned(
                 top: 8,
                 right: 8,
-                child: GestureDetector(
-                  onTap: () => vm.setActiveCardId(null),
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: AppColors.surface,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.close,
-                      color: AppColors.textSecondary,
-                      size: 20,
-                    ),
+                child: IconButton(
+                  tooltip: UserStorage.l10n.cancel,
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
+                  onPressed: () => vm.setActiveCardId(null),
+                  icon: const Icon(
+                    Icons.close,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ),
@@ -266,7 +225,7 @@ class _InsightScreenState extends State<InsightScreen> {
               Text(
                 UserStorage.l10n.knowledgeInsight,
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -408,7 +367,7 @@ class _InsightScreenState extends State<InsightScreen> {
                   onRefresh: vm.loadData,
                   child: vm.isReordering
                       ? ReorderableListView(
-                          padding: const EdgeInsets.fromLTRB(20, 16, 20, 160),
+                          padding: const EdgeInsets.fromLTRB(20, 16, 20, 72),
                           onReorder: (oldIndex, newIndex) =>
                               vm.moveItem(oldIndex, newIndex),
                           header: Column(
@@ -422,7 +381,7 @@ class _InsightScreenState extends State<InsightScreen> {
                                     Text(
                                       UserStorage.l10n.knowledgeInsight,
                                       style: const TextStyle(
-                                        fontSize: 24,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.textPrimary,
                                       ),
@@ -456,7 +415,7 @@ class _InsightScreenState extends State<InsightScreen> {
                               .toList(),
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 160),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 72),
                           itemCount: _insightListItemCount(vm),
                           itemBuilder: (context, index) =>
                               _buildInsightListItem(context, vm, index),
@@ -483,54 +442,37 @@ class _InsightScreenState extends State<InsightScreen> {
   /// Preview cards shown when the user has no real insights yet.
   /// Rendered with reduced opacity and a banner hint; non-interactive.
   Widget _buildPreviewCards() {
-    final samples = InsightPreviewData.samples;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Banner hint
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.15),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 32, 0, 24),
+      child: Column(
+        children: [
+          const Icon(
+            Icons.auto_awesome_outlined,
+            size: 24,
+            color: AppColors.textSecondary,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            UserStorage.l10n.insightEmptyTitle,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
             ),
           ),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.auto_awesome,
-                size: 18,
-                color: AppColors.primary,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  UserStorage.l10n.noKnowledgeInsight,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w500,
-                    height: 1.4,
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(height: 6),
+          Text(
+            UserStorage.l10n.insightEmptyBody,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 14,
+              height: 1.45,
+              color: AppColors.textSecondary,
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        // Sample cards — visual only, no interaction
-        ...samples.map((s) {
-          final card = NativeWidgetFactory.build(s.template, s.data);
-          if (card == null) return const SizedBox.shrink();
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Opacity(opacity: 0.55, child: IgnorePointer(child: card)),
-          );
-        }),
-      ],
+        ],
+      ),
     );
   }
 }

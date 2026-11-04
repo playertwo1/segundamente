@@ -40,16 +40,8 @@ class GalleryCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,10 +51,10 @@ class GalleryCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontFamily: 'PingFang SC',
-                fontSize: 18,
+                fontFamily: 'Inter',
+                fontSize: 16,
                 fontWeight: FontWeight.w500,
-                height: 28 / 18,
+                height: 24 / 16,
                 letterSpacing: -0.15,
                 color: AppColors.textPrimary,
               ),
@@ -72,7 +64,7 @@ class GalleryCard extends StatelessWidget {
             Text(
               headline,
               style: const TextStyle(
-                fontFamily: 'PingFang SC',
+                fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 height: 20 / 14,
@@ -168,7 +160,7 @@ class GalleryCard extends StatelessWidget {
               child: Text(
                 image.label,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),

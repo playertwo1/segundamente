@@ -201,7 +201,7 @@ class KnowledgeDirectoryBody extends StatelessWidget {
             padding: const EdgeInsets.all(40),
             alignment: Alignment.center,
             child: Text(UserStorage.l10n.emptyFolder,
-                style: const TextStyle(color: AppColors.divider)),
+                style: const TextStyle(color: AppColors.textSecondary)),
           ),
         ],
       );

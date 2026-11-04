@@ -435,9 +435,9 @@ Finish by returning a concise result: what template was saved, template_id, use_
         },
       'place' => {
           'name': 'Riverside Cafe',
-          'address': 'West Bund · Shanghai',
-          'lat': 31.2304,
-          'lng': 121.4737,
+          'address': 'Parque Ibirapuera · São Paulo',
+          'lat': -23.587,
+          'lng': -46.657,
         },
       'spec_sheet' => {
           'name': 'Travel Backpack',

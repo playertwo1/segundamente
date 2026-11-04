@@ -12,16 +12,21 @@ void main() {
   });
 
   test('InsightViewModel does not start in a loading state', () {
-    final vm = InsightViewModel(router: MemexRouter());
+    final vm = InsightViewModel(router: _FakeRouter());
     addTearDown(vm.dispose);
     expect(vm.isLoading, isFalse);
     expect(vm.insights, isNull);
   });
 
   test('KnowledgeBaseViewModel does not start in a loading state', () {
-    final vm = KnowledgeBaseViewModel(router: MemexRouter());
+    final vm = KnowledgeBaseViewModel(router: _FakeRouter());
     addTearDown(vm.dispose);
     expect(vm.isLoading, isFalse);
     expect(vm.recentFiles, isEmpty);
   });
+}
+
+class _FakeRouter implements MemexRouter {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

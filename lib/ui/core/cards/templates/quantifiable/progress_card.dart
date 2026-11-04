@@ -72,7 +72,7 @@ class _ProgressCardState extends State<ProgressCard> {
   Widget build(BuildContext context) {
     final double total = (widget.data['total'] as num?)?.toDouble() ?? 100.0;
     final String unit = widget.data['unit'] ?? '%';
-    final String label = widget.data['label'] ?? 'Progress';
+    final String label = widget.data['label'] ?? widget.data['title'] ?? '';
 
     return GlassCard(
       onTap: widget.onTap,

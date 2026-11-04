@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/data/repositories/get_knowledge_insight_detail.dart';
 import 'package:memex/data/repositories/memex_router.dart';
@@ -11,11 +10,10 @@ import 'package:memex/ui/chat/widgets/open_super_agent_dialog.dart';
 import 'package:memex/ui/chat/widgets/reference_asset_formatter.dart';
 import 'package:memex/ui/timeline/widgets/timeline_card_detail_screen.dart';
 import 'package:memex/utils/toast_helper.dart';
-import 'package:memex/ui/core/widgets/detail_page_layout.dart';
+import 'package:memex/ui/core/widgets/editorial_scaffold.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/utils/share_service.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
-import 'package:memex/ui/core/widgets/back_button.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Unified AI Insight detail page
@@ -106,7 +104,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
           color: AppColors.textPrimary,
         ),
         em: style.copyWith(fontStyle: FontStyle.italic),
-        listBullet: style.copyWith(color: AppColors.primary),
+        listBullet: style.copyWith(color: AppColors.textSecondary),
         code: TextStyle(
           fontSize: (style.fontSize ?? 14) - 1,
           color: AppColors.textSecondary,
@@ -276,7 +274,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
                       child: Icon(
                         Icons.auto_awesome,
                         size: 16,
-                        color: AppColors.primary,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -303,7 +301,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
             Text(
               _content,
               style: const TextStyle(
-                fontSize: 17,
+                fontSize: 15,
                 color: AppColors.textSecondary,
                 height: 1.7,
                 letterSpacing: 0,
@@ -317,7 +315,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
             Text(
               UserStorage.l10n.relatedRecordsCount(_relatedCards.length),
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
@@ -358,39 +356,41 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = UserStorage.l10n;
     if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: AppColors.cardBackground,
-        body: const Center(child: const AgentLogoLoading()),
+      return EditorialScaffold(
+        title: l10n.aiInsightDetail,
+        body: const Center(child: AgentLogoLoading()),
       );
     }
 
     if (_errorMessage != null || _metadata == null) {
-      return Scaffold(
-        backgroundColor: AppColors.cardBackground,
-        appBar: AppBar(
-          backgroundColor: AppColors.cardBackground,
-          elevation: 0,
-          leading: const AppBackButton(),
-        ),
+      return EditorialScaffold(
+        title: l10n.aiInsightDetail,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.error_outline,
-                  size: 48, color: AppColors.textTertiary),
+                  size: 32, color: AppColors.textSecondary),
               const SizedBox(height: 12),
-              Text(
-                _errorMessage ?? UserStorage.l10n.loadFailed,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textTertiary,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  _errorMessage ?? l10n.loadFailed,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
+              TextButton(
                 onPressed: _fetchDetail,
-                child: Text(UserStorage.l10n.reload),
+                style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+                child: Text(l10n.reload),
               ),
             ],
           ),
@@ -398,147 +398,98 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
       );
     }
 
-    final metadata = _metadata!;
-
-    return DetailPageLayout(
-      title: metadata.title,
-      icon: metadata.icon,
-      type: metadata.type,
-      subTitle: UserStorage.l10n.aiInsightDetail,
-      actions: [
-        GestureDetector(
-          onTap: _shareInsight,
-          child: SvgPicture.asset(
-            'assets/icons/btn_share.svg',
-            width: 36,
-            height: 36,
-          ),
-        ),
-        const SizedBox(width: 4),
-        GestureDetector(
-          onTap: _showChatDialog,
-          child: SizedBox(
-            width: 36,
-            height: 36,
-            child: Center(
-              child: SvgPicture.asset(
-                'assets/icons/chat_add.svg',
-                width: 22,
-                height: 20,
-              ),
+    final detail = _insightDetail!;
+    final children = <Widget>[];
+    if (detail.widgetType == 'native' &&
+        detail.widgetTemplate != null &&
+        detail.widgetData != null) {
+      children.add(
+        NativeWidgetFactory.buildDetail(
+              detail.widgetTemplate!,
+              detail.widgetData!,
+            ) ??
+            const SizedBox.shrink(),
+      );
+      if (_content.isNotEmpty) {
+        children.addAll([
+          const SizedBox(height: 20),
+          _buildInsightMarkdown(
+            _content,
+            GoogleFonts.inter(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+              height: 1.5,
             ),
           ),
+        ]);
+      }
+    } else if (_content.isNotEmpty) {
+      children.add(
+        _buildInsightMarkdown(
+          _content,
+          GoogleFonts.inter(
+            fontSize: 15,
+            color: AppColors.textPrimary,
+            height: 1.55,
+          ),
+        ),
+      );
+    }
+
+    if (_relatedCards.isNotEmpty) {
+      children.addAll([
+        const SizedBox(height: 24),
+        EditorialSectionLabel(
+          l10n.relatedRecordsCount(_relatedCards.length),
+          horizontalPadding: 0,
+        ),
+        const SizedBox(height: 8),
+        ..._relatedCards.map((card) {
+          return _RelatedCardItem(
+            card: card,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => TimelineCardDetailScreen(cardId: card.id),
+              ),
+            ),
+          );
+        }),
+      ]);
+    } else {
+      children.addAll([
+        const SizedBox(height: 24),
+        Text(
+          l10n.noRelatedRecords,
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppColors.textSecondary,
+          ),
+        ),
+      ]);
+    }
+
+    final metadata = _metadata!;
+    return EditorialScaffold(
+      title: metadata.title,
+      subtitle: l10n.aiInsightDetail,
+      actions: [
+        IconButton(
+          tooltip: l10n.knowledgeReaderShare,
+          onPressed: _shareInsight,
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          icon: const Icon(Icons.ios_share_outlined),
+        ),
+        IconButton(
+          tooltip: l10n.chatWithSegundaMente,
+          onPressed: _showChatDialog,
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          icon: const Icon(Icons.chat_bubble_outline),
         ),
       ],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Content text
-          if (_insightDetail?.widgetType == 'native' &&
-              _insightDetail?.widgetTemplate != null &&
-              _insightDetail?.widgetData != null) ...[
-            NativeWidgetFactory.buildDetail(
-                  _insightDetail!.widgetTemplate!,
-                  _insightDetail!.widgetData!,
-                ) ??
-                const SizedBox.shrink(),
-
-            // Insight comment below card
-            if (_content.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 1),
-                      child: Icon(
-                        Icons.auto_awesome,
-                        size: 16,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _buildInsightMarkdown(
-                        _content,
-                        GoogleFonts.inter(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.textSecondary,
-                          height: 1.6,
-                          letterSpacing: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-
-            const SizedBox(height: 32),
-          ] else if (_content.isNotEmpty) ...[
-            _buildInsightMarkdown(
-              _content,
-              const TextStyle(
-                fontSize: 17,
-                color: AppColors.textSecondary, // Slate-700
-                height: 1.7,
-                letterSpacing: 0,
-              ),
-            ),
-            const SizedBox(height: 32),
-          ],
-
-          // Related cards section
-          if (_relatedCards.isNotEmpty) ...[
-            Text(
-              UserStorage.l10n.relatedRecordsCount(_relatedCards.length),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ..._relatedCards.map((card) {
-              void onTap() {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => TimelineCardDetailScreen(
-                      cardId: card.id,
-                    ),
-                  ),
-                );
-              }
-
-              return _RelatedCardItem(
-                card: card,
-                onTap: onTap,
-              );
-            }),
-          ] else ...[
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Text(
-                  UserStorage.l10n.noRelatedRecords,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ],
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+        children: children,
       ),
     );
   }

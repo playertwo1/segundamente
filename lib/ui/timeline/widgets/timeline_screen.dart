@@ -277,10 +277,15 @@ class TimelineScreenState extends State<TimelineScreen> {
           ),
           // Header actions: notification, companion, user avatar
           SizedBox(
-            height: 36,
+            height: 48,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                IconButton(
+                  tooltip: UserStorage.l10n.globalSearchOpen,
+                  onPressed: () => context.push(AppRoutes.search),
+                  icon: const Icon(Icons.search, color: AppColors.textPrimary),
+                ),
                 // Notification button
                 if (AppDatabase.isInitialized)
                   ListenableBuilder(
@@ -371,7 +376,7 @@ class TimelineScreenState extends State<TimelineScreen> {
                         avatar: _userAvatar ?? UserStorage.defaultAvatarSeed,
                         name: '',
                         size: 32,
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: AppColors.textPrimary,
                       ),
                     ),
                   ),

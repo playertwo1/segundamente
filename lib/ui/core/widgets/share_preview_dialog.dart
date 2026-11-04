@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'package:memex/ui/core/cards/style/timeline_theme.dart';
+import 'package:memex/ui/core/widgets/editorial_scaffold.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/utils/user_storage.dart';
 
@@ -38,172 +37,76 @@ class SharePreviewDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = UserStorage.l10n;
 
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-      child: Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-        child: TweenAnimationBuilder<double>(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeOutCubic,
-          tween: Tween(begin: 0.0, end: 1.0),
-          builder: (context, value, child) {
-            return Transform.translate(
-              offset: Offset(0, 30 * (1 - value)),
-              child: Opacity(
-                opacity: value,
-                child: child,
-              ),
-            );
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Preview Title
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  l10n.sharePreviewTitle,
-                  style: TimelineTheme.typography.title.copyWith(
-                    color: Colors.white,
-                    fontSize: 20,
-                    shadows: [
-                      const Shadow(
-                        color: Colors.black26,
-                        offset: Offset(0, 2),
-                        blurRadius: 4,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Image Preview
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 30,
-                        offset: const Offset(0, 15),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: Image.memory(
-                      imageBytes,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // Action Buttons — equal width distribution
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildButton(
-                      onTap: onCancel,
-                      icon: Icons.close_rounded,
-                      label: l10n.cancel,
-                    ),
-                  ),
-                  if (onToggleStyle != null)
-                    Expanded(
-                      child: _buildButton(
-                        onTap: onToggleStyle!,
-                        icon: isDetailStyle
-                            ? Icons.crop_square_rounded
-                            : Icons.article_outlined,
-                        label: isDetailStyle
-                            ? l10n.shareCardStyle
-                            : l10n.shareDetailStyle,
-                      ),
-                    ),
-                  if (onToggleBranding != null)
-                    Expanded(
-                      child: _buildButton(
-                        onTap: onToggleBranding!,
-                        icon: showBranding
-                            ? Icons.bookmark_remove_outlined
-                            : Icons.bookmark_add_outlined,
-                        label: showBranding
-                            ? l10n.shareHideBranding
-                            : l10n.shareShowBranding,
-                      ),
-                    ),
-                  Expanded(
-                    child: _buildButton(
-                      onTap: onShare,
-                      icon: Icons.share_rounded,
-                      label: l10n.shareNow,
-                      isPrimary: true,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+    return Dialog.fullscreen(
+      backgroundColor: AppColors.background,
+      child: EditorialScaffold(
+        title: l10n.sharePreviewTitle,
+        onBack: onCancel,
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Image.memory(
+            imageBytes,
+            fit: BoxFit.contain,
+            semanticLabel: l10n.sharePreviewTitle,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildButton({
-    required VoidCallback onTap,
-    required IconData icon,
-    required String label,
-    bool isPrimary = false,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isPrimary
-                  ? Colors.white
-                  : Colors.white.withValues(alpha: 0.15),
-              border: isPrimary
-                  ? null
-                  : Border.all(
-                      color: AppColors.divider,
-                      width: 1.5,
+        bottom: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (onToggleStyle != null)
+              EditorialRow(
+                title: l10n.sharePosterFormat(
+                  isDetailStyle ? l10n.shareDetailStyle : l10n.shareCardStyle,
+                ),
+                subtitle:
+                    isDetailStyle ? l10n.shareCardStyle : l10n.shareDetailStyle,
+                leading: const Icon(Icons.article_outlined),
+                trailing: const Icon(Icons.swap_horiz_outlined),
+                selected: isDetailStyle,
+                onTap: onToggleStyle,
+              ),
+            if (onToggleBranding != null)
+              EditorialRow(
+                title: l10n.sharePosterBranding(
+                  showBranding
+                      ? l10n.sharePosterVisible
+                      : l10n.sharePosterHidden,
+                ),
+                subtitle: showBranding
+                    ? l10n.shareHideBranding
+                    : l10n.shareShowBranding,
+                leading: const Icon(Icons.branding_watermark_outlined),
+                trailing: const Icon(Icons.swap_horiz_outlined),
+                selected: showBranding,
+                onTap: onToggleBranding,
+              ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: onCancel,
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size.fromHeight(52),
                     ),
-              boxShadow: isPrimary
-                  ? [
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.3),
-                        blurRadius: 15,
-                        offset: const Offset(0, 4),
-                      ),
-                    ]
-                  : [],
+                    child: Text(l10n.cancel),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: SizedBox(
+                    height: 52,
+                    child: FilledButton.icon(
+                      onPressed: onShare,
+                      icon: const Icon(Icons.ios_share_outlined),
+                      label: Text(l10n.shareNow),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            child: Icon(
-              icon,
-              color: isPrimary ? AppColors.primary : Colors.white,
-              size: 22,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

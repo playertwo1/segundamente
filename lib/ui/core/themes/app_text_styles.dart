@@ -20,7 +20,6 @@ class AppTextStyles {
   // ── Card Detail ──
 
   static const TextStyle cardTitle = TextStyle(
-    fontFamily: 'PingFang SC',
     fontSize: 24,
     fontWeight: FontWeight.w600,
     height: 33 / 24,
@@ -37,7 +36,6 @@ class AppTextStyles {
   );
 
   static const TextStyle tag = TextStyle(
-    fontFamily: 'PingFang SC',
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 20 / 16,

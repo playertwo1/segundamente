@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform, visibleForTesting;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:logging/logging.dart';
@@ -18,6 +19,7 @@ import 'package:memex/l10n/app_localizations_ext.dart';
 import 'package:memex/agent/run_mode/agent_action_approval_service.dart';
 import 'package:memex/agent/run_mode/agent_run_mode.dart';
 import 'package:memex/data/repositories/memex_router.dart';
+import 'package:memex/routing/routes.dart';
 import 'package:memex/data/model/chat_artifact.dart';
 import 'package:memex/data/model/chat_events.dart';
 import 'package:memex/data/services/demo_service.dart';
@@ -40,6 +42,7 @@ import 'package:memex/utils/token_usage_utils.dart';
 import 'package:memex/utils/time_context.dart';
 import 'package:memex/ui/chat/chat_event_batcher.dart';
 import 'package:memex/ui/chat/view_models/photo_attachments_viewmodel.dart';
+import 'package:memex/ui/chat/view_models/voice_dictation_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/selected_photo_attachment.dart';
 
 // --- Display Models ---
@@ -479,6 +482,8 @@ class AgentChatDialog extends StatefulWidget {
   final DateTime Function()? scrollClockForTesting;
 
   @visibleForTesting
+  final VoiceDictationViewModel? voiceDictationForTesting;
+  @visibleForTesting
   final PhotoAttachmentsViewModel? photoAttachmentsForTesting;
   @visibleForTesting
   final List<List<EnhancedPhoto>>? photoSuggestionsForTesting;
@@ -500,6 +505,7 @@ class AgentChatDialog extends StatefulWidget {
     this.initialTokenUsage,
     this.chatEventsForTesting,
     this.scrollClockForTesting,
+    this.voiceDictationForTesting,
     this.photoAttachmentsForTesting,
     this.photoSuggestionsForTesting,
     this.imagePickerForTesting,
@@ -519,6 +525,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
   MemexRouter? _memexRouter;
   MemexRouter get _router => _memexRouter ??= MemexRouter();
   final InputDraftService _draftService = InputDraftService.instance;
+  late final VoiceDictationViewModel _voice =
+      widget.voiceDictationForTesting ?? VoiceDictationViewModel();
 
   // State
   List<ChatDisplayItem> _items = [];
@@ -672,6 +680,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
 
   @override
   void dispose() {
+    if (widget.voiceDictationForTesting == null) _voice.dispose();
     _galleryAttachments?.removeListener(_onAttachmentsChanged);
     if (widget.photoAttachmentsForTesting == null) {
       _galleryAttachments?.dispose();
@@ -2314,6 +2323,37 @@ class _AgentChatDialogState extends State<AgentChatDialog>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                ListenableBuilder(
+                  listenable: _voice,
+                  builder: (context, _) {
+                    if (!_voice.isBusy) return const SizedBox.shrink();
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.fiber_manual_record,
+                            size: 12,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              key: const ValueKey('super_agent_voice_status'),
+                              _voice.isRecording
+                                  ? UserStorage.l10n.voiceRecording
+                                  : UserStorage.l10n.voiceTranscribing,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
                 TextField(
                   controller: _messageController,
                   focusNode: _messageFocusNode,
@@ -2346,6 +2386,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                               icon: Icons.add,
                               onTap: _showAttachMenu,
                             ),
+                            _buildMicButton(),
                             if (_showRunModeSelector) _buildRunModeChip(),
                           ],
                         ),
@@ -2620,15 +2661,18 @@ class _AgentChatDialogState extends State<AgentChatDialog>
           children: [
             tile('attach_camera', Icons.photo_camera_outlined, l10n.camera,
                 () => _pickImage(ImageSource.camera)),
-            tile('attach_gallery', Icons.photo_library_outlined, l10n.attachGallery,
-                () => _pickImage(ImageSource.gallery)),
+            tile('attach_gallery', Icons.photo_library_outlined,
+                l10n.attachGallery, () => _pickImage(ImageSource.gallery)),
             tile(
                 'attach_txt',
                 Icons.upload_file_outlined,
                 l10n.importTranscriptFile,
-                () => importTranscriptFile(
+                () => importTranscriptFiles(
                       context,
                       onConfirmed: (text) => _sendMessage(text),
+                      onViewActivity: () => unawaited(
+                        GoRouter.of(context).push(AppRoutes.activity),
+                      ),
                     )),
             tile('attach_pdf', Icons.picture_as_pdf_outlined, l10n.attachPdf,
                 () => _pickAttachment(FileType.custom, const ['pdf'])),
@@ -2666,6 +2710,77 @@ class _AgentChatDialogState extends State<AgentChatDialog>
               ? 'application/pdf'
               : _audioMimes[ext] ?? 'audio/mpeg',
         }));
+  }
+
+  /// Tap to record, tap again to stop; the transcript lands in the text field
+  /// so it can be reviewed before sending.
+  Widget _buildMicButton() {
+    final l10n = UserStorage.l10n;
+    return ListenableBuilder(
+      listenable: _voice,
+      builder: (context, _) {
+        final recording = _voice.isRecording;
+        final busy = _voice.state == VoiceDictationState.transcribing;
+        return Semantics(
+          button: true,
+          enabled: !busy,
+          label: busy
+              ? l10n.voiceTranscribing
+              : recording
+                  ? l10n.voiceStop
+                  : l10n.voiceStart,
+          onTap: busy ? null : _toggleVoice,
+          excludeSemantics: true,
+          child: GestureDetector(
+            key: const ValueKey('super_agent_mic_button'),
+            onTap: busy ? null : _toggleVoice,
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: recording ? AppColors.primary : AppColors.background,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: busy
+                  ? const Padding(
+                      padding: EdgeInsets.all(14),
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Icon(
+                      recording ? Icons.stop_rounded : Icons.mic_none,
+                      size: 22,
+                      color: recording
+                          ? AppColors.onPrimary
+                          : AppColors.textSecondary,
+                    ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _toggleVoice() async {
+    final l10n = UserStorage.l10n;
+    final text = await _voice.toggle();
+    if (!mounted) return;
+    if (_voice.permissionDenied) {
+      ToastHelper.showInfo(context, l10n.voiceMicDenied);
+    } else if (_voice.error != null) {
+      ToastHelper.showError(context, _voice.error);
+    } else if (text != null) {
+      if (text.trim().isEmpty) {
+        ToastHelper.showInfo(context, l10n.voiceNothingHeard);
+      } else {
+        final current = _messageController.text.trimRight();
+        final next = current.isEmpty ? text.trim() : '$current ${text.trim()}';
+        _messageController.value = TextEditingValue(
+          text: next,
+          selection: TextSelection.collapsed(offset: next.length),
+        );
+        _messageFocusNode.requestFocus();
+      }
+    }
   }
 
   Widget _buildInputIconButton({

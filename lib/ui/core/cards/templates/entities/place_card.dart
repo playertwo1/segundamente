@@ -12,7 +12,7 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String name = data['name'] ?? 'Place';
+    final String name = data['name'] ?? data['title'] ?? '';
     final String address = data['address'] ?? '';
     final double? lat = (data['latitude'] ?? data['lat']) as double?;
     final double? lng = (data['longitude'] ?? data['lng']) as double?;

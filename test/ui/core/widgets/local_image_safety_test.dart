@@ -19,9 +19,12 @@ void main() {
     tempDir = Directory.systemTemp.createTempSync('memex_local_image_');
   });
 
-  tearDown(() {
+  tearDown(() async {
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
+    await Future<void>.delayed(Duration.zero);
     if (tempDir.existsSync()) {
-      tempDir.deleteSync(recursive: true);
+      await tempDir.delete(recursive: true);
     }
   });
 
@@ -143,6 +146,7 @@ void main() {
         'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='));
     final inspection = Completer<AssetSafetyReport>();
     final started = Completer<void>();
+    final imageLoaded = Completer<void>();
     final service = ImagePreviewCacheService(
         tempDirectoryProvider: () async => tempDir,
         safetyInspector: (file, {required config}) {
@@ -159,7 +163,13 @@ void main() {
             child: LocalImage(
                 key: const ValueKey('recycled'),
                 url: source,
-                previewCacheService: service)));
+                previewCacheService: service,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (frame != null && !imageLoaded.isCompleted) {
+                    imageLoaded.complete();
+                  }
+                  return child;
+                })));
     await tester.pumpWidget(page(oldFile.path));
     await _pumpUntil(tester, () => started.isCompleted);
     var oldFinished = false;
@@ -170,7 +180,7 @@ void main() {
       oldFinished = true;
     }));
     await tester.pumpWidget(page(newFile.path));
-    await _pumpUntil(tester, () => find.byType(Image).evaluate().isNotEmpty);
+    await _pumpUntil(tester, () => imageLoaded.isCompleted);
     final displayed = tester.widget<Image>(find.byType(Image)).image;
     inspection
         .complete(AssetSafetyService.instance.inspectFileSync(oldFile.path));
@@ -178,6 +188,7 @@ void main() {
     expect(find.byIcon(Icons.image_not_supported_outlined), findsNothing);
     expect(tester.widget<Image>(find.byType(Image)).image, displayed);
     await tester.pumpWidget(const SizedBox.shrink());
+    await displayed.evict();
   });
 
   testWidgets('slow source inspection leaves the page interactive',

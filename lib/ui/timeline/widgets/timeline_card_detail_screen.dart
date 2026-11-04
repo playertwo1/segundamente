@@ -509,9 +509,9 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                 Text(
                   DateFormat('MM/dd HH:mm').format(_detail!.timestamp),
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.divider,
+                    color: AppColors.textSecondary,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -621,7 +621,6 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
               child: Text(
                 detail.title,
                 style: const TextStyle(
-                  fontFamily: 'PingFang SC',
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textSecondary,
@@ -1125,7 +1124,6 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                         child: Text(
                                           detail.title,
                                           style: const TextStyle(
-                                            fontFamily: 'PingFang SC',
                                             fontSize: 24,
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.textSecondary,
@@ -1135,6 +1133,10 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                         ),
                                       ),
                                     ),
+
+                                  TimelineCardDetailTemplateSection(
+                                    detail: detail,
+                                  ),
 
                                   TimelineCardDetailBodySection(
                                     detail: detail,
@@ -2073,6 +2075,44 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class TimelineCardDetailTemplateSection extends StatelessWidget {
+  const TimelineCardDetailTemplateSection({
+    super.key,
+    required this.detail,
+  });
+
+  final CardDetailModel detail;
+
+  @override
+  Widget build(BuildContext context) {
+    final configs = detail.uiConfigs
+        .where((config) =>
+            config.templateId != 'classic_card' &&
+            config.templateId != 'audio_card')
+        .toList(growable: false);
+    if (configs.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final config in configs)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: IgnorePointer(
+              child: NativeCardFactory.build(
+                templateId: config.templateId,
+                data: config.data,
+                title: detail.title,
+                status: detail.status,
+                overrideTitle: false,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

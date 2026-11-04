@@ -55,6 +55,55 @@ void main() {
     );
     expect(find.text('Activity stats'), findsNothing);
   });
+
+  testWidgets('empty insight state contains no sample records', (tester) async {
+    final viewModel = InsightViewModel(router: MemexRouter())
+      ..isLoading = false
+      ..insights = [];
+    addTearDown(viewModel.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: InsightScreen(viewModel: viewModel, isEmbedded: true),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text(UserStorage.l10n.insightEmptyTitle), findsOneWidget);
+    expect(find.text(UserStorage.l10n.insightEmptyBody), findsOneWidget);
+  });
+
+  testWidgets('insight actions use labeled open buttons and can be dismissed',
+      (tester) async {
+    final viewModel = InsightViewModel(router: MemexRouter())
+      ..isLoading = false
+      ..insights = [_insight(id: 'first', quote: 'First insight')]
+      ..activeCardId = 'first';
+    addTearDown(viewModel.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: InsightScreen(viewModel: viewModel, isEmbedded: true),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text(UserStorage.l10n.reorderInsights), findsOneWidget);
+    expect(find.text(UserStorage.l10n.delete), findsOneWidget);
+    expect(find.byTooltip(UserStorage.l10n.cancel), findsOneWidget);
+
+    await tester.tap(find.byTooltip(UserStorage.l10n.cancel));
+    await tester.pump();
+    expect(viewModel.activeCardId, isNull);
+  });
 }
 
 KnowledgeInsightCard _insight({

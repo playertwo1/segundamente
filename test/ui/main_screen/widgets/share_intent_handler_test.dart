@@ -42,7 +42,7 @@ void main() {
     );
 
     expect(importedPaths, [
-      ['/tmp/report.pdf', '/tmp/archive.zip'],
+      ['/tmp/report.pdf', Uri.parse('file:///tmp/archive.zip').toFilePath()],
     ]);
     expect(drafts, isEmpty);
     expect(backupPaths, isEmpty);
@@ -67,7 +67,7 @@ void main() {
       ),
     );
 
-    expect(backupPaths, ['/tmp/backup.memex']);
+    expect(backupPaths, [Uri.parse('file:///tmp/backup.memex').toFilePath()]);
     expect(importedPaths, isEmpty);
   });
 
@@ -190,7 +190,8 @@ void main() {
 
     expect(importedPaths, isEmpty);
     expect(drafts, hasLength(1));
-    expect(drafts.single.images.single.path, '/tmp/opened_photo.jpg');
+    expect(drafts.single.images.single.path,
+        Uri.parse('file:///tmp/opened_photo.jpg').toFilePath());
   });
 
   test('external opened non-image files route to import', () async {

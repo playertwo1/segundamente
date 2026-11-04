@@ -1722,7 +1722,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupProviderCredentialsDescription.
   ///
   /// In en, this message translates to:
-  /// **'Add or edit OpenAI, Anthropic, DeepSeek, Gemini, OpenRouter, Ollama, or another compatible provider.'**
+  /// **'Add or edit OpenAI, Anthropic, Gemini, OpenRouter, Ollama, or another compatible provider.'**
   String get aiSetupProviderCredentialsDescription;
 
   /// No description provided for @modelRolesTitle.
@@ -1854,7 +1854,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiServiceCustomModelDescription.
   ///
   /// In en, this message translates to:
-  /// **'Choose this first if you already have an API key from OpenAI, Anthropic, DeepSeek, Gemini, or another provider.'**
+  /// **'Choose this first if you already have an API key from OpenAI, Anthropic, Gemini, or another provider.'**
   String get aiServiceCustomModelDescription;
 
   /// No description provided for @enableAiService.
@@ -2976,7 +2976,7 @@ abstract class AppLocalizations {
   /// No description provided for @keyIdHelper.
   ///
   /// In en, this message translates to:
-  /// **'Name this setup, such as deepseek or work-gpt.'**
+  /// **'Name this setup, such as gemini or work-gpt.'**
   String get keyIdHelper;
 
   /// No description provided for @required.
@@ -4626,7 +4626,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoWelcome.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Segunda Mente!\nLet\'s take a quick tour of what AI can do for your records.'**
+  /// **'Welcome to Segunda Mente!\nSee three ways to record, organize, and find your moments again.'**
   String get demoWelcome;
 
   /// No description provided for @demoTapAdd.
@@ -4680,7 +4680,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoStartTour.
   ///
   /// In en, this message translates to:
-  /// **'Start Tour'**
+  /// **'Start tour'**
   String get demoStartTour;
 
   /// No description provided for @demoGetStarted.
@@ -6266,6 +6266,516 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Capture'**
   String get captureButtonLabel;
+
+  /// No description provided for @lockUnlockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Segunda Mente'**
+  String get lockUnlockTitle;
+
+  /// No description provided for @lockConfirmIdentity.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your identity to see your records.'**
+  String get lockConfirmIdentity;
+
+  /// No description provided for @lockUseBiometrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Use biometrics'**
+  String get lockUseBiometrics;
+
+  /// No description provided for @lockUsePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Use PIN'**
+  String get lockUsePin;
+
+  /// No description provided for @lockEnterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your PIN'**
+  String get lockEnterPin;
+
+  /// No description provided for @lockWrongPin.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{Wrong PIN · {count} attempt left} other{Wrong PIN · {count} attempts left}}'**
+  String lockWrongPin(int count);
+
+  /// No description provided for @lockForgotPin.
+  ///
+  /// In en, this message translates to:
+  /// **'I forgot my PIN'**
+  String get lockForgotPin;
+
+  /// No description provided for @lockForgotPinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The PIN cannot be recovered'**
+  String get lockForgotPinTitle;
+
+  /// No description provided for @lockForgotPinBody.
+  ///
+  /// In en, this message translates to:
+  /// **'For security, the PIN cannot be reset here. If biometrics are on, use them to get in and change the PIN in Settings. Without biometrics, only clearing the app data in Android restores access, and that erases local records (restore a backup afterwards).'**
+  String get lockForgotPinBody;
+
+  /// No description provided for @lockTempBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Access temporarily blocked'**
+  String get lockTempBlockedTitle;
+
+  /// No description provided for @lockTempBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again in a moment to protect your records.'**
+  String get lockTempBlockedBody;
+
+  /// No description provided for @lockAvailableIn.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds, plural, one{Access returns in {seconds} second} other{Access returns in {seconds} seconds}}'**
+  String lockAvailableIn(int seconds);
+
+  /// No description provided for @lockDeleteDigit.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete digit'**
+  String get lockDeleteDigit;
+
+  /// No description provided for @lockBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get lockBack;
+
+  /// No description provided for @locationContextSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use an approximate area to give your records context.'**
+  String get locationContextSubtitle;
+
+  /// No description provided for @locationTestingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for an approximate position…'**
+  String get locationTestingTitle;
+
+  /// No description provided for @locationTestingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This can take a few seconds.'**
+  String get locationTestingHint;
+
+  /// No description provided for @locationCancelTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel test'**
+  String get locationCancelTest;
+
+  /// No description provided for @locationTestAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Test again'**
+  String get locationTestAgain;
+
+  /// No description provided for @locationTestResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test result'**
+  String get locationTestResultTitle;
+
+  /// No description provided for @locationApproxNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Approximate location is used only as context when turned on.'**
+  String get locationApproxNote;
+
+  /// No description provided for @locationOsmLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Map and search: OpenStreetMap'**
+  String get locationOsmLine;
+
+  /// No description provided for @activityMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activityMenu;
+
+  /// No description provided for @activityHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Background activity'**
+  String get activityHeading;
+
+  /// No description provided for @activityUpdatedNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated just now'**
+  String get activityUpdatedNow;
+
+  /// No description provided for @activitySectionRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
+  String get activitySectionRunning;
+
+  /// No description provided for @activitySectionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get activitySectionFailed;
+
+  /// No description provided for @activityStartedAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'started {elapsed} ago'**
+  String activityStartedAgo(Object elapsed);
+
+  /// No description provided for @activityRetryProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempt {count} of {max}'**
+  String activityRetryProgress(int count, int max);
+
+  /// No description provided for @activityFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not finish.'**
+  String get activityFailedBody;
+
+  /// No description provided for @activityEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent activity'**
+  String get activityEmptyTitle;
+
+  /// No description provided for @activityEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When Segunda Mente organizes records, you will see the progress here.'**
+  String get activityEmptyBody;
+
+  /// No description provided for @activityBackToTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the timeline'**
+  String get activityBackToTimeline;
+
+  /// No description provided for @activityLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the activity.'**
+  String get activityLoadFailed;
+
+  /// No description provided for @activityTaskAddRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Organize record'**
+  String get activityTaskAddRecord;
+
+  /// No description provided for @activityTaskChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply in the conversation'**
+  String get activityTaskChat;
+
+  /// No description provided for @activityTaskComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a comment'**
+  String get activityTaskComment;
+
+  /// No description provided for @activityTaskCharacter.
+  ///
+  /// In en, this message translates to:
+  /// **'Character activity'**
+  String get activityTaskCharacter;
+
+  /// No description provided for @activityTaskOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Background task'**
+  String get activityTaskOther;
+
+  /// No description provided for @sendReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review before sending'**
+  String get sendReviewTitle;
+
+  /// No description provided for @sendNothingWithoutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is sent without your confirmation.'**
+  String get sendNothingWithoutConfirm;
+
+  /// No description provided for @sendBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get sendBack;
+
+  /// No description provided for @sendNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Send now'**
+  String get sendNow;
+
+  /// No description provided for @globalSearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get globalSearchTitle;
+
+  /// No description provided for @globalSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search everything'**
+  String get globalSearchHint;
+
+  /// No description provided for @globalSearchRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent searches'**
+  String get globalSearchRecent;
+
+  /// No description provided for @globalSearchClearRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear recent'**
+  String get globalSearchClearRecent;
+
+  /// No description provided for @globalSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get globalSearchResults;
+
+  /// No description provided for @globalSearchCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} record} other{{count} records}}'**
+  String globalSearchCount(int count);
+
+  /// No description provided for @globalSearchGroupCards.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards'**
+  String get globalSearchGroupCards;
+
+  /// No description provided for @globalSearchGroupKnowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowledge'**
+  String get globalSearchGroupKnowledge;
+
+  /// No description provided for @globalSearchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No records found'**
+  String get globalSearchNoResults;
+
+  /// No description provided for @globalSearchNoResultsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try other terms or check the spelling.'**
+  String get globalSearchNoResultsHint;
+
+  /// No description provided for @globalSearchClearQuery.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get globalSearchClearQuery;
+
+  /// No description provided for @globalSearchOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get globalSearchOpen;
+
+  /// No description provided for @knowledgeReaderMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowledge · Markdown · {minutes} min'**
+  String knowledgeReaderMeta(int minutes);
+
+  /// No description provided for @knowledgeReaderShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get knowledgeReaderShare;
+
+  /// No description provided for @demoStepProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step} of 3'**
+  String demoStepProgress(int step);
+
+  /// No description provided for @demoContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get demoContinue;
+
+  /// No description provided for @guides.
+  ///
+  /// In en, this message translates to:
+  /// **'Guides'**
+  String get guides;
+
+  /// No description provided for @noGuidesSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'No guides saved'**
+  String get noGuidesSaved;
+
+  /// No description provided for @userGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'User guide'**
+  String get userGuideTitle;
+
+  /// No description provided for @selectedFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected files'**
+  String get selectedFiles;
+
+  /// No description provided for @plainTextFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Text file · TXT'**
+  String get plainTextFile;
+
+  /// No description provided for @reorderInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder'**
+  String get reorderInsights;
+
+  /// No description provided for @insightEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No insights yet'**
+  String get insightEmptyTitle;
+
+  /// No description provided for @insightEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights will appear here when they are generated from your records.'**
+  String get insightEmptyBody;
+
+  /// No description provided for @insightMapNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'This insight has no locations to show yet.'**
+  String get insightMapNoData;
+
+  /// No description provided for @viewActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'View activity'**
+  String get viewActivity;
+
+  /// No description provided for @importingTranscript.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing transcript…'**
+  String get importingTranscript;
+
+  /// No description provided for @transcriptImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'This transcript could not be saved.'**
+  String get transcriptImportFailed;
+
+  /// No description provided for @markdownFileType.
+  ///
+  /// In en, this message translates to:
+  /// **'Markdown file'**
+  String get markdownFileType;
+
+  /// No description provided for @sharePosterFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Current format: {format}'**
+  String sharePosterFormat(Object format);
+
+  /// No description provided for @sharePosterBranding.
+  ///
+  /// In en, this message translates to:
+  /// **'Branding: {state}'**
+  String sharePosterBranding(Object state);
+
+  /// No description provided for @sharePosterVisible.
+  ///
+  /// In en, this message translates to:
+  /// **'shown'**
+  String get sharePosterVisible;
+
+  /// No description provided for @sharePosterHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'hidden'**
+  String get sharePosterHidden;
+
+  /// No description provided for @sharedFromMemex.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared from Segunda Mente'**
+  String get sharedFromMemex;
+
+  /// No description provided for @voiceStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Record audio'**
+  String get voiceStart;
+
+  /// No description provided for @voiceStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop and transcribe'**
+  String get voiceStop;
+
+  /// No description provided for @voiceRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording… tap the microphone to stop'**
+  String get voiceRecording;
+
+  /// No description provided for @voiceTranscribing.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcribing…'**
+  String get voiceTranscribing;
+
+  /// No description provided for @voiceMicDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission denied. Enable it in this app\'s settings.'**
+  String get voiceMicDenied;
+
+  /// No description provided for @voiceNothingHeard.
+  ///
+  /// In en, this message translates to:
+  /// **'No speech was recognised. Try again.'**
+  String get voiceNothingHeard;
+
+  /// No description provided for @youLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get youLabel;
+
+  /// No description provided for @routineStreakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} day streak} other{{count} days streak}}'**
+  String routineStreakDays(int count);
 }
 
 class _AppLocalizationsDelegate

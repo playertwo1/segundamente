@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:memex/ui/core/themes/app_colors.dart';
+import 'package:memex/ui/core/widgets/editorial_scaffold.dart';
+import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/memory/view_models/memory_viewmodel.dart';
 import 'package:memex/utils/user_storage.dart';
-import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 
 @visibleForTesting
 String formatMemoryListDate(dynamic isoValue) {
@@ -42,19 +43,8 @@ class _MemoryScreenState extends State<MemoryScreen> {
       listenable: widget.viewModel,
       builder: (context, _) {
         final vm = widget.viewModel;
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              UserStorage.l10n.memoryTitle,
-              style: const TextStyle(
-                  color: AppColors.textPrimary, fontWeight: FontWeight.bold),
-            ),
-            backgroundColor: AppColors.background,
-            surfaceTintColor: AppColors.background,
-            elevation: 0,
-            iconTheme: const IconThemeData(color: AppColors.textPrimary),
-          ),
-          backgroundColor: AppColors.background,
+        return EditorialScaffold(
+          title: UserStorage.l10n.memoryTitle,
           body: _buildBody(vm),
         );
       },
@@ -63,14 +53,14 @@ class _MemoryScreenState extends State<MemoryScreen> {
 
   Widget _buildBody(MemoryViewModel vm) {
     if (vm.isLoading) {
-      return const Center(child: const AgentLogoLoading());
+      return const Center(child: AgentLogoLoading());
     }
 
     if (vm.error != null) {
       return Center(
         child: Text(
           UserStorage.l10n.errorLoadingMemory(vm.error!),
-          style: const TextStyle(color: Colors.red),
+          style: const TextStyle(color: AppColors.danger),
         ),
       );
     }
@@ -84,17 +74,18 @@ class _MemoryScreenState extends State<MemoryScreen> {
       length: 2,
       child: Column(
         children: [
-          Container(
-            color: AppColors.cardBackground,
-            child: TabBar(
-              labelColor: AppColors.primary,
-              unselectedLabelColor: Colors.grey,
-              indicatorColor: AppColors.primary,
-              tabs: [
-                Tab(text: UserStorage.l10n.longTermProfile),
-                Tab(text: UserStorage.l10n.recentBuffer),
-              ],
-            ),
+          TabBar(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            labelColor: AppColors.primary,
+            unselectedLabelColor: AppColors.textTertiary,
+            indicatorColor: AppColors.primary,
+            indicatorSize: TabBarIndicatorSize.label,
+            dividerColor: AppColors.divider,
+            labelStyle: const TextStyle(fontWeight: FontWeight.w600),
+            tabs: [
+              Tab(text: UserStorage.l10n.longTermProfile),
+              Tab(text: UserStorage.l10n.recentBuffer),
+            ],
           ),
           Expanded(
             child: TabBarView(
@@ -114,13 +105,13 @@ class _MemoryScreenState extends State<MemoryScreen> {
       return Center(
         child: Text(
           UserStorage.l10n.memoryNoLongTermYet,
-          style: const TextStyle(color: Colors.grey),
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
       );
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: MarkdownBody(
         data: content,
         styleSheet: MarkdownStyleSheet(
@@ -149,7 +140,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
       return Center(
         child: Text(
           UserStorage.l10n.memoryNoRecentBuffer,
-          style: const TextStyle(color: Colors.grey),
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
       );
     }
@@ -157,60 +148,18 @@ class _MemoryScreenState extends State<MemoryScreen> {
     final reversedBuffer = buffer.reversed.toList();
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       itemCount: reversedBuffer.length,
       itemBuilder: (context, index) {
         final item = reversedBuffer[index];
-        return Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: const BorderSide(color: AppColors.divider)),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.iconBgLight,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        item['subject'] ??
-                            UserStorage.l10n.memoryGeneralSubject,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      _formatDate(item['created_at']),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.textTertiary,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  item['content'] ?? '',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    color: AppColors.textSecondary,
-                    height: 1.4,
-                  ),
-                ),
-              ],
+        return EditorialRow(
+          title: item['subject'] ?? UserStorage.l10n.memoryGeneralSubject,
+          subtitle: item['content'] ?? '',
+          trailing: Text(
+            _formatDate(item['created_at']),
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textTertiary,
             ),
           ),
         );

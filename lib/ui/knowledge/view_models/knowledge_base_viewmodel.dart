@@ -76,6 +76,7 @@ class KnowledgeBaseViewModel extends ChangeNotifier {
   List<Map<String, dynamic>> recentFiles = [];
   List<Map<String, dynamic>> additionalRootFolders = [];
   List<Map<String, dynamic>> rootLevelFiles = [];
+  List<Map<String, dynamic>> resourcesFiles = [];
   Map<String, int> categoryCounts = {};
 
   int countItems(String category) => categoryCounts[category] ?? 0;
@@ -95,6 +96,13 @@ class KnowledgeBaseViewModel extends ChangeNotifier {
     );
     additionalRootFolders = additionalRootFoldersFromListing(rootListing);
     rootLevelFiles = rootFilesFromListing(rootListing);
+
+    final resourcesResult =
+        await _router.listPkmDirectory(path: pkmParaRootPaths[2]);
+    resourcesFiles = resourcesResult.when(
+      onOk: rootFilesFromListing,
+      onError: (_, __) => <Map<String, dynamic>>[],
+    );
 
     final countPaths = [
       ...pkmParaRootPaths,

@@ -27,6 +27,12 @@ abstract final class AppRoutes {
   /// Memory.
   static const String memory = '/memory';
 
+  /// Global search (reference 16).
+  static const String search = '/search';
+
+  /// Background task activity (reference 18).
+  static const String activity = '/activity';
+
   /// Character config.
   static const String characterConfig = '/character-config';
 

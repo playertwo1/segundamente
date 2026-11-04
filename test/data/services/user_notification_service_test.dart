@@ -37,6 +37,7 @@ class TestableNotificationService {
   TestableNotificationService(this._db);
 
   final TestNotificationServiceDb _db;
+  int _nextId = 0;
 
   Future<String> upsert({
     required String userId,
@@ -64,7 +65,7 @@ class TestableNotificationService {
         return existing.id;
       }
 
-      final id = 'test-${DateTime.now().microsecondsSinceEpoch}';
+      final id = 'test-${_nextId++}';
       await _db.into(_db.userNotifications).insert(
             UserNotificationsCompanion.insert(
               id: id,

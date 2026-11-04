@@ -165,20 +165,10 @@ class _ActionCenterSheetState extends State<ActionCenterSheet>
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 24,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
+      decoration: const BoxDecoration(color: AppColors.background),
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.85,
-        minHeight: MediaQuery.of(context).size.height * 0.5,
+        maxHeight: MediaQuery.sizeOf(context).height * 0.98,
+        minHeight: MediaQuery.sizeOf(context).height * 0.9,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -237,7 +227,7 @@ class _ActionCenterSheetState extends State<ActionCenterSheet>
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
                       letterSpacing: -0.3,

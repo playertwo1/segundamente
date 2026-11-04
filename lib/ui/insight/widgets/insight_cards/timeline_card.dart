@@ -51,18 +51,7 @@ class TimelineCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -70,7 +59,7 @@ class TimelineCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
                 height: 1.3,
@@ -83,7 +72,9 @@ class TimelineCard extends StatelessWidget {
               final index = entry.key;
               final item = entry.value;
               final isLast = index == items.length - 1;
-              final dotColor = _parseColor(item.color ?? '#5B6CFF');
+              final dotColor = item.isFilledDot
+                  ? AppColors.textPrimary
+                  : AppColors.textSecondary;
 
               return _buildTimelineItem(item, dotColor, isLast);
             }),
@@ -106,8 +97,8 @@ class TimelineCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 // Solid filled dot
                 Container(
-                  width: 24,
-                  height: 24,
+                  width: 10,
+                  height: 10,
                   decoration: BoxDecoration(
                     color: dotColor,
                     shape: BoxShape.circle,
@@ -117,7 +108,7 @@ class TimelineCard extends StatelessWidget {
                 if (!isLast)
                   Expanded(
                     child: Container(
-                      width: 1.5,
+                      width: 1,
                       color: AppColors.divider,
                     ),
                   ),
@@ -185,12 +176,5 @@ class TimelineCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Color _parseColor(String colorStr) {
-    if (colorStr.startsWith('#')) {
-      return Color(int.parse(colorStr.substring(1), radix: 16) + 0xFF000000);
-    }
-    return AppColors.primary;
   }
 }

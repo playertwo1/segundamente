@@ -12,7 +12,7 @@ class InsightBubble {
   InsightBubble({
     required this.label,
     required this.value,
-    this.color = '#6366F1',
+    this.color = '#F3EEE6',
     this.subLabel,
     this.isHighlight = false,
   });
@@ -21,7 +21,7 @@ class InsightBubble {
     return InsightBubble(
       label: json['label'] as String? ?? '',
       value: json['value'] as num? ?? 1,
-      color: json['color'] as String? ?? '#6366F1',
+      color: json['color'] as String? ?? '#F3EEE6',
       subLabel: json['sub_label'] as String?,
       isHighlight: json['is_highlight'] as bool? ?? false,
     );
@@ -55,19 +55,7 @@ class BubbleChartCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          // Gradient border or shadow if needed, but design looks clean flat/soft
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -76,7 +64,7 @@ class BubbleChartCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontFamily: 'PingFang SC',
+                fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: AppColors.textPrimary,
@@ -153,8 +141,6 @@ class BubbleChartCard extends StatelessWidget {
   }
 
   Widget _buildBubble(InsightBubble bubble, double size) {
-    final color = _parseColor(bubble.color);
-    final bgColor = color.withValues(alpha: 0.15);
     final bool isSolid = bubble.isHighlight;
 
     return Container(
@@ -162,15 +148,16 @@ class BubbleChartCard extends StatelessWidget {
       height: size,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: isSolid ? color : bgColor,
+        color: isSolid ? AppColors.textPrimary : AppColors.surface,
         shape: BoxShape.circle,
+        border: isSolid ? null : Border.all(color: AppColors.divider),
       ),
       child: Center(
         child: Text(
           bubble.label,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: isSolid ? Colors.white : color,
+            color: isSolid ? AppColors.background : AppColors.textPrimary,
             fontWeight: FontWeight.w600,
             fontSize: isSolid ? 18 : 14,
           ),
@@ -179,30 +166,5 @@ class BubbleChartCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _parseColor(String colorStr) {
-    if (colorStr.startsWith('#')) {
-      return Color(int.parse(colorStr.substring(1), radix: 16) + 0xFF000000);
-    }
-    // Fallback simple names
-    switch (colorStr.toLowerCase()) {
-      case 'red':
-        return Colors.red;
-      case 'blue':
-        return Colors.blue;
-      case 'green':
-        return Colors.green;
-      case 'orange':
-        return Colors.orange;
-      case 'purple':
-        return Colors.purple;
-      case 'black':
-        return Colors.black;
-      case 'white':
-        return Colors.white;
-      default:
-        return AppColors.primary;
-    }
   }
 }

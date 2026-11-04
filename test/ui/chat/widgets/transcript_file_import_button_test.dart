@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,9 +20,11 @@ void main() {
   Future<void> pump(
     WidgetTester tester, {
     required Future<List<int>?> Function() pickBytes,
-    required Future<bool> Function(TranscriptImport source) store,
+    required Future<bool> Function(List<TranscriptImport> sources) store,
+    List<String> fileNames = const ['conversa.txt'],
     Future<void> Function()? onStored,
     void Function(String text)? onConfirmed,
+    VoidCallback? onViewActivity,
   }) {
     return tester.pumpWidget(
       MaterialApp(
@@ -31,10 +34,19 @@ void main() {
           appBar: AppBar(
             actions: [
               TranscriptFileImportButton(
-                pickBytes: pickBytes,
+                pickFiles: () async {
+                  final bytes = await pickBytes();
+                  return bytes == null
+                      ? null
+                      : [
+                          for (final name in fileNames)
+                            (name: name, bytes: bytes),
+                        ];
+                },
                 store: store,
                 onStored: onStored,
                 onConfirmed: onConfirmed,
+                onViewActivity: onViewActivity,
               ),
             ],
           ),
@@ -81,6 +93,7 @@ void main() {
       find.byKey(const ValueKey('send_outgoing_text')),
     );
     expect(shown.data, '[00:00:01]\nolá');
+    expect(find.text('conversa.txt'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('send_confirmation_cancel')));
     await tester.pumpAndSettle();
@@ -97,8 +110,8 @@ void main() {
     await pump(
       tester,
       pickBytes: () async => bytes,
-      store: (source) async {
-        stored.add(source);
+      store: (sources) async {
+        stored.addAll(sources);
         return true;
       },
       onStored: () async {
@@ -118,6 +131,37 @@ void main() {
     expect(refreshes, 1);
     expect(sent, ['[00:00:01]\nolá']);
     expect(find.text(UserStorage.l10n.dataImportSuccess), findsOneWidget);
+  });
+
+  testWidgets('lists multiple TXT files and stores each original',
+      (tester) async {
+    final bytes = utf8.encode('00:01\nolá');
+    final stored = <TranscriptImport>[];
+    final sent = <String>[];
+    await pump(
+      tester,
+      pickBytes: () async => bytes,
+      fileNames: const ['parte-1.txt', 'parte-2.txt'],
+      store: (sources) async {
+        stored.addAll(sources);
+        return true;
+      },
+      onConfirmed: sent.add,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('import_transcript_file')));
+    await tester.pumpAndSettle();
+    expect(find.text('parte-1.txt'), findsOneWidget);
+    expect(find.text('parte-2.txt'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('send_confirmation_confirm')));
+    await tester.pumpAndSettle();
+
+    expect(stored, hasLength(2));
+    expect(
+      stored.map((source) => source.originalBytes).toList(),
+      [bytes, bytes],
+    );
+    expect(sent, ['[00:00:01]\nolá\n\n[00:00:01]\nolá']);
   });
 
   testWidgets('a PDF disguised as text cannot be confirmed', (tester) async {
@@ -140,5 +184,52 @@ void main() {
     );
     expect(confirm.onPressed, isNull);
     expect(stores, 0);
+  });
+
+  testWidgets('shows import progress and opens existing activity on request',
+      (tester) async {
+    final saving = Completer<bool>();
+    var activityOpens = 0;
+    await pump(
+      tester,
+      pickBytes: () async => utf8.encode('00:01\nolá'),
+      store: (_) => saving.future,
+      onConfirmed: (_) {},
+      onViewActivity: () => activityOpens++,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('import_transcript_file')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('send_confirmation_confirm')));
+    await tester.pump();
+
+    expect(find.text(UserStorage.l10n.importingTranscript), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    saving.complete(true);
+    await tester.pumpAndSettle();
+    expect(find.text(UserStorage.l10n.viewActivity), findsOneWidget);
+
+    await tester.tap(find.text(UserStorage.l10n.viewActivity));
+    expect(activityOpens, 1);
+  });
+
+  testWidgets('reports a failed import without sending the transcript',
+      (tester) async {
+    final sent = <String>[];
+    await pump(
+      tester,
+      pickBytes: () async => utf8.encode('00:01\nolá'),
+      store: (_) async => false,
+      onConfirmed: sent.add,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('import_transcript_file')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('send_confirmation_confirm')));
+    await tester.pumpAndSettle();
+
+    expect(find.text(UserStorage.l10n.transcriptImportFailed), findsOneWidget);
+    expect(sent, isEmpty);
   });
 }

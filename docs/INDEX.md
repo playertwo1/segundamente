@@ -32,6 +32,24 @@
 | Tipos de registro da timeline (1) | [imagem](../.impeccable-mobile/references/amoled-v3-ios/12-timeline-card-types.png) |
 | Tipos de registro (2) e detalhe de métrica | [imagem](../.impeccable-mobile/references/amoled-v3-ios/13-timeline-card-types-2.png) |
 | Companheiro, perfil e central de ações | [imagem](../.impeccable-mobile/references/amoled-v3-ios/14-companion-profile-states.png) |
+| Bloqueio biométrico e por PIN | [imagem](../.impeccable-mobile/references/amoled-v3-ios/15-app-lock.png) |
+| Busca global e resultados | [imagem](../.impeccable-mobile/references/amoled-v3-ios/16-global-search.png) |
+| Variações de insight | [imagem](../.impeccable-mobile/references/amoled-v3-ios/17-insight-variants.png) |
+| Atividade dos agentes | [imagem](../.impeccable-mobile/references/amoled-v3-ios/18-agent-activity.png) |
+| Pôster e compartilhamento | [imagem](../.impeccable-mobile/references/amoled-v3-ios/19-share-poster.png) |
+| Tour de boas-vindas e guia | [imagem](../.impeccable-mobile/references/amoled-v3-ios/20-welcome-tour.png) |
+| Leitor de arquivo de Conhecimento | [imagem](../.impeccable-mobile/references/amoled-v3-ios/21-knowledge-reader.png) |
+| Importação DOCX/TXT | [imagem](../.impeccable-mobile/references/amoled-v3-ios/22-import-data.png) |
+| Contexto de localização (OpenStreetMap) | [imagem](../.impeccable-mobile/references/amoled-v3-ios/23-location-context.png) |
+
+### Implementação das pranchas 17, 19, 20 e 22
+
+| Prancha | Subfase | Componentes existentes | Limite aplicado |
+|---|---|---|---|
+| 17 — Variações de insight | F5V-02 | `insight_screen.dart`, `insight_detail_page.dart`, `NativeWidgetFactory` e `insight_cards/` | Gráficos, mapas geográficos com coordenadas, timeline e narrativa. Não há grafo de conexões disponível. |
+| 20 — Tour e GUIAS | F5V-02 | `demo_overlay.dart`, `KnowledgeBaseViewModel` e `KnowledgeBaseScreen` | Tour em três passos; o guia existente é apenas listado e renomeado na interface, sem alterar `Memex Guide.md`. |
+| 22 — Importação | F5V-03 | `TranscriptFileImportButton`, `TranscriptImportService` e rota de atividade existente | Lista, prévia, confirmação, progresso e falha para TXT. DOCX adiado porque a F2-03 só autoriza TXT. |
+| 19 — Compartilhamento | F5V-04 | `SharePreviewDialog`, `SharePosterDecorator` e `ShareService` | Prévia e folha nativa; sem data, edição de texto ou compartilhamento por proximidade. |
 
 ### Referência principal de navegação
 

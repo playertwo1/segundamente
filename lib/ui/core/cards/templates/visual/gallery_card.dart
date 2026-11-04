@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
 import 'package:memex/utils/user_storage.dart';
-import 'package:memex/ui/core/themes/app_colors.dart';
 
 class GalleryCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -22,7 +22,7 @@ class GalleryCard extends StatelessWidget {
     if (imageUrls.isEmpty) {
       return GlassCard(
         onTap: onTap,
-        child: Center(child: Text(UserStorage.l10n.noImages)),
+        child: Text(UserStorage.l10n.noImages),
       );
     }
 
@@ -32,15 +32,29 @@ class GalleryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildGrid(imageUrls),
+          SizedBox(
+            height: 72,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: imageUrls.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (context, index) => SizedBox(
+                width: 72,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: _buildImage(imageUrls[index]),
+                ),
+              ),
+            ),
+          ),
           if (title != null)
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(top: 8),
               child: Text(
                 title,
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -50,102 +64,8 @@ class GalleryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildGrid(List<String> imageUrls) {
-    int count = imageUrls.length;
-    if (count == 1) {
-      return SizedBox(
-        height: 180,
-        width: double.infinity,
-        child: _buildImage(imageUrls[0]),
-      );
-    }
-
-    if (count == 2) {
-      return SizedBox(
-        height: 180,
-        child: Row(
-          children: [
-            Expanded(child: _buildImage(imageUrls[0])),
-            const SizedBox(width: 2),
-            Expanded(child: _buildImage(imageUrls[1])),
-          ],
-        ),
-      );
-    }
-
-    if (count == 3) {
-      return SizedBox(
-        height: 320,
-        child: Column(
-          children: [
-            Expanded(child: _buildImage(imageUrls[0])),
-            const SizedBox(height: 2),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(child: _buildImage(imageUrls[1])),
-                  const SizedBox(width: 2),
-                  Expanded(child: _buildImage(imageUrls[2])),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    // 4+
-    return SizedBox(
-      height: 240,
-      child: Column(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(child: _buildImage(imageUrls[0])),
-                const SizedBox(width: 2),
-                Expanded(child: _buildImage(imageUrls[1])),
-              ],
-            ),
-          ),
-          const SizedBox(height: 2),
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(child: _buildImage(imageUrls[2])),
-                const SizedBox(width: 2),
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      _buildImage(
-                          imageUrls[count > 3 ? 3 : 0]), // Safety check index
-                      if (count > 4)
-                        Container(
-                          color: Colors.black54,
-                          child: Center(
-                            child: Text(
-                              '+${count - 4}',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildImage(String url) {
-    return Container(
+    return ColoredBox(
       color: AppColors.background,
       child: LocalImage(
         url: url,
@@ -153,7 +73,9 @@ class GalleryCard extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         errorBuilder: (_, __, ___) => const Center(
-            child: Icon(Icons.broken_image, color: AppColors.textTertiary)),
+          child:
+              Icon(Icons.broken_image_outlined, color: AppColors.textTertiary),
+        ),
       ),
     );
   }

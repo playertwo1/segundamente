@@ -159,7 +159,6 @@ class _ClassicCardState extends State<ClassicCard> {
               maxLines: 8,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontFamily: 'PingFang SC',
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
                 height: 1.6,

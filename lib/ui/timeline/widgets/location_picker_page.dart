@@ -52,7 +52,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
     if (widget.initialPoint != null) {
       _currentCenter = widget.initialPoint!;
     } else {
-      _currentCenter = const LatLng(39.9042, 116.4074); // Beijing
+      _currentCenter = const LatLng(-23.5505, -46.6333); // São Paulo fallback
     }
 
     _searchController.text = widget.initialName ?? '';

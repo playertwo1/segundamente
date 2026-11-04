@@ -38,14 +38,14 @@ class TrendChartCard extends StatelessWidget {
     this.topRightText,
     this.points = const [],
     this.highlightInfo,
-    this.color = '#6366F1',
+    this.color = '#F3EEE6',
     this.insight,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    const lineColor = AppColors.primary;
+    const lineColor = AppColors.textPrimary;
 
     final spots = points.asMap().entries.map((e) {
       return FlSpot(e.key.toDouble(), e.value.value);
@@ -64,17 +64,6 @@ class TrendChartCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -89,10 +78,10 @@ class TrendChartCard extends StatelessWidget {
                     child: Text(
                       title,
                       style: const TextStyle(
-                        fontFamily: 'PingFang SC',
-                        fontSize: 18,
+                        fontFamily: 'Inter',
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        height: 28 / 18,
+                        height: 24 / 16,
                         letterSpacing: -0.44,
                         color: AppColors.textPrimary,
                       ),
@@ -102,7 +91,7 @@ class TrendChartCard extends StatelessWidget {
                     Text(
                       topRightText!,
                       style: const TextStyle(
-                        fontFamily: 'PingFang SC',
+                        fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         height: 20 / 14,
@@ -200,7 +189,7 @@ class TrendChartCard extends StatelessWidget {
                             radius: 4,
                             color: lineColor,
                             strokeWidth: 2,
-                            strokeColor: Colors.white,
+                            strokeColor: AppColors.background,
                           );
                         },
                       ),

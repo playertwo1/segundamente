@@ -40,7 +40,7 @@ class RadarChartCard extends StatelessWidget {
     required this.centerValue,
     required this.centerLabel,
     this.dimensions = const [],
-    this.color = '#5B6CFF',
+    this.color = '#F3EEE6',
     this.insight,
     this.onTap,
   });
@@ -51,16 +51,8 @@ class RadarChartCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,7 +67,7 @@ class RadarChartCard extends StatelessWidget {
                     child: Text(
                       title,
                       style: const TextStyle(
-                        fontFamily: 'PingFang SC',
+                        fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textPrimary,
@@ -91,7 +83,7 @@ class RadarChartCard extends StatelessWidget {
                     Text(
                       badge!,
                       style: const TextStyle(
-                        fontFamily: 'PingFang SC',
+                        fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textPrimary,
@@ -126,15 +118,8 @@ class RadarChartCard extends StatelessWidget {
                               style: GoogleFonts.inter(
                                 fontSize: 32,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 height: 1.1,
-                                shadows: [
-                                  Shadow(
-                                    color: AppColors.primary
-                                        .withValues(alpha: 0.6),
-                                    blurRadius: 12,
-                                  ),
-                                ],
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -143,15 +128,8 @@ class RadarChartCard extends StatelessWidget {
                               style: GoogleFonts.inter(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
-                                color: Colors.white.withValues(alpha: 0.9),
+                                color: AppColors.textSecondary,
                                 height: 1.3,
-                                shadows: [
-                                  Shadow(
-                                    color: AppColors.primary
-                                        .withValues(alpha: 0.6),
-                                    blurRadius: 8,
-                                  ),
-                                ],
                               ),
                             ),
                           ],
@@ -239,13 +217,13 @@ class _RadarPainter extends CustomPainter {
 
     // Fill
     final fillPaint = Paint()
-      ..color = const Color(0xD95B6CFF)
+      ..color = AppColors.textPrimary.withValues(alpha: 0.12)
       ..style = PaintingStyle.fill;
     canvas.drawPath(dataPath, fillPaint);
 
     // Border
     final borderPaint = Paint()
-      ..color = AppColors.primary
+      ..color = AppColors.textPrimary
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
     canvas.drawPath(dataPath, borderPaint);

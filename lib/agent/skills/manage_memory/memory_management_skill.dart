@@ -30,7 +30,7 @@ class MemoryManagementSkill extends Skill {
               'Use ONLY when the user explicitly asks to remember, save, note, '
               'update, or correct something about themselves for the long term '
               '(e.g. "remember that I\'m allergic to peanuts", "update my job '
-              'title", "forget that I live in Beijing"). Routine capture does '
+              'title", "forget that I live in São Paulo"). Routine capture does '
               'NOT need this skill — new records accumulate into memory '
               'automatically in the background.',
         );

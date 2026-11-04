@@ -48,7 +48,6 @@ class SnippetCard extends StatelessWidget {
                     .map((tag) => Text(
                           '#$tag',
                           style: const TextStyle(
-                            fontFamily: 'PingFang SC',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: AppColors.primary,
@@ -81,7 +80,6 @@ class SnippetCard extends StatelessWidget {
         );
       default:
         return const TextStyle(
-          fontFamily: 'PingFang SC',
           fontSize: 15,
           fontWeight: FontWeight.w400,
           height: 1.6,

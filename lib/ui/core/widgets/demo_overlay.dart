@@ -1,8 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:memex/data/services/demo_service.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
+import 'package:memex/utils/user_storage.dart';
 
 /// Full-screen spotlight overlay for the onboarding demo.
 ///
@@ -40,32 +40,14 @@ class DemoOverlay extends StatelessWidget {
         // showing the spotlight. Show a blocking scrim in the meantime.
         if (step == DemoStep.tapCard && !demo.cardReady) {
           return Material(
-            color: Colors.black54,
+            color: Colors.black.withValues(alpha: 0.9),
             child: SafeArea(
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12, right: 16),
-                  child: GestureDetector(
-                    onTap: demo.skip,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        demo.skipText,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              child: _DemoBlockingOverlay(
+                step: _progressStep(step),
+                skipText: demo.skipText,
+                continueText: UserStorage.l10n.demoContinue,
+                onSkip: demo.skip,
+                onContinue: demo.advance,
               ),
             ),
           );
@@ -75,90 +57,91 @@ class DemoOverlay extends StatelessWidget {
           targetKey: targetKey,
           tooltipText: demo.tooltipText,
           skipText: demo.skipText,
+          continueText: UserStorage.l10n.demoContinue,
+          progressStep: _progressStep(step),
           onSkip: demo.skip,
+          onContinue: demo.advance,
         );
       },
     );
   }
 
+  int _progressStep(DemoStep? step) => switch (step) {
+        DemoStep.welcome => 1,
+        DemoStep.tapAddButton || DemoStep.tapSend => 2,
+        DemoStep.tapCard ||
+        DemoStep.tapInsightTab ||
+        DemoStep.tapKnowledgeTab ||
+        DemoStep.done =>
+          3,
+        null => 1,
+      };
+
   Widget _buildCenteredOverlay(BuildContext context, DemoService demo) {
     return Material(
-      color: Colors.black54,
+      color: Colors.black.withValues(alpha: 0.9),
       child: SafeArea(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(
-                  padding: const EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.2),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.divider),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _DemoProgress(
+                    step: _progressStep(demo.currentStep),
+                    label: UserStorage.l10n.demoStepProgress(
+                      _progressStep(demo.currentStep),
                     ),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.auto_awesome,
-                        size: 48,
-                        color: AppColors.primary,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        demo.tooltipText,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                          height: 1.5,
-                        ),
-                      ),
-                      const SizedBox(height: 28),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: demo.advance,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: AppColors.onPrimary,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            demo.actionButtonText,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (demo.currentStep == DemoStep.welcome) ...[
-                        const SizedBox(height: 12),
-                        GestureDetector(
-                          onTap: demo.skip,
-                          child: Text(
-                            demo.skipText,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textTertiary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
+                  const SizedBox(height: 20),
+                  const Icon(
+                    Icons.auto_awesome_outlined,
+                    size: 32,
+                    color: AppColors.textSecondary,
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  Text(
+                    demo.tooltipText,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: FilledButton(
+                      onPressed: demo.advance,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.black,
+                        minimumSize: const Size.fromHeight(52),
+                      ),
+                      child: Text(demo.actionButtonText),
+                    ),
+                  ),
+                  if (demo.currentStep == DemoStep.welcome) ...[
+                    const SizedBox(height: 4),
+                    TextButton(
+                      onPressed: demo.skip,
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
+                      child: Text(demo.skipText),
+                    ),
+                  ],
+                ],
               ),
             ),
           ),
@@ -174,13 +157,19 @@ class _SpotlightOverlay extends StatefulWidget {
   final GlobalKey targetKey;
   final String tooltipText;
   final String skipText;
+  final String continueText;
+  final int progressStep;
   final VoidCallback onSkip;
+  final VoidCallback onContinue;
 
   const _SpotlightOverlay({
     required this.targetKey,
     required this.tooltipText,
     required this.skipText,
+    required this.continueText,
+    required this.progressStep,
     required this.onSkip,
+    required this.onContinue,
   });
 
   @override
@@ -314,32 +303,14 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
       // Measuring in progress — keep the scrim up (no cutout, no tooltip)
       // so the overlay never disappears between steps.
       return Material(
-        color: Colors.black54,
+        color: Colors.black.withValues(alpha: 0.9),
         child: SafeArea(
-          child: Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, right: 16),
-              child: GestureDetector(
-                onTap: widget.onSkip,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    widget.skipText,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          child: _DemoBlockingOverlay(
+            step: widget.progressStep,
+            skipText: widget.skipText,
+            continueText: widget.continueText,
+            onSkip: widget.onSkip,
+            onContinue: widget.onContinue,
           ),
         ),
       );
@@ -373,23 +344,13 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
         Positioned(
           top: MediaQuery.of(context).padding.top + 12,
           right: 16,
-          child: GestureDetector(
-            onTap: widget.onSkip,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                widget.skipText,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textSecondary,
-                ),
-              ),
+          child: TextButton(
+            onPressed: widget.onSkip,
+            style: TextButton.styleFrom(
+              minimumSize: const Size(48, 48),
+              foregroundColor: AppColors.textSecondary,
             ),
+            child: Text(widget.skipText),
           ),
         ),
       ],
@@ -425,43 +386,51 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColors.surface,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.15),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-              border: Border.all(
-                color: AppColors.primary.withValues(alpha: 0.2),
-              ),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.divider),
             ),
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.auto_awesome,
-                    color: AppColors.primary,
-                    size: 16,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    widget.tooltipText,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                      height: 1.4,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.auto_awesome_outlined,
+                      size: 20,
+                      color: AppColors.textSecondary,
                     ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        widget.tooltipText,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                _DemoProgress(
+                  step: widget.progressStep,
+                  label: UserStorage.l10n.demoStepProgress(widget.progressStep),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: FilledButton(
+                    onPressed: widget.onContinue,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.black,
+                      minimumSize: const Size.fromHeight(48),
+                    ),
+                    child: Text(widget.continueText),
                   ),
                 ),
               ],
@@ -484,6 +453,104 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
           painter: _ArrowPainter(pointUp: pointUp),
         ),
       ),
+    );
+  }
+}
+
+class _DemoBlockingOverlay extends StatelessWidget {
+  const _DemoBlockingOverlay({
+    required this.step,
+    required this.skipText,
+    required this.continueText,
+    required this.onSkip,
+    required this.onContinue,
+  });
+
+  final int step;
+  final String skipText;
+  final String continueText;
+  final VoidCallback onSkip;
+  final VoidCallback onContinue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+          top: 72,
+          left: 20,
+          right: 20,
+          child: SizedBox(
+            height: 52,
+            child: FilledButton(
+              onPressed: onContinue,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(52),
+              ),
+              child: Text(continueText),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 12,
+          left: 20,
+          width: 160,
+          child: _DemoProgress(
+            step: step,
+            label: UserStorage.l10n.demoStepProgress(step),
+          ),
+        ),
+        Positioned(
+          top: 12,
+          right: 8,
+          child: TextButton(
+            onPressed: onSkip,
+            style: TextButton.styleFrom(
+              minimumSize: const Size(48, 48),
+              foregroundColor: AppColors.textSecondary,
+            ),
+            child: Text(skipText),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DemoProgress extends StatelessWidget {
+  const _DemoProgress({required this.step, required this.label});
+
+  final int step;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppColors.textSecondary,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Row(
+          children: List.generate(
+            3,
+            (index) => Expanded(
+              child: Container(
+                height: 2,
+                margin: EdgeInsets.only(right: index == 2 ? 0 : 6),
+                color: index < step ? AppColors.primary : AppColors.divider,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

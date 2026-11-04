@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
-import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
+import 'package:memex/utils/user_storage.dart';
 
 class ConversationCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -11,88 +11,64 @@ class ConversationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> rawMessages = data['messages'] ?? [];
-    // Show last 3 messages
-    final messages = rawMessages
-        .take(3)
-        .toList(); // Actually usually we want latest at bottom, but let's just show list.
-    // If we want chronological, we might need to reverse if data is new->old. Assuming data is old->new (chat log).
-
-    final String title = data['title'] ?? 'Conversation';
+    final rawMessages = data['messages'];
+    final messages = rawMessages is List
+        ? rawMessages.whereType<Map>().take(3).toList()
+        : const <Map>[];
+    final title = data['title']?.toString() ?? '';
 
     return GlassCard(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header (optional, maybe just title)
-          Padding(
-            padding: const EdgeInsets.only(left: 4, bottom: 12),
-            child: Text(
+          if (title.isNotEmpty) ...[
+            Text(
               title,
               style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textTertiary),
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textSecondary,
+              ),
             ),
-          ),
-
+            const SizedBox(height: 8),
+          ],
           if (messages.isEmpty)
-            Center(
-                child: Text(UserStorage.l10n.noMessages,
-                    style: const TextStyle(color: AppColors.textTertiary))),
+            Text(
+              UserStorage.l10n.noMessages,
+              style: const TextStyle(color: AppColors.textTertiary),
+            ),
+          ...messages.map((message) {
+            final sender = message['sender']?.toString() ?? '';
+            final isMe = message['isMe'] == true || sender == 'me';
+            final speaker = isMe ? UserStorage.l10n.youLabel : sender;
+            final text = message['text']?.toString() ?? '';
 
-          // Chat Bubbles
-          ...messages.map((m) {
-            final String text = m['text'] ?? '';
-            final String sender = m['sender'] ?? '';
-            final bool isMe = m['isMe'] == true || sender == 'me';
-
-            return Align(
-              alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 4),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                constraints: const BoxConstraints(maxWidth: 240), // Limit width
-                decoration: BoxDecoration(
-                  color: isMe ? const Color(0xFF3B82F6) : AppColors.background,
-                  borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(12),
-                    topRight: const Radius.circular(12),
-                    bottomLeft: isMe
-                        ? const Radius.circular(12)
-                        : const Radius.circular(2),
-                    bottomRight: isMe
-                        ? const Radius.circular(2)
-                        : const Radius.circular(12),
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontSize: 13,
+                    height: 1.4,
+                    color: AppColors.textPrimary,
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (!isMe)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 2),
-                        child: Text(sender,
-                            style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textSecondary)),
+                    if (speaker.isNotEmpty)
+                      TextSpan(
+                        text: '$speaker: ',
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    Text(
-                      text,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: isMe ? Colors.white : AppColors.textSecondary,
-                      ),
-                    ),
+                    TextSpan(text: text),
                   ],
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

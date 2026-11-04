@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -22,6 +23,9 @@ void main() {
       'location_context_config': jsonEncode(config.toJson()),
     });
     await UserStorage.initL10n();
+    tester.view.physicalSize = const Size(800, 2400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
       MaterialApp(
@@ -36,9 +40,16 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  // The success snackbar sits over the bottom bar; let it leave first.
+  Future<void> tapSave(WidgetTester tester) async {
+    await tester.pump(const Duration(seconds: 4));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+  }
+
   Future<void> scrollToTestButton(WidgetTester tester) async {
     await tester.scrollUntilVisible(
-      find.text('Test current location'),
+      find.byIcon(Icons.location_searching),
       300,
       scrollable: find.byType(Scrollable).first,
     );
@@ -97,13 +108,13 @@ void main() {
     expect(find.text('OpenStreetMap / Nominatim'), findsOneWidget);
     expect(find.text('Saved'), findsOneWidget);
 
-    await tester.tap(find.byType(SwitchListTile));
+    await tester.tap(find.byType(Switch));
     await tester.pumpAndSettle();
     var config = await UserStorage.getLocationContextConfig();
     expect(config.enabled, isFalse);
     expect(find.text('Save'), findsOneWidget);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tapSave(tester);
     await tester.pumpAndSettle();
     config = await UserStorage.getLocationContextConfig();
     expect(config.enabled, isTrue);
@@ -117,29 +128,73 @@ void main() {
     config = await UserStorage.getLocationContextConfig();
     expect(config.granularity, LocationContextGranularity.neighborhood);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tapSave(tester);
     await tester.pumpAndSettle();
     config = await UserStorage.getLocationContextConfig();
     expect(config.granularity, LocationContextGranularity.street);
 
     await tester.scrollUntilVisible(
-      find.text('Location freshness'),
+      find.text('LOCATION FRESHNESS'),
       300,
       scrollable: find.byType(Scrollable).first,
     );
     await tester.pumpAndSettle();
     await tester.tap(find.text('15 minutes'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('30 minutes').last);
+    await tester.tap(
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.text('30 minutes'),
+      ),
+    );
     await tester.pumpAndSettle();
 
     config = await UserStorage.getLocationContextConfig();
     expect(config.ttlMinutes, 15);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tapSave(tester);
     await tester.pumpAndSettle();
     config = await UserStorage.getLocationContextConfig();
     expect(config.ttlMinutes, 30);
+  });
+
+  testWidgets('testing shows progress and can be canceled', (tester) async {
+    final pending = Completer<CurrentLocationContext>();
+    await pumpLocationSettingsPage(
+      tester,
+      loadCurrentContext: ({bool forceRefresh = false}) => pending.future,
+    );
+    await tester.tap(find.byIcon(Icons.location_searching));
+    await tester.pump();
+
+    expect(find.text('Looking for an approximate position…'), findsOneWidget);
+    expect(find.text('Cancel test'), findsOneWidget);
+
+    await tester.tap(find.text('Cancel test'));
+    await tester.pump();
+    expect(find.text('Looking for an approximate position…'), findsNothing);
+
+    // A late answer after cancelling must not show a result.
+    pending.complete(
+      CurrentLocationContext(
+        status: 'fresh',
+        source: 'device_gps',
+        updatedAt: DateTime.utc(2026, 5, 15, 10),
+        granularity: LocationContextGranularity.city,
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Test result'), findsNothing);
+    expect(find.text('Test current location'), findsOneWidget);
+  });
+
+  testWidgets('shows only OpenStreetMap as provider, no keys asked', (
+    tester,
+  ) async {
+    await pumpLocationSettingsPage(tester);
+    expect(find.text('OpenStreetMap / Nominatim'), findsOneWidget);
+    expect(find.text('Map and search: OpenStreetMap'), findsOneWidget);
+    expect(find.byType(TextField), findsNothing);
   });
 
   testWidgets('complex edits stay draft until explicit save', (
@@ -176,7 +231,7 @@ void main() {
     expect(find.text('Save'), findsOneWidget);
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     expect(
@@ -188,7 +243,7 @@ void main() {
       findsOneWidget,
     );
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tapSave(tester);
     await tester.pumpAndSettle();
     config = await UserStorage.getLocationContextConfig();
     expect(config.provider, GeocodingProvider.openStreetMap);
@@ -207,7 +262,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byType(SwitchListTile));
+    await tester.tap(find.byType(Switch));
     await tester.pumpAndSettle();
     expect(find.text('Save'), findsOneWidget);
 
@@ -238,8 +293,11 @@ void main() {
 
     expect(find.text('Contexto de localização'), findsOneWidget);
     expect(find.text('Anexar localização atual ao chat'), findsOneWidget);
-    expect(find.text(UserStorage.l10n.reverseGeocodingProvider), findsOneWidget);
-    expect(find.text(UserStorage.l10n.contextGranularity), findsOneWidget);
+    expect(
+      find.text(UserStorage.l10n.reverseGeocodingProvider.toUpperCase()),
+      findsOneWidget,
+    );
+    expect(find.text(UserStorage.l10n.contextGranularity.toUpperCase()), findsOneWidget);
     expect(find.text(UserStorage.l10n.saved), findsOneWidget);
   });
 
@@ -254,7 +312,7 @@ void main() {
       },
     );
 
-    await tester.tap(find.byType(SwitchListTile));
+    await tester.tap(find.byType(Switch));
     await tester.pumpAndSettle();
 
     expect(find.text('Save'), findsOneWidget);
@@ -296,7 +354,7 @@ void main() {
     );
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     expect(receivedForceRefresh, isTrue);
@@ -333,7 +391,7 @@ void main() {
     );
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     expect(find.textContaining('GPS: unavailable'), findsOneWidget);
@@ -388,7 +446,7 @@ void main() {
     );
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     await tester.scrollUntilVisible(
@@ -427,7 +485,7 @@ void main() {
     );
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     expect(find.text('System location is off'), findsOneWidget);
@@ -465,7 +523,7 @@ void main() {
     );
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     expect(find.text('Location permission is blocked'), findsOneWidget);
@@ -505,7 +563,7 @@ void main() {
     );
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     expect(find.text('Approximate location only'), findsOneWidget);
@@ -537,7 +595,7 @@ void main() {
     );
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     expect(find.textContaining('GPS: fresh'), findsOneWidget);
@@ -565,7 +623,7 @@ void main() {
     );
 
     await scrollToTestButton(tester);
-    await tester.tap(find.text('Test current location'));
+    await tester.tap(find.byIcon(Icons.location_searching));
     await tester.pumpAndSettle();
 
     expect(

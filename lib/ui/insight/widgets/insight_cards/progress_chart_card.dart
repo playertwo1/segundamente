@@ -24,6 +24,13 @@ class ProgressItem {
 }
 
 class ProgressChartCard extends StatelessWidget {
+  static const _chartPalette = [
+    AppColors.textPrimary,
+    AppColors.textSecondary,
+    AppColors.textTertiary,
+    AppColors.divider,
+  ];
+
   final String title;
   final String? subtitle;
   final double current;
@@ -51,16 +58,8 @@ class ProgressChartCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 24, 24, 24),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            ),
-          ],
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +113,7 @@ class ProgressChartCard extends StatelessWidget {
                       Text(
                         title,
                         style: const TextStyle(
-                          fontFamily: 'PingFang SC',
+                          fontFamily: 'Inter',
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                           height: 24 / 16,
@@ -131,7 +130,7 @@ class ProgressChartCard extends StatelessWidget {
                         Text(
                           subtitle!,
                           style: const TextStyle(
-                            fontFamily: 'PingFang SC',
+                            fontFamily: 'Inter',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             height: 20 / 14,
@@ -146,7 +145,7 @@ class ProgressChartCard extends StatelessWidget {
                       // Legend items
                       if (items.isNotEmpty) ...[
                         const SizedBox(height: 12),
-                        ...items.map((item) => Padding(
+                        ...items.asMap().entries.map((entry) => Padding(
                               padding: const EdgeInsets.only(bottom: 6),
                               child: Row(
                                 children: [
@@ -154,16 +153,16 @@ class ProgressChartCard extends StatelessWidget {
                                     width: 8,
                                     height: 8,
                                     decoration: BoxDecoration(
-                                      color: _parseColor(item.color),
+                                      color: _chartColor(entry.key),
                                       shape: BoxShape.circle,
                                     ),
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
-                                      '${item.label} (${item.value.toInt()})',
+                                      '${entry.value.label} (${entry.value.value.toInt()})',
                                       style: const TextStyle(
-                                        fontFamily: 'PingFang SC',
+                                        fontFamily: 'Inter',
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         height: 16 / 12,
@@ -191,9 +190,10 @@ class ProgressChartCard extends StatelessWidget {
 
   List<PieChartSectionData> _buildSections() {
     if (items.isNotEmpty) {
-      return items.map((item) {
+      return items.asMap().entries.map((entry) {
+        final item = entry.value;
         return PieChartSectionData(
-          color: _parseColor(item.color),
+          color: _chartColor(entry.key),
           value: item.value,
           title: '',
           radius: 10,
@@ -205,7 +205,7 @@ class ProgressChartCard extends StatelessWidget {
     final remainder = target - current;
     return [
       PieChartSectionData(
-        color: AppColors.primary,
+        color: AppColors.textPrimary,
         value: current,
         title: '',
         radius: 10,
@@ -222,16 +222,5 @@ class ProgressChartCard extends StatelessWidget {
     ];
   }
 
-  Color _parseColor(String colorStr) {
-    if (colorStr.startsWith('#')) {
-      return Color(int.parse(colorStr.substring(1), radix: 16) + 0xFF000000);
-    }
-    switch (colorStr.toLowerCase()) {
-      case 'grey':
-      case 'gray':
-        return AppColors.textTertiary;
-      default:
-        return AppColors.divider;
-    }
-  }
+  Color _chartColor(int index) => _chartPalette[index % _chartPalette.length];
 }

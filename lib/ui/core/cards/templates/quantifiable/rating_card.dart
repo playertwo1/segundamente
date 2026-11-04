@@ -10,10 +10,12 @@ class RatingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String subject = data['subject'] ?? 'Rating';
+    final String subject = data['subject'] ?? data['title'] ?? '';
     final double score = (data['score'] as num?)?.toDouble() ?? 0.0;
     final double maxScore = (data['max_score'] as num?)?.toDouble() ?? 5.0;
     final String? comment = data['comment'];
+    final normalizedScore =
+        maxScore > 0 ? ((score / maxScore) * 5).clamp(0.0, 5.0) : 0.0;
 
     return GlassCard(
       onTap: onTap,
@@ -37,7 +39,7 @@ class RatingCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.amber.withValues(alpha: 0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -45,7 +47,7 @@ class RatingCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Colors.amber,
+                    color: AppColors.primary,
                   ),
                 ),
               ),
@@ -55,17 +57,25 @@ class RatingCard extends StatelessWidget {
           // Star rating visualization
           Row(
             children: List.generate(5, (index) {
-              // Normalize score to 5 stars
-              final normalizedScore = (score / maxScore) * 5;
               if (index < normalizedScore.floor()) {
-                return const Icon(Icons.star, color: Colors.amber, size: 20);
+                return const Icon(
+                  Icons.star,
+                  color: AppColors.primary,
+                  size: 20,
+                );
               } else if (index < normalizedScore &&
                   (normalizedScore - index) >= 0.5) {
-                return const Icon(Icons.star_half,
-                    color: Colors.amber, size: 20);
+                return const Icon(
+                  Icons.star_half,
+                  color: AppColors.primary,
+                  size: 20,
+                );
               } else {
-                return const Icon(Icons.star_border,
-                    color: Colors.amber, size: 20);
+                return const Icon(
+                  Icons.star_border,
+                  color: AppColors.primary,
+                  size: 20,
+                );
               }
             }),
           ),

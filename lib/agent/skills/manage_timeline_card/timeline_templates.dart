@@ -441,11 +441,11 @@ final List<Map<String, dynamic>> timelineTemplates = [
     'use_case': 'Transaction records, expense records, bills, etc.',
     'data_structure': '''
 - `merchant` (String, required): Merchant name.
-- `amount` (String, required): Total amount, must include currency unit, e.g., "¥50.00", "\$25.99", "€30.00".
+- `amount` (String, required): Total amount, must include currency unit, e.g., "R\$50.00", "USD 25.99", "€30.00".
 - `location` (String, optional): Transaction location.
 - `items` (List<Map>, optional): Transaction detail list, each item contains:
   - `name` (String, required): Item name.
-  - `amount` (String, required): Item price, must include currency unit, e.g., "¥20.00", "\$10.99".
+  - `amount` (String, required): Item price, must include currency unit, e.g., "R\$20.00", "USD 10.99".
 '''
   },
   {
