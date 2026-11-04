@@ -1159,7 +1159,9 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     String finalMessage = message.trim();
     final displayText = finalMessage.isNotEmpty
         ? finalMessage
-        : UserStorage.l10n.attachedImagesMessage(images.length);
+        : (images.isEmpty && files.isNotEmpty
+            ? UserStorage.l10n.attachedFilesMessage(files.length)
+            : UserStorage.l10n.attachedImagesMessage(images.length));
     final sentAt = DateTime.now();
     List<Map<String, String>>? refs;
     if (widget.initialRefs != null && !_contextSent) {

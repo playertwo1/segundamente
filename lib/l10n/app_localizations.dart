@@ -968,6 +968,12 @@ abstract class AppLocalizations {
   /// **'Sent {count} image(s)'**
   String attachedImagesMessage(Object count);
 
+  /// No description provided for @attachedFilesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent {count} file(s)'**
+  String attachedFilesMessage(Object count);
+
   /// No description provided for @noTaskData.
   ///
   /// In en, this message translates to:

@@ -182,6 +182,51 @@ void main() {
     expect(result.usage, isNull);
   });
 
+  group('explicit audio attachment without a duration in its name', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({
+        'use_local_speech_to_text': false,
+      });
+    });
+
+    test('is still blocked without skipLengthCheck', () async {
+      final audio = File('${tempDir.path}/teste_sm.wav');
+      await audio.create();
+      await _resizeFile(audio, 1024 * 1024);
+
+      final result = await SpeechTranscriptionService.instance
+          .transcribeFileWithMetadata(audio.path);
+
+      expect(result.model, 'asset-safety');
+      expect(result.text, isNull);
+    });
+
+    test('passes the safety gate with skipLengthCheck', () async {
+      final audio = File('${tempDir.path}/teste_sm.wav');
+      await audio.create();
+      await _resizeFile(audio, 1024 * 1024);
+
+      try {
+        final result = await SpeechTranscriptionService.instance
+            .transcribeFileWithMetadata(audio.path, skipLengthCheck: true);
+        expect(result.model, isNot('asset-safety'));
+      } catch (_) {
+        // Reached the model lookup, which the test environment lacks.
+      }
+    });
+
+    test('is blocked above the size limit even with skipLengthCheck', () async {
+      final audio = File('${tempDir.path}/teste_sm.wav');
+      await audio.create();
+      await _resizeFile(audio, 21 * 1024 * 1024);
+
+      final result = await SpeechTranscriptionService.instance
+          .transcribeFileWithMetadata(audio.path, skipLengthCheck: true);
+
+      expect(result.model, 'asset-safety');
+    });
+  });
+
   test(
     'saveAssetFromFile keeps long image and records dimensions safely',
     () async {

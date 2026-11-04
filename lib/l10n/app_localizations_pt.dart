@@ -500,6 +500,11 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String attachedFilesMessage(Object count) {
+    return '$count arquivo(s) enviado(s)';
+  }
+
+  @override
   String get noTaskData => 'Sem dados da tarefa';
 
   @override

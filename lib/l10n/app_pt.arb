@@ -230,6 +230,12 @@
       "count": {}
     }
   },
+  "attachedFilesMessage": "{count} arquivo(s) enviado(s)",
+  "@attachedFilesMessage": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "noTaskData": "Sem dados da tarefa",
   "createdAtDate": "Criado: {date}",
   "@createdAtDate": {

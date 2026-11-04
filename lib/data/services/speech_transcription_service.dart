@@ -77,7 +77,10 @@ class SpeechTranscriptionService {
       );
     }
 
-    return _transcribeFileWithCloud(audioPath);
+    return _transcribeFileWithCloud(
+      audioPath,
+      skipLengthCheck: skipLengthCheck,
+    );
   }
 
   Future<String?> transcribeSamples(Float32List samples) async {
@@ -101,7 +104,10 @@ class SpeechTranscriptionService {
     String audioPath, {
     bool skipLengthCheck = false,
   }) async {
-    final safety = await _inspectAudioForTranscription(audioPath);
+    final safety = await _inspectAudioForTranscription(
+      audioPath,
+      skipLengthCheck: skipLengthCheck,
+    );
     if (!safety.safeForAnalysis) {
       _logger.warning(
         'Skipping unsafe local audio transcription for $audioPath: ${safety.reason}',
@@ -135,9 +141,13 @@ class SpeechTranscriptionService {
   }
 
   Future<SpeechTranscriptionResult> _transcribeFileWithCloud(
-    String audioPath,
-  ) async {
-    final safety = await _inspectAudioForTranscription(audioPath);
+    String audioPath, {
+    bool skipLengthCheck = false,
+  }) async {
+    final safety = await _inspectAudioForTranscription(
+      audioPath,
+      skipLengthCheck: skipLengthCheck,
+    );
     if (!safety.safeForAnalysis) {
       _logger.warning(
         'Skipping unsafe cloud audio transcription for $audioPath: ${safety.reason}',
@@ -155,13 +165,36 @@ class SpeechTranscriptionService {
   }
 
   Future<AssetSafetyReport> _inspectAudioForTranscription(
-    String audioPath,
-  ) async {
+    String audioPath, {
+    bool skipLengthCheck = false,
+  }) async {
     final file = File(audioPath);
     if (!file.existsSync()) {
       throw Exception('Audio file not found: $audioPath');
     }
-    return AssetSafetyService.instance.inspectFile(audioPath);
+    final report = await AssetSafetyService.instance.inspectFile(audioPath);
+    // An audio the user attached on purpose carries no duration in its file
+    // name (only app recordings do), so only the size limit applies to it.
+    if (skipLengthCheck &&
+        report.type == AssetSafetyType.audio &&
+        report.durationSeconds == null &&
+        report.fileSizeBytes <=
+            const AssetSafetyConfig().maxAudioBytesForCloud) {
+      return AssetSafetyReport(
+        filePath: report.filePath,
+        type: report.type,
+        fileSizeBytes: report.fileSizeBytes,
+        width: null,
+        height: null,
+        durationSeconds: null,
+        safeForPreview: true,
+        safeForAnalysis: true,
+        safeForOcr: false,
+        safeForInlineBase64: false,
+        reason: 'explicit attachment within the size limit',
+      );
+    }
+    return report;
   }
 
   Future<SpeechTranscriptionResult> _transcribeSamplesWithCloud(

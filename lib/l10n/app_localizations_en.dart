@@ -493,6 +493,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String attachedFilesMessage(Object count) {
+    return 'Sent $count file(s)';
+  }
+
+  @override
   String get noTaskData => 'No task data';
 
   @override
