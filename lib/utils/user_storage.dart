@@ -22,6 +22,7 @@ import 'package:memex/data/services/claude_auth_service.dart';
 import 'package:memex/domain/models/task_exceptions.dart';
 import 'package:memex/llm_client/codex_responses_client.dart';
 import 'package:memex/llm_client/gemini_oauth_client.dart';
+import 'package:memex/llm_client/fallback_llm_client.dart';
 import 'package:memex/data/services/avatar_media_service.dart';
 
 /// Storage location for a user's workspace.
@@ -874,6 +875,117 @@ class UserStorage {
     return (client: client, modelConfig: modelConfig);
   }
 
+  static const String _keyFallbackEnabled = 'llm_fallback_enabled';
+  static const String _keyFallbackOrder = 'llm_fallback_order';
+
+  /// Whether automatic model fallback is enabled.
+  static Future<bool> isFallbackEnabled() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(_keyFallbackEnabled) ?? true;
+    } catch (_) {
+      return true;
+    }
+  }
+
+  /// Toggle automatic model fallback.
+  static Future<void> setFallbackEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyFallbackEnabled, enabled);
+  }
+
+  /// Get the user-configured fallback order (list of LLMConfig keys).
+  static Future<List<String>> getFallbackOrder() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getStringList(_keyFallbackOrder) ?? <String>[];
+    } catch (_) {
+      return <String>[];
+    }
+  }
+
+  /// Set the user-configured fallback order (list of LLMConfig keys).
+  static Future<void> setFallbackOrder(List<String> order) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_keyFallbackOrder, order);
+  }
+
+  /// Checks if an [LLMConfig] has valid credentials and is ready for use.
+  static Future<bool> isConfigReady(LLMConfig config) async {
+    if (!config.isValid) return false;
+    try {
+      switch (config.type) {
+        case LLMConfig.typeOpenAiOauth:
+          final tokens = await OpenAiAuthService.getSavedTokens();
+          return tokens != null;
+        case LLMConfig.typeGeminiOauth:
+          final token = await GeminiAuthService.getValidAccessToken();
+          return token != null;
+        case LLMConfig.typeClaudeOauth:
+          final token = await ClaudeAuthService.getValidAccessToken();
+          return token != null;
+        default:
+          return config.apiKey.isNotEmpty || config.type == LLMConfig.typeOllama;
+      }
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Assembles the list of fallback candidates starting with [primaryConfig].
+  static Future<List<FallbackCandidate>> getFallbackCandidates(
+    LLMConfig primaryConfig,
+  ) async {
+    final candidates = <FallbackCandidate>[];
+
+    // 1. Primary candidate
+    try {
+      final primaryRes = await buildLLMResources(primaryConfig);
+      candidates.add(FallbackCandidate(
+        key: primaryConfig.key,
+        name: LLMConfig.displayName(primaryConfig.type),
+        client: primaryRes.client,
+        modelConfig: primaryRes.modelConfig,
+      ));
+    } catch (_) {
+      // Primary couldn't even be built, continue to fallbacks
+    }
+
+    // 2. Remaining configs
+    final allConfigs = await getLLMConfigs();
+    final remaining =
+        allConfigs.where((c) => c.key != primaryConfig.key).toList();
+
+    // Sort by custom order if set
+    final preferredOrder = await getFallbackOrder();
+    if (preferredOrder.isNotEmpty) {
+      remaining.sort((a, b) {
+        final indexA = preferredOrder.indexOf(a.key);
+        final indexB = preferredOrder.indexOf(b.key);
+        if (indexA != -1 && indexB != -1) return indexA.compareTo(indexB);
+        if (indexA != -1) return -1;
+        if (indexB != -1) return 1;
+        return 0;
+      });
+    }
+
+    for (final cfg in remaining) {
+      if (await isConfigReady(cfg)) {
+        try {
+          final res = await buildLLMResources(cfg);
+          candidates.add(FallbackCandidate(
+            key: cfg.key,
+            name: LLMConfig.displayName(cfg.type),
+            client: res.client,
+            modelConfig: res.modelConfig,
+          ));
+        } catch (_) {}
+      }
+    }
+
+    return candidates;
+  }
+
   /// Get both the LLMClient and ModelConfig for an agent.
   /// This centralized method handles client creation and model configuration mapping.
   /// [defaultClientKey] specifies which default config to use if the agent hasn't selected one.
@@ -891,7 +1003,20 @@ class UserStorage {
           'The LLM configuration for $agentId is invalid.');
     }
 
-    return buildLLMResources(llmConfig);
+    final fallbackEnabled = await isFallbackEnabled();
+    if (!fallbackEnabled) {
+      return buildLLMResources(llmConfig);
+    }
+
+    final candidates = await getFallbackCandidates(llmConfig);
+    if (candidates.length <= 1) {
+      return buildLLMResources(llmConfig);
+    }
+
+    return (
+      client: FallbackLLMClient(candidates: candidates),
+      modelConfig: candidates.first.modelConfig,
+    );
   }
 
   /// Get photo suggestion cache

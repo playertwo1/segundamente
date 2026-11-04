@@ -31,6 +31,8 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
   String _defaultConfigKey = LLMConfig.defaultClientKey;
   bool _isLoading = true;
   bool _didAutoOpenFirstConfig = false;
+  bool _isFallbackEnabled = true;
+  List<String> _fallbackOrder = [];
 
   String _providerDisplayName(String type) {
     final l10n = UserStorage.l10n;
@@ -90,10 +92,14 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
     final router = MemexRouter();
     final configs = await router.getLLMConfigs();
     final defaultConfigKey = await router.getDefaultLLMConfigKey();
+    final isFallbackEnabled = await router.isFallbackEnabled();
+    final fallbackOrder = await router.getFallbackOrder();
     if (!mounted) return;
     setState(() {
       _configs = configs;
       _defaultConfigKey = defaultConfigKey;
+      _isFallbackEnabled = isFallbackEnabled;
+      _fallbackOrder = fallbackOrder;
       _isLoading = false;
     });
     _maybeAutoOpenFirstConfig();
@@ -253,6 +259,127 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
     _editConfig(null, duplicateSource: duplicated);
   }
 
+  String _buildFallbackChainSubtitle() {
+    final validConfigs = _configs.where((c) => c.isValid).toList();
+    if (validConfigs.isEmpty) return 'Nenhum provedor configurado';
+    if (_fallbackOrder.isNotEmpty) {
+      validConfigs.sort((a, b) {
+        final iA = _fallbackOrder.indexOf(a.key);
+        final iB = _fallbackOrder.indexOf(b.key);
+        if (iA != -1 && iB != -1) return iA.compareTo(iB);
+        if (iA != -1) return -1;
+        if (iB != -1) return 1;
+        return 0;
+      });
+    }
+    return validConfigs
+        .map((c) => LLMConfig.displayName(c.type))
+        .take(4)
+        .join(' ➔ ');
+  }
+
+  void _openFallbackOrderSheet() {
+    final validConfigs = _configs.where((c) => c.isValid).toList();
+    if (_fallbackOrder.isNotEmpty) {
+      validConfigs.sort((a, b) {
+        final iA = _fallbackOrder.indexOf(a.key);
+        final iB = _fallbackOrder.indexOf(b.key);
+        if (iA != -1 && iB != -1) return iA.compareTo(iB);
+        if (iA != -1) return -1;
+        if (iB != -1) return 1;
+        return 0;
+      });
+    }
+
+    showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Prioridade de Fallback',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Arraste para definir a ordem em que os modelos serão tentados em caso de falha.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Flexible(
+                    child: ReorderableListView(
+                      shrinkWrap: true,
+                      onReorder: (oldIndex, newIndex) async {
+                        setSheetState(() {
+                          if (oldIndex < newIndex) {
+                            newIndex -= 1;
+                          }
+                          final item = validConfigs.removeAt(oldIndex);
+                          validConfigs.insert(newIndex, item);
+                        });
+                        final newOrder =
+                            validConfigs.map((c) => c.key).toList();
+                        await MemexRouter().setFallbackOrder(newOrder);
+                        setState(() => _fallbackOrder = newOrder);
+                      },
+                      children: [
+                        for (int i = 0; i < validConfigs.length; i++)
+                          ListTile(
+                            key: ValueKey(validConfigs[i].key),
+                            leading: CircleAvatar(
+                              radius: 14,
+                              backgroundColor: AppColors.primary,
+                              child: Text(
+                                '${i + 1}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              LLMConfig.displayName(validConfigs[i].type),
+                            ),
+                            subtitle: Text(validConfigs[i].modelId),
+                            trailing: const Icon(Icons.drag_handle),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _openAdvancedAgentConfig() async {
     await Navigator.push<void>(
       context,
@@ -311,6 +438,34 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
                 trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: _openAdvancedAgentConfig,
               ),
+              const Divider(height: 1),
+              SwitchListTile(
+                key: const ValueKey('model-fallback-toggle'),
+                secondary: const Icon(Icons.alt_route_rounded),
+                title: const Text('Fallback automático'),
+                subtitle: const Text(
+                  'Se o provedor atual falhar (rate limit, offline, erro), tenta os outros automaticamente.',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: _isFallbackEnabled,
+                onChanged: (val) async {
+                  await MemexRouter().setFallbackEnabled(val);
+                  setState(() => _isFallbackEnabled = val);
+                },
+              ),
+              if (_isFallbackEnabled && _configs.length > 1) ...[
+                ListTile(
+                  key: const ValueKey('model-fallback-order-action'),
+                  leading: const Icon(Icons.low_priority_rounded),
+                  title: const Text('Ordem de prioridade do fallback'),
+                  subtitle: Text(
+                    _buildFallbackChainSubtitle(),
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: _openFallbackOrderSheet,
+                ),
+              ],
             ],
           ),
         ),

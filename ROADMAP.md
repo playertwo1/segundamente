@@ -10,6 +10,9 @@
 5. Antes de mudança média ou grande: leia `docs/WATCHDOG.md`. Antes de fechar uma fase: aplique `docs/AUDIT.md`.
 6. Regras de código, camadas e testes do Memex: `AGENTS.md` (ele vence em conflito).
 
+## Próxima prioridade
+F5-04 é a próxima tarefa de implementação, conforme pedido do dono e D-019. A direção está aprovada em D-017 e documentada em [`DESIGN.md`](DESIGN.md), com as dez pranchas no [índice](docs/INDEX.md#design-móvel). A execução visual pode começar antes das validações manuais restantes da F4; isso não altera as dependências nem fecha os portões da F4/F5. Ao terminar F5-04, retomar as demais pendências registradas em `STATE.md` e na ordem geral deste roadmap.
+
 Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE`. Prioridade: P0 bloqueia o fluxo principal · P1 sustenta o MVP · P2 melhoria · P3 futuro.
 
 ## Fases
@@ -102,15 +105,15 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F5-01 | Teste ponta a ponta dos 7 critérios no S25 Ultra | P0 | F4 | IN_PROGRESS | Checklist preenchido com evidência |
 | F5-02 | Revisão de privacidade: chaves e tokens protegidos, sem segredo em log, política de envio compreensível | P0 | F4 | IN_PROGRESS | Revisão registrada |
 | F5-03 | Desempenho (sessão longa, lista de histórico) e correções | P1 | F4 | IN_PROGRESS | Medições registradas |
-| F5-04 | Aplicar a direção AMOLED aprovada em `DESIGN.md`: conteúdo editorial, navegação no topo, sem barra inferior persistente e conversa com acesso explícito | P2 | F4 | NOT_RUN | Widget tests dos comportamentos visíveis; capturas antes/depois no S25; checagem de menu/rotas, rolagem, texto ampliado e leitor de tela |
+| F5-04 | Aplicar a direção AMOLED aprovada em `DESIGN.md`: conteúdo editorial, navegação no topo, sem barra inferior persistente e conversa com acesso explícito | P2 | D-017, D-019 | READY | Widget tests dos comportamentos visíveis; capturas antes/depois no S25; checagem de menu/rotas, rolagem, texto ampliado e leitor de tela |
 | F5-05 | Auditoria final (`docs/AUDIT.md`) e atribuições GPL | P0 | F5-01 | IN_PROGRESS | Relatório de auditoria sem item crítico aberto |
 
 **Portão F5 = MVP pronto.** Aberto em 2026-11-02 com os portões da F0, da F1, da F2, da F3 e da F4 ainda abertos. `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto.
 
 ### F5-04 — direção aprovada, implementação pendente
 - Direção e dez pranchas aprovadas: [`DESIGN.md`](DESIGN.md) e [`docs/INDEX.md`](docs/INDEX.md#design-móvel).
-- A aprovação é de design. As telas ainda não foram implementadas; F5-04 permanece `NOT_RUN` e depende de F4.
-- Ordem sugerida quando F5-04 estiver liberada: tokens/tema e navegação; timeline, conhecimento e memórias; entrada e conversa; calendário, detalhes e relatórios; configurações, modelos, agentes e backup; estados vazios/erro e validação de acessibilidade.
+- A aprovação é de design. As telas ainda não foram implementadas; F5-04 está `READY` por D-019, mesmo com validações manuais da F4 pendentes. Isso permite iniciar o trabalho visual, mas não fecha a F4 nem remove seus critérios do portão do MVP.
+- Ordem de implementação: tokens/tema e navegação; timeline, conhecimento e memórias; entrada e conversa; calendário, detalhes e relatórios; configurações, modelos, agentes e backup; estados vazios/erro e validação de acessibilidade.
 - Aplicar os componentes e abstrações existentes em `lib/ui/core/themes/`; conferir `DESIGN.md` e as rotas antes de alterar cada família. Toda interação visual nova precisa do widget test exigido por `AGENTS.md`.
 
 ## Critérios de aceite do MVP (no Galaxy S25 Ultra, sem NotebookLM, PC ligado, Hermes ou serviço pago próprio)
@@ -234,4 +237,4 @@ Primeiro fechar o que está `IN_PROGRESS` com prova no S25 (F2-09, F2-10, F2-03,
 - 2026-11-03 — D-011 (áudio pelo endpoint de transcrição), D-012 (só en e pt), D-013 (Gemini OAuth bloqueado), D-014 (ideias do Memos na F6) e D-015 (login Claude pendente).
 - 2026-11-03 — D-016 (ideias do Daedalus Echo: F2-11, F3-07, F6-09 a F6-11).
 - 2026-11-03 — D-018 (ideias do anarlog: F1-09, F2-12, F2-13, F3-08, F3-09).
-- 2026-11-03 — D-017: direção visual móvel AMOLED aprovada; aplicação permanece em F5-04 `NOT_RUN`.
+- 2026-11-03 — D-017: direção visual móvel AMOLED aprovada. D-019 prioriza a implementação em F5-04 (`READY`) antes das demais pendências; portões da F4/F5 mantidos.

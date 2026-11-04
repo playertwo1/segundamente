@@ -1,6 +1,6 @@
 # STATE — ponto de retomada
 
-**Atualizado:** 2026-11-03 · **Fase ativa:** F6 — Memória longitudinal · **Estado:** IN_PROGRESS
+**Atualizado:** 2026-11-03 · **Fase ativa:** F5 — Fechamento do MVP · **Estado:** IN_PROGRESS
 
 A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 17, serial RQCY10934YV) executou o app `app.segundamente.dev` (PID 7991), exibindo "Boas-vindas à Segunda Mente" em português (evidência em `docs/s25_screenshot.png`). A F1 continua `IN_PROGRESS`: faltam resposta real de dois provedores e o login OAuth. A F2 continua `IN_PROGRESS`: faltam o TXT real de ~50 min, voz no S25 e fotos. A F3 continua `IN_PROGRESS`: faltam a amostra de 53 min e uma resposta real de modelo. A F4 continua `IN_PROGRESS`: faltam abrir o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F5 continua `IN_PROGRESS`: `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto. O portão da F6 não fecha.
 
@@ -8,7 +8,8 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 - Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). Antes deste envio, `origin/main` está em `db7bc1d`, sobre a F2 `e8b30b1` e a F1 `790e8b8`. A F4 é `969d177`. A F5 é `e1f6c9f`. Este commit é a F6. O dono aprovou o push dos três. Os portões da F3, da F4, da F5 e da F6 continuam abertos.
 - No código: login OAuth de OpenAI (`lib/data/services/openai_auth_service.dart`), Gemini (`gemini_auth_service.dart`, bloqueado pelo Google, D-013) e Claude (`claude_auth_service.dart`, `67389b4`, conflita com D-005 e espera decisão, D-015). Claude por chave de API continua em `lib/domain/models/llm_config.dart`.
 - Planejamento: [índice](docs/INDEX.md), [PROJECT.md](PROJECT.md), [ROADMAP.md](ROADMAP.md), [DESIGN.md](DESIGN.md), [decisões](docs/DECISIONS.md), `docs/questionario/`.
-- Design visual AMOLED v3 aprovado em 2026-11-03 (D-017), com dez pranchas em `.impeccable-mobile/references/amoled-v3-ios/`. F5-04 continua `NOT_RUN`: nenhuma tela foi implementada ou validada no aparelho.
+- Design visual AMOLED v3 aprovado em 2026-11-03 (D-017), com dez pranchas em `.impeccable-mobile/references/amoled-v3-ios/`. F5-04 está `READY` para implementação (D-019): nenhuma tela foi atualizada ou validada no aparelho ainda.
+- Próxima prioridade definida pelo dono: implementar F5-04 seguindo `DESIGN.md` e as pranchas v3 antes de retomar as outras tarefas pendentes. F4 continua aberta e seu portão não muda; D-019 libera apenas iniciar este trabalho visual em paralelo às validações restantes da F4.
 
 ## Evidência da F0 (2026-11-02/2026-11-03; Windows 11, Flutter 3.47.9 stable, Dart 3.13.7, JDK 17, Samsung Galaxy S25 Ultra)
 - F0-01 `DONE`: `git remote -v` mostra `upstream=memex-lab/memex`; commit base do Memex = `6143923e7b2237520b7143f4e5aae88822788aa4`.
@@ -99,7 +100,7 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 - F5-01 `IN_PROGRESS`. Checklist dos 7 critérios em `docs/F5-01-checklist.md`. Cada critério no S25 Ultra está `NOT_RUN`.
 - F5-02 `IN_PROGRESS`. Nota em `docs/F5-02-privacidade.md`. O log de sucesso da OpenAI não imprime mais access token, refresh token nem ID token. A falha dedicada da troca de código, na OpenAI e no Gemini, registra só o status HTTP. O `catch` ainda grava a exceção. O teste `openai_auth_log_test.dart` recusa `${tokenResponse.body}` e `${response.body}` e ainda exige `jsonDecode(tokenResponse.body)`. Tokens e `apiKey` continuam em `SharedPreferences`. Uma passagem sem histórico corrigiu a frase que punha a `apiKey` do Gemini no cabeçalho: nessa lista de modelos a chave vai na query `key=`.
 - F5-03 `IN_PROGRESS`. Nota em `docs/F5-03-medicoes.md`. Fixture sintético de 1500 segmentos (50 min, um a cada 2 s): parse 15 ms. Exportação de 100 itens nos três formatos: 25 ms. Não é o TXT do Samsung. A lista de histórico e o aparelho estão `NOT_RUN`. Nenhum código de desempenho foi mudado.
-- F5-04 `NOT_RUN`. Direção aprovada em D-017 e `DESIGN.md`; as pranchas estão em `.impeccable-mobile/references/amoled-v3-ios/`. Sem mudança visual no app, capturas antes/depois ou validação de acessibilidade.
+- F5-04 `READY`. Direção aprovada em D-017; prioridade e início antes do fechamento da F4 autorizados em D-019. `DESIGN.md` e as pranchas estão em `.impeccable-mobile/references/amoled-v3-ios/`. Sem mudança visual no app, capturas antes/depois ou validação de acessibilidade.
 - F5-05 `IN_PROGRESS`. `docs/reviews/F5.md` termina em `AUDIT RESULT: FAIL` por causa do S25 e do armazenamento em claro. Atribuições de licença continuam em `docs/F0-04-licencas.md`. Não há `LicensePage` em `lib/`.
 - Comando: `flutter test --reporter expanded` nos dois arquivos abaixo. Saída: `F5-03 parse_ms=15 segments=1500`, `F5-03 export_ms=25 items=100`, `00:00 +3: All tests passed!`
   - `test/data/services/openai_auth_log_test.dart`
@@ -128,10 +129,12 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 ## Última atividade
 - 2026-11-03: ideias do anarlog em F1-09, F2-12, F2-13, F3-08 e F3-09 (D-018, `eb0747e`). Segue sem código nessas tarefas. Fila geral das novas em `ROADMAP.md`, seção "Ordem geral das tarefas novas".
 - 2026-11-03: roadmap detalhado com F1-07/08, F2-08 a F2-10 e F6-05 a F6-08 (ideias do Memos, D-014); ideias do Daedalus Echo em F2-11, F3-07 e F6-09 a F6-11 (D-016, `ec80d43`). Decisões D-011 a D-016 em `docs/DECISIONS.md`. Nenhuma dessas tarefas novas tem código.
+- 2026-11-03: por pedido do dono, F5-04 virou a próxima prioridade de implementação, antes de retomar as demais pendências. A F4 continua aberta; D-019 permite iniciar o redesign sem declarar seu portão concluído.
 - 2026-11-02: o dono pediu commit e push da F4, da F5 e da F6 (busca de texto, painel de encaminhamentos aprovados e `revisions.json`). Semântica, tópicos e o "por quê" continuam `NOT_RUN`.
 
 ## Próxima ação
-- Validar o áudio no S25 (F2-09): `.m4a` curto, depois ~50 min. Depois, o TXT real de ~50 min do Samsung (F2-03), o compartilhamento de PDF e áudio (F2-10), os IDs GPT-6 (F1-07) e a decisão D-015. Depois, as tarefas novas na ordem do `ROADMAP.md` ("Ordem geral das tarefas novas"): F1-09, F3-08, F3-07, F2-13, F2-11, F2-12, F6-11, F6-08, F6-05, F6-09, F6-06, F6-07; F3-09, F6-10 e F6-07 só depois de medir.
+- Implementar F5-04 conforme `DESIGN.md` e as dez referências v3: (1) tema/tokens e navegação de topo, sem barra inferior persistente; (2) timeline, conhecimento e memórias; (3) entrada e conversa com acesso “Conversar” explícito; (4) calendário, detalhes e relatórios; (5) configurações, modelos, agentes e backup; (6) estados vazios/erro, testes de widget, escala de texto e leitor de tela. Mapear cada destino às rotas existentes antes de alterar navegação. Validar no S25 quando disponível. F5-04 não fecha a F4 nem o MVP.
+- Depois de concluir e registrar a evidência de F5-04, retomar o restante na sequência anterior: validar áudio no S25 (F2-09), TXT real de ~50 min (F2-03), compartilhamento de PDF e áudio (F2-10), IDs GPT-6 (F1-07) e decisão D-015; depois seguir "Ordem geral das tarefas novas" em `ROADMAP.md`.
 - O portão da F6 continua aberto. Semântica, tópicos e o "por quê" continuam `NOT_RUN`. A F5 continua aberta (`AUDIT RESULT: FAIL`). A F4 continua aberta até o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F3 continua aberta até a amostra de 53 min e uma saída real de modelo. A F2 continua aberta até os critérios 1, 2 e 3 no S25; F2-03 espera um TXT real de ~50 min; F2-02 e F2-05 estão `NOT_RUN`. A F1 continua aberta por uma resposta real de OpenAI e de Gemini. A F0 continua aberta pelo S25 (D-009). Não começar a F7.
 
 ## Bloqueios e aprovações humanas

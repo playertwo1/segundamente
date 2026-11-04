@@ -1868,6 +1868,13 @@ class MemexRouter {
     _emitLLMConfigChanged(configs, reason: 'default_changed');
   }
 
+  Future<bool> isFallbackEnabled() => UserStorage.isFallbackEnabled();
+  Future<void> setFallbackEnabled(bool enabled) =>
+      UserStorage.setFallbackEnabled(enabled);
+  Future<List<String>> getFallbackOrder() => UserStorage.getFallbackOrder();
+  Future<void> setFallbackOrder(List<String> order) =>
+      UserStorage.setFallbackOrder(order);
+
   void _emitLLMConfigChanged(
     List<LLMConfig> configs, {
     required String reason,
