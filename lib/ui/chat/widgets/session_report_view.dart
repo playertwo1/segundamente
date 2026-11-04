@@ -12,6 +12,8 @@ class SessionReportView extends StatefulWidget {
     required this.onSetStatus,
     this.onExport = _ignoreExport,
     this.errorMessage,
+    this.onDraftWithModel,
+    this.usedLocalFallback = false,
   });
 
   final SessionReport? report;
@@ -29,6 +31,9 @@ class SessionReportView extends StatefulWidget {
   final Future<void> Function(ReportExportFormat format, Set<String> itemIds)
       onExport;
   final String? errorMessage;
+  final Future<void> Function(ReportKind kind, String? customTitle)?
+      onDraftWithModel;
+  final bool usedLocalFallback;
 
   static Future<void> _ignoreExport(
     ReportExportFormat format,
@@ -82,6 +87,31 @@ class _SessionReportViewState extends State<SessionReportView> {
   void dispose() {
     _customTitle.dispose();
     super.dispose();
+  }
+
+  Future<void> _confirmAndDraftWithModel() async {
+    final l10n = UserStorage.l10n;
+    final send = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.sendLeavesDeviceTitle),
+        content: Text(l10n.reportModelConfirmBody),
+        actions: [
+          TextButton(
+            key: const ValueKey('report_model_cancel'),
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.sendBack),
+          ),
+          TextButton(
+            key: const ValueKey('report_model_confirm'),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.sendNow),
+          ),
+        ],
+      ),
+    );
+    if (send != true) return;
+    await widget.onDraftWithModel!(_kind, _customTitle.text);
   }
 
   @override
@@ -138,6 +168,20 @@ class _SessionReportViewState extends State<SessionReportView> {
             child: Text(l10n.reportGenerate),
           ),
         ),
+        if (widget.onDraftWithModel != null)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              key: const ValueKey('report_generate_model'),
+              onPressed: _confirmAndDraftWithModel,
+              child: Text(l10n.reportGenerateModel),
+            ),
+          ),
+        if (widget.usedLocalFallback)
+          Text(
+            l10n.reportModelFallback,
+            key: const ValueKey('report_model_fallback'),
+          ),
         if (report != null)
           Wrap(
             children: [

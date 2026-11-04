@@ -3385,6 +3385,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportGenerate => 'Generate draft';
 
   @override
+  String get reportGenerateModel => 'Generate with the model';
+
+  @override
+  String get reportModelFallback =>
+      'The model did not answer validly; the local draft was used.';
+
+  @override
+  String get reportModelConfirmBody =>
+      'This session\'s text will be sent to the configured model to organize the report. Nothing is sent without your confirmation.';
+
+  @override
   String get reportUnconfirmed => 'Unconfirmed';
 
   @override

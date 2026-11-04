@@ -57,6 +57,42 @@ class SessionReportService {
     return report;
   }
 
+  /// Asks the model for the items; if it fails or answers something the
+  /// report validation refuses, falls back to the local draft and says so.
+  Future<({SessionReport report, Object? modelError})> draftWithModel({
+    required String userId,
+    required String sessionId,
+    required ReportKind kind,
+    required String? customTitle,
+    required Future<String> Function(String system, String user) ask,
+  }) async {
+    try {
+      final reply = await ask(
+        reportExtractionSystemPrompt(kind),
+        reportExtractionUserPrompt(await _segments(userId, sessionId)),
+      );
+      final report = await applyModelJson(
+        userId: userId,
+        sessionId: sessionId,
+        kind: kind,
+        customTitle: customTitle,
+        json: reportModelReplyJson(reply),
+      );
+      return (report: report, modelError: null);
+    } on StateError {
+      rethrow; // approved items or nothing to report: not a model failure
+    } catch (error) {
+      _logger.warning('Model report failed, using local draft: $error');
+      final report = await draft(
+        userId: userId,
+        sessionId: sessionId,
+        kind: kind,
+        customTitle: customTitle,
+      );
+      return (report: report, modelError: error);
+    }
+  }
+
   Future<SessionReport> applyModelJson({
     required String userId,
     required String sessionId,

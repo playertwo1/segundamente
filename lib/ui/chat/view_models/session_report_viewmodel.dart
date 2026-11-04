@@ -47,6 +47,30 @@ class SessionReportViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// True when the model failed and the local draft was used instead.
+  bool usedLocalFallback = false;
+
+  Future<void> draftWithModel(ReportKind kind, String? customTitle) async {
+    loading = true;
+    errorMessage = null;
+    usedLocalFallback = false;
+    notifyListeners();
+    final result = await _router.draftSessionReportWithModel(
+      sessionId: sessionId,
+      kind: kind,
+      customTitle: customTitle,
+    );
+    result.when(
+      onOk: (value) {
+        report = value.report;
+        usedLocalFallback = value.modelError != null;
+      },
+      onError: (error, _) => errorMessage = '$error',
+    );
+    loading = false;
+    notifyListeners();
+  }
+
   Future<void> edit({
     required String itemId,
     required String text,

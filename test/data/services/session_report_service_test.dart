@@ -317,4 +317,46 @@ void main() {
     expect(await revisions.exists(), isFalse);
     expect(await original.readAsBytes(), bytes);
   });
+
+  test('model draft keeps verified items and fails over to the local draft',
+      () async {
+    await storeTranscript();
+    String? sentText;
+
+    final ok = await service.draftWithModel(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+      ask: (system, user) async {
+        sentText = user;
+        return '```json\n{"items":[{"kind":"decision","text":"Escopo fechado",'
+            '"segment_id":"seg_0","excerpt":"fechar o escopo"}]}\n```';
+      },
+    );
+    expect(sentText, contains('[seg_0 00:00:01] fechar o escopo'));
+    expect(ok.modelError, isNull);
+    expect(ok.report.items.single.kind, ReportItemKind.decision);
+    expect(ok.report.items.single.status, ReportItemStatus.unconfirmed);
+
+    final fallback = await service.draftWithModel(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+      ask: (system, user) async => '{"items":[{"kind":"decision","text":"x",'
+          '"segment_id":"seg_0","excerpt":"texto que não existe"}]}',
+    );
+    expect(fallback.modelError, isA<FormatException>());
+    expect(fallback.report.items.first.kind, ReportItemKind.summary);
+
+    final failed = await service.draftWithModel(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+      ask: (system, user) async => throw const SocketException('offline'),
+    );
+    expect(failed.modelError, isA<SocketException>());
+  });
 }

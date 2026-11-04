@@ -3416,6 +3416,17 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reportGenerate => 'Gerar rascunho';
 
   @override
+  String get reportGenerateModel => 'Gerar com o modelo';
+
+  @override
+  String get reportModelFallback =>
+      'O modelo não respondeu de forma válida; usei o rascunho local.';
+
+  @override
+  String get reportModelConfirmBody =>
+      'O texto desta sessão será enviado ao modelo configurado para organizar o relatório. Nada é enviado sem a sua confirmação.';
+
+  @override
   String get reportUnconfirmed => 'Não confirmado';
 
   @override

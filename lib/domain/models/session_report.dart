@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 const sessionReportSchemaVersion = 1;
 
 const reportAssigneeUnknown = 'não identificado';
@@ -281,6 +283,50 @@ SessionReport sessionReportFromModelJson({
   );
 }
 
+// shortcut: sends the whole text in one request, no chunking; split by time
+// when a real 50 min transcript exceeds the model context.
+const reportModelInputLimit = 60000;
+
+String reportExtractionSystemPrompt(ReportKind kind) {
+  final kinds = sectionsFor(kind).map((k) => k.name).join(', ');
+  return 'You organize a transcript into report items. Reply with ONLY a '
+      'JSON object {"items":[{"kind","text","segment_id","excerpt"}]}. '
+      'kind is one of: $kinds. '
+      'text is a short statement in the transcript language. '
+      'segment_id is copied from the segment label. '
+      'excerpt is an exact, verbatim substring of that segment. '
+      'Never invent facts, people or dates. Do not output assignees, '
+      'due dates or status. Use summary for the main point and decision, '
+      'task, followUp, idea, opportunity or question only when the '
+      'transcript clearly says so. Skip anything unclear.';
+}
+
+String reportExtractionUserPrompt(List<ReportSegment> segments) {
+  final buffer = StringBuffer();
+  for (final segment in segments) {
+    final clock = segment.clock == null ? '' : ' ${segment.clock}';
+    buffer.writeln('[${segment.id}$clock] ${segment.text}');
+  }
+  if (buffer.length > reportModelInputLimit) {
+    throw FormatException('transcript too long for one request');
+  }
+  return buffer.toString();
+}
+
+/// Models often wrap JSON in a Markdown fence; accept that and nothing else.
+Map<String, dynamic> reportModelReplyJson(String reply) {
+  var text = reply.trim();
+  final fence = RegExp(r'^```[a-zA-Z]*\s*([\s\S]*?)\s*```$').firstMatch(text);
+  if (fence != null) text = fence.group(1)!;
+  final decoded = jsonDecode(text);
+  if (decoded is! Map) throw FormatException('reply is not an object');
+  // The schema version is ours, not the model's to state.
+  return {
+    ...decoded.cast<String, dynamic>(),
+    'schema_version': sessionReportSchemaVersion
+  };
+}
+
 SessionReport sessionReportFromStorage(Map<String, dynamic> json) {
   final migrated = _migrate(json);
   final version = migrated['schema_version'];
@@ -370,9 +416,8 @@ SessionReport editReportItem(
 }) {
   final nextText = text.trim();
   if (nextText.isEmpty) throw ArgumentError.value(text, 'text', 'empty');
-  final nextAssignee = assignee.trim().isEmpty
-      ? reportAssigneeUnknown
-      : assignee.trim();
+  final nextAssignee =
+      assignee.trim().isEmpty ? reportAssigneeUnknown : assignee.trim();
   final nextDue = due.trim().isEmpty ? reportDueUnknown : due.trim();
   var found = false;
   final items = [
@@ -488,9 +533,11 @@ Map<String, dynamic> _migrate(Map<String, dynamic> json) {
     'schema_version': sessionReportSchemaVersion,
     'session_id': json['session_id'],
     'kind': _legacyKind(legacyKind).name,
-    'title': titleFor(_legacyKind(legacyKind), json['custom_title']?.toString()),
+    'title':
+        titleFor(_legacyKind(legacyKind), json['custom_title']?.toString()),
     'custom_title': json['custom_title'],
-    'sections': sectionsFor(_legacyKind(legacyKind)).map((s) => s.name).toList(),
+    'sections':
+        sectionsFor(_legacyKind(legacyKind)).map((s) => s.name).toList(),
     'items': [
       for (var i = 0; i < entries.length; i++)
         if (entries[i] is Map)

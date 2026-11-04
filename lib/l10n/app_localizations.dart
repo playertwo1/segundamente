@@ -6057,6 +6057,24 @@ abstract class AppLocalizations {
   /// **'Generate draft'**
   String get reportGenerate;
 
+  /// No description provided for @reportGenerateModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate with the model'**
+  String get reportGenerateModel;
+
+  /// No description provided for @reportModelFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'The model did not answer validly; the local draft was used.'**
+  String get reportModelFallback;
+
+  /// No description provided for @reportModelConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This session\'s text will be sent to the configured model to organize the report. Nothing is sent without your confirmation.'**
+  String get reportModelConfirmBody;
+
   /// No description provided for @reportUnconfirmed.
   ///
   /// In en, this message translates to:

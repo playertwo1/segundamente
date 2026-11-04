@@ -47,6 +47,8 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
             report: viewModel.report,
             errorMessage: viewModel.errorMessage,
             onDraft: viewModel.draft,
+            onDraftWithModel: viewModel.draftWithModel,
+            usedLocalFallback: viewModel.usedLocalFallback,
             onEdit: viewModel.edit,
             onSetStatus: viewModel.setStatus,
             onExport: (format, itemIds) async {

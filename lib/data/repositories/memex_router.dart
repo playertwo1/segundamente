@@ -33,6 +33,8 @@ import 'package:memex/domain/models/card_detail_model.dart';
 import 'package:memex/domain/models/tag_model.dart';
 import 'package:memex/domain/models/insight_detail_model.dart';
 import 'package:memex/domain/models/character_model.dart';
+import 'package:dart_agent_core/dart_agent_core.dart';
+import 'package:memex/domain/models/agent_definitions.dart';
 import 'package:memex/domain/models/llm_config.dart';
 import 'package:memex/domain/models/agent_config.dart';
 import 'package:memex/db/app_database.dart';
@@ -1187,6 +1189,40 @@ class MemexRouter {
         sessionId: sessionId,
         kind: kind,
         customTitle: customTitle,
+      );
+    });
+  }
+
+  /// Sends the session text to the configured chat model. The caller must
+  /// have shown the "text leaves the phone" confirmation first.
+  Future<Result<({SessionReport report, Object? modelError})>>
+      draftSessionReportWithModel({
+    required String sessionId,
+    required ReportKind kind,
+    required String? customTitle,
+  }) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      final resources = await UserStorage.getAgentLLMResources(
+        AgentDefinitions.chatAgent,
+        defaultClientKey: LLMConfig.defaultClientKey,
+      );
+      return SessionReportService().draftWithModel(
+        userId: userId,
+        sessionId: sessionId,
+        kind: kind,
+        customTitle: customTitle,
+        ask: (system, user) async {
+          final response = await resources.client.generate(
+            [
+              SystemMessage(system),
+              UserMessage([TextPart(user)]),
+            ],
+            modelConfig: resources.modelConfig,
+            jsonOutput: true,
+          );
+          return response.textOutput ?? '';
+        },
       );
     });
   }

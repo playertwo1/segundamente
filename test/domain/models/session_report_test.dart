@@ -222,4 +222,29 @@ void main() {
       'item_2',
     );
   });
+
+  test('model reply parsing accepts a fence and refuses other text', () {
+    expect(reportModelReplyJson('```json\n{"items":[]}\n```'),
+        {'items': [], 'schema_version': 1});
+    expect(reportModelReplyJson(' {"items":[]} '),
+        {'items': [], 'schema_version': 1});
+    expect(() => reportModelReplyJson('Claro! {"items":[]}'),
+        throwsFormatException);
+    expect(() => reportModelReplyJson('[1]'), throwsFormatException);
+  });
+
+  test('extraction prompt lists segment ids and refuses oversized text', () {
+    final prompt = reportExtractionUserPrompt(const [
+      ReportSegment(id: 'seg_0', text: 'olá', clock: '00:00:01'),
+    ]);
+    expect(prompt, '[seg_0 00:00:01] olá\n');
+    expect(
+      () => reportExtractionUserPrompt([
+        ReportSegment(id: 'seg_0', text: 'a' * reportModelInputLimit),
+      ]),
+      throwsFormatException,
+    );
+    expect(reportExtractionSystemPrompt(ReportKind.brainstorm),
+        contains('idea, opportunity'));
+  });
 }
