@@ -9,12 +9,27 @@ class AppBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap ?? () => Navigator.pop(context),
-      child: SvgPicture.asset(
-        'assets/icons/btn_back.svg',
-        width: 36,
-        height: 36,
+    void action() => (onTap ?? () => Navigator.pop(context))();
+    return Semantics(
+      button: true,
+      label: MaterialLocalizations.of(context).backButtonTooltip,
+      excludeSemantics: true,
+      onTap: action,
+      // 48dp touch target around the 36dp icon.
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: action,
+        child: SizedBox(
+          width: 48,
+          height: 48,
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/icons/btn_back.svg',
+              width: 36,
+              height: 36,
+            ),
+          ),
+        ),
       ),
     );
   }

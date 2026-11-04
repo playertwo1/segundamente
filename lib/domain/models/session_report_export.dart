@@ -139,14 +139,17 @@ String _statusLabel(ReportItemStatus status) {
 /// shortcut: Helvetica WinAnsi covers pt-BR. A code point above 255 becomes
 /// "?" in the PDF only. Upgrade when a Unicode font is bundled.
 List<int> _pdf(String markdown) {
-  final lines = <String>[];
+  final lines = <_ReportLine>[];
   for (final line in const LineSplitter().convert(markdown)) {
-    lines.addAll(_wrap(line, 90));
+    final parsed = _ReportLine.parse(line);
+    for (final part in _wrap(parsed.text, parsed.wrapWidth)) {
+      lines.add(_ReportLine(part, parsed.level));
+    }
   }
-  const perPage = 45;
-  final pages = <List<String>>[];
+  const perPage = 42;
+  final pages = <List<_ReportLine>>[];
   if (lines.isEmpty) {
-    pages.add(const ['']);
+    pages.add(const [_ReportLine('', 0)]);
   } else {
     for (var start = 0; start < lines.length; start += perPage) {
       final end = start + perPage;
@@ -157,6 +160,7 @@ List<int> _pdf(String markdown) {
     '<< /Type /Catalog /Pages 2 0 R >>',
     '',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>',
   ];
   final kids = <int>[];
   for (final page in pages) {
@@ -165,7 +169,7 @@ List<int> _pdf(String markdown) {
     kids.add(pageId);
     bodies.add(
       '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] '
-      '/Contents $contentId 0 R /Resources << /Font << /F1 3 0 R >> >> >>',
+      '/Contents $contentId 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> >>',
     );
     bodies.add(_content(page));
   }
@@ -184,10 +188,13 @@ List<String> _wrap(String line, int width) {
   return parts;
 }
 
-String _content(List<String> lines) {
-  final commands = StringBuffer('BT\n/F1 11 Tf\n50 800 Td\n14 TL\n');
+String _content(List<_ReportLine> lines) {
+  final commands = StringBuffer('BT\n50 800 Td\n');
   for (final line in lines) {
-    commands.write('${_pdfLiteral(line)} Tj\nT*\n');
+    commands.write(
+      '${line.pdfFont} ${line.pdfSize} Tf\n${line.pdfLeading} TL\n'
+      '${_pdfLiteral(line.text)} Tj\nT*\n',
+    );
   }
   commands.write('ET');
   final stream = commands.toString();
@@ -254,13 +261,13 @@ const _rels = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 ''';
 
 String _documentXml(String markdown) {
-  final paragraphs = const LineSplitter()
-      .convert(markdown)
-      .map(
-        (line) =>
-            '<w:p><w:r><w:t xml:space="preserve">${_xml(line)}</w:t></w:r></w:p>',
-      )
-      .join();
+  final paragraphs = const LineSplitter().convert(markdown).map((raw) {
+    final line = _ReportLine.parse(raw);
+    final props = line.level == 0
+        ? ''
+        : '<w:rPr><w:b/><w:sz w:val="${line.docxHalfPoints}"/></w:rPr>';
+    return '<w:p><w:r>$props<w:t xml:space="preserve">${_xml(line.text)}</w:t></w:r></w:p>';
+  }).join();
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
       '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
       '<w:body>$paragraphs<w:sectPr/></w:body></w:document>';
@@ -271,4 +278,25 @@ String _xml(String value) {
       .replaceAll('&', '&amp;')
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;');
+}
+
+/// One export line. Level 1-3 is a heading (`#`, `##`, `###`) whose markers are
+/// dropped and replaced by bold, larger text in PDF and DOCX.
+class _ReportLine {
+  const _ReportLine(this.text, this.level);
+
+  final String text;
+  final int level;
+
+  factory _ReportLine.parse(String line) {
+    final match = RegExp(r'^(#{1,3}) (.*)$').firstMatch(line);
+    if (match == null) return _ReportLine(line, 0);
+    return _ReportLine(match.group(2)!, match.group(1)!.length);
+  }
+
+  String get pdfFont => level == 0 ? '/F1' : '/F2';
+  int get pdfSize => const [11, 18, 14, 12][level];
+  int get pdfLeading => const [14, 24, 20, 16][level];
+  int get wrapWidth => const [90, 56, 70, 80][level];
+  int get docxHalfPoints => const [22, 36, 28, 24][level];
 }

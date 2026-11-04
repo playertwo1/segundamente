@@ -144,6 +144,39 @@ void main() {
     expect('/Type /Page /Parent'.allMatches(pdf).length, 2);
     expect(pdf, contains('ação'));
   });
+  test('pdf and docx draw headings in bold instead of showing # markers', () {
+    final report = sample();
+    final pdf = latin1.decode(
+      exportSessionReportBytes(
+        report: report,
+        exportedAt: exportedAt,
+        format: ReportExportFormat.pdf,
+      ),
+    );
+    final docx = _docxText(
+      exportSessionReportBytes(
+        report: report,
+        exportedAt: exportedAt,
+        format: ReportExportFormat.docx,
+      ),
+    );
+    final markdown = utf8.decode(
+      exportSessionReportBytes(
+        report: report,
+        exportedAt: exportedAt,
+        format: ReportExportFormat.markdown,
+      ),
+    );
+
+    expect(markdown, contains('## Decisões'));
+    for (final text in [pdf, docx]) {
+      expect(text, isNot(contains('# ')));
+      expect(text, contains('Decisões'));
+    }
+    expect(pdf, contains('/BaseFont /Helvetica-Bold'));
+    expect(pdf, contains('/F2 18 Tf'));
+    expect(docx, contains('<w:b/>'));
+  });
 }
 
 String _docxText(List<int> bytes) {
