@@ -623,7 +623,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondary,
+                  color: AppColors.textPrimary,
                   height: 1.375,
                   letterSpacing: -0.45,
                 ),
@@ -1126,7 +1126,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                           style: const TextStyle(
                                             fontSize: 24,
                                             fontWeight: FontWeight.w600,
-                                            color: AppColors.textSecondary,
+                                            color: AppColors.textPrimary,
                                             height: 1.375, // 33/24
                                             letterSpacing: -0.45,
                                           ),

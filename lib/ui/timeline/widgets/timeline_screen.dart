@@ -1263,7 +1263,9 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 60,
+              // Grows with the system text scale so "Ontem 14:38" wraps at a
+              // space instead of mid-word; capped to keep room for content.
+              width: MediaQuery.textScalerOf(context).scale(60).clamp(60, 96),
               child: Padding(
                 padding: const EdgeInsets.only(top: 2, right: 8),
                 child: Text(

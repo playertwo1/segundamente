@@ -428,7 +428,7 @@ class MetricCard extends StatelessWidget {
     switch (color) {
       case 'emerald':
         return {
-          'bg': const Color(0xFFECFDF5),
+          'bg': const Color(0xFF14241A),
           'primary': AppColors.success,
         };
       case 'orange':
@@ -438,7 +438,7 @@ class MetricCard extends StatelessWidget {
         };
       case 'purple':
         return {
-          'bg': const Color(0xFFFAF5FF),
+          'bg': const Color(0xFF1F1727),
           'primary': const Color(0xFFA855F7),
         };
       case 'blue':

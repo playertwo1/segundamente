@@ -60,6 +60,33 @@ void main() {
     expect(find.text('São Paulo'), findsOneWidget);
   });
 
+  testWidgets('MetricCard icon tiles stay dark for emerald and purple themes', (
+    tester,
+  ) async {
+    await pumpCard(
+      tester,
+      const MetricCard(data: {
+        'items': [
+          {'title': 'A', 'value': 1, 'color': 'emerald'},
+          {'title': 'B', 'value': 2, 'color': 'purple'},
+        ],
+      }),
+    );
+
+    final fills = tester
+        .widgetList<Container>(find.byType(Container))
+        .map((c) => c.decoration)
+        .whereType<BoxDecoration>()
+        .map((d) => d.color)
+        .whereType<Color>()
+        .toList();
+    expect(fills, contains(const Color(0xFF14241A)));
+    expect(fills, contains(const Color(0xFF1F1727)));
+    for (final c in fills) {
+      expect(c.computeLuminance(), lessThan(0.1));
+    }
+  });
+
   testWidgets('GalleryCard lays thumbnails out in a horizontal strip', (
     tester,
   ) async {
