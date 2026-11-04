@@ -34,7 +34,7 @@ void main() {
       () async {
     final userId = 'seed_user_${DateTime.now().microsecondsSinceEpoch}';
     final characters = await CharacterService.instance.getAllCharacters(userId);
-    final auntie = characters.firstWhere((c) => c.id == '3');
+    final auntie = characters.firstWhere((c) => c.id == 'socio_tecnico');
 
     expect(auntie.persona, contains('## Voice'));
     expect(auntie.persona, isNot(contains('## Example Dialogue')));
@@ -47,32 +47,50 @@ void main() {
     expect(auntie.postHistoryInstructions, isNotNull);
   });
 
-  test('seed migration refreshes legacy default auntie persona', () async {
+  test('seed 4 adds the personal characters and retires unedited originals',
+      () async {
     final userId = 'migration_user_${DateTime.now().microsecondsSinceEpoch}';
     final charsPath = CharacterService.instance.getCharactersPath(userId);
     await Directory(charsPath).create(recursive: true);
     await File(p.join(charsPath, '.characters_seed_version'))
-        .writeAsString('1');
+        .writeAsString('3');
     await File(p.join(charsPath, '3.yaml')).writeAsString(
       '''
-name: 热心长辈
-tags:
-  - 温暖
-  - 关怀
-persona: "1. 说话热乎，充满生活气息，喜欢用'哎呀'、'乖'等亲昵词。"
+name: Tia acolhedora
+tags: []
+persona: "Parece uma tia familiar que se preocupa se o usuário comeu."
 avatar: "18"
 enabled: true
 ''',
     );
+    await File(p.join(charsPath, '5.yaml')).writeAsString(
+      '''
+name: Meu amigo
+tags: []
+persona: "Escrevi este personagem do meu jeito."
+avatar: "5"
+enabled: true
+''',
+    );
 
-    final character = await CharacterService.instance.getCharacter(userId, '3');
+    final ids = (await CharacterService.instance.getAllCharacters(userId))
+        .map((c) => c.id)
+        .toSet();
 
-    expect(character, isNotNull);
-    expect(character!.persona, isNot(contains("喜欢用'哎呀'")));
-    expect(character.persona, contains('## Voice'));
-    expect(character.mesExample, isNotNull);
-    expect(character.interestFilter, isNotNull);
-    expect(character.postHistoryInstructions, isNotNull);
+    expect(ids, isNot(contains('3')));
+    expect(ids, contains('5'));
+    expect(ids, containsAll(['socio_tecnico', 'amigo_bar', 'curador']));
+    expect(ids, hasLength(16));
+  });
+
+  test('new users get exactly the 15 personal characters', () async {
+    final userId = 'fresh_user_${DateTime.now().microsecondsSinceEpoch}';
+    final ids = (await CharacterService.instance.getAllCharacters(userId))
+        .map((c) => c.id)
+        .toList();
+
+    expect(ids, hasLength(15));
+    expect(ids, isNot(contains('counselor')));
   });
 
   test('resolves imported HEIC avatar paths when loading characters', () async {
@@ -117,20 +135,20 @@ enabled: true
     });
 
     expect(
-      await CharacterService.instance.deleteCharacter(userId, '3'),
+      await CharacterService.instance.deleteCharacter(userId, 'socio_tecnico'),
       isTrue,
     );
     await Future<void>.delayed(Duration.zero);
 
     expect(messages, hasLength(1));
     expect(messages.single.userId, userId);
-    expect(messages.single.characterId, '3');
+    expect(messages.single.characterId, 'socio_tecnico');
   });
 
   test('multi-character routing nudges multiple voices without forcing fill',
       () async {
     final userId = 'selection_user_${DateTime.now().microsecondsSinceEpoch}';
-    final client = _CapturingTextClient('3');
+    final client = _CapturingTextClient('amigo_bar');
 
     final selected = await CharacterSelectionService.selectMultipleCharacters(
       userId: userId,
@@ -142,7 +160,7 @@ enabled: true
     );
 
     expect(selected, hasLength(1));
-    expect(selected.first.id, '3');
+    expect(selected.first.id, 'amigo_bar');
     expect(client.lastPrompt, contains('prefer selecting 2-5'));
     expect(
       client.lastPrompt,

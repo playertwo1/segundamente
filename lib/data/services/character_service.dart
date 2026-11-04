@@ -17,7 +17,7 @@ class CharacterService {
 
   /// Bump this whenever new default characters need to be seeded to existing users.
   /// New users get all characters from l10n.defaultCharacters at once.
-  static const int _currentSeedVersion = 3;
+  static const int _currentSeedVersion = 4;
   static const String _seedVersionFile = '.characters_seed_version';
 
   /// Migrations: version -> list of character IDs to seed for existing users.
@@ -25,6 +25,36 @@ class CharacterService {
   /// known legacy seed text, so user-created characters are left alone.
   static const Map<int, List<String>> _migrations = {
     1: ['counselor'],
+    4: _personalCharacterIds,
+  };
+
+  static const List<String> _personalCharacterIds = [
+    'socio_tecnico',
+    'revisor_chato',
+    'cobrador_prazo',
+    'memoria_projeto',
+    'advogado_diabo',
+    'gerente_escopo',
+    'parceiro_foco',
+    'guardiao_energia',
+    'diario_bordo',
+    'calmo_crise',
+    'provocador_criativo',
+    'tradutor',
+    'amigo_bar',
+    'financas_burocracia',
+    'curador',
+  ];
+
+  /// The five original defaults were replaced in seed version 4. A file is
+  /// removed only while its persona still has the original seed text, so a
+  /// character the user edited stays.
+  static const Map<String, List<String>> _retiredDefaultPersonaMarkers = {
+    '2': ['mentor mais velho', 'older mentor the user trusts'],
+    '3': ['tia familiar', 'familiar auntie'],
+    '4': ['pessoa tranquila e contida', 'quiet, restrained person'],
+    '5': ['amigo próximo do usuário', "user's familiar friend"],
+    'counselor': ['ouvinte mais estável', 'steadier listener'],
   };
 
   static const Map<String, List<String>> _legacyDefaultPersonaMarkers = {
@@ -214,9 +244,36 @@ class CharacterService {
       if (v == 2 || v == 3) {
         await _refreshLegacyDefaultCharacters(userId, charsPath);
       }
+      if (v == 4) {
+        await _removeRetiredDefaultCharacters(userId, charsPath);
+      }
     }
 
     await _writeSeedVersion(charsPath, _currentSeedVersion);
+  }
+
+  Future<void> _removeRetiredDefaultCharacters(
+    String userId,
+    String charsPath,
+  ) async {
+    for (final entry in _retiredDefaultPersonaMarkers.entries) {
+      final charFile = File(p.join(charsPath, '${entry.key}.yaml'));
+      if (!await charFile.exists()) continue;
+      try {
+        final doc = loadYaml(await charFile.readAsString());
+        final charData = jsonDecode(jsonEncode(doc)) as Map<String, dynamic>;
+        final persona = charData['persona']?.toString() ?? '';
+        final unedited = [
+          ...entry.value,
+          ...?_legacyDefaultPersonaMarkers[entry.key],
+        ].any(persona.contains);
+        if (!unedited) continue;
+        await charFile.delete();
+        _logger.info('Removed retired default ${entry.key} for user $userId');
+      } catch (e) {
+        _logger.warning('Could not retire default ${entry.key}: $e');
+      }
+    }
   }
 
   Future<void> _refreshLegacyDefaultCharacters(

@@ -372,15 +372,8 @@ class DemoService extends ChangeNotifier {
     // Ensure default characters are created before writing comment
     await CharacterService.instance.getAllCharacters(userId);
 
-    // Pick a default character for the comment (死党/Buddy)
-    final defaultChars = UserStorage.l10n.defaultCharacters;
-    var commentCharId = '5';
-    for (final charData in defaultChars) {
-      if (charData['id'] == '5') {
-        commentCharId = charData['id'] as String;
-        break;
-      }
-    }
+    // Pick a default character for the comment (Amigo de bar)
+    const commentCharId = 'amigo_bar';
 
     // Wait a moment to simulate processing
     await Future.delayed(const Duration(milliseconds: 1500));

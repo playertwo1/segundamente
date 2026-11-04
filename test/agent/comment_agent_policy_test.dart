@@ -49,16 +49,17 @@ void main() {
       expect(skill.systemPrompt, isNot(contains('call `SkipComment`')));
     });
 
-    test('counselor default persona includes a comment policy', () {
-      final counselor = UserStorage.l10n.defaultCharacters.firstWhere(
-        (character) =>
-            character['name'] == '心理咨询师' || character['name'] == 'Counselor',
-      );
-      final persona = counselor['persona'] as String;
+    test('every default persona includes a comment policy', () {
+      final defaults = UserStorage.l10n.defaultCharacters;
+      expect(defaults, hasLength(15));
+      for (final character in defaults) {
+        final persona = character['persona'] as String;
 
-      expect(persona, contains('## Comment Policy'));
-      expect(persona, contains('Reply when:'));
-      expect(persona, contains('Skip when:'));
+        expect(persona, contains('## Comment Policy'),
+            reason: '${character['id']}');
+        expect(persona, contains('Reply when:'), reason: '${character['id']}');
+        expect(persona, contains('Skip when:'), reason: '${character['id']}');
+      }
     });
 
     test('comment prompt supports policy based skipping in normal mode', () {
