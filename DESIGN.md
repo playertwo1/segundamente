@@ -1,6 +1,6 @@
 # Segunda Mente — direção visual móvel
 
-**Estado:** aprovada pelo dono em 2026-11-03. **Escopo atual:** referência para implementação futura; as telas Flutter ainda não foram alteradas.
+**Estado:** aprovada pelo dono em 2026-11-03. **Escopo atual:** em implementação na fase F5V (D-022).
 
 ## Contrato visual
 

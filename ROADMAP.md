@@ -11,7 +11,7 @@
 6. Regras de código, camadas e testes do Memex: `AGENTS.md` (ele vence em conflito).
 
 ## Próxima prioridade
-F5-04 é a próxima tarefa de implementação, conforme pedido do dono e D-019. A direção está aprovada em D-017 e documentada em [`DESIGN.md`](DESIGN.md), com as dez pranchas no [índice](docs/INDEX.md#design-móvel). A execução visual pode começar antes das validações manuais restantes da F4; isso não altera as dependências nem fecha os portões da F4/F5. Ao terminar F5-04, retomar as demais pendências registradas em `STATE.md` e na ordem geral deste roadmap.
+F5V — Redesign visual da versão nova é a fase atual (D-022), começando pela F5V-01 (tema AMOLED e navegação no topo). A F5 segue aberta em paralelo: o que falta nela depende do S25. O desenho está aprovado em D-017 e documentado em [`DESIGN.md`](DESIGN.md), com dez pranchas no [índice](docs/INDEX.md#design-móvel). F5V não fecha os portões F0–F5.
 
 Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE`. Prioridade: P0 bloqueia o fluxo principal · P1 sustenta o MVP · P2 melhoria · P3 futuro.
 
@@ -24,6 +24,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | F3 — Extração e relatório | Relatório por sessão com evidências e confirmação | IN_PROGRESS | Critério 6 abaixo |
 | F4 — Exportação | Mesmo relatório em PDF, DOCX e MD | IN_PROGRESS | Critério 5 abaixo |
 | F5 — Fechamento do MVP | Testes no S25, privacidade, desempenho, visual | IN_PROGRESS | Critério 7 abaixo + `docs/AUDIT.md` |
+| F5V — Redesign visual da versão nova | Aplicar em todas as telas a direção AMOLED v3 aprovada | IN_PROGRESS | Testes de widget, acessibilidade e validação no S25 quando disponível (D-022) |
 | F6 — Memória longitudinal | Busca semântica, tópicos, "o que mudou?" | IN_PROGRESS | MVP concluído |
 | F7 — Voz contínua e ponte CLI | Full duplex; Claude Code/Codex CLI no PC | BLOCKED | MVP concluído + termos verificados |
 | F8 — NotebookLM | Via Drive/Docs, depois conectores | BLOCKED | MVP e exportação estáveis; consentimento por envio |
@@ -104,18 +105,27 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
 |---|---|---|---|---|---|
 | F5-01 | Teste ponta a ponta dos 7 critérios no S25 Ultra | P0 | F4 | IN_PROGRESS | Checklist preenchido com evidência |
-| F5-02 | Revisão de privacidade: chaves e tokens protegidos, sem segredo em log, política de envio compreensível | P0 | F4 | IN_PROGRESS | Revisão registrada |
+| F5-02 | Revisão de privacidade: chaves e tokens protegidos, sem segredo em log, política de envio compreensível | P0 | F4 | IN_PROGRESS | Revisão registrada; cofre do Android em `b513d72`, falta ver a migração no S25 |
 | F5-03 | Desempenho (sessão longa, lista de histórico) e correções | P1 | F4 | IN_PROGRESS | Medições registradas |
-| F5-04 | Aplicar a direção AMOLED aprovada em `DESIGN.md`: conteúdo editorial, navegação no topo, sem barra inferior persistente e conversa com acesso explícito | P2 | D-017, D-019 | READY | Widget tests dos comportamentos visíveis; capturas antes/depois no S25; checagem de menu/rotas, rolagem, texto ampliado e leitor de tela |
+| F5-04 | Definir e documentar a direção visual móvel AMOLED | P2 | D-017 | DONE | `DESIGN.md`, D-017 e dez pranchas aprovadas listadas em `docs/INDEX.md` |
 | F5-05 | Auditoria final (`docs/AUDIT.md`) e atribuições GPL | P0 | F5-01 | IN_PROGRESS | Relatório de auditoria sem item crítico aberto |
 
 **Portão F5 = MVP pronto.** Aberto em 2026-11-02 com os portões da F0, da F1, da F2, da F3 e da F4 ainda abertos. `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto.
 
-### F5-04 — direção aprovada, implementação pendente
+### F5-04 — direção documentada
 - Direção e dez pranchas aprovadas: [`DESIGN.md`](DESIGN.md) e [`docs/INDEX.md`](docs/INDEX.md#design-móvel).
-- A aprovação é de design. As telas ainda não foram implementadas; F5-04 está `READY` por D-019, mesmo com validações manuais da F4 pendentes. Isso permite iniciar o trabalho visual, mas não fecha a F4 nem remove seus critérios do portão do MVP.
-- Ordem de implementação: tokens/tema e navegação; timeline, conhecimento e memórias; entrada e conversa; calendário, detalhes e relatórios; configurações, modelos, agentes e backup; estados vazios/erro e validação de acessibilidade.
-- Aplicar os componentes e abstrações existentes em `lib/ui/core/themes/`; conferir `DESIGN.md` e as rotas antes de alterar cada família. Toda interação visual nova precisa do widget test exigido por `AGENTS.md`.
+- F5-04 cobre a decisão e os artefatos de design, concluídos. A implementação está na F5V, iniciada agora (D-022).
+
+## F5V — Redesign visual da versão nova
+| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
+|---|---|---|---|---|---|
+| F5V-01 | Atualizar tokens/tema AMOLED e navegação superior; remover a barra inferior persistente | P1 | D-017, D-022 | IN_PROGRESS | Rotas mapeadas; widget tests; captura da navegação |
+| F5V-02 | Aplicar a direção às telas de timeline, conhecimento, insights e memórias | P1 | F5V-01 | READY | Estados principais cobertos por widget tests e capturas comparadas às referências |
+| F5V-03 | Atualizar entrada, conversa e acesso explícito “Conversar” | P1 | F5V-01 | READY | Teste de navegação/ação do chat, estados de envio e captura |
+| F5V-04 | Atualizar calendário, detalhes, relatórios, configurações, modelos, agentes e backup | P1 | F5V-01 | READY | Widget tests dos comportamentos e capturas de cada família |
+| F5V-05 | Revisar estados vazios/erro, escala de texto, contraste, leitor de tela e validar no aparelho | P1 | F5V-02, F5V-03, F5V-04 | READY | Verificações de acessibilidade; capturas finais; validação no S25 quando disponível |
+
+**Direção e escopo:** seguir [`DESIGN.md`](DESIGN.md), D-017 e as dez pranchas em [`docs/INDEX.md`](docs/INDEX.md#design-móvel). Usar os temas/componentes existentes em `lib/ui/core/themes/` e mapear as rotas antes de alterar navegação. Toda interação nova precisa de widget test conforme `AGENTS.md`. F5V não altera nem fecha automaticamente os portões F0–F5.
 
 ## Critérios de aceite do MVP (no Galaxy S25 Ultra, sem NotebookLM, PC ligado, Hermes ou serviço pago próprio)
 1. Conversar por texto e falar com o app com resposta opcional em áudio.
@@ -238,5 +248,5 @@ Primeiro fechar o que está `IN_PROGRESS` com prova no S25 (F2-09, F2-10, F2-03,
 - 2026-11-03 — D-011 (áudio pelo endpoint de transcrição), D-012 (só en e pt), D-013 (Gemini OAuth bloqueado), D-014 (ideias do Memos na F6) e D-015 (login Claude pendente).
 - 2026-11-03 — D-016 (ideias do Daedalus Echo: F2-11, F3-07, F6-09 a F6-11).
 - 2026-11-03 — D-018 (ideias do anarlog: F1-09, F2-12, F2-13, F3-08, F3-09).
-- 2026-11-03 — D-017: direção visual móvel AMOLED aprovada. D-019 prioriza a implementação em F5-04 (`READY`) antes das demais pendências; portões da F4/F5 mantidos.
+- 2026-11-03 — D-017: direção visual móvel AMOLED aprovada. D-021 agendou a F5V para depois da F5; D-022 a inicia agora, em paralelo; portões mantidos.
 - 2026-11-03 — D-020: fallback resiliente entre modelos e provedores (FallbackLLMClient) com reordenação por drag-and-drop na UI; Gemini OAuth e Claude Sonnet 5.5 High validados com resposta real no S25 Ultra.

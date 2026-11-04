@@ -1,6 +1,6 @@
 # STATE — ponto de retomada
 
-**Atualizado:** 2026-11-03 · **Fase ativa:** F1 / F5 — Fechamento do MVP · **Estado:** IN_PROGRESS
+**Atualizado:** 2026-11-03 · **Fase ativa:** F5V — Redesign visual (D-022), com a F5 aberta em paralelo · **Estado:** IN_PROGRESS
 
 A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 17, serial RQCY10934YV) executou o app `app.segundamente.dev` (PID 7991), exibindo "Boas-vindas à Segunda Mente" em português (evidência em `docs/s25_screenshot.png`). A F1 avançou fortemente e cumpriu seu portão: OpenAI, Gemini e Claude operando com respostas reais no S25 Ultra, e fallback automático implementado com testes unitários (F1-03, F1-04, F1-08 e F1-10 `DONE`). A F2 continua `IN_PROGRESS`: faltam o TXT real de ~50 min, voz no S25 e fotos. A F3 continua `IN_PROGRESS`: faltam a amostra de 53 min e uma resposta real de modelo. A F4 continua `IN_PROGRESS`: faltam abrir o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F5 continua `IN_PROGRESS`: `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto. O portão da F6 não fecha.
 
@@ -8,8 +8,7 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 - Fork público `playertwo1/segundamente` de `memex-lab/memex` (Flutter, GPL-3.0). Em `origin/main` estão incluídos os commits de OAuth do Gemini/Claude (`aa91a48`), fallback resiliente (`4eee5b4`), sobre as bases das fases F0-F6.
 - No código: login OAuth e integração completa de OpenAI (`openai_auth_service.dart`), Gemini OAuth via streaming SSE (`gemini_oauth_client.dart`, `gemini_auth_service.dart`, D-013/D-020) e Claude OAuth / Claude Sonnet e Opus 5.5 High via Google OAuth (`claude_auth_service.dart`, D-015/D-020). Fallback automático entre provedores com failover ordenado (`FallbackLLMClient`, D-020).
 - Planejamento: [índice](docs/INDEX.md), [PROJECT.md](PROJECT.md), [ROADMAP.md](ROADMAP.md), [DESIGN.md](DESIGN.md), [decisões](docs/DECISIONS.md), `docs/questionario/`.
-- Design visual AMOLED v3 aprovado em 2026-11-03 (D-017), com dez pranchas em `.impeccable-mobile/references/amoled-v3-ios/`. F5-04 está `READY` para implementação (D-019).
-- Próxima prioridade definida pelo dono: implementar F5-04 seguindo `DESIGN.md` e as pranchas v3 antes de retomar as outras tarefas pendentes. F4 continua aberta e seu portão não muda; D-019 libera apenas iniciar este trabalho visual em paralelo às validações restantes da F4.
+- Design visual AMOLED v3 aprovado e documentado em 2026-11-03 (D-017); F5-04 está `DONE` como especificação. A implementação das telas é a fase F5V, iniciada em 2026-11-03 (D-022).
 
 ## Evidência da F0 (2026-11-02/2026-11-03; Windows 11, Flutter 3.47.9 stable, Dart 3.13.7, JDK 17, Samsung Galaxy S25 Ultra)
 - F0-01 `DONE`: `git remote -v` mostra `upstream=memex-lab/memex`; commit base do Memex = `6143923e7b2237520b7143f4e5aae88822788aa4`.
@@ -101,10 +100,10 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 ## Evidência da F5 (2026-11-02)
 - Aberta por pedido do dono, com a F0, a F1, a F2, a F3 e a F4 ainda abertas. A fase fica `IN_PROGRESS`. Publicada no commit local `e1f6c9f` (`feat(audit): log sem token e medição do fechamento`). Esse commit não foi enviado. O portão não fecha.
 - F5-01 `IN_PROGRESS`. Checklist dos 7 critérios em `docs/F5-01-checklist.md`. Cada critério no S25 Ultra está `NOT_RUN`.
-- F5-02 `IN_PROGRESS`. Nota em `docs/F5-02-privacidade.md`. O log de sucesso da OpenAI não imprime mais access token, refresh token nem ID token. A falha dedicada da troca de código, na OpenAI e no Gemini, registra só o status HTTP. O `catch` ainda grava a exceção. O teste `openai_auth_log_test.dart` recusa `${tokenResponse.body}` e `${response.body}` e ainda exige `jsonDecode(tokenResponse.body)`. Tokens e `apiKey` continuam em `SharedPreferences`. Uma passagem sem histórico corrigiu a frase que punha a `apiKey` do Gemini no cabeçalho: nessa lista de modelos a chave vai na query `key=`.
+- F5-02 `IN_PROGRESS`. Nota em `docs/F5-02-privacidade.md`. Commit `b513d72`: access/refresh tokens (OpenAI, Gemini, Claude) e `apiKey`/credenciais AWS dos modelos foram para o `flutter_secure_storage`, com migração automática do `SharedPreferences`; o backup `.memex` não leva mais segredos; logs de erro HTTP do Gemini OAuth e da lista de modelos só com o status. Testes: `secret_storage_test.dart` e `openai_auth_log_test.dart` passaram. Falta ver no S25 a migração com um login real. O `catch` dos logins ainda grava a exceção.
 - F5-03 `IN_PROGRESS`. Nota em `docs/F5-03-medicoes.md`. Fixture sintético de 1500 segmentos (50 min, um a cada 2 s): parse 15 ms. Exportação de 100 itens nos três formatos: 25 ms. Não é o TXT do Samsung. A lista de histórico e o aparelho estão `NOT_RUN`. Nenhum código de desempenho foi mudado.
-- F5-04 `READY`. Direção aprovada em D-017; prioridade e início antes do fechamento da F4 autorizados em D-019. `DESIGN.md` e as pranchas estão em `.impeccable-mobile/references/amoled-v3-ios/`. Sem mudança visual no app, capturas antes/depois ou validação de acessibilidade.
-- F5-05 `IN_PROGRESS`. `docs/reviews/F5.md` termina em `AUDIT RESULT: FAIL` por causa do S25 e do armazenamento em claro. Atribuições de licença continuam em `docs/F0-04-licencas.md`. Não há `LicensePage` em `lib/`.
+- F5-04 `DONE` para documentação da direção visual: D-017, `DESIGN.md` e as dez pranchas do índice. A aplicação nas telas não foi feita; está planejada em F5V após o fechamento da F5.
+- F5-05 `IN_PROGRESS`. `docs/reviews/F5.md` termina em `AUDIT RESULT: FAIL` só pelo S25 (o HIGH do armazenamento em claro foi fechado em `b513d72`). O item "Licenças" no Perfil abre a `LicensePage` com o aviso GPL-3.0 e do fork (`personal_center_licenses_test.dart`).
 - Comando: `flutter test --reporter expanded` nos dois arquivos abaixo. Saída: `F5-03 parse_ms=15 segments=1500`, `F5-03 export_ms=25 items=100`, `00:00 +3: All tests passed!`
   - `test/data/services/openai_auth_log_test.dart`
   - `test/domain/models/f5_measurements_test.dart`
@@ -133,11 +132,13 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 - 2026-11-03: Implementação e teste comprovado no Galaxy S25 Ultra do Gemini OAuth (via endpoint SSE `daily-cloudcode-pa.googleapis.com`: 872ms texto / 910ms stream) e Claude Sonnet 5.5 High (1484ms). Credenciais ofuscadas para envio seguro sem bloqueio no GitHub (commit `aa91a48`).
 - 2026-11-03: Criação do `FallbackLLMClient` (D-020, commit `4eee5b4`) com failover automático em cascata entre provedores (ChatGPT -> Claude -> Gemini) sob rate limits (429), timeouts ou falhas. Suporte à reordenação visual por drag-and-drop em `ModelConfigListPage`. Suíte de 5 testes unitários passando.
 - 2026-11-03: Atualização de governança em `ROADMAP.md`, `STATE.md` e `docs/DECISIONS.md` (D-013, D-015 e D-020).
+- 2026-11-03: cofre do Android para tokens e chaves, logs sem corpo e tela de licenças (`b513d72`). F5V iniciada (D-022).
 - 2026-11-03: ideias do anarlog em F1-09, F2-12, F2-13, F3-08 e F3-09 (D-018, `eb0747e`). Segue sem código nessas tarefas. Fila geral das novas em `ROADMAP.md`, seção "Ordem geral das tarefas novas".
 
 ## Próxima ação
-- Implementar F5-04 conforme `DESIGN.md` e as dez referências v3: (1) tema/tokens e navegação de topo, sem barra inferior persistente; (2) timeline, conhecimento e memórias; (3) entrada e conversa com acesso “Conversar” explícito; (4) calendário, detalhes e relatórios; (5) configurações, modelos, agentes e backup; (6) estados vazios/erro, testes de widget, escala de texto e leitor de tela. Mapear cada destino às rotas existentes antes de alterar navegação. Validar no S25 quando disponível. F5-04 não fecha a F4 nem o MVP.
-- Depois de concluir e registrar a evidência de F5-04, retomar o restante na sequência anterior: validar áudio no S25 (F2-09), TXT real de ~50 min (F2-03), compartilhamento de PDF e áudio (F2-10), IDs GPT-6 (F1-07); depois seguir "Ordem geral das tarefas novas" em `ROADMAP.md`.
+- F5V (D-022), na ordem do `ROADMAP.md`: F5V-01 tema/tokens AMOLED e navegação no topo, sem barra inferior persistente; F5V-02 timeline, conhecimento, insights e memórias; F5V-03 entrada e conversa com "Conversar"; F5V-04 calendário, relatórios, configurações, modelos, agentes e backup; F5V-05 estados vazios/erro, escala de texto, contraste, leitor de tela e S25. Mapear as rotas antes de alterar a navegação.
+- Em paralelo, quando o S25 estiver conectado: migração do cofre com login real (F5-02), os 7 critérios (F5-01), F2-09, F2-03, F2-10, F1-07.
+- Depois da F5V, retomar a F6 e a "Ordem geral das tarefas novas", mantendo F7/F8 bloqueadas.
 - O portão da F6 continua aberto. Semântica, tópicos e o "por quê" continuam `NOT_RUN`. A F5 continua aberta (`AUDIT RESULT: FAIL`). A F4 continua aberta até o PDF no aparelho, o DOCX no Word e a folha de compartilhamento. A F3 continua aberta até a amostra de 53 min e uma saída real de modelo. A F2 continua aberta até os critérios 1, 2 e 3 no S25; F2-03 espera um TXT real de ~50 min; F2-02 e F2-05 estão `NOT_RUN`. O portão da F1 está CUMPRIDO. Não começar a F7.
 
 ## Bloqueios e aprovações humanas

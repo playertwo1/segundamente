@@ -22,8 +22,10 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-016 | 2026-11-03 | Ideias do Daedalus Echo: Whisper local multilíngue, extrator de tarefas robusto, recuperação por tópicos, agenda; o resto fica fora | ACCEPTED |
 | D-017 | 2026-11-03 | Direção visual móvel AMOLED, editorial e sem barra inferior persistente | ACCEPTED |
 | D-018 | 2026-11-03 | Ideias do anarlog: prompts de resumo, correção conservadora, dicionário, legenda SRT/VTT e transparência dos provedores; o resto fica fora | ACCEPTED |
-| D-019 | 2026-11-03 | Priorizar a implementação visual F5-04 antes das demais pendências, sem fechar o portão F4 | ACCEPTED |
+| D-019 | 2026-11-03 | Priorizar a implementação visual F5-04 antes das demais pendências, sem fechar o portão F4 | SUPERSEDED |
 | D-020 | 2026-11-03 | Mecanismo de fallback resiliente entre modelos e provedores (FallbackLLMClient) | ACCEPTED |
+| D-021 | 2026-11-03 | Fazer o redesign visual em fase própria após o fechamento da fase F5 atual | SUPERSEDED |
+| D-022 | 2026-11-03 | Iniciar a fase F5V agora, em paralelo ao fechamento da F5 | ACCEPTED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -94,7 +96,7 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Contexto: em 2026-11-03 o dono aprovou a versão v3 das referências AMOLED após comparar com interfaces oficiais do Apple Journal, Day One e Things.
 - Decisão: usar fundo preto AMOLED, texto marfim e cinza, âmbar/cobre como acento, composição editorial com listas abertas e divisores finos, tipografia compacta com escala do sistema preservada e ícones coerentes com rótulos. A navegação global não terá barra inferior persistente; os destinos ficam no menu do cabeçalho e em ações contextuais. O chat terá acesso explícito com “Conversar” e “Conversar com a Segunda Mente”.
 - Fonte de implementação: [DESIGN.md](../DESIGN.md) e as dez pranchas em `.impeccable-mobile/references/amoled-v3-ios/`.
-- Limite: a decisão aprova a direção visual, não declara a implementação pronta. Antes de mudar o roteamento, mapear o menu às rotas existentes; manter acessibilidade, fluxos atuais e testes de widget. F5-04 só vira `DONE` com código e evidências; D-019 a prioriza como `READY`.
+- Limite: a decisão aprova a direção visual, não declara a implementação pronta. Antes de mudar o roteamento, mapear o menu às rotas existentes; manter acessibilidade, fluxos atuais e testes de widget. F5-04 conclui apenas a documentação; a implementação e suas evidências ficam na fase F5V (D-021).
 - Descartado: a exploração v1/v2 com paleta azul e navegação inferior pesada.
 
 
@@ -106,11 +108,22 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Ficam em ideias futuras: separar falantes (diarização e voiceprint, modelos pesados), CLI e servidor MCP (F7) e detecção do idioma do resumo (hoje o app tem só en e pt).
 
 ## D-019 — Próxima prioridade: redesign móvel
-- Contexto: em 2026-11-03, depois de aprovar as referências AMOLED v3 (D-017), o dono pediu que as alterações das telas e a direção visual sejam o próximo trabalho do projeto, antes de retomar o restante.
-- Decisão: colocar F5-04 como próxima tarefa, em estado `READY`, e permitir iniciar sua implementação antes das validações manuais restantes da F4. Seguir `DESIGN.md`, as dez pranchas do índice e a ordem de implementação em `ROADMAP.md`.
-- Limite: isto só altera a ordem de execução. A F4 permanece `IN_PROGRESS`; seus critérios continuam necessários para fechar a F4 e a F5/MVP. F5-04 só vira `DONE` com código, testes de widget, capturas e checagens de acessibilidade exigidas no roadmap.
+- Estado: `SUPERSEDED` por D-021 após o dono esclarecer que o redesign deve ocorrer numa fase própria, depois da fase atual.
+- Decisão anterior: iniciar a implementação em F5-04 foi registrado, mas não executado.
 
 ## D-020 — Fallback resiliente entre modelos e provedores
 - Contexto: se o provedor ativo falhar (HTTP 429 rate limit, 500/503/529 sobrecarga, timeout de rede ou falta de cota), os agentes ou chats do usuário falhavam diretamente. O usuário pediu um fallback automático (ex.: se o ChatGPT parar de responder, vai para o Claude; se o Claude parar de responder, vai para o Gemini).
 - Decisão: criar `FallbackLLMClient` implementando `LLMClient`, operando em cascata ordenada. Se o provedor primário falhar, tenta sequencialmente os próximos candidatos autorizados com seus respectivos `ModelConfig`. Em streams, realiza failover transparente antes da emissão de dados. Adicionada chave de ativação e tela de reordenação de prioridade por drag-and-drop nas configurações de IA.
 - Limite: se um modelo já começou a emitir texto em streaming antes de falhar, a transmissão parcial é encerrada com erro para não duplicar texto já exibido na UI.
+
+## D-021 — Redesign visual após a fase atual
+- Estado: `SUPERSEDED` por D-022.
+- Contexto: o dono esclareceu em 2026-11-03 que o redesign da versão nova deve ocorrer depois de concluir a fase atual, não como a próxima tarefa dentro dela.
+- Decisão: manter o fechamento de F5 como foco atual e inserir F5V — Redesign visual da versão nova imediatamente depois de F5 e antes de F6. F5-04 cobre a direção aprovada e documentada; a implementação das telas fica em F5V.
+- Limite: F5V só começa depois de F5. Esta ordem não fecha nem remove critérios dos portões F0–F5 e não desbloqueia F7/F8 por si só.
+
+## D-022 — F5V começa agora
+- Contexto: em 2026-11-03, depois do commit `b513d72` (cofre do Android para tokens e chaves), o dono pediu para iniciar a fase visual imediatamente.
+- Decisão: a F5V passa a `IN_PROGRESS` e é a fase de trabalho atual. A F5 continua aberta em paralelo: o que falta nela depende do S25 (7 critérios, migração do cofre no aparelho, medições).
+- Limite: a ordem muda, os portões não. F5V não fecha a F4 nem a F5, e o MVP só fica pronto com o portão da F5. F7/F8 continuam bloqueadas.
+
