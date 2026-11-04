@@ -35,9 +35,7 @@ class ModelListService {
       } else {
         requestUri = Uri.parse(endpoint);
         if (apiKey.isNotEmpty) {
-          if (type == LLMConfig.typeClaude ||
-              type == LLMConfig.typeMinimax ||
-              type == LLMConfig.typeMimo) {
+          if (type == LLMConfig.typeClaude) {
             headers['x-api-key'] = apiKey;
             headers['anthropic-version'] = '2023-06-01';
           } else {
@@ -71,15 +69,6 @@ class ModelListService {
     if (type == LLMConfig.typeGemini) {
       return _parseGeminiModels(json);
     }
-    if (type == LLMConfig.typeSeed) {
-      return _parseVolcengineModels(json);
-    }
-    if (type == LLMConfig.typeQwen) {
-      return _parseQwenModels(json);
-    }
-    if (type == LLMConfig.typeZhipu) {
-      return _parseZhipuModels(json);
-    }
     return _parseOpenAiModels(json);
   }
 
@@ -98,35 +87,6 @@ class ModelListService {
     return ids;
   }
 
-  /// Parse Qwen (Aliyun) response: OpenAI-compatible, with irrelevant models filtered out.
-  static final _qwenExcludePattern = RegExp(
-    r'MiniMax|codeqwen|qwen-coder|qwen-image|qwen-math|qwen-mt-|qwen1\.5|qwen2-|-tts-|tongyi-|z-image|wan2',
-    caseSensitive: false,
-  );
-
-  static List<String> _parseQwenModels(dynamic json) {
-    final all = _parseOpenAiModels(json);
-    return all.where((id) => !_qwenExcludePattern.hasMatch(id)).toList();
-  }
-
-  /// Zhipu models that don't support multimodal input — exact match only.
-  static const _zhipuExcludeExact = {
-    'glm-4.5',
-    'glm-4.5-air',
-    'glm-4.6',
-    'glm-4.7',
-    'glm-5',
-    'glm-5-turbo',
-    'glm-5.1',
-  };
-
-  static List<String> _parseZhipuModels(dynamic json) {
-    final all = _parseOpenAiModels(json);
-    return all
-        .where((id) => !_zhipuExcludeExact.contains(id.toLowerCase()))
-        .toList();
-  }
-
   /// Parse Gemini response: { "models": [{ "name": "models/gemini-..." }, ...] }
   /// Only includes models that support generateContent.
   static List<String> _parseGeminiModels(dynamic json) {
@@ -141,32 +101,6 @@ class ModelListService {
         if (methods is List && methods.contains('generateContent')) {
           final name = (item['name'] as String).replaceFirst('models/', '');
           ids.add(name);
-        }
-      }
-    }
-    ids.sort();
-    return ids;
-  }
-
-  /// Parse Volcengine response: OpenAI-compatible but with modalities field.
-  /// Only includes models with image in input_modalities and text in output_modalities.
-  static List<String> _parseVolcengineModels(dynamic json) {
-    if (json is! Map<String, dynamic>) return [];
-    final data = json['data'];
-    if (data is! List) return [];
-    final ids = <String>[];
-    for (final item in data) {
-      if (item is Map<String, dynamic> && item['id'] is String) {
-        final modalities = item['modalities'];
-        if (modalities is Map<String, dynamic>) {
-          final input = modalities['input_modalities'];
-          final output = modalities['output_modalities'];
-          if (input is List &&
-              output is List &&
-              input.contains('image') &&
-              output.contains('text')) {
-            ids.add(item['id'] as String);
-          }
         }
       }
     }

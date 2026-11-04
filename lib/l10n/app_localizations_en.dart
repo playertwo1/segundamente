@@ -406,7 +406,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noPendingActions => 'No pending actions';
 
   @override
-  String get clarificationNeeded => 'Memex wants to confirm';
+  String get clarificationNeeded => 'Segunda Mente wants to confirm';
 
   @override
   String get clarificationTextHint => 'Type a short answer';
@@ -553,7 +553,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterPassword => 'Enter password';
 
   @override
-  String get memexLocked => 'Memex is locked';
+  String get memexLocked => 'Segunda Mente is locked';
 
   @override
   String get calendarShortSun => 'Sun';
@@ -610,26 +610,28 @@ class AppLocalizationsEn extends AppLocalizations {
       'Whether it\'s memories or the present, I\'m here...';
 
   @override
-  String get refreshSuperAgentStateTooltip => 'Clear Memex Agent context';
+  String get refreshSuperAgentStateTooltip =>
+      'Clear Segunda Mente Agent context';
 
   @override
   String get refreshSuperAgentStateTitle =>
-      'Clear Memex Agent history context?';
+      'Clear Segunda Mente Agent history context?';
 
   @override
   String get refreshSuperAgentStateMessage =>
-      'The visible chat history will stay, but Memex Agent\'s historical runtime context will be cleared and future replies will start from a fresh context. Persistent memory, knowledge base files, cards, and other saved data are not affected. Use this when Memex Agent keeps behaving abnormally. Continue?';
+      'The visible chat history will stay, but Segunda Mente Agent\'s historical runtime context will be cleared and future replies will start from a fresh context. Persistent memory, knowledge base files, cards, and other saved data are not affected. Use this when Segunda Mente Agent keeps behaving abnormally. Continue?';
 
   @override
   String get refreshSuperAgentStateActiveRunMessage =>
-      'Wait until the current Memex Agent message finishes before clearing context.';
+      'Wait until the current Segunda Mente Agent message finishes before clearing context.';
 
   @override
-  String get refreshSuperAgentStateSuccess => 'Memex Agent context cleared';
+  String get refreshSuperAgentStateSuccess =>
+      'Segunda Mente Agent context cleared';
 
   @override
   String refreshSuperAgentStateFailed(Object error) {
-    return 'Failed to clear Memex Agent context: $error';
+    return 'Failed to clear Segunda Mente Agent context: $error';
   }
 
   @override
@@ -655,14 +657,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get processingEllipsis => 'Processing...';
 
   @override
-  String get agentBackgroundTitle => 'Memex Agent';
+  String get agentBackgroundTitle => 'Segunda Mente Agent';
 
   @override
-  String get agentBackgroundPausedTitle => 'Memex Agent paused';
+  String get agentBackgroundPausedTitle => 'Segunda Mente Agent paused';
 
   @override
   String get agentBackgroundNeedsAttentionTitle =>
-      'Memex Agent needs attention';
+      'Segunda Mente Agent needs attention';
 
   @override
   String get agentBackgroundStageIdle => 'Idle';
@@ -858,7 +860,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get setupModelConfigSubtitle =>
-      'Memex needs a frontier AI model to organize records, analyze images, and generate insights. Choose one connection method.';
+      'Segunda Mente needs a frontier AI model to organize records, analyze images, and generate insights. Choose one connection method.';
 
   @override
   String get setupModelConfigComplete => 'Complete & Go';
@@ -895,14 +897,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupStatusCustomDescription =>
-      'Memex will use your configured provider credentials and model role selections.';
+      'Segunda Mente will use your configured provider credentials and model role selections.';
 
   @override
   String get aiSetupChooseConnectionTitle => 'Choose a connection method';
 
   @override
   String get aiSetupChooseConnectionDescription =>
-      'Start with the path that matches how you want Memex to access AI models.';
+      'Start with the path that matches how you want Segunda Mente to access AI models.';
 
   @override
   String get aiSetupOfficialRouteDescription =>
@@ -917,7 +919,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupCustomPageSubtitle =>
-      'Configure provider credentials first, then choose the model Memex should use.';
+      'Configure provider credentials first, then choose the model Segunda Mente should use.';
 
   @override
   String get aiSetupProviderCredentialsTitle => 'Provider and API keys';
@@ -959,7 +961,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupServiceCapabilitiesDescription =>
-      'Choose the providers Memex uses for adjacent AI-powered capabilities such as speech and reverse geocoding.';
+      'Choose the providers Segunda Mente uses for adjacent AI-powered capabilities such as speech and reverse geocoding.';
 
   @override
   String get aiSetupAdvancedCustomizationTitle => 'Advanced model routing';
@@ -992,7 +994,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiServiceLongDescription =>
-      'Memex uses a multi-agent system to organize life records, knowledge notes, and social context, discover deeper insights, and provide AI companionship with persistent memory. Your data is stored as plain-text Markdown, preserving data freedom and portability.';
+      'Segunda Mente uses a multi-agent system to organize life records, knowledge notes, and social context, discover deeper insights, and provide AI companionship with persistent memory. Your data is stored as plain-text Markdown, preserving data freedom and portability.';
 
   @override
   String get aiServiceCustomApiRouteTitle => 'I have an API key';
@@ -1443,11 +1445,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get memexAgentNotificationPermissionTitle =>
-      'Keep Memex Agent running in the background';
+      'Keep Segunda Mente Agent running in the background';
 
   @override
   String get memexAgentNotificationPermissionMessage =>
-      'Memex Agent runs locally on your device. Notifications let Memex show progress and keep processing after you leave the app or turn off the screen. If notifications are off, keep Memex open in the foreground until the task finishes.';
+      'Segunda Mente Agent runs locally on your device. Notifications let Segunda Mente show progress and keep processing after you leave the app or turn off the screen. If notifications are off, keep Segunda Mente open in the foreground until the task finishes.';
 
   @override
   String get loadDetailFailedRetryShort =>
@@ -1682,31 +1684,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get providerGeminiOauth => 'Gemini (Google OAuth)';
 
   @override
-  String get providerKimi => 'Kimi (Moonshot)';
-
-  @override
-  String get providerQwen => 'Aliyun';
-
-  @override
-  String get providerSeed => 'Volcengine';
-
-  @override
-  String get providerZhipu => 'Zhipu GLM';
-
-  @override
-  String get providerDeepSeek => 'DeepSeek';
-
-  @override
-  String get providerMinimax => 'MiniMax';
-
-  @override
   String get providerOpenRouter => 'OpenRouter';
 
   @override
   String get providerOllama => 'Ollama (Local)';
-
-  @override
-  String get providerMimo => 'Xiaomi MIMO';
 
   @override
   String get providerMemex => 'Memex proxy service';
@@ -2052,7 +2033,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autoBackupDescription =>
-      'When enabled, Memex creates at most one local snapshot per day after startup or when returning to the foreground.';
+      'When enabled, Segunda Mente creates at most one local snapshot per day after startup or when returning to the foreground.';
 
   @override
   String get backupSensitiveSettingsHint =>
@@ -2132,14 +2113,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get defaultBackupLocationAndroidDesc =>
-      'Use Memex\'s app-specific external files folder. No storage permission needed.';
+      'Use Segunda Mente\'s app-specific external files folder. No storage permission needed.';
 
   @override
   String get chooseBackupLocation => 'Choose backup folder';
 
   @override
   String get chooseBackupLocationAndroidDesc =>
-      'Pick a folder with Android\'s system picker and grant Memex persistent access.';
+      'Pick a folder with Android\'s system picker and grant Segunda Mente persistent access.';
 
   @override
   String get storedBackups => 'Stored Backups';
@@ -2313,7 +2294,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String llmConsentMessage(Object provider) {
-    return 'To enable AI features, Memex needs to send your data to $provider for processing. This includes:\n\n• Text you enter (notes, voice transcriptions)\n• Photo metadata and extracted text (OCR)\n• Health and fitness summaries\n• Timeline card content\n\nYour data is sent directly from your device to $provider. Memex does not store or relay your data through any other server.\n\nPlease review $provider\'s privacy policy for how they handle your data.\n\nDo you agree to send your data to $provider for AI processing?';
+    return 'To enable AI features, Segunda Mente needs to send your data to $provider for processing. This includes:\n\n• Text you enter (notes, voice transcriptions)\n• Photo metadata and extracted text (OCR)\n• Health and fitness summaries\n• Timeline card content\n\nYour data is sent directly from your device to $provider. Segunda Mente does not store or relay your data through any other server.\n\nPlease review $provider\'s privacy policy for how they handle your data.\n\nDo you agree to send your data to $provider for AI processing?';
   }
 
   @override
@@ -2496,7 +2477,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyPolicy => 'Privacy Policy';
 
   @override
-  String get privacyPolicyDesc => 'How Memex handles your data';
+  String get privacyPolicyDesc => 'How Segunda Mente handles your data';
 
   @override
   String get llmAuthError =>
@@ -2538,15 +2519,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get speechModelStartDownload => 'Start Download';
-
-  @override
-  String get speechModelChooseSource => 'Choose download source:';
-
-  @override
-  String get speechModelChinaMirror => '🇨🇳 China Mirror (Faster in CN)';
-
-  @override
-  String get speechModelGithub => '🌐 GitHub (Global)';
 
   @override
   String get speechModelDownloading => 'Downloading model...';
@@ -2591,7 +2563,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoWelcome =>
-      'Welcome to Memex!\nLet\'s take a quick tour of what AI can do for your records.';
+      'Welcome to Segunda Mente!\nLet\'s take a quick tour of what AI can do for your records.';
 
   @override
   String get demoTapAdd => 'Tap here to create your first record';
@@ -2629,14 +2601,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoSkip => 'Skip';
 
   @override
-  String get demoPrefillText => 'Hello Memex! This is my first record 🎉';
+  String get demoPrefillText =>
+      'Hello Segunda Mente! This is my first record 🎉';
 
   @override
   String get visionBadge => 'Vision';
 
   @override
   String get notMultimodalHint =>
-      'Memex relies on multimodal model capabilities for media analysis. If your records contain images, please make sure the model you configured supports image input.';
+      'Segunda Mente relies on multimodal model capabilities for media analysis. If your records contain images, please make sure the model you configured supports image input.';
 
   @override
   String get defaultModelPrefix => 'Default';
@@ -2663,11 +2636,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yesterday => 'Yesterday';
 
   @override
-  String get showInsightTextTitle => 'Show Memex insight comment';
+  String get showInsightTextTitle => 'Show Segunda Mente insight comment';
 
   @override
   String get showInsightTextDesc =>
-      'Whether to show the Memex insight as a pinned comment in the card detail comment section.';
+      'Whether to show the Segunda Mente insight as a pinned comment in the card detail comment section.';
 
   @override
   String get enableCharacterCommentTitle => 'Character auto-comment';
@@ -2716,16 +2689,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reverseGeocodingProvider => 'Reverse geocoding provider';
-
-  @override
-  String get amapProviderName => 'Amap';
-
-  @override
-  String get amapApiKey => 'Amap API Key';
-
-  @override
-  String get amapGcj02Note =>
-      'Amap uses GCJ-02 coordinates. Device GPS is converted before reverse geocoding.';
 
   @override
   String get contextGranularity => 'Context granularity';
@@ -2814,7 +2777,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationStatusSuccessBody =>
-      'Memex can attach this location summary when location context is relevant.';
+      'Segunda Mente can attach this location summary when location context is relevant.';
 
   @override
   String get locationStatusApproximateTitle => 'Approximate location only';
@@ -2828,7 +2791,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationStatusServiceDisabledBody =>
-      'Memex only uses device GPS and will not infer location from network or IP. On Android, open Location settings; on iOS, enable Settings > Privacy & Security > Location Services.';
+      'Segunda Mente only uses device GPS and will not infer location from network or IP. On Android, open Location settings; on iOS, enable Settings > Privacy & Security > Location Services.';
 
   @override
   String get locationStatusPermissionDeniedTitle =>
@@ -2836,7 +2799,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationStatusPermissionDeniedBody =>
-      'Allow Memex to use location while testing or when location context is needed. Always access is not requested.';
+      'Allow Segunda Mente to use location while testing or when location context is needed. Always access is not requested.';
 
   @override
   String get locationStatusPermissionForeverTitle =>
@@ -2844,14 +2807,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationStatusPermissionForeverBody =>
-      'Open app settings and allow location for Memex. On iOS, While Using the App is enough.';
+      'Open app settings and allow location for Segunda Mente. On iOS, While Using the App is enough.';
 
   @override
   String get locationStatusDisabledTitle => 'Location Context is off';
 
   @override
   String get locationStatusDisabledBody =>
-      'Turn on the switch above and save when you want Memex to attach device location to agent context.';
+      'Turn on the switch above and save when you want Segunda Mente to attach device location to agent context.';
 
   @override
   String get locationStatusGeocodeUnavailableTitle =>
@@ -2859,7 +2822,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationStatusGeocodeUnavailableBody =>
-      'Memex has coordinates but will not inject GPS-only context into the agent. Check the reverse geocoding provider and try again.';
+      'Segunda Mente has coordinates but will not inject GPS-only context into the agent. Check the reverse geocoding provider and try again.';
 
   @override
   String get locationStatusUnavailableTitle => 'Location unavailable';
@@ -3021,7 +2984,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tavernImportDescription =>
-      '• SillyTavern V2 character cards (.json)\n• PNG images with embedded cards (.png)\n\nFields like persona, world book, etc. will be automatically mapped to Memex character format.';
+      '• SillyTavern V2 character cards (.json)\n• PNG images with embedded cards (.png)\n\nFields like persona, world book, etc. will be automatically mapped to Segunda Mente character format.';
 
   @override
   String get pickCharacterFile => 'Pick Character File';
@@ -3148,7 +3111,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get earlyUpdateInstallPermissionRequired =>
-      'Allow Memex to install unknown apps, then tap download and install again.';
+      'Allow Segunda Mente to install unknown apps, then tap download and install again.';
 
   @override
   String earlyUpdateLastChecked(Object time) {
@@ -3191,11 +3154,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataImportSettingsDescription =>
-      'Bring old files into Memex, then decide whether to organize them.';
+      'Bring old files into Segunda Mente, then decide whether to organize them.';
 
   @override
   String get dataImportDescription =>
-      'Choose old notes, exported records, documents, or ZIP archives. Memex saves a copy first and leaves the original files untouched. After import, you can decide whether Memex should help organize them.';
+      'Choose old notes, exported records, documents, or ZIP archives. Segunda Mente saves a copy first and leaves the original files untouched. After import, you can decide whether Segunda Mente should help organize them.';
 
   @override
   String get dataImportSelectFiles => 'Choose files to import';
@@ -3204,14 +3167,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dataImportImporting => 'Saving files...';
 
   @override
-  String get dataImportSuccess => 'Files saved in Memex';
+  String get dataImportSuccess => 'Files saved in Segunda Mente';
 
   @override
   String get dataImportOnlyStored => 'Files saved. No organization started.';
 
   @override
   String get dataImportQueued =>
-      'Memex will organize this import in the background.';
+      'Segunda Mente will organize this import in the background.';
 
   @override
   String get dataImportResultTitle => 'Import complete';
@@ -3239,7 +3202,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String dataImportProcessPrompt(Object count) {
-    return 'You imported $count files. Choose whether Memex should organize them now, or just keep the originals.';
+    return 'You imported $count files. Choose whether Segunda Mente should organize them now, or just keep the originals.';
   }
 
   @override
@@ -3247,30 +3210,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataImportProcessKnowledgeBaseDesc =>
-      'Best for documents, notes, project material, and references. Memex will extract useful information and group it for later use.';
+      'Best for documents, notes, project material, and references. Segunda Mente will extract useful information and group it for later use.';
 
   @override
   String get dataImportProcessTimelineCards => 'Create timeline records';
 
   @override
   String get dataImportProcessTimelineCardsDesc =>
-      'Best for diaries, chat logs, activity history, and old exports. Memex will turn time-based content into records when it makes sense.';
+      'Best for diaries, chat logs, activity history, and old exports. Segunda Mente will turn time-based content into records when it makes sense.';
 
   @override
   String get dataImportImpactNone =>
-      'Memex will only keep these original files. No AI organization will start.';
+      'Segunda Mente will only keep these original files. No AI organization will start.';
 
   @override
   String get dataImportImpactKnowledgeBase =>
-      'Memex will read these files and organize useful long-term information into the knowledge base. It will not proactively create timeline records.';
+      'Segunda Mente will read these files and organize useful long-term information into the knowledge base. It will not proactively create timeline records.';
 
   @override
   String get dataImportImpactTimelineCards =>
-      'Memex will read these files and create timeline records for life events or dated history when appropriate. It will not proactively organize the knowledge base.';
+      'Segunda Mente will read these files and create timeline records for life events or dated history when appropriate. It will not proactively organize the knowledge base.';
 
   @override
   String get dataImportImpactBoth =>
-      'Memex will try to create timeline records and organize reusable information into the knowledge base. This is best for a complete personal archive.';
+      'Segunda Mente will try to create timeline records and organize reusable information into the knowledge base. This is best for a complete personal archive.';
 
   @override
   String get dataImportFinish => 'Just save them';

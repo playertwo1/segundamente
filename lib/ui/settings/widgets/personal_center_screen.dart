@@ -27,7 +27,6 @@ class PersonalCenterScreen extends StatefulWidget {
 class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
   final MemexRouter _memexRouter = MemexRouter();
   String? _userId;
-  String? _userEmail;
 
   bool _showAuthBadge = false;
   String? _userAvatar;
@@ -52,7 +51,6 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
     if (mounted) {
       setState(() {
         _userId = userId ?? UserStorage.l10n.notSet;
-        _userEmail = userId != null ? '$userId@memex.local' : null;
         _userAvatar = avatar;
       });
     }
@@ -98,7 +96,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
           builder: (context, scrollController) {
             return Container(
               decoration: const BoxDecoration(
-                color: AppColors.background,
+                color: AppColors.surface,
                 borderRadius: BorderRadiusDirectional.only(
                   topStart: Radius.circular(20),
                   topEnd: Radius.circular(20),
@@ -200,14 +198,14 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                                     color: AppColors.primary,
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: AppColors.background,
+                                      color: AppColors.surface,
                                       width: 2,
                                     ),
                                   ),
                                   child: const Icon(
                                     Icons.edit,
                                     size: 13,
-                                    color: Colors.white,
+                                    color: AppColors.onPrimary,
                                   ),
                                 ),
                               ),
@@ -227,17 +225,6 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 4),
-
-                        // User Email
-                        if (_userEmail != null)
-                          Text(
-                            _userEmail!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
                       ],
                     ),
 
@@ -263,7 +250,6 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                               ).then((_) => _checkPermissionBadge());
                             },
                           ),
-                          const SizedBox(height: 12),
                           _buildFunctionTab(
                             icon: Icons.auto_awesome_rounded,
                             title: UserStorage.l10n.aiModelHubTitle,
@@ -277,7 +263,6 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                               );
                             },
                           ),
-                          const SizedBox(height: 12),
                           _buildFunctionTab(
                             icon: Icons.science_outlined,
                             title: UserStorage.l10n.experimentalLab,
@@ -291,13 +276,11 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                               );
                             },
                           ),
-                          const SizedBox(height: 12),
                           _buildFunctionTab(
                             icon: Icons.memory,
                             title: UserStorage.l10n.memoryTitle,
                             onTap: () => context.push(AppRoutes.memory),
                           ),
-                          const SizedBox(height: 12),
                           _buildFunctionTab(
                             icon: Icons.psychology,
                             title: UserStorage.l10n.aiCharacterConfig,
@@ -305,7 +288,6 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                                 context.push(AppRoutes.characterConfig),
                             isLoading: false,
                           ),
-                          const SizedBox(height: 12),
                           _buildFunctionTab(
                             icon: Icons.settings_outlined,
                             title: UserStorage.l10n.settings,
@@ -320,7 +302,6 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                               });
                             },
                           ),
-                          const SizedBox(height: 12),
                           _buildFunctionTab(
                             icon: Icons.bug_report_outlined,
                             title: UserStorage.l10n.debugging,
@@ -336,7 +317,6 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                               );
                             },
                           ),
-                          const SizedBox(height: 12),
                           _buildFunctionTab(
                             icon: Icons.gavel_outlined,
                             title: UserStorage.l10n.openSourceLicenses,
@@ -362,6 +342,8 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
     );
   }
 
+  /// Grouped editorial row (D-017, board 14): outline icon, label, chevron
+  /// and a thin divider; no boxes or shadows.
   Widget _buildFunctionTab({
     required IconData icon,
     required String title,
@@ -373,27 +355,20 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
       color: Colors.transparent,
       child: InkWell(
         onTap: isLoading ? null : onTap,
-        borderRadius: BorderRadius.circular(16),
         child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: AppColors.cardBackground,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.divider),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.textSecondary.withValues(alpha: 0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              ),
-            ],
+          constraints: const BoxConstraints(minHeight: 56),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: AppColors.divider, width: 0.5),
+            ),
           ),
           child: Row(
             children: [
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Icon(icon, color: AppColors.primary, size: 24),
+                  Icon(icon, color: AppColors.textSecondary, size: 24),
                   if (showBadge)
                     Positioned(
                       right: -2,
@@ -402,7 +377,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                         width: 10,
                         height: 10,
                         decoration: const BoxDecoration(
-                          color: Colors.red,
+                          color: AppColors.danger,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -418,7 +393,6 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                     color: isLoading
                         ? AppColors.textTertiary
                         : AppColors.textPrimary,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -429,7 +403,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               else
-                const Icon(Icons.chevron_right, color: AppColors.divider),
+                const Icon(Icons.chevron_right, color: AppColors.textSecondary),
             ],
           ),
         ),

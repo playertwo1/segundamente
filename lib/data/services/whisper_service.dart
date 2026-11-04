@@ -27,10 +27,6 @@ class WhisperService {
   /// Download URLs
   static const _downloadUrl =
       'https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17.tar.bz2';
-  static const _downloadUrlChina =
-      'https://hf-mirror.com/csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17/resolve/main/model.int8.onnx';
-  static const _tokensUrlChina =
-      'https://hf-mirror.com/csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17/resolve/main/tokens.txt';
 
   sherpa.OfflineRecognizer? _recognizer; // kept for legacy, prefer bg isolate
   TranscriptionIsolate? _bgIsolate;
@@ -72,56 +68,40 @@ class WhisperService {
 
   /// Download model files with progress callback.
   /// [onProgress] receives values from 0.0 to 1.0.
-  /// [useChineseMirror] downloads individual files from hf-mirror.com.
   Future<void> downloadModel({
     required ValueChanged<double> onProgress,
-    bool useChineseMirror = false,
   }) async {
     final dir = await _modelDir();
     await Directory(dir).create(recursive: true);
 
-    if (useChineseMirror) {
-      // Download individual files from Chinese mirror
-      await _downloadFile(
-        _downloadUrlChina,
-        '$dir/$_modelFileName',
-        onProgress: (p) => onProgress(p * 0.95), // 95% for model
-      );
-      await _downloadFile(
-        _tokensUrlChina,
-        '$dir/$_tokensFileName',
-        onProgress: (p) => onProgress(0.95 + p * 0.05), // last 5% for tokens
-      );
-    } else {
-      // Download tar.bz2 archive from GitHub
-      _logger.info('Downloading SenseVoice model from $_downloadUrl');
-      final tmpFile = File('$dir/model.tar.bz2');
-      await _downloadFile(
-        _downloadUrl,
-        tmpFile.path,
-        onProgress: (p) => onProgress(p * 0.9),
-      );
+    // Download tar.bz2 archive from GitHub
+    _logger.info('Downloading SenseVoice model from $_downloadUrl');
+    final tmpFile = File('$dir/model.tar.bz2');
+    await _downloadFile(
+      _downloadUrl,
+      tmpFile.path,
+      onProgress: (p) => onProgress(p * 0.9),
+    );
 
-      // Extract
-      _logger.info('Extracting model archive...');
-      onProgress(0.9);
-      final bytes = await tmpFile.readAsBytes();
-      final decompressed = BZip2Decoder().decodeBytes(bytes);
-      final archive = TarDecoder().decodeBytes(decompressed);
+    // Extract
+    _logger.info('Extracting model archive...');
+    onProgress(0.9);
+    final bytes = await tmpFile.readAsBytes();
+    final decompressed = BZip2Decoder().decodeBytes(bytes);
+    final archive = TarDecoder().decodeBytes(decompressed);
 
-      for (final file in archive) {
-        if (file.isFile) {
-          final name = file.name.split('/').last;
-          if (name == _modelFileName || name == _tokensFileName) {
-            final outFile = File('$dir/$name');
-            await outFile.writeAsBytes(file.content as List<int>);
-          }
+    for (final file in archive) {
+      if (file.isFile) {
+        final name = file.name.split('/').last;
+        if (name == _modelFileName || name == _tokensFileName) {
+          final outFile = File('$dir/$name');
+          await outFile.writeAsBytes(file.content as List<int>);
         }
       }
-      // Clean up archive
-      if (tmpFile.existsSync()) await tmpFile.delete();
-      onProgress(1.0);
     }
+    // Clean up archive
+    if (tmpFile.existsSync()) await tmpFile.delete();
+    onProgress(1.0);
 
     _logger.info('SenseVoice model downloaded to $dir');
   }

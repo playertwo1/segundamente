@@ -53,18 +53,6 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
         return l10n.providerGemini;
       case LLMConfig.typeGeminiOauth:
         return l10n.providerGeminiOauth;
-      case LLMConfig.typeKimi:
-        return l10n.providerKimi;
-      case LLMConfig.typeQwen:
-        return l10n.providerQwen;
-      case LLMConfig.typeSeed:
-        return l10n.providerSeed;
-      case LLMConfig.typeZhipu:
-        return l10n.providerZhipu;
-      case LLMConfig.typeDeepSeek:
-        return l10n.providerDeepSeek;
-      case LLMConfig.typeMinimax:
-        return l10n.providerMinimax;
       case LLMConfig.typeOpenRouter:
         return l10n.providerOpenRouter;
       case LLMConfig.typeOllama:

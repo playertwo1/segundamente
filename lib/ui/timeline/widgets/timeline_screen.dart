@@ -1101,49 +1101,42 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
 
     if (isSingleCompactCard) {
       final config = displayConfigs.first;
-      final content = Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: GestureDetector(
-          onTap: onTap,
-          behavior: HitTestBehavior.opaque,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: NativeCardFactory.build(
-              status: card.status,
-              templateId: config.templateId,
-              data: config.data,
-              title: card.title ?? '',
-              tags: card.tags,
-              onTap: onTap,
-              cardId: card.id,
-              configIndex: 0,
-              failureReason: card.failureReason,
-              onUpdate: (cardId, configIndex, data) {
-                MemexRouter().updateCardUiConfig(cardId, configIndex, data);
-              },
-            ),
+      final content = GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: EdgeInsets.zero,
+          child: NativeCardFactory.build(
+            status: card.status,
+            templateId: config.templateId,
+            data: config.data,
+            title: card.title ?? '',
+            tags: card.tags,
+            onTap: onTap,
+            cardId: card.id,
+            configIndex: 0,
+            failureReason: card.failureReason,
+            onUpdate: (cardId, configIndex, data) {
+              MemexRouter().updateCardUiConfig(cardId, configIndex, data);
+            },
           ),
         ),
       );
 
       if (!AppDatabase.isInitialized) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTimestampHeader(),
+        return _buildEntryRow(
+          [
             content,
           ],
         );
       }
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildTimestampHeader(),
+      return _buildEntryRow(
+        [
           content,
           ...widget.attachments.map((a) => Padding(
                 key: ValueKey(a.id),
-                padding: const EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(top: 12),
                 child: CardAttachmentFactory.build(a),
               )),
         ],
@@ -1151,7 +1144,7 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
     }
 
     final normalContent = Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.zero,
       child: GestureDetector(
         onTap: onTap,
         onLongPress: canToggleClassic ? _toggleClassicMode : null,
@@ -1229,95 +1222,119 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
     );
 
     if (!AppDatabase.isInitialized) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildTimestampHeader(),
+      return _buildEntryRow(
+        [
           normalContent,
         ],
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTimestampHeader(),
+    return _buildEntryRow(
+      [
         normalContent,
         ...widget.attachments.map((a) => Padding(
               key: ValueKey(a.id),
-              padding: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(top: 12),
               child: CardAttachmentFactory.build(a),
             )),
       ],
     );
   }
 
-  Widget _buildTimestampHeader() {
+  /// Editorial timeline row (D-017): time column on the left, content on the
+  /// right, a thin divider below. Card bodies still come from the factories.
+  Widget _buildEntryRow(List<Widget> children) {
     final card = widget.card;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Row(
-        children: [
-          Text(
-            card.displayTime(UserStorage.l10n),
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textTertiary,
-              letterSpacing: -0.15,
+    final meta = _buildMeta();
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColors.divider, width: 0.5),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 60,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 2, right: 8),
+                child: Text(
+                  card.displayTime(UserStorage.l10n),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textSecondary,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (card.status == 'processing' &&
-                    card.uiConfigs.isNotEmpty &&
-                    card.uiConfigs.first.templateId != 'classic_card') ...[
-                  const Icon(Icons.auto_awesome_outlined,
-                      size: 11, color: AppColors.textTertiary),
-                  const SizedBox(width: 3),
-                  Flexible(
-                    child: Text(
-                      UserStorage.l10n.pendingAiProcessingHint,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: AppColors.textTertiary,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (meta != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: meta,
                     ),
-                  ),
-                ] else if (card.address != null &&
-                    card.address!.isNotEmpty) ...[
-                  const Icon(
-                    Icons.location_on_outlined,
-                    size: 14,
-                    color: AppColors.textTertiary,
-                  ),
-                  const SizedBox(width: 4),
-                  Flexible(
-                    child: Text(
-                      card.address!.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            AppColors.textTertiary, // Using the requested color
-                        letterSpacing: 0.5,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
+                  ...children,
                 ],
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  /// Processing hint or address, shown above the content when present.
+  Widget? _buildMeta() {
+    final card = widget.card;
+    final children = <Widget>[
+      if (card.status == 'processing' &&
+          card.uiConfigs.isNotEmpty &&
+          card.uiConfigs.first.templateId != 'classic_card') ...[
+        const Icon(Icons.auto_awesome_outlined,
+            size: 11, color: AppColors.textTertiary),
+        const SizedBox(width: 3),
+        Flexible(
+          child: Text(
+            UserStorage.l10n.pendingAiProcessingHint,
+            style: const TextStyle(
+              fontSize: 11,
+              color: AppColors.textTertiary,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+      ] else if (card.address != null && card.address!.isNotEmpty) ...[
+        const Icon(
+          Icons.location_on_outlined,
+          size: 14,
+          color: AppColors.textTertiary,
+        ),
+        const SizedBox(width: 4),
+        Flexible(
+          child: Text(
+            card.address!.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textTertiary, // Using the requested color
+              letterSpacing: 0.5,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+      ],
+    ];
+    if (children.isEmpty) return null;
+    return Row(mainAxisSize: MainAxisSize.min, children: children);
   }
 }

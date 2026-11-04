@@ -1,8 +1,8 @@
 # Build Guide
 
-Memex uses region flavors (`global`, `cn`) and Android channel flavors
+Memex uses region flavors (`global`) and Android channel flavors
 (`stable`, `early`, `dev`). Android currently defines six Gradle product
-flavors. iOS currently defines two schemes: `global` and `cn`.
+flavors. iOS currently defines two schemes: `global`.
 
 ## Flavors
 
@@ -11,18 +11,14 @@ flavors. iOS currently defines two schemes: `global` and `cn`.
 | Flavor | Android Package | Channel | Intended Use |
 |--------|-----------------|---------|--------------|
 | `globalDev` | `com.memexlab.memex.dev` | Dev | Local overseas development; isolated package/data |
-| `cnDev` | `com.memexlab.memex.cn.dev` | Dev | Local China development; isolated package/data |
 | `globalEarly` | `com.memexlab.memex.early` | Early | Overseas early/pre-release Android builds |
-| `cnEarly` | `com.memexlab.memex.cn.early` | Early | China early/pre-release Android builds |
 | `global` | `com.memexlab.memex` | Stable | Overseas stable release; avoid for local dev |
-| `cn` | `com.memexlab.memex.cn` | Stable | China stable release; avoid for local dev |
 
 ### iOS
 
 | Flavor | iOS Bundle ID | Intended Use |
 |--------|---------------|--------------|
 | `global` | `com.memexlab.memex` | Overseas builds |
-| `cn` | `com.memexlab.memex.cn` | China domestic builds |
 
 ## Prerequisites
 
@@ -46,25 +42,21 @@ cd ios && pod install && cd ..
 flutter run --flavor globalDev
 
 # China dev, isolated package/data
-flutter run --flavor cnDev
 ```
 
 ### Android early or stable channels
 
 ```bash
 flutter run --flavor globalEarly
-flutter run --flavor cnEarly
 
 # Stable release flavors; avoid for local development
 flutter run --flavor global
-flutter run --flavor cn
 ```
 
 ### iOS
 
 ```bash
 flutter run --flavor global
-flutter run --flavor cn
 ```
 
 ## Build
@@ -74,19 +66,14 @@ flutter run --flavor cn
 ```bash
 # Local debug APKs
 flutter build apk --flavor globalDev --debug
-flutter build apk --flavor cnDev --debug
 
 # Release APKs
 flutter build apk --flavor global --release
-flutter build apk --flavor cn --release
 flutter build apk --flavor globalEarly --release
-flutter build apk --flavor cnEarly --release
 
 # Release App Bundles
 flutter build appbundle --flavor global --release
-flutter build appbundle --flavor cn --release
 flutter build appbundle --flavor globalEarly --release
-flutter build appbundle --flavor cnEarly --release
 ```
 
 Output path: `build/app/outputs/flutter-apk/memex_<flavor>_<version>_<build>.apk`
@@ -95,14 +82,13 @@ Output path: `build/app/outputs/flutter-apk/memex_<flavor>_<version>_<build>.apk
 
 ```bash
 flutter build ipa --flavor global --release
-flutter build ipa --flavor cn --release
 ```
 
 Or use the deploy script:
 
 ```bash
 ./deploy_ios.sh global
-./deploy_ios.sh cn
+./deploy_ios.sh global
 ```
 
 ## Signing
@@ -115,9 +101,6 @@ debug builds and do not define release signing configs.
 | Flavor(s) | Properties File | Signing Config |
 |-----------|-----------------|----------------|
 | `global` | `android/key-global.properties` | `globalRelease` |
-| `cn` | `android/key-cn.properties` | `cnRelease` |
-| `globalEarly`, `cnEarly` | `android/key-early.properties` | `earlyRelease` |
-| `globalDev`, `cnDev` | Debug signing only | No release signing config |
 
 Properties file format:
 
@@ -149,7 +132,7 @@ keytool -list -v -keystore android/app/<keystore-file>
 ### iOS
 
 iOS signing is managed through your Apple Developer account. Register the App
-IDs (`com.memexlab.memex`, `com.memexlab.memex.cn`) and create Provisioning
+IDs (`com.memexlab.memex`) and create Provisioning
 Profiles in Xcode or the Apple Developer Portal.
 
 ## Flavor Detection in Dart
@@ -158,10 +141,6 @@ Use `AppFlavor` to branch on the current flavor at runtime:
 
 ```dart
 import 'package:memex/config/app_flavor.dart';
-
-if (AppFlavor.isCN) {
-  // China-specific logic
-}
 
 if (AppFlavor.isDev) {
   // Development-channel logic

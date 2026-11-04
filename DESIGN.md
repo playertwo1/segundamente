@@ -43,6 +43,6 @@ Segunda Mente deve parecer um diário pessoal contemporâneo: calmo, editorial e
 
 ## Referências aprovadas
 
-Dez pranchas da versão escolhida estão em [`.impeccable-mobile/references/amoled-v3-ios/`](.impeccable-mobile/references/amoled-v3-ios/README.md). Use-as como direção, não como copy ou especificação literal: textos e dados nas imagens são ilustrativos.
+Quatorze pranchas da versão escolhida estão em [`.impeccable-mobile/references/amoled-v3-ios/`](.impeccable-mobile/references/amoled-v3-ios/README.md). Use-as como direção, não como copy ou especificação literal: textos e dados nas imagens são ilustrativos.
 
 Fontes oficiais usadas para a inspiração: [Apple Journal](https://www.apple.com/newsroom/2023/12/apple-launches-journal-app-a-new-app-for-reflecting-on-everyday-moments/), [Day One](https://dayoneapp.com/releases/new-improved-journal-headers/) e [Things para iOS 26](https://culturedcode.com/things/blog/2025/09/things-for-os-26/). A decisão está registrada em [D-017](docs/DECISIONS.md#d-017--direção-visual-móvel).

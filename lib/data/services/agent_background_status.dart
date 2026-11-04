@@ -207,9 +207,9 @@ class AgentBackgroundStatus {
 
 class AgentBackgroundStatusLabels {
   const AgentBackgroundStatusLabels({
-    this.title = 'Memex Agent',
-    this.pausedTitle = 'Memex Agent paused',
-    this.needsAttentionTitle = 'Memex Agent needs attention',
+    this.title = 'Segunda Mente Agent',
+    this.pausedTitle = 'Segunda Mente Agent paused',
+    this.needsAttentionTitle = 'Segunda Mente Agent needs attention',
     this.stageIdle = 'Idle',
     this.stageProcessing = 'Processing',
     this.stageQueued = 'Queued',

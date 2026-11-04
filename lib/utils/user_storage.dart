@@ -354,8 +354,13 @@ class UserStorage {
       bool changed = false;
       if (jsonString != null) {
         final List<dynamic> jsonList = jsonDecode(jsonString);
-        configs = jsonList.map((j) {
-          final config = LLMConfig.fromJson(j);
+        final all = jsonList.map((j) => LLMConfig.fromJson(j)).toList();
+        configs = all
+            .where((c) => !LLMConfig.removedTypes.contains(c.type))
+            .toList();
+        // Saving below rewrites the keystore map without the dropped keys.
+        if (configs.length != all.length) changed = true;
+        configs = configs.map((config) {
           // A plain secret comes from an older version or a restored backup:
           // it wins, and saving below moves it to the keystore.
           if (_hasSecrets(config)) {
@@ -623,14 +628,10 @@ class UserStorage {
     }
   }
 
-  static Future<bool> getUseLocalSpeechToText() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getBool(_keyUseLocalSpeechToText) ?? true;
-    } catch (e) {
-      return false;
-    }
-  }
+  /// Always false: the only local model was SenseVoice (Alibaba), removed in
+  /// D-024. Transcription goes to the configured cloud model until F2-11 ships
+  /// a local Whisper.
+  static Future<bool> getUseLocalSpeechToText() async => false;
 
   static Future<void> setUseLocalSpeechToText(bool value) async {
     try {
@@ -875,31 +876,10 @@ class UserStorage {
         );
         break;
       // Providers compatible with OpenAI Chat Completions
-      case LLMConfig.typeKimi:
-      case LLMConfig.typeQwen:
-      case LLMConfig.typeZhipu:
-      case LLMConfig.typeDeepSeek:
       case LLMConfig.typeOpenRouter:
       case LLMConfig.typeOllama:
       case LLMConfig.typeMemex:
         client = OpenAIClient(
-          apiKey: llmConfig.getEffectiveApiKey(),
-          baseUrl: llmConfig.baseUrl,
-          proxyUrl: proxyUrl,
-        );
-        break;
-      // Seed (Doubao) is compatible with OpenAI Responses API
-      case LLMConfig.typeSeed:
-        client = ResponsesClient(
-          apiKey: llmConfig.getEffectiveApiKey(),
-          baseUrl: llmConfig.baseUrl,
-          proxyUrl: proxyUrl,
-        );
-        break;
-      // MiniMax and MIMO are compatible with Anthropic API
-      case LLMConfig.typeMinimax:
-      case LLMConfig.typeMimo:
-        client = ClaudeClient(
           apiKey: llmConfig.getEffectiveApiKey(),
           baseUrl: llmConfig.baseUrl,
           proxyUrl: proxyUrl,

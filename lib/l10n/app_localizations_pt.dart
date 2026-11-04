@@ -411,7 +411,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noPendingActions => 'Nenhuma ação pendente';
 
   @override
-  String get clarificationNeeded => 'Memex quer confirmar';
+  String get clarificationNeeded => 'Segunda Mente quer confirmar';
 
   @override
   String get clarificationTextHint => 'Digite uma resposta curta';
@@ -562,7 +562,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get enterPassword => 'Digite a senha';
 
   @override
-  String get memexLocked => 'Memex está bloqueado';
+  String get memexLocked => 'Segunda Mente está bloqueada';
 
   @override
   String get calendarShortSun => 'Dom';
@@ -618,26 +618,28 @@ class AppLocalizationsPt extends AppLocalizations {
   String get aiInputHint => 'Seja memória ou presente, estou aqui...';
 
   @override
-  String get refreshSuperAgentStateTooltip => 'Limpar contexto do Memex Agent';
+  String get refreshSuperAgentStateTooltip =>
+      'Limpar contexto do agente da Segunda Mente';
 
   @override
   String get refreshSuperAgentStateTitle =>
-      'Limpar contexto histórico do Memex Agent?';
+      'Limpar contexto histórico do agente da Segunda Mente?';
 
   @override
   String get refreshSuperAgentStateMessage =>
-      'O histórico visível do chat permanecerá, mas o contexto histórico de runtime do Memex Agent será limpo e as respostas futuras começarão com um contexto novo. Memória persistente, arquivos da base de conhecimento, cartões e outros dados salvos não serão afetados. Use isto quando o Memex Agent continuar se comportando de forma anormal. Continuar?';
+      'O histórico visível do chat permanecerá, mas o contexto histórico de runtime do agente da Segunda Mente será limpo e as respostas futuras começarão com um contexto novo. Memória persistente, arquivos da base de conhecimento, cartões e outros dados salvos não serão afetados. Use isto quando o agente da Segunda Mente continuar se comportando de forma anormal. Continuar?';
 
   @override
   String get refreshSuperAgentStateActiveRunMessage =>
-      'Aguarde a mensagem atual do Memex Agent terminar antes de limpar o contexto.';
+      'Aguarde a mensagem atual do agente da Segunda Mente terminar antes de limpar o contexto.';
 
   @override
-  String get refreshSuperAgentStateSuccess => 'Contexto do Memex Agent limpo';
+  String get refreshSuperAgentStateSuccess =>
+      'Contexto do agente da Segunda Mente limpo';
 
   @override
   String refreshSuperAgentStateFailed(Object error) {
-    return 'Falha ao limpar contexto do Memex Agent: $error';
+    return 'Falha ao limpar contexto do agente da Segunda Mente: $error';
   }
 
   @override
@@ -663,14 +665,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get processingEllipsis => 'Processando...';
 
   @override
-  String get agentBackgroundTitle => 'Memex Agent';
+  String get agentBackgroundTitle => 'Agente da Segunda Mente';
 
   @override
-  String get agentBackgroundPausedTitle => 'Memex Agent pausado';
+  String get agentBackgroundPausedTitle => 'Agente da Segunda Mente pausado';
 
   @override
   String get agentBackgroundNeedsAttentionTitle =>
-      'Memex Agent precisa de atenção';
+      'Agente da Segunda Mente precisa de atenção';
 
   @override
   String get agentBackgroundStageIdle => 'Ocioso';
@@ -868,7 +870,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get setupModelConfigSubtitle =>
-      'Memex precisa de um modelo AI de fronteira para organizar registros, analisar imagens e gerar insights. Escolha um método de conexão.';
+      'Segunda Mente precisa de um modelo AI de fronteira para organizar registros, analisar imagens e gerar insights. Escolha um método de conexão.';
 
   @override
   String get setupModelConfigComplete => 'Concluir e seguir';
@@ -906,14 +908,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aiSetupStatusCustomDescription =>
-      'Memex usará suas credenciais de provedor configuradas e seleções de papéis de modelo.';
+      'Segunda Mente usará suas credenciais de provedor configuradas e seleções de papéis de modelo.';
 
   @override
   String get aiSetupChooseConnectionTitle => 'Escolha um método de conexão';
 
   @override
   String get aiSetupChooseConnectionDescription =>
-      'Comece pelo caminho que combina com a forma como você quer que Memex acesse modelos AI.';
+      'Comece pelo caminho que combina com a forma como você quer que Segunda Mente acesse modelos AI.';
 
   @override
   String get aiSetupOfficialRouteDescription =>
@@ -928,7 +930,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aiSetupCustomPageSubtitle =>
-      'Configure credenciais do provedor primeiro, depois escolha o modelo que Memex deve usar.';
+      'Configure credenciais do provedor primeiro, depois escolha o modelo que Segunda Mente deve usar.';
 
   @override
   String get aiSetupProviderCredentialsTitle => 'Provedor e chaves API';
@@ -971,7 +973,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aiSetupServiceCapabilitiesDescription =>
-      'Escolha os provedores que Memex usa para capacidades AI adjacentes, como speech e reverse geocoding.';
+      'Escolha os provedores que Segunda Mente usa para capacidades AI adjacentes, como speech e reverse geocoding.';
 
   @override
   String get aiSetupAdvancedCustomizationTitle =>
@@ -1007,7 +1009,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aiServiceLongDescription =>
-      'Memex usa um sistema multiagente para organizar registros de vida, notas de conhecimento e contexto social, descobrir insights mais profundos e oferecer companhia AI com memória persistente. Seus dados são armazenados como Markdown em texto puro, preservando liberdade e portabilidade dos dados.';
+      'Segunda Mente usa um sistema multiagente para organizar registros de vida, notas de conhecimento e contexto social, descobrir insights mais profundos e oferecer companhia AI com memória persistente. Seus dados são armazenados como Markdown em texto puro, preservando liberdade e portabilidade dos dados.';
 
   @override
   String get aiServiceCustomApiRouteTitle => 'Tenho uma chave API';
@@ -1458,11 +1460,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get memexAgentNotificationPermissionTitle =>
-      'Manter o Memex Agent em segundo plano';
+      'Manter o agente da Segunda Mente em segundo plano';
 
   @override
   String get memexAgentNotificationPermissionMessage =>
-      'O Memex Agent roda localmente no seu dispositivo. Com notificações, o Memex pode mostrar o progresso e continuar processando depois que você sai do app ou desliga a tela. Se as notificações estiverem desativadas, mantenha o Memex aberto em primeiro plano até a tarefa terminar.';
+      'O agente da Segunda Mente roda localmente no seu dispositivo. Com notificações, a Segunda Mente pode mostrar o progresso e continuar processando depois que você sai do app ou desliga a tela. Se as notificações estiverem desativadas, mantenha a Segunda Mente aberto em primeiro plano até a tarefa terminar.';
 
   @override
   String get loadDetailFailedRetryShort =>
@@ -1699,31 +1701,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get providerGeminiOauth => 'Gemini via Google OAuth';
 
   @override
-  String get providerKimi => 'Kimi da Moonshot';
-
-  @override
-  String get providerQwen => 'Provedor Aliyun';
-
-  @override
-  String get providerSeed => 'Provedor Volcengine';
-
-  @override
-  String get providerZhipu => 'Provedor Zhipu GLM';
-
-  @override
-  String get providerDeepSeek => 'DeepSeek';
-
-  @override
-  String get providerMinimax => 'MiniMax';
-
-  @override
   String get providerOpenRouter => 'OpenRouter';
 
   @override
   String get providerOllama => 'Ollama local';
-
-  @override
-  String get providerMimo => 'Provedor Xiaomi MIMO';
 
   @override
   String get providerMemex => 'Serviço proxy Memex';
@@ -2070,7 +2051,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get autoBackupDescription =>
-      'Quando ativado, Memex cria no máximo um snapshot local por dia depois da inicialização ou ao voltar ao foreground.';
+      'Quando ativado, Segunda Mente cria no máximo um snapshot local por dia depois da inicialização ou ao voltar ao foreground.';
 
   @override
   String get backupSensitiveSettingsHint =>
@@ -2150,14 +2131,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get defaultBackupLocationAndroidDesc =>
-      'Use a pasta de arquivos externos específica do Memex. Não é necessária permissão de armazenamento.';
+      'Use a pasta de arquivos externos específica da Segunda Mente. Não é necessária permissão de armazenamento.';
 
   @override
   String get chooseBackupLocation => 'Escolher pasta de backup';
 
   @override
   String get chooseBackupLocationAndroidDesc =>
-      'Escolha uma pasta pelo seletor do Android e conceda acesso persistente ao Memex.';
+      'Escolha uma pasta pelo seletor do Android e conceda acesso persistente à Segunda Mente.';
 
   @override
   String get storedBackups => 'Backups armazenados';
@@ -2333,7 +2314,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String llmConsentMessage(Object provider) {
-    return 'Para ativar recursos AI, Memex precisa enviar seus dados para $provider para processamento. Isso inclui:\n\n• Texto que você digita (notas, transcrições de voz)\n• Metadados de fotos e texto extraído (OCR)\n• Resumos de saúde e fitness\n• Conteúdo de cartões de timeline\n\nSeus dados são enviados diretamente do seu dispositivo para $provider. Memex não armazena nem retransmite seus dados por qualquer outro servidor.\n\nRevise a política de privacidade de $provider para saber como eles lidam com seus dados.\n\nVocê concorda em enviar seus dados para $provider para processamento AI?';
+    return 'Para ativar recursos AI, Segunda Mente precisa enviar seus dados para $provider para processamento. Isso inclui:\n\n• Texto que você digita (notas, transcrições de voz)\n• Metadados de fotos e texto extraído (OCR)\n• Resumos de saúde e fitness\n• Conteúdo de cartões de timeline\n\nSeus dados são enviados diretamente do seu dispositivo para $provider. Segunda Mente não armazena nem retransmite seus dados por qualquer outro servidor.\n\nRevise a política de privacidade de $provider para saber como eles lidam com seus dados.\n\nVocê concorda em enviar seus dados para $provider para processamento AI?';
   }
 
   @override
@@ -2517,7 +2498,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get privacyPolicy => 'Política de privacidade';
 
   @override
-  String get privacyPolicyDesc => 'Como Memex lida com seus dados';
+  String get privacyPolicyDesc => 'Como Segunda Mente lida com seus dados';
 
   @override
   String get llmAuthError =>
@@ -2559,15 +2540,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get speechModelStartDownload => 'Iniciar download';
-
-  @override
-  String get speechModelChooseSource => 'Escolha a fonte de download:';
-
-  @override
-  String get speechModelChinaMirror => '🇨🇳 China Mirror (mais rápido na CN)';
-
-  @override
-  String get speechModelGithub => '🌐 GitHub (fonte global)';
 
   @override
   String get speechModelDownloading => 'Baixando modelo...';
@@ -2613,7 +2585,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get demoWelcome =>
-      'Boas-vindas ao Memex!\nVamos fazer uma tour rápida do que AI pode fazer pelos seus registros.';
+      'Boas-vindas à Segunda Mente!\nVamos fazer uma tour rápida do que AI pode fazer pelos seus registros.';
 
   @override
   String get demoTapAdd => 'Toque aqui para criar seu primeiro registro';
@@ -2652,14 +2624,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get demoSkip => 'Pular';
 
   @override
-  String get demoPrefillText => 'Olá Memex! Este é meu primeiro registro 🎉';
+  String get demoPrefillText =>
+      'Olá Segunda Mente! Este é meu primeiro registro 🎉';
 
   @override
   String get visionBadge => 'Visão';
 
   @override
   String get notMultimodalHint =>
-      'Memex depende de capacidades multimodais de modelo para análise de mídia. Se seus registros contêm imagens, confirme que o modelo configurado suporta entrada de imagem.';
+      'Segunda Mente depende de capacidades multimodais de modelo para análise de mídia. Se seus registros contêm imagens, confirme que o modelo configurado suporta entrada de imagem.';
 
   @override
   String get defaultModelPrefix => 'Padrão';
@@ -2686,11 +2659,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get yesterday => 'Ontem';
 
   @override
-  String get showInsightTextTitle => 'Mostrar comentário de insight do Memex';
+  String get showInsightTextTitle =>
+      'Mostrar comentário de insight da Segunda Mente';
 
   @override
   String get showInsightTextDesc =>
-      'Se deve mostrar o insight do Memex como comentário fixado na seção de comentários do detalhe do cartão.';
+      'Se deve mostrar o insight da Segunda Mente como comentário fixado na seção de comentários do detalhe do cartão.';
 
   @override
   String get enableCharacterCommentTitle =>
@@ -2740,16 +2714,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get reverseGeocodingProvider => 'Provedor de reverse geocoding';
-
-  @override
-  String get amapProviderName => 'Amap';
-
-  @override
-  String get amapApiKey => 'Valor Amap API Key';
-
-  @override
-  String get amapGcj02Note =>
-      'Amap usa coordenadas GCJ-02. O GPS do dispositivo é convertido antes do reverse geocoding.';
 
   @override
   String get contextGranularity => 'Granularidade do contexto';
@@ -2838,7 +2802,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get locationStatusSuccessBody =>
-      'Memex pode anexar este resumo de localização quando o contexto for relevante.';
+      'Segunda Mente pode anexar este resumo de localização quando o contexto for relevante.';
 
   @override
   String get locationStatusApproximateTitle => 'Apenas localização aproximada';
@@ -2853,7 +2817,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get locationStatusServiceDisabledBody =>
-      'Memex usa apenas o GPS do dispositivo e não inferirá localização por rede ou IP. No Android, abra Location settings; no iOS, ative Settings > Privacy & Security > Location Services.';
+      'Segunda Mente usa apenas o GPS do dispositivo e não inferirá localização por rede ou IP. No Android, abra Location settings; no iOS, ative Settings > Privacy & Security > Location Services.';
 
   @override
   String get locationStatusPermissionDeniedTitle =>
@@ -2861,7 +2825,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get locationStatusPermissionDeniedBody =>
-      'Permita que Memex use localização durante testes ou quando o contexto de localização for necessário. Always access não é solicitado.';
+      'Permita que Segunda Mente use localização durante testes ou quando o contexto de localização for necessário. Always access não é solicitado.';
 
   @override
   String get locationStatusPermissionForeverTitle =>
@@ -2869,14 +2833,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get locationStatusPermissionForeverBody =>
-      'Abra as configurações do app e permita localização para Memex. No iOS, While Using the App é suficiente.';
+      'Abra as configurações do app e permita localização para Segunda Mente. No iOS, While Using the App é suficiente.';
 
   @override
   String get locationStatusDisabledTitle => 'Contexto de localização desligado';
 
   @override
   String get locationStatusDisabledBody =>
-      'Ative o switch acima e salve quando quiser que Memex anexe a localização do dispositivo ao contexto do agente.';
+      'Ative o switch acima e salve quando quiser que Segunda Mente anexe a localização do dispositivo ao contexto do agente.';
 
   @override
   String get locationStatusGeocodeUnavailableTitle =>
@@ -2884,7 +2848,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get locationStatusGeocodeUnavailableBody =>
-      'Memex tem coordenadas, mas não injetará contexto apenas de GPS no agente. Verifique o provedor de reverse geocoding e tente novamente.';
+      'Segunda Mente tem coordenadas, mas não injetará contexto apenas de GPS no agente. Verifique o provedor de reverse geocoding e tente novamente.';
 
   @override
   String get locationStatusUnavailableTitle => 'Localização indisponível';
@@ -3048,7 +3012,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tavernImportDescription =>
-      '• Cartões de personagem SillyTavern V2 (.json)\n• Imagens PNG com cartões embutidos (.png)\n\nCampos como persona, world book etc. serão mapeados automaticamente para o formato de personagem do Memex.';
+      '• Cartões de personagem SillyTavern V2 (.json)\n• Imagens PNG com cartões embutidos (.png)\n\nCampos como persona, world book etc. serão mapeados automaticamente para o formato de personagem da Segunda Mente.';
 
   @override
   String get pickCharacterFile => 'Escolher arquivo de personagem';
@@ -3174,7 +3138,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get earlyUpdateInstallPermissionRequired =>
-      'Permita que Memex instale apps desconhecidos, depois toque em baixar e instalar novamente.';
+      'Permita que Segunda Mente instale apps desconhecidos, depois toque em baixar e instalar novamente.';
 
   @override
   String earlyUpdateLastChecked(Object time) {
@@ -3217,11 +3181,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get dataImportSettingsDescription =>
-      'Traga arquivos antigos para o Memex e depois decida se quer organizá-los.';
+      'Traga arquivos antigos para a Segunda Mente e depois decida se quer organizá-los.';
 
   @override
   String get dataImportDescription =>
-      'Escolha anotações antigas, registros exportados, documentos ou arquivos ZIP. O Memex salva uma cópia primeiro e não altera os arquivos originais. Depois você decide se quer ajuda do Memex para organizar tudo.';
+      'Escolha anotações antigas, registros exportados, documentos ou arquivos ZIP. A Segunda Mente salva uma cópia primeiro e não altera os arquivos originais. Depois você decide se quer ajuda da Segunda Mente para organizar tudo.';
 
   @override
   String get dataImportSelectFiles => 'Escolher arquivos para importar';
@@ -3230,7 +3194,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dataImportImporting => 'Salvando arquivos...';
 
   @override
-  String get dataImportSuccess => 'Arquivos salvos no Memex';
+  String get dataImportSuccess => 'Arquivos salvos na Segunda Mente';
 
   @override
   String get dataImportOnlyStored =>
@@ -3238,7 +3202,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get dataImportQueued =>
-      'O Memex organizará esta importação em segundo plano.';
+      'A Segunda Mente organizará esta importação em segundo plano.';
 
   @override
   String get dataImportResultTitle => 'Importação concluída';
@@ -3266,7 +3230,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String dataImportProcessPrompt(Object count) {
-    return 'Você importou $count arquivos. Escolha se o Memex deve organizá-los agora ou apenas manter os originais.';
+    return 'Você importou $count arquivos. Escolha se a Segunda Mente deve organizá-los agora ou apenas manter os originais.';
   }
 
   @override
@@ -3275,7 +3239,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get dataImportProcessKnowledgeBaseDesc =>
-      'Ideal para documentos, notas, material de projetos e referências. O Memex extrairá informações úteis e as agrupará para uso futuro.';
+      'Ideal para documentos, notas, material de projetos e referências. A Segunda Mente extrairá informações úteis e as agrupará para uso futuro.';
 
   @override
   String get dataImportProcessTimelineCards =>
@@ -3283,23 +3247,23 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get dataImportProcessTimelineCardsDesc =>
-      'Ideal para diários, conversas, histórico de atividades e exportações antigas. O Memex transformará conteúdo com data em registros quando fizer sentido.';
+      'Ideal para diários, conversas, histórico de atividades e exportações antigas. A Segunda Mente transformará conteúdo com data em registros quando fizer sentido.';
 
   @override
   String get dataImportImpactNone =>
-      'O Memex manterá apenas estes arquivos originais. Nenhuma organização por IA será iniciada.';
+      'A Segunda Mente manterá apenas estes arquivos originais. Nenhuma organização por IA será iniciada.';
 
   @override
   String get dataImportImpactKnowledgeBase =>
-      'O Memex lerá estes arquivos e organizará informações úteis de longo prazo na base de conhecimento. Ele não criará registros da linha do tempo de forma proativa.';
+      'A Segunda Mente lerá estes arquivos e organizará informações úteis de longo prazo na base de conhecimento. Ele não criará registros da linha do tempo de forma proativa.';
 
   @override
   String get dataImportImpactTimelineCards =>
-      'O Memex lerá estes arquivos e criará registros da linha do tempo para eventos ou históricos com data quando apropriado. Ele não organizará a base de conhecimento de forma proativa.';
+      'A Segunda Mente lerá estes arquivos e criará registros da linha do tempo para eventos ou históricos com data quando apropriado. Ele não organizará a base de conhecimento de forma proativa.';
 
   @override
   String get dataImportImpactBoth =>
-      'O Memex tentará criar registros da linha do tempo e organizar informações reutilizáveis na base de conhecimento. É a melhor opção para um arquivo pessoal completo.';
+      'A Segunda Mente tentará criar registros da linha do tempo e organizar informações reutilizáveis na base de conhecimento. É a melhor opção para um arquivo pessoal completo.';
 
   @override
   String get dataImportFinish => 'Apenas salvar';

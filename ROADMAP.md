@@ -121,7 +121,7 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 |---|---|---|---|---|---|
 | F5V-01 | Atualizar tokens/tema AMOLED e navegação superior; remover a barra inferior persistente | P1 | D-017, D-022 | REVIEW | Rotas mapeadas; widget tests; captura da navegação |
 | F5V-02 | Aplicar a direção às telas de timeline, conhecimento, insights e memórias | P1 | F5V-01 | IN_PROGRESS | Estados principais cobertos por widget tests e capturas comparadas às referências |
-| F5V-03 | Atualizar entrada, conversa e acesso explícito “Conversar” | P1 | F5V-01 | READY | Teste de navegação/ação do chat, estados de envio e captura |
+| F5V-03 | Atualizar entrada, conversa e acesso explícito “Conversar” | P1 | F5V-01 | IN_PROGRESS | Teste de navegação/ação do chat, estados de envio e captura |
 | F5V-04 | Atualizar calendário, detalhes, relatórios, configurações, modelos, agentes e backup | P1 | F5V-01 | READY | Widget tests dos comportamentos e capturas de cada família |
 | F5V-05 | Revisar estados vazios/erro, escala de texto, contraste, leitor de tela e validar no aparelho | P1 | F5V-02, F5V-03, F5V-04 | READY | Verificações de acessibilidade; capturas finais; validação no S25 quando disponível |
 
@@ -249,4 +249,5 @@ Primeiro fechar o que está `IN_PROGRESS` com prova no S25 (F2-09, F2-10, F2-03,
 - 2026-11-03 — D-016 (ideias do Daedalus Echo: F2-11, F3-07, F6-09 a F6-11).
 - 2026-11-03 — D-018 (ideias do anarlog: F1-09, F2-12, F2-13, F3-08, F3-09).
 - 2026-11-03 — D-017: direção visual móvel AMOLED aprovada. D-021 agendou a F5V para depois da F5; D-022 a inicia agora, em paralelo; portões mantidos.
+- 2026-11-04 — D-023: sem espelho chinês no download do modelo de voz.
 - 2026-11-03 — D-020: fallback resiliente entre modelos e provedores (FallbackLLMClient) com reordenação por drag-and-drop na UI; Gemini OAuth e Claude Sonnet 5.5 High validados com resposta real no S25 Ultra.

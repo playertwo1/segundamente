@@ -90,15 +90,43 @@ void main() {
         },
       ];
 
+    var menuTaps = 0;
     await tester.pumpWidget(
       MaterialApp(
-        home: KnowledgeBaseScreen(viewModel: viewModel),
+        home: KnowledgeBaseScreen(
+          viewModel: viewModel,
+          onMenuTap: () => menuTaps++,
+        ),
       ),
     );
 
-    expect(find.text('PROJECTS'), findsOneWidget);
-    expect(find.text('Projects (Projekte)'), findsOneWidget);
-    expect(find.text('2 items'), findsOneWidget);
+    // P.A.R.A. is a grouped list (D-017): one labeled row per category.
+    for (final label in [
+      UserStorage.l10n.pkmCategoryProject,
+      UserStorage.l10n.pkmCategoryArea,
+      UserStorage.l10n.pkmCategoryResource,
+      UserStorage.l10n.pkmCategoryArchive,
+    ]) {
+      expect(
+        find.ancestor(of: find.text(label), matching: find.byType(ListTile)),
+        findsOneWidget,
+      );
+    }
+    expect(find.byType(GridView), findsNothing);
+
+    // Extra root folders keep their name and item count as a row.
+    final folderRow = find.ancestor(
+      of: find.text('Projects (Projekte)'),
+      matching: find.byType(ListTile),
+    );
+    expect(folderRow, findsOneWidget);
+    expect(
+      find.descendant(of: folderRow, matching: find.text('2')),
+      findsOneWidget,
+    );
     expect(find.text('Loose note.md'), findsOneWidget);
+
+    await tester.tap(find.byTooltip(UserStorage.l10n.navMenu));
+    expect(menuTaps, 1);
   });
 }

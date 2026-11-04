@@ -34,7 +34,7 @@ void main() {
   });
 
   testWidgets('shows Dev channel badge for development builds', (tester) async {
-    AppFlavor.init('cnDev');
+    AppFlavor.init('globalDev');
 
     await tester.pumpWidget(const MaterialApp(home: MemexBrandTitle()));
 

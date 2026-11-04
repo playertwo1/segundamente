@@ -19,29 +19,32 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // AMOLED editorial row: no box or shadow unless a template asks for a
+    // fill; zero-padding (image) cards keep a quiet rounded clip.
+    final edgeToEdge = padding == EdgeInsets.zero;
+    final radius = BorderRadius.circular(edgeToEdge ? 12 : 0);
+    final p = padding.resolve(TextDirection.ltr);
+    final effectivePadding = edgeToEdge || backgroundColor != null
+        ? padding
+        : EdgeInsets.only(top: p.top.clamp(0, 8), bottom: p.bottom.clamp(0, 8));
     return Container(
       width: double.infinity,
       margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: edgeToEdge ? Clip.antiAlias : Clip.none,
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(borderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 16,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: backgroundColor == AppColors.cardBackground
+            ? null
+            : backgroundColor,
+        borderRadius: radius,
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: radius,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(borderRadius),
+          borderRadius: radius,
           child: Padding(
-            padding: padding,
+            padding: effectivePadding,
             child: child,
           ),
         ),

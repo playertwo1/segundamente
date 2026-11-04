@@ -32,7 +32,7 @@ void main() {
 
       expect(status.state, AgentBackgroundRunState.active);
       expect(status.remainingTasks, 4);
-      expect(status.title, 'Memex Agent');
+      expect(status.title, 'Segunda Mente Agent');
       expect(status.taskSummary, 'Running 1, Pending 2, Retry 1');
       expect(status.statusText, 'Running 1, Pending 2, Retry 1');
       expect(status.detail, 'Processing 4 queued task(s).');
@@ -109,7 +109,7 @@ void main() {
 
         final platformMap = status.toPlatformMap(isInBackground: true);
 
-        expect(status.title, 'Memex Agent');
+        expect(status.title, 'Segunda Mente Agent');
         expect(status.stage, 'Tool called');
         expect(status.detail, 'Updated the timeline card');
         expect(status.summary, 'Updated the timeline card');
@@ -165,7 +165,7 @@ void main() {
 
       expect(status.state, AgentBackgroundRunState.idle);
       expect(status.shouldShowSystemSurface, isFalse);
-      expect(status.title, 'Memex Agent');
+      expect(status.title, 'Segunda Mente Agent');
       expect(status.detail, 'API key is missing');
       expect(status.summary, 'API key is missing');
     });
@@ -240,7 +240,7 @@ void main() {
         now: DateTime(2026, 1, 1),
       );
 
-      expect(status.title, 'Memex Agent');
+      expect(status.title, 'Agente da Segunda Mente');
       expect(status.stage, 'Processando');
       expect(status.detail, 'Processando 4 tarefa(s) na fila.');
       expect(status.summary, 'Processando 4 tarefa(s) na fila.');
@@ -335,7 +335,7 @@ void main() {
 
       expect(status.state, AgentBackgroundRunState.failed);
       expect(status.shouldShowSystemSurface, isTrue);
-      expect(status.title, 'Memex Agent needs attention');
+      expect(status.title, 'Segunda Mente Agent needs attention');
       expect(status.stage, 'Needs attention');
       expect(status.detail, 'API key is missing');
       expect(status.summary, 'API key is missing');

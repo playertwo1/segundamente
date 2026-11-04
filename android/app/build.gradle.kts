@@ -26,8 +26,6 @@ android {
 
     val (globalKeystoreProperties, hasGlobalKeystore) =
         loadKeystoreProperties("key-global.properties")
-    val (cnKeystoreProperties, hasCnKeystore) =
-        loadKeystoreProperties("key-cn.properties")
     val (earlyKeystoreProperties, hasEarlyKeystore) =
         loadKeystoreProperties("key-early.properties")
 
@@ -61,14 +59,6 @@ android {
                 storePassword = globalKeystoreProperties["storePassword"] as String
             }
         }
-        if (hasCnKeystore) {
-            create("cnRelease") {
-                keyAlias = cnKeystoreProperties["keyAlias"] as String
-                keyPassword = cnKeystoreProperties["keyPassword"] as String
-                storeFile = file(cnKeystoreProperties["storeFile"] as String)
-                storePassword = cnKeystoreProperties["storePassword"] as String
-            }
-        }
         if (hasEarlyKeystore) {
             create("earlyRelease") {
                 keyAlias = earlyKeystoreProperties["keyAlias"] as String
@@ -80,11 +70,8 @@ android {
     }
 
     val globalApplicationId = "app.segundamente"
-    val cnApplicationId = "app.segundamente.cn"
     val globalEarlyApplicationId = "app.segundamente.early"
-    val cnEarlyApplicationId = "app.segundamente.cn.early"
     val globalDevApplicationId = "app.segundamente.dev"
-    val cnDevApplicationId = "app.segundamente.cn.dev"
 
     // Static shortcut targetPackage must be a literal in each flavor overlay.
     // Android persists @string references as resource IDs in ShortcutInfo intents.
@@ -98,39 +85,10 @@ android {
                 signingConfig = signingConfigs.getByName("globalRelease")
             }
         }
-        create("cn") {
-            dimension = "market"
-            applicationId = cnApplicationId
-            manifestPlaceholders["appLabel"] = "Segunda Mente"
-            if (hasCnKeystore) {
-                signingConfig = signingConfigs.getByName("cnRelease")
-            }
-        }
-        create("globalEarly") {
-            dimension = "market"
-            applicationId = globalEarlyApplicationId
-            manifestPlaceholders["appLabel"] = "Segunda Mente Early"
-            if (hasEarlyKeystore) {
-                signingConfig = signingConfigs.getByName("earlyRelease")
-            }
-        }
-        create("cnEarly") {
-            dimension = "market"
-            applicationId = cnEarlyApplicationId
-            manifestPlaceholders["appLabel"] = "Segunda Mente Early CN"
-            if (hasEarlyKeystore) {
-                signingConfig = signingConfigs.getByName("earlyRelease")
-            }
-        }
         create("globalDev") {
             dimension = "market"
             applicationId = globalDevApplicationId
             manifestPlaceholders["appLabel"] = "Segunda Mente Dev"
-        }
-        create("cnDev") {
-            dimension = "market"
-            applicationId = cnDevApplicationId
-            manifestPlaceholders["appLabel"] = "Segunda Mente Dev CN"
         }
     }
 

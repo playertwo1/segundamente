@@ -2,7 +2,7 @@
 
 Esta versão substitui as pranchas anteriores após a revisão do usuário. O conjunto foi refeito olhando capturas oficiais do Apple Journal, Day One e Things e usando-as como referência visual direta de hierarquia, densidade, espaçamento, cabeçalhos e listas. As capturas oficiais foram usadas durante a geração como inspiração, não foram copiadas para este repositório.
 
-**Estado:** direção visual aprovada pelo dono em 2026-11-03 (D-017); aplicação no app ainda não iniciada.
+**Estado:** direção visual aprovada pelo dono em 2026-11-03 (D-017); aplicação inicial do tema em andamento na fase F5V. As pranchas 11–14 ampliam a cobertura de captura, tipos de registro, perfil e avisos.
 
 ## Direção visual
 
@@ -36,7 +36,18 @@ Esta versão substitui as pranchas anteriores após a revisão do usuário. O co
 | `08-agents-backup.png` | Agentes/habilidades e backup |
 | `09-navigation-chat-icons.png` | Acesso ao chat, menu principal e família de ícones |
 | `10-primary-states.png` | Timeline vazia, busca sem resultado e falha de restauração |
+| `11-capture-quick-record.png` | Timeline com captura, composição de texto/anexos e gravação rápida |
+| `12-timeline-card-types.png` | Tarefa, evento, métrica, humor, pessoa, lugar, link e citação |
+| `13-timeline-card-types-2.png` | Galeria, transação, progresso, avaliação, rotina, conversa resumida e detalhe de métrica |
+| `14-companion-profile-states.png` | Chat com personagem, perfil em folha, central de ações e indicador do agente |
 
 ## Limites
 
 São referências geradas, não capturas nem implementação do app. Textos e registros são exemplos, não copy aprovada nem prova de funcionalidades. O menu e a ausência de barra inferior são proposta visual; antes de implementar, conciliar os destinos com as rotas reais e preservar gestos, acessibilidade e navegação já existentes. As imagens não foram validadas em aparelho, com TalkBack/VoiceOver ou com fontes ampliadas.
+
+## Decisões das novas pranchas
+
+- **11 — Captura:** o botão `+` abre composição com anexos removíveis; gravação rápida mostra transcrição ao vivo e mantém “Cancelar” como alvo explícito de arraste.
+- **12 — Tipos de registro (1):** todos os tipos usam a mesma linha editorial aberta; cada um ganha só um dado ou miniatura própria (por exemplo, métrica = número + mini-gráfico), sem caixa repetida.
+- **13 — Tipos de registro (2) e detalhe:** galerias usam uma faixa de miniaturas; progresso, avaliação e rotina usam indicadores compactos. O detalhe de métrica prioriza gráfico e origem, com Editar/Mover/Excluir como ações textuais.
+- **14 — Companheiro, perfil e avisos:** a conversa identifica o personagem; o perfil agrupa destinos em linhas; avisos mostram uma ação textual cada, enquanto “Organizando…” fica como indicador discreto separado do sino e do botão `+`.

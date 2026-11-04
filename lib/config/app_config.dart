@@ -14,12 +14,7 @@ class AppConfig {
 
   /// Provider types available in the current flavor.
   static List<String> get availableProviders {
-    switch (AppFlavor.current) {
-      case AppFlavorType.cn:
-        return _cnProviders;
-      case AppFlavorType.global:
-        return _globalProviders;
-    }
+    return _globalProviders;
   }
 
   /// Returns true if [providerType] is available in the current flavor.
@@ -39,27 +34,8 @@ class AppConfig {
     // Google
     LLMConfig.typeGemini,
     LLMConfig.typeGeminiOauth,
-    // Chinese providers
-    LLMConfig.typeKimi,
-    LLMConfig.typeQwen,
-    LLMConfig.typeSeed,
-    LLMConfig.typeZhipu,
-    LLMConfig.typeDeepSeek,
-    LLMConfig.typeMimo,
     // Aggregators
     LLMConfig.typeOpenRouter,
-    LLMConfig.typeOllama,
-  ];
-
-  static const _cnProviders = [
-    // Chinese providers
-    LLMConfig.typeKimi,
-    LLMConfig.typeQwen,
-    LLMConfig.typeSeed,
-    LLMConfig.typeZhipu,
-    LLMConfig.typeDeepSeek,
-    LLMConfig.typeMimo,
-    // Aggregators
     LLMConfig.typeOllama,
   ];
 

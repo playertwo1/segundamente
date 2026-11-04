@@ -24,6 +24,7 @@ import 'package:memex/data/services/system_action_service.dart';
 import 'package:memex/db/app_database.dart';
 import 'package:memex/l10n/app_localizations.dart';
 import 'package:memex/ui/chat/widgets/agent_chat_dialog.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
 import 'package:memex/ui/knowledge/widgets/knowledge_file_page.dart';
@@ -998,6 +999,24 @@ void main() {
         findsOneWidget,
       );
       expect(find.text(UserStorage.l10n.sendLabel), findsOneWidget);
+    });
+
+    testWidgets('send is amber with dark text when it can submit',
+        (tester) async {
+      await _pumpDialog(tester);
+
+      final fill = (tester
+              .widget<AnimatedContainer>(find.descendant(
+                of: find.byKey(const ValueKey('super_agent_publish_button')),
+                matching: find.byType(AnimatedContainer),
+              ))
+              .decoration as BoxDecoration)
+          .color;
+      final text =
+          tester.widget<Text>(find.text(UserStorage.l10n.sendLabel)).style!;
+
+      expect(fill, AppColors.primary);
+      expect(text.color, AppColors.onPrimary);
     });
 
     testWidgets('renders a legacy schedule artifact without a dead link', (

@@ -87,4 +87,37 @@ void main() {
     expect(
         await SecretStorage.read('llm_config_secrets'), contains('sk-chave'));
   });
+
+  test('configs of removed Chinese providers are dropped with their keys',
+      () async {
+    Map<String, dynamic> cfg(String key, String type) => LLMConfig(
+          key: key,
+          type: type,
+          modelId: 'm',
+          apiKey: '',
+          baseUrl: 'https://x',
+        ).toJson();
+    SharedPreferences.setMockInitialValues({
+      'llm_client_configs': jsonEncode([
+        cfg('default', LLMConfig.typeChatCompletion),
+        cfg('kimi-1', 'kimi'),
+        cfg('deep', 'deepseek'),
+      ]),
+    });
+    FlutterSecureStorage.setMockInitialValues({
+      'llm_config_secrets': jsonEncode({
+        'default': {'apiKey': 'sk-ok'},
+        'kimi-1': {'apiKey': 'sk-kimi'},
+        'deep': {'apiKey': 'sk-deep'},
+      }),
+    });
+
+    final configs = await UserStorage.getLLMConfigs();
+
+    expect(configs.map((c) => c.key), ['default']);
+    expect(configs.single.apiKey, 'sk-ok');
+    final secrets = jsonDecode((await SecretStorage.read('llm_config_secrets'))!)
+        as Map<String, dynamic>;
+    expect(secrets.keys, ['default']);
+  });
 }

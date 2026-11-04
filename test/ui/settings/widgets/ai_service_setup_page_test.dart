@@ -64,10 +64,10 @@ void main() {
   ) async {
     const activeConfig = LLMConfig(
       key: 'daily-driver',
-      type: LLMConfig.typeDeepSeek,
-      modelId: 'deepseek-v4-flash',
+      type: LLMConfig.typeOpenRouter,
+      modelId: 'anthropic/claude-sonnet-5',
       apiKey: 'sk-test',
-      baseUrl: 'https://api.deepseek.com',
+      baseUrl: 'https://openrouter.ai/api/v1',
     );
     await UserStorage.saveLLMConfigs([
       LLMConfig.createDefaultClientConfig(),
@@ -272,11 +272,11 @@ void main() {
       baseUrl: 'https://api.openai.com/v1',
     );
     const secondConfig = LLMConfig(
-      key: 'custom-deepseek',
-      type: LLMConfig.typeDeepSeek,
-      modelId: 'deepseek-v4-flash',
-      apiKey: 'sk-deepseek',
-      baseUrl: 'https://api.deepseek.com',
+      key: 'custom-router',
+      type: LLMConfig.typeOpenRouter,
+      modelId: 'anthropic/claude-sonnet-5',
+      apiKey: 'sk-router',
+      baseUrl: 'https://openrouter.ai/api/v1',
     );
     await UserStorage.saveLLMConfigs([
       LLMConfig.createDefaultClientConfig(),

@@ -809,7 +809,7 @@ abstract class AppLocalizations {
   /// No description provided for @clarificationNeeded.
   ///
   /// In en, this message translates to:
-  /// **'Memex wants to confirm'**
+  /// **'Segunda Mente wants to confirm'**
   String get clarificationNeeded;
 
   /// No description provided for @clarificationTextHint.
@@ -1067,7 +1067,7 @@ abstract class AppLocalizations {
   /// No description provided for @memexLocked.
   ///
   /// In en, this message translates to:
-  /// **'Memex is locked'**
+  /// **'Segunda Mente is locked'**
   String get memexLocked;
 
   /// No description provided for @calendarShortSun.
@@ -1175,37 +1175,37 @@ abstract class AppLocalizations {
   /// No description provided for @refreshSuperAgentStateTooltip.
   ///
   /// In en, this message translates to:
-  /// **'Clear Memex Agent context'**
+  /// **'Clear Segunda Mente Agent context'**
   String get refreshSuperAgentStateTooltip;
 
   /// No description provided for @refreshSuperAgentStateTitle.
   ///
   /// In en, this message translates to:
-  /// **'Clear Memex Agent history context?'**
+  /// **'Clear Segunda Mente Agent history context?'**
   String get refreshSuperAgentStateTitle;
 
   /// No description provided for @refreshSuperAgentStateMessage.
   ///
   /// In en, this message translates to:
-  /// **'The visible chat history will stay, but Memex Agent\'s historical runtime context will be cleared and future replies will start from a fresh context. Persistent memory, knowledge base files, cards, and other saved data are not affected. Use this when Memex Agent keeps behaving abnormally. Continue?'**
+  /// **'The visible chat history will stay, but Segunda Mente Agent\'s historical runtime context will be cleared and future replies will start from a fresh context. Persistent memory, knowledge base files, cards, and other saved data are not affected. Use this when Segunda Mente Agent keeps behaving abnormally. Continue?'**
   String get refreshSuperAgentStateMessage;
 
   /// No description provided for @refreshSuperAgentStateActiveRunMessage.
   ///
   /// In en, this message translates to:
-  /// **'Wait until the current Memex Agent message finishes before clearing context.'**
+  /// **'Wait until the current Segunda Mente Agent message finishes before clearing context.'**
   String get refreshSuperAgentStateActiveRunMessage;
 
   /// No description provided for @refreshSuperAgentStateSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Memex Agent context cleared'**
+  /// **'Segunda Mente Agent context cleared'**
   String get refreshSuperAgentStateSuccess;
 
   /// No description provided for @refreshSuperAgentStateFailed.
   ///
   /// In en, this message translates to:
-  /// **'Failed to clear Memex Agent context: {error}'**
+  /// **'Failed to clear Segunda Mente Agent context: {error}'**
   String refreshSuperAgentStateFailed(Object error);
 
   /// No description provided for @nothingHere.
@@ -1253,19 +1253,19 @@ abstract class AppLocalizations {
   /// No description provided for @agentBackgroundTitle.
   ///
   /// In en, this message translates to:
-  /// **'Memex Agent'**
+  /// **'Segunda Mente Agent'**
   String get agentBackgroundTitle;
 
   /// No description provided for @agentBackgroundPausedTitle.
   ///
   /// In en, this message translates to:
-  /// **'Memex Agent paused'**
+  /// **'Segunda Mente Agent paused'**
   String get agentBackgroundPausedTitle;
 
   /// No description provided for @agentBackgroundNeedsAttentionTitle.
   ///
   /// In en, this message translates to:
-  /// **'Memex Agent needs attention'**
+  /// **'Segunda Mente Agent needs attention'**
   String get agentBackgroundNeedsAttentionTitle;
 
   /// No description provided for @agentBackgroundStageIdle.
@@ -1608,7 +1608,7 @@ abstract class AppLocalizations {
   /// No description provided for @setupModelConfigSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Memex needs a frontier AI model to organize records, analyze images, and generate insights. Choose one connection method.'**
+  /// **'Segunda Mente needs a frontier AI model to organize records, analyze images, and generate insights. Choose one connection method.'**
   String get setupModelConfigSubtitle;
 
   /// No description provided for @setupModelConfigComplete.
@@ -1674,7 +1674,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupStatusCustomDescription.
   ///
   /// In en, this message translates to:
-  /// **'Memex will use your configured provider credentials and model role selections.'**
+  /// **'Segunda Mente will use your configured provider credentials and model role selections.'**
   String get aiSetupStatusCustomDescription;
 
   /// No description provided for @aiSetupChooseConnectionTitle.
@@ -1686,7 +1686,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupChooseConnectionDescription.
   ///
   /// In en, this message translates to:
-  /// **'Start with the path that matches how you want Memex to access AI models.'**
+  /// **'Start with the path that matches how you want Segunda Mente to access AI models.'**
   String get aiSetupChooseConnectionDescription;
 
   /// No description provided for @aiSetupOfficialRouteDescription.
@@ -1710,7 +1710,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupCustomPageSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Configure provider credentials first, then choose the model Memex should use.'**
+  /// **'Configure provider credentials first, then choose the model Segunda Mente should use.'**
   String get aiSetupCustomPageSubtitle;
 
   /// No description provided for @aiSetupProviderCredentialsTitle.
@@ -1782,7 +1782,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupServiceCapabilitiesDescription.
   ///
   /// In en, this message translates to:
-  /// **'Choose the providers Memex uses for adjacent AI-powered capabilities such as speech and reverse geocoding.'**
+  /// **'Choose the providers Segunda Mente uses for adjacent AI-powered capabilities such as speech and reverse geocoding.'**
   String get aiSetupServiceCapabilitiesDescription;
 
   /// No description provided for @aiSetupAdvancedCustomizationTitle.
@@ -1842,7 +1842,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiServiceLongDescription.
   ///
   /// In en, this message translates to:
-  /// **'Memex uses a multi-agent system to organize life records, knowledge notes, and social context, discover deeper insights, and provide AI companionship with persistent memory. Your data is stored as plain-text Markdown, preserving data freedom and portability.'**
+  /// **'Segunda Mente uses a multi-agent system to organize life records, knowledge notes, and social context, discover deeper insights, and provide AI companionship with persistent memory. Your data is stored as plain-text Markdown, preserving data freedom and portability.'**
   String get aiServiceLongDescription;
 
   /// No description provided for @aiServiceCustomApiRouteTitle.
@@ -2628,13 +2628,13 @@ abstract class AppLocalizations {
   /// No description provided for @memexAgentNotificationPermissionTitle.
   ///
   /// In en, this message translates to:
-  /// **'Keep Memex Agent running in the background'**
+  /// **'Keep Segunda Mente Agent running in the background'**
   String get memexAgentNotificationPermissionTitle;
 
   /// No description provided for @memexAgentNotificationPermissionMessage.
   ///
   /// In en, this message translates to:
-  /// **'Memex Agent runs locally on your device. Notifications let Memex show progress and keep processing after you leave the app or turn off the screen. If notifications are off, keep Memex open in the foreground until the task finishes.'**
+  /// **'Segunda Mente Agent runs locally on your device. Notifications let Segunda Mente show progress and keep processing after you leave the app or turn off the screen. If notifications are off, keep Segunda Mente open in the foreground until the task finishes.'**
   String get memexAgentNotificationPermissionMessage;
 
   /// No description provided for @loadDetailFailedRetryShort.
@@ -3057,42 +3057,6 @@ abstract class AppLocalizations {
   /// **'Gemini (Google OAuth)'**
   String get providerGeminiOauth;
 
-  /// No description provided for @providerKimi.
-  ///
-  /// In en, this message translates to:
-  /// **'Kimi (Moonshot)'**
-  String get providerKimi;
-
-  /// No description provided for @providerQwen.
-  ///
-  /// In en, this message translates to:
-  /// **'Aliyun'**
-  String get providerQwen;
-
-  /// No description provided for @providerSeed.
-  ///
-  /// In en, this message translates to:
-  /// **'Volcengine'**
-  String get providerSeed;
-
-  /// No description provided for @providerZhipu.
-  ///
-  /// In en, this message translates to:
-  /// **'Zhipu GLM'**
-  String get providerZhipu;
-
-  /// No description provided for @providerDeepSeek.
-  ///
-  /// In en, this message translates to:
-  /// **'DeepSeek'**
-  String get providerDeepSeek;
-
-  /// No description provided for @providerMinimax.
-  ///
-  /// In en, this message translates to:
-  /// **'MiniMax'**
-  String get providerMinimax;
-
   /// No description provided for @providerOpenRouter.
   ///
   /// In en, this message translates to:
@@ -3104,12 +3068,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ollama (Local)'**
   String get providerOllama;
-
-  /// No description provided for @providerMimo.
-  ///
-  /// In en, this message translates to:
-  /// **'Xiaomi MIMO'**
-  String get providerMimo;
 
   /// No description provided for @providerMemex.
   ///
@@ -3738,7 +3696,7 @@ abstract class AppLocalizations {
   /// No description provided for @autoBackupDescription.
   ///
   /// In en, this message translates to:
-  /// **'When enabled, Memex creates at most one local snapshot per day after startup or when returning to the foreground.'**
+  /// **'When enabled, Segunda Mente creates at most one local snapshot per day after startup or when returning to the foreground.'**
   String get autoBackupDescription;
 
   /// No description provided for @backupSensitiveSettingsHint.
@@ -3876,7 +3834,7 @@ abstract class AppLocalizations {
   /// No description provided for @defaultBackupLocationAndroidDesc.
   ///
   /// In en, this message translates to:
-  /// **'Use Memex\'s app-specific external files folder. No storage permission needed.'**
+  /// **'Use Segunda Mente\'s app-specific external files folder. No storage permission needed.'**
   String get defaultBackupLocationAndroidDesc;
 
   /// No description provided for @chooseBackupLocation.
@@ -3888,7 +3846,7 @@ abstract class AppLocalizations {
   /// No description provided for @chooseBackupLocationAndroidDesc.
   ///
   /// In en, this message translates to:
-  /// **'Pick a folder with Android\'s system picker and grant Memex persistent access.'**
+  /// **'Pick a folder with Android\'s system picker and grant Segunda Mente persistent access.'**
   String get chooseBackupLocationAndroidDesc;
 
   /// No description provided for @storedBackups.
@@ -4182,7 +4140,7 @@ abstract class AppLocalizations {
   /// No description provided for @llmConsentMessage.
   ///
   /// In en, this message translates to:
-  /// **'To enable AI features, Memex needs to send your data to {provider} for processing. This includes:\n\n• Text you enter (notes, voice transcriptions)\n• Photo metadata and extracted text (OCR)\n• Health and fitness summaries\n• Timeline card content\n\nYour data is sent directly from your device to {provider}. Memex does not store or relay your data through any other server.\n\nPlease review {provider}\'s privacy policy for how they handle your data.\n\nDo you agree to send your data to {provider} for AI processing?'**
+  /// **'To enable AI features, Segunda Mente needs to send your data to {provider} for processing. This includes:\n\n• Text you enter (notes, voice transcriptions)\n• Photo metadata and extracted text (OCR)\n• Health and fitness summaries\n• Timeline card content\n\nYour data is sent directly from your device to {provider}. Segunda Mente does not store or relay your data through any other server.\n\nPlease review {provider}\'s privacy policy for how they handle your data.\n\nDo you agree to send your data to {provider} for AI processing?'**
   String llmConsentMessage(Object provider);
 
   /// No description provided for @llmConsentAgree.
@@ -4524,7 +4482,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyDesc.
   ///
   /// In en, this message translates to:
-  /// **'How Memex handles your data'**
+  /// **'How Segunda Mente handles your data'**
   String get privacyPolicyDesc;
 
   /// No description provided for @llmAuthError.
@@ -4592,24 +4550,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Download'**
   String get speechModelStartDownload;
-
-  /// No description provided for @speechModelChooseSource.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose download source:'**
-  String get speechModelChooseSource;
-
-  /// No description provided for @speechModelChinaMirror.
-  ///
-  /// In en, this message translates to:
-  /// **'🇨🇳 China Mirror (Faster in CN)'**
-  String get speechModelChinaMirror;
-
-  /// No description provided for @speechModelGithub.
-  ///
-  /// In en, this message translates to:
-  /// **'🌐 GitHub (Global)'**
-  String get speechModelGithub;
 
   /// No description provided for @speechModelDownloading.
   ///
@@ -4686,7 +4626,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoWelcome.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Memex!\nLet\'s take a quick tour of what AI can do for your records.'**
+  /// **'Welcome to Segunda Mente!\nLet\'s take a quick tour of what AI can do for your records.'**
   String get demoWelcome;
 
   /// No description provided for @demoTapAdd.
@@ -4758,7 +4698,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoPrefillText.
   ///
   /// In en, this message translates to:
-  /// **'Hello Memex! This is my first record 🎉'**
+  /// **'Hello Segunda Mente! This is my first record 🎉'**
   String get demoPrefillText;
 
   /// No description provided for @visionBadge.
@@ -4770,7 +4710,7 @@ abstract class AppLocalizations {
   /// No description provided for @notMultimodalHint.
   ///
   /// In en, this message translates to:
-  /// **'Memex relies on multimodal model capabilities for media analysis. If your records contain images, please make sure the model you configured supports image input.'**
+  /// **'Segunda Mente relies on multimodal model capabilities for media analysis. If your records contain images, please make sure the model you configured supports image input.'**
   String get notMultimodalHint;
 
   /// No description provided for @defaultModelPrefix.
@@ -4824,13 +4764,13 @@ abstract class AppLocalizations {
   /// No description provided for @showInsightTextTitle.
   ///
   /// In en, this message translates to:
-  /// **'Show Memex insight comment'**
+  /// **'Show Segunda Mente insight comment'**
   String get showInsightTextTitle;
 
   /// No description provided for @showInsightTextDesc.
   ///
   /// In en, this message translates to:
-  /// **'Whether to show the Memex insight as a pinned comment in the card detail comment section.'**
+  /// **'Whether to show the Segunda Mente insight as a pinned comment in the card detail comment section.'**
   String get showInsightTextDesc;
 
   /// No description provided for @enableCharacterCommentTitle.
@@ -4916,24 +4856,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reverse geocoding provider'**
   String get reverseGeocodingProvider;
-
-  /// No description provided for @amapProviderName.
-  ///
-  /// In en, this message translates to:
-  /// **'Amap'**
-  String get amapProviderName;
-
-  /// No description provided for @amapApiKey.
-  ///
-  /// In en, this message translates to:
-  /// **'Amap API Key'**
-  String get amapApiKey;
-
-  /// No description provided for @amapGcj02Note.
-  ///
-  /// In en, this message translates to:
-  /// **'Amap uses GCJ-02 coordinates. Device GPS is converted before reverse geocoding.'**
-  String get amapGcj02Note;
 
   /// No description provided for @contextGranularity.
   ///
@@ -5100,7 +5022,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationStatusSuccessBody.
   ///
   /// In en, this message translates to:
-  /// **'Memex can attach this location summary when location context is relevant.'**
+  /// **'Segunda Mente can attach this location summary when location context is relevant.'**
   String get locationStatusSuccessBody;
 
   /// No description provided for @locationStatusApproximateTitle.
@@ -5124,7 +5046,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationStatusServiceDisabledBody.
   ///
   /// In en, this message translates to:
-  /// **'Memex only uses device GPS and will not infer location from network or IP. On Android, open Location settings; on iOS, enable Settings > Privacy & Security > Location Services.'**
+  /// **'Segunda Mente only uses device GPS and will not infer location from network or IP. On Android, open Location settings; on iOS, enable Settings > Privacy & Security > Location Services.'**
   String get locationStatusServiceDisabledBody;
 
   /// No description provided for @locationStatusPermissionDeniedTitle.
@@ -5136,7 +5058,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationStatusPermissionDeniedBody.
   ///
   /// In en, this message translates to:
-  /// **'Allow Memex to use location while testing or when location context is needed. Always access is not requested.'**
+  /// **'Allow Segunda Mente to use location while testing or when location context is needed. Always access is not requested.'**
   String get locationStatusPermissionDeniedBody;
 
   /// No description provided for @locationStatusPermissionForeverTitle.
@@ -5148,7 +5070,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationStatusPermissionForeverBody.
   ///
   /// In en, this message translates to:
-  /// **'Open app settings and allow location for Memex. On iOS, While Using the App is enough.'**
+  /// **'Open app settings and allow location for Segunda Mente. On iOS, While Using the App is enough.'**
   String get locationStatusPermissionForeverBody;
 
   /// No description provided for @locationStatusDisabledTitle.
@@ -5160,7 +5082,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationStatusDisabledBody.
   ///
   /// In en, this message translates to:
-  /// **'Turn on the switch above and save when you want Memex to attach device location to agent context.'**
+  /// **'Turn on the switch above and save when you want Segunda Mente to attach device location to agent context.'**
   String get locationStatusDisabledBody;
 
   /// No description provided for @locationStatusGeocodeUnavailableTitle.
@@ -5172,7 +5094,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationStatusGeocodeUnavailableBody.
   ///
   /// In en, this message translates to:
-  /// **'Memex has coordinates but will not inject GPS-only context into the agent. Check the reverse geocoding provider and try again.'**
+  /// **'Segunda Mente has coordinates but will not inject GPS-only context into the agent. Check the reverse geocoding provider and try again.'**
   String get locationStatusGeocodeUnavailableBody;
 
   /// No description provided for @locationStatusUnavailableTitle.
@@ -5454,7 +5376,7 @@ abstract class AppLocalizations {
   /// No description provided for @tavernImportDescription.
   ///
   /// In en, this message translates to:
-  /// **'• SillyTavern V2 character cards (.json)\n• PNG images with embedded cards (.png)\n\nFields like persona, world book, etc. will be automatically mapped to Memex character format.'**
+  /// **'• SillyTavern V2 character cards (.json)\n• PNG images with embedded cards (.png)\n\nFields like persona, world book, etc. will be automatically mapped to Segunda Mente character format.'**
   String get tavernImportDescription;
 
   /// No description provided for @pickCharacterFile.
@@ -5664,7 +5586,7 @@ abstract class AppLocalizations {
   /// No description provided for @earlyUpdateInstallPermissionRequired.
   ///
   /// In en, this message translates to:
-  /// **'Allow Memex to install unknown apps, then tap download and install again.'**
+  /// **'Allow Segunda Mente to install unknown apps, then tap download and install again.'**
   String get earlyUpdateInstallPermissionRequired;
 
   /// No description provided for @earlyUpdateLastChecked.
@@ -5736,13 +5658,13 @@ abstract class AppLocalizations {
   /// No description provided for @dataImportSettingsDescription.
   ///
   /// In en, this message translates to:
-  /// **'Bring old files into Memex, then decide whether to organize them.'**
+  /// **'Bring old files into Segunda Mente, then decide whether to organize them.'**
   String get dataImportSettingsDescription;
 
   /// No description provided for @dataImportDescription.
   ///
   /// In en, this message translates to:
-  /// **'Choose old notes, exported records, documents, or ZIP archives. Memex saves a copy first and leaves the original files untouched. After import, you can decide whether Memex should help organize them.'**
+  /// **'Choose old notes, exported records, documents, or ZIP archives. Segunda Mente saves a copy first and leaves the original files untouched. After import, you can decide whether Segunda Mente should help organize them.'**
   String get dataImportDescription;
 
   /// No description provided for @dataImportSelectFiles.
@@ -5760,7 +5682,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataImportSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Files saved in Memex'**
+  /// **'Files saved in Segunda Mente'**
   String get dataImportSuccess;
 
   /// No description provided for @dataImportOnlyStored.
@@ -5772,7 +5694,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataImportQueued.
   ///
   /// In en, this message translates to:
-  /// **'Memex will organize this import in the background.'**
+  /// **'Segunda Mente will organize this import in the background.'**
   String get dataImportQueued;
 
   /// No description provided for @dataImportResultTitle.
@@ -5814,7 +5736,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataImportProcessPrompt.
   ///
   /// In en, this message translates to:
-  /// **'You imported {count} files. Choose whether Memex should organize them now, or just keep the originals.'**
+  /// **'You imported {count} files. Choose whether Segunda Mente should organize them now, or just keep the originals.'**
   String dataImportProcessPrompt(Object count);
 
   /// No description provided for @dataImportProcessKnowledgeBase.
@@ -5826,7 +5748,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataImportProcessKnowledgeBaseDesc.
   ///
   /// In en, this message translates to:
-  /// **'Best for documents, notes, project material, and references. Memex will extract useful information and group it for later use.'**
+  /// **'Best for documents, notes, project material, and references. Segunda Mente will extract useful information and group it for later use.'**
   String get dataImportProcessKnowledgeBaseDesc;
 
   /// No description provided for @dataImportProcessTimelineCards.
@@ -5838,31 +5760,31 @@ abstract class AppLocalizations {
   /// No description provided for @dataImportProcessTimelineCardsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Best for diaries, chat logs, activity history, and old exports. Memex will turn time-based content into records when it makes sense.'**
+  /// **'Best for diaries, chat logs, activity history, and old exports. Segunda Mente will turn time-based content into records when it makes sense.'**
   String get dataImportProcessTimelineCardsDesc;
 
   /// No description provided for @dataImportImpactNone.
   ///
   /// In en, this message translates to:
-  /// **'Memex will only keep these original files. No AI organization will start.'**
+  /// **'Segunda Mente will only keep these original files. No AI organization will start.'**
   String get dataImportImpactNone;
 
   /// No description provided for @dataImportImpactKnowledgeBase.
   ///
   /// In en, this message translates to:
-  /// **'Memex will read these files and organize useful long-term information into the knowledge base. It will not proactively create timeline records.'**
+  /// **'Segunda Mente will read these files and organize useful long-term information into the knowledge base. It will not proactively create timeline records.'**
   String get dataImportImpactKnowledgeBase;
 
   /// No description provided for @dataImportImpactTimelineCards.
   ///
   /// In en, this message translates to:
-  /// **'Memex will read these files and create timeline records for life events or dated history when appropriate. It will not proactively organize the knowledge base.'**
+  /// **'Segunda Mente will read these files and create timeline records for life events or dated history when appropriate. It will not proactively organize the knowledge base.'**
   String get dataImportImpactTimelineCards;
 
   /// No description provided for @dataImportImpactBoth.
   ///
   /// In en, this message translates to:
-  /// **'Memex will try to create timeline records and organize reusable information into the knowledge base. This is best for a complete personal archive.'**
+  /// **'Segunda Mente will try to create timeline records and organize reusable information into the knowledge base. This is best for a complete personal archive.'**
   String get dataImportImpactBoth;
 
   /// No description provided for @dataImportFinish.

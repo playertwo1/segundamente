@@ -34,7 +34,6 @@ class _LocationContextSettingsPageState
     extends State<LocationContextSettingsPage> {
   LocationContextConfig _config = const LocationContextConfig();
   LocationContextConfig _savedConfig = const LocationContextConfig();
-  late final TextEditingController _amapKeyController;
   bool _loading = true;
   bool _saving = false;
   bool _testing = false;
@@ -47,14 +46,7 @@ class _LocationContextSettingsPageState
   @override
   void initState() {
     super.initState();
-    _amapKeyController = TextEditingController();
     _load();
-  }
-
-  @override
-  void dispose() {
-    _amapKeyController.dispose();
-    super.dispose();
   }
 
   Future<void> _load() async {
@@ -63,7 +55,6 @@ class _LocationContextSettingsPageState
     setState(() {
       _config = config;
       _savedConfig = config;
-      _amapKeyController.text = config.amapApiKey;
       _loading = false;
     });
   }
@@ -76,7 +67,7 @@ class _LocationContextSettingsPageState
     if (!_hasChanges || _saving) return;
     setState(() => _saving = true);
 
-    final config = _config.copyWith(amapApiKey: _amapKeyController.text.trim());
+    final config = _config;
     try {
       await UserStorage.saveLocationContextConfig(config);
       if (!mounted) return;
@@ -84,8 +75,7 @@ class _LocationContextSettingsPageState
         _config = config;
         _savedConfig = config;
         _saving = false;
-        _amapKeyController.text = config.amapApiKey;
-      });
+        });
       ToastHelper.showSuccess(context, UserStorage.l10n.saveSuccess);
     } catch (e) {
       if (!mounted) return;
@@ -213,15 +203,12 @@ class _LocationContextSettingsPageState
     switch (provider) {
       case GeocodingProvider.openStreetMap:
         return 'OpenStreetMap / Nominatim';
-      case GeocodingProvider.amap:
-        return UserStorage.l10n.amapProviderName;
     }
   }
 
   bool _isSameConfig(LocationContextConfig a, LocationContextConfig b) {
     return a.enabled == b.enabled &&
         a.provider == b.provider &&
-        a.amapApiKey == b.amapApiKey &&
         a.granularity == b.granularity &&
         a.ttlMinutes == b.ttlMinutes;
   }
@@ -312,16 +299,11 @@ class _LocationContextSettingsPageState
                           ),
                           selectedItemBuilder: (_) => [
                             const Text('OpenStreetMap / Nominatim'),
-                            Text(l10n.amapProviderName),
                           ],
                           items: [
                             const DropdownMenuItem(
                               value: GeocodingProvider.openStreetMap,
                               child: Text('OpenStreetMap / Nominatim'),
-                            ),
-                            DropdownMenuItem(
-                              value: GeocodingProvider.amap,
-                              child: Text(l10n.amapProviderName),
                             ),
                           ],
                           onChanged: (value) {
@@ -329,28 +311,6 @@ class _LocationContextSettingsPageState
                             _updateDraft(_config.copyWith(provider: value));
                           },
                         ),
-                        if (_config.provider == GeocodingProvider.amap) ...[
-                          const SizedBox(height: 12),
-                          TextField(
-                            controller: _amapKeyController,
-                            decoration: InputDecoration(
-                              labelText: l10n.amapApiKey,
-                              border: const OutlineInputBorder(),
-                              isDense: true,
-                            ),
-                            onChanged: (value) => _updateDraft(
-                              _config.copyWith(amapApiKey: value.trim()),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            l10n.amapGcj02Note,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
                       ],
                     ),
                   ),

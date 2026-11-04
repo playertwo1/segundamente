@@ -97,7 +97,7 @@ class SharePosterDecorator extends StatelessWidget {
                               end: Alignment.bottomRight,
                             ).createShader(bounds),
                             child: const Text(
-                              'Memex',
+                              'Segunda Mente',
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w900,

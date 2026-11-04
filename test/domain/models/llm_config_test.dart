@@ -59,62 +59,29 @@ void main() {
     test('handles keys with special characters gracefully', () {
       const config = LLMConfig(
         key: 'config-v1.2_test',
-        type: LLMConfig.typeKimi,
-        modelId: 'kimi-k2.5',
+        type: LLMConfig.typeChatCompletion,
+        modelId: 'gpt-5.6-sol',
         apiKey: 'key',
-        baseUrl: 'https://api.moonshot.cn/v1',
+        baseUrl: 'https://api.openai.com/v1',
       );
       final duplicated = config.duplicate(existingKeys: []);
       expect(duplicated.key, 'config-v1.2_test_copy');
     });
   });
 
-  group('DeepSeek provider', () {
-    test('uses official OpenAI-compatible API defaults', () {
-      expect(LLMConfig.typeDeepSeek, 'deepseek');
-      expect(LLMConfig.providerDisplayName(LLMConfig.typeDeepSeek), 'DeepSeek');
-      expect(LLMConfig.displayName(LLMConfig.typeDeepSeek), 'DeepSeek');
-      expect(
-        LLMConfig.underlyingClientType(LLMConfig.typeDeepSeek),
-        LLMConfig.typeChatCompletion,
-      );
-      expect(
-        LLMConfig.defaultBaseUrl(LLMConfig.typeDeepSeek),
-        'https://api.deepseek.com',
-      );
-      expect(LLMConfig.supportsModelListing(LLMConfig.typeDeepSeek), isTrue);
-      expect(
-        LLMConfig.modelsEndpoint(
-          LLMConfig.typeDeepSeek,
-          'https://api.deepseek.com',
-        ),
-        'https://api.deepseek.com/models',
-      );
+  group('removed Chinese providers (D-024)', () {
+    test('are listed so stored configs can be dropped', () {
+      expect(LLMConfig.removedTypes, contains('deepseek'));
+      expect(LLMConfig.removedTypes, contains('kimi'));
+      expect(LLMConfig.removedTypes, hasLength(7));
     });
 
-    test('recommends current official model IDs', () {
-      expect(LLMConfig.recommendedModels(LLMConfig.typeDeepSeek), [
-        'deepseek-v4-flash',
-        'deepseek-v4-pro',
-      ]);
-      expect(LLMConfig.featuredModels(LLMConfig.typeDeepSeek), {
-        'deepseek-v4-flash',
-        'deepseek-v4-pro',
-      });
-    });
-
-    test('requires an API key and base URL', () {
-      const validConfig = LLMConfig(
-        key: 'deepseek',
-        type: LLMConfig.typeDeepSeek,
-        modelId: 'deepseek-v4-flash',
-        apiKey: 'sk-test',
-        baseUrl: 'https://api.deepseek.com',
-      );
-
-      expect(validConfig.isValid, isTrue);
-      expect(validConfig.copyWith(apiKey: '').isValid, isFalse);
-      expect(validConfig.copyWith(baseUrl: '').isValid, isFalse);
+    test('OpenRouter and Ollama lists carry no Chinese model', () {
+      final all = [
+        ...LLMConfig.recommendedModels(LLMConfig.typeOpenRouter),
+        ...LLMConfig.recommendedModels(LLMConfig.typeOllama),
+      ].join(' ');
+      expect(all, isNot(matches(RegExp('qwen|deepseek|minimax|glm|mimo|kimi'))));
     });
   });
 
@@ -160,15 +127,8 @@ void main() {
         LLMConfig.typeClaude: 'claude-fable-5',
         LLMConfig.typeBedrockClaude: 'anthropic.claude-fable-5',
         LLMConfig.typeGemini: 'gemini-3.6-flash',
-        LLMConfig.typeKimi: 'kimi-k3',
-        LLMConfig.typeQwen: 'qwen3.8-max',
-        LLMConfig.typeSeed: 'doubao-seed-2-0-pro-260215',
-        LLMConfig.typeZhipu: 'glm-5.2',
-        LLMConfig.typeDeepSeek: 'deepseek-v4-flash',
-        LLMConfig.typeMinimax: 'MiniMax-M3',
-        LLMConfig.typeMimo: 'mimo-v2.5-pro',
         LLMConfig.typeOpenRouter: 'anthropic/claude-fable-5',
-        LLMConfig.typeOllama: 'qwen3.5:9b',
+        LLMConfig.typeOllama: 'gemma4:12b',
       };
 
       for (final entry in expectedFirstModel.entries) {
@@ -188,11 +148,6 @@ void main() {
     test('recognizes multimodal models added to the recommendations', () {
       const multimodalModels = <(String, String)>[
         (LLMConfig.typeClaude, 'claude-fable-5'),
-        (LLMConfig.typeKimi, 'kimi-k3'),
-        (LLMConfig.typeQwen, 'qwen3.8-max'),
-        (LLMConfig.typeSeed, 'doubao-seed-2-0-pro-260215'),
-        (LLMConfig.typeMinimax, 'MiniMax-M3'),
-        (LLMConfig.typeMimo, 'mimo-v2.5'),
         (LLMConfig.typeOllama, 'gemma4:12b'),
       ];
 
@@ -203,10 +158,6 @@ void main() {
           reason: '$model should be marked as multimodal',
         );
       }
-      expect(
-        LLMConfig.isKnownMultimodal(LLMConfig.typeZhipu, 'glm-5.2'),
-        isFalse,
-      );
     });
   });
 }

@@ -1,18 +1,16 @@
-enum GeocodingProvider { openStreetMap, amap }
+enum GeocodingProvider { openStreetMap }
 
 enum LocationContextGranularity { city, district, neighborhood, street, full }
 
 class LocationContextConfig {
   final bool enabled;
   final GeocodingProvider provider;
-  final String amapApiKey;
   final LocationContextGranularity granularity;
   final int ttlMinutes;
 
   const LocationContextConfig({
     this.enabled = false,
     this.provider = GeocodingProvider.openStreetMap,
-    this.amapApiKey = '',
     this.granularity = LocationContextGranularity.neighborhood,
     this.ttlMinutes = 15,
   });
@@ -24,7 +22,6 @@ class LocationContextConfig {
         (e) => e.name == json['provider'],
         orElse: () => GeocodingProvider.openStreetMap,
       ),
-      amapApiKey: json['amapApiKey'] as String? ?? '',
       granularity: LocationContextGranularity.values.firstWhere(
         (e) => e.name == json['granularity'],
         orElse: () => LocationContextGranularity.neighborhood,
@@ -36,7 +33,6 @@ class LocationContextConfig {
   Map<String, dynamic> toJson() => {
         'enabled': enabled,
         'provider': provider.name,
-        'amapApiKey': amapApiKey,
         'granularity': granularity.name,
         'ttlMinutes': ttlMinutes,
       };
@@ -44,14 +40,12 @@ class LocationContextConfig {
   LocationContextConfig copyWith({
     bool? enabled,
     GeocodingProvider? provider,
-    String? amapApiKey,
     LocationContextGranularity? granularity,
     int? ttlMinutes,
   }) {
     return LocationContextConfig(
       enabled: enabled ?? this.enabled,
       provider: provider ?? this.provider,
-      amapApiKey: amapApiKey ?? this.amapApiKey,
       granularity: granularity ?? this.granularity,
       ttlMinutes: ttlMinutes ?? this.ttlMinutes,
     );

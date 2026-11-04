@@ -66,19 +66,19 @@ void main() {
       expect(config.copyWith(llmConfigKey: null).llmConfigKey, isNull);
     });
 
-    test('DeepSeek builds an OpenAI-compatible chat client', () async {
+    test('OpenRouter builds an OpenAI-compatible chat client', () async {
       const config = LLMConfig(
-        key: 'deepseek',
-        type: LLMConfig.typeDeepSeek,
-        modelId: 'deepseek-v4-flash',
+        key: 'router',
+        type: LLMConfig.typeOpenRouter,
+        modelId: 'anthropic/claude-sonnet-5',
         apiKey: 'sk-test',
-        baseUrl: 'https://api.deepseek.com',
+        baseUrl: 'https://openrouter.ai/api/v1',
       );
 
       final resources = await UserStorage.buildLLMResources(config);
 
       expect(resources.client, isA<OpenAIClient>());
-      expect(resources.modelConfig.model, 'deepseek-v4-flash');
+      expect(resources.modelConfig.model, 'anthropic/claude-sonnet-5');
     });
 
     test('Claude uses the official endpoint and SDK caching default', () async {

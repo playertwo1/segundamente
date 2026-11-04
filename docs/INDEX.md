@@ -28,6 +28,10 @@
 | Agentes e backup | [imagem](../.impeccable-mobile/references/amoled-v3-ios/08-agents-backup.png) |
 | Menu, acesso ao chat e ícones | [imagem](../.impeccable-mobile/references/amoled-v3-ios/09-navigation-chat-icons.png) |
 | Estados vazios e erro | [imagem](../.impeccable-mobile/references/amoled-v3-ios/10-primary-states.png) |
+| Captura rápida, anexos e gravação | [imagem](../.impeccable-mobile/references/amoled-v3-ios/11-capture-quick-record.png) |
+| Tipos de registro da timeline (1) | [imagem](../.impeccable-mobile/references/amoled-v3-ios/12-timeline-card-types.png) |
+| Tipos de registro (2) e detalhe de métrica | [imagem](../.impeccable-mobile/references/amoled-v3-ios/13-timeline-card-types-2.png) |
+| Companheiro, perfil e central de ações | [imagem](../.impeccable-mobile/references/amoled-v3-ios/14-companion-profile-states.png) |
 
 ### Referência principal de navegação
 

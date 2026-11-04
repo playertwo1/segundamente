@@ -187,27 +187,27 @@ void main() {
   });
 
   group('ModelConfigEditPage provider selection', () {
-    testWidgets('renders DeepSeek configuration with official defaults',
+    testWidgets('renders OpenRouter configuration with its defaults',
         (tester) async {
       AppFlavor.init('global');
-      const deepSeekConfig = LLMConfig(
-        key: 'deepseek',
-        type: LLMConfig.typeDeepSeek,
-        modelId: 'deepseek-v4-flash',
+      const routerConfig = LLMConfig(
+        key: 'router',
+        type: LLMConfig.typeOpenRouter,
+        modelId: 'anthropic/claude-sonnet-5',
         apiKey: 'sk-test',
-        baseUrl: 'https://api.deepseek.com',
+        baseUrl: 'https://openrouter.ai/api/v1',
       );
 
       await tester.pumpWidget(
         buildTestableWidget(
-          const ModelConfigEditPage(duplicateSource: deepSeekConfig),
+          const ModelConfigEditPage(duplicateSource: routerConfig),
         ),
       );
       await tester.pump(const Duration(milliseconds: 100));
 
-      expect(find.textContaining('DeepSeek'), findsWidgets);
-      expect(find.text('https://api.deepseek.com'), findsOneWidget);
-      expect(find.text('deepseek-v4-flash'), findsOneWidget);
+      expect(find.textContaining('OpenRouter'), findsWidgets);
+      expect(find.text('https://openrouter.ai/api/v1'), findsOneWidget);
+      expect(find.text('anthropic/claude-sonnet-5'), findsOneWidget);
     });
   });
 
@@ -218,15 +218,15 @@ void main() {
       final defaultConfig = LLMConfig.createDefaultClientConfig();
       const setupConfig = LLMConfig(
         key: '',
-        type: LLMConfig.typeDeepSeek,
-        modelId: 'deepseek-v4-flash',
+        type: LLMConfig.typeOpenRouter,
+        modelId: 'anthropic/claude-sonnet-5',
         apiKey: 'sk-test',
-        baseUrl: 'https://api.deepseek.com',
+        baseUrl: 'https://openrouter.ai/api/v1',
       );
       await UserStorage.saveLLMConfigs([defaultConfig]);
       await UserStorage.saveLLMConsent(
         true,
-        providerType: LLMConfig.typeDeepSeek,
+        providerType: LLMConfig.typeOpenRouter,
       );
 
       await tester.pumpWidget(
@@ -249,9 +249,9 @@ void main() {
 
       final configs = await UserStorage.getLLMConfigs();
       final savedConfig = configs.firstWhere(
-        (config) => config.type == LLMConfig.typeDeepSeek,
+        (config) => config.type == LLMConfig.typeOpenRouter,
       );
-      expect(savedConfig.key, 'deepseek');
+      expect(savedConfig.key, 'openrouter');
     });
   });
 

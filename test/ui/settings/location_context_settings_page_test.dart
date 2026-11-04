@@ -45,23 +45,6 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<void> selectProvider(
-    WidgetTester tester,
-    GeocodingProvider provider,
-  ) async {
-    final currentLabel = provider == GeocodingProvider.amap
-        ? 'OpenStreetMap / Nominatim'
-        : 'Amap';
-    final targetLabel = provider == GeocodingProvider.amap
-        ? 'Amap'
-        : 'OpenStreetMap / Nominatim';
-
-    await tester.tap(find.text(currentLabel));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text(targetLabel).last);
-    await tester.pumpAndSettle();
-  }
-
   Future<void> pumpPageFromLauncher(
     WidgetTester tester, {
     LocationContextConfig config = const LocationContextConfig(),
@@ -112,7 +95,6 @@ void main() {
     expect(find.text('Location Context'), findsOneWidget);
     expect(find.text('Attach current location to chat'), findsOneWidget);
     expect(find.text('OpenStreetMap / Nominatim'), findsOneWidget);
-    expect(find.text('Amap API Key'), findsNothing);
     expect(find.text('Saved'), findsOneWidget);
 
     await tester.tap(find.byType(SwitchListTile));
@@ -126,41 +108,6 @@ void main() {
     config = await UserStorage.getLocationContextConfig();
     expect(config.enabled, isTrue);
     expect(find.text('Saved'), findsOneWidget);
-
-    await tester.tap(find.text('OpenStreetMap / Nominatim'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Amap').last);
-    await tester.pumpAndSettle();
-
-    expect(find.text('Amap API Key'), findsOneWidget);
-    await tester.enterText(find.byType(TextField), 'test-amap-key');
-    await tester.pumpAndSettle();
-
-    config = await UserStorage.getLocationContextConfig();
-    expect(config.provider, GeocodingProvider.openStreetMap);
-    expect(config.amapApiKey, isEmpty);
-
-    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
-    await tester.pumpAndSettle();
-    config = await UserStorage.getLocationContextConfig();
-    expect(config.provider, GeocodingProvider.amap);
-    expect(config.amapApiKey, 'test-amap-key');
-
-    await tester.tap(find.text('Amap'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('OpenStreetMap / Nominatim').last);
-    await tester.pumpAndSettle();
-
-    expect(find.text('Amap API Key'), findsNothing);
-    config = await UserStorage.getLocationContextConfig();
-    expect(config.provider, GeocodingProvider.amap);
-    expect(config.amapApiKey, 'test-amap-key');
-
-    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
-    await tester.pumpAndSettle();
-    config = await UserStorage.getLocationContextConfig();
-    expect(config.provider, GeocodingProvider.openStreetMap);
-    expect(config.amapApiKey, 'test-amap-key');
 
     await tester.tap(find.text('Neighborhood'));
     await tester.pumpAndSettle();
@@ -203,7 +150,6 @@ void main() {
       provider: GeocodingProvider.openStreetMap,
       granularity: LocationContextGranularity.city,
       ttlMinutes: 5,
-      amapApiKey: 'saved-key',
     );
     await pumpLocationSettingsPage(
       tester,
@@ -219,11 +165,6 @@ void main() {
       },
     );
 
-    await selectProvider(tester, GeocodingProvider.amap);
-    await tester.enterText(find.byType(TextField), '  draft-key  ');
-    await tester.pumpAndSettle();
-    await selectProvider(tester, GeocodingProvider.openStreetMap);
-
     await tester.tap(find.text('City'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Full address candidate').last);
@@ -232,7 +173,6 @@ void main() {
     var config = await UserStorage.getLocationContextConfig();
     expect(config.provider, GeocodingProvider.openStreetMap);
     expect(config.granularity, LocationContextGranularity.city);
-    expect(config.amapApiKey, 'saved-key');
     expect(find.text('Save'), findsOneWidget);
 
     await scrollToTestButton(tester);
@@ -253,7 +193,6 @@ void main() {
     config = await UserStorage.getLocationContextConfig();
     expect(config.provider, GeocodingProvider.openStreetMap);
     expect(config.granularity, LocationContextGranularity.full);
-    expect(config.amapApiKey, 'draft-key');
     expect(find.text('Saved'), findsOneWidget);
   });
 
@@ -348,7 +287,7 @@ void main() {
             neighborhood: 'People Square',
             street: 'Xizang Middle Road',
             fullAddress: 'People Square, Huangpu, Shanghai',
-            provider: 'amap',
+            provider: 'osm',
             updatedAt: now,
             confidence: 'high',
           ),
@@ -437,7 +376,7 @@ void main() {
             city: 'Shanghai',
             district: 'Huangpu',
             neighborhood: 'People Square',
-            provider: 'amap',
+            provider: 'osm',
             updatedAt: DateTime.utc(2026, 5, 15, 10),
             confidence: 'high',
           ),
@@ -553,7 +492,7 @@ void main() {
           granularity: LocationContextGranularity.city,
           address: GeocodedAddress(
             city: 'Shanghai',
-            provider: 'amap',
+            provider: 'osm',
             updatedAt: DateTime.utc(2026, 5, 15, 10),
             confidence: 'low',
           ),
@@ -580,7 +519,7 @@ void main() {
       tester,
       config: const LocationContextConfig(
         enabled: true,
-        provider: GeocodingProvider.amap,
+        provider: GeocodingProvider.openStreetMap,
         granularity: LocationContextGranularity.neighborhood,
       ),
       loadCurrentContext: ({bool forceRefresh = false}) async {
@@ -592,7 +531,7 @@ void main() {
           source: 'device_gps',
           updatedAt: DateTime.utc(2026, 5, 15, 10),
           granularity: LocationContextGranularity.neighborhood,
-          reason: 'reverse geocode unavailable (amap): amap api key is empty',
+          reason: 'reverse geocode unavailable (osm): no address',
         );
       },
     );
@@ -602,7 +541,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('GPS: fresh'), findsOneWidget);
-    expect(find.textContaining('Provider: Amap'), findsOneWidget);
+    expect(find.textContaining('Provider: OpenStreetMap / Nominatim'), findsOneWidget);
     expect(find.textContaining('Reverse geocode: unavailable'), findsOneWidget);
     expect(find.textContaining('Agent context: not injected'), findsOneWidget);
     expect(
@@ -610,7 +549,7 @@ void main() {
       findsOneWidget,
     );
     expect(
-      find.textContaining('Reason: reverse geocode unavailable (amap)'),
+      find.textContaining('Reason: reverse geocode unavailable (osm)'),
       findsOneWidget,
     );
   });

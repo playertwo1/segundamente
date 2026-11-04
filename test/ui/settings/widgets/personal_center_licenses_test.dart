@@ -27,4 +27,19 @@ void main() {
     expect(find.byType(LicensePage), findsOneWidget);
     expect(find.textContaining('GPL-3.0'), findsOneWidget);
   });
+
+  testWidgets('profile shows grouped rows and no made-up e-mail',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 2000));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    SharedPreferences.setMockInitialValues(
+        {'language': 'pt', 'user_id': 'Fael'});
+    await UserStorage.initL10n();
+    await tester.pumpWidget(const MaterialApp(home: PersonalCenterScreen()));
+    await tester.pump();
+
+    expect(find.textContaining('@memex.local'), findsNothing);
+    expect(find.textContaining('@'), findsNothing);
+    expect(find.text('Licenças'), findsOneWidget);
+  });
 }

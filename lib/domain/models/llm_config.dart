@@ -1,5 +1,3 @@
-import 'package:memex/config/app_flavor.dart';
-
 class LLMConfig {
   static const String defaultClientKey = 'default';
 
@@ -12,17 +10,21 @@ class LLMConfig {
   static const String typeClaudeOauth = 'claude_oauth';
   static const String typeOpenAiOauth = 'openai_oauth';
 
-  // Chinese LLM providers & aggregators
-  static const String typeKimi = 'kimi';
-  static const String typeQwen = 'qwen';
-  static const String typeSeed = 'seed';
-  static const String typeZhipu = 'zhipu';
-  static const String typeDeepSeek = 'deepseek';
-  static const String typeMinimax = 'minimax';
+  // Aggregators
   static const String typeOpenRouter = 'openrouter';
   static const String typeOllama = 'ollama';
-  static const String typeMimo = 'mimo';
   static const String typeMemex = 'memex';
+
+  /// Provedores chineses removidos (D-024); configs gravadas com eles são descartadas.
+  static const Set<String> removedTypes = {
+    'kimi',
+    'qwen',
+    'seed',
+    'zhipu',
+    'deepseek',
+    'minimax',
+    'mimo',
+  };
 
   /// User-friendly display name for a provider type.
   /// Only OpenAI and Anthropic types need special handling since their
@@ -45,20 +47,6 @@ class LLMConfig {
         return 'Google Gemini';
       case typeGeminiOauth:
         return 'Google Gemini (OAuth)';
-      case typeKimi:
-        return 'Kimi';
-      case typeQwen:
-        return 'Aliyun';
-      case typeSeed:
-        return 'Volcengine';
-      case typeZhipu:
-        return 'Zhipu';
-      case typeDeepSeek:
-        return 'DeepSeek';
-      case typeMinimax:
-        return 'MiniMax';
-      case typeMimo:
-        return 'Xiaomi MIMO';
       case typeOpenRouter:
         return 'OpenRouter';
       case typeOllama:
@@ -74,19 +62,10 @@ class LLMConfig {
   /// Returns the underlying client type to use, or null if the type is native.
   static String? underlyingClientType(String type) {
     switch (type) {
-      case typeKimi:
-      case typeQwen:
-      case typeZhipu:
-      case typeDeepSeek:
       case typeOpenRouter:
       case typeOllama:
       case typeMemex:
         return typeChatCompletion;
-      case typeSeed:
-        return typeResponses;
-      case typeMinimax:
-      case typeMimo:
-        return typeClaude;
       default:
         return null; // native type, no mapping needed
     }
@@ -111,26 +90,12 @@ class LLMConfig {
         return 'Gemini';
       case typeGeminiOauth:
         return 'Gemini (OAuth)';
-      case typeKimi:
-        return 'Kimi';
-      case typeQwen:
-        return 'Aliyun';
-      case typeSeed:
-        return 'Volcengine';
-      case typeZhipu:
-        return 'Zhipu GLM';
-      case typeDeepSeek:
-        return 'DeepSeek';
-      case typeMinimax:
-        return 'MiniMax';
       case typeOpenRouter:
         return 'OpenRouter';
       case typeOllama:
         return 'Ollama';
       case typeMemex:
         return 'Memex AI';
-      case typeMimo:
-        return 'Xiaomi MIMO';
       default:
         return type;
     }
@@ -196,23 +161,6 @@ class LLMConfig {
           'claude-sonnet-5-5-high',
           'claude-opus-5-5-high',
         };
-      case typeKimi:
-        return const {'kimi-k3', 'kimi-k2.7-code'};
-      case typeQwen:
-        return const {'qwen3.8-max', 'qwen3.7-plus', 'qwen3.7-flash'};
-      case typeSeed:
-        return const {
-          'doubao-seed-2-0-pro-260215',
-          'doubao-seed-2-0-code-preview-260215',
-        };
-      case typeZhipu:
-        return const {'glm-5.2', 'glm-5v-turbo'};
-      case typeDeepSeek:
-        return const {'deepseek-v4-flash', 'deepseek-v4-pro'};
-      case typeMinimax:
-        return const {'MiniMax-M3', 'MiniMax-M2.7'};
-      case typeMimo:
-        return const {'mimo-v2.5-pro', 'mimo-v2.5'};
       case typeOpenRouter:
         return const {
           'anthropic/claude-fable-5',
@@ -223,15 +171,9 @@ class LLMConfig {
           'openai/gpt-5.6-luna',
           'google/gemini-3.6-flash',
           'google/gemini-3.1-pro-preview',
-          'qwen/qwen3.8-max',
-          'deepseek/deepseek-v4-pro',
-          'minimax/minimax-m3',
-          'z-ai/glm-5.2',
-          'xiaomi/mimo-v2.5-pro',
-          'moonshotai/kimi-k2.7-code',
         };
       case typeOllama:
-        return const {'qwen3.5:9b', 'gemma4:12b', 'llama4:scout'};
+        return const {'gemma4:12b', 'llama4:scout'};
       default:
         return const {};
     }
@@ -310,38 +252,6 @@ class LLMConfig {
           'us.anthropic.claude-haiku-4-5-20251001-v1:0',
           'global.anthropic.claude-haiku-4-5-20251001-v1:0',
         ];
-      case typeKimi:
-        return const [
-          'kimi-k3',
-          'kimi-k2.7-code',
-          'kimi-k2.6',
-          'kimi-k2.5',
-        ];
-      case typeQwen:
-        return const [
-          'qwen3.8-max',
-          'qwen3.7-plus',
-          'qwen3.7-flash',
-          'qwen3.5-plus',
-        ];
-      case typeSeed:
-        return const [
-          'doubao-seed-2-0-pro-260215',
-          'doubao-seed-2-0-code-preview-260215',
-          'doubao-seed-2-0-mini-260428',
-          'doubao-seed-2-0-lite-260428',
-        ];
-      case typeZhipu:
-        return const ['glm-5.2', 'glm-5v-turbo', 'glm-4.6v'];
-      case typeDeepSeek:
-        return const ['deepseek-v4-flash', 'deepseek-v4-pro'];
-      case typeMinimax:
-        return const [
-          'MiniMax-M3',
-          'MiniMax-M2.7',
-          'MiniMax-M2.7-highspeed',
-          'MiniMax-M2.5',
-        ];
       case typeOpenRouter:
         return const [
           'anthropic/claude-fable-5',
@@ -352,23 +262,13 @@ class LLMConfig {
           'openai/gpt-5.6-luna',
           'google/gemini-3.6-flash',
           'google/gemini-3.1-pro-preview',
-          'qwen/qwen3.8-max',
-          'deepseek/deepseek-v4-pro',
-          'minimax/minimax-m3',
-          'z-ai/glm-5.2',
-          'xiaomi/mimo-v2.5-pro',
-          'moonshotai/kimi-k2.7-code',
         ];
       case typeOllama:
         return const [
-          'qwen3.5:9b',
-          'qwen3.5:4b',
           'gemma4:12b',
           'gemma4:e4b',
           'llama4:scout',
         ];
-      case typeMimo:
-        return const ['mimo-v2.5-pro', 'mimo-v2.5'];
       default:
         return const [];
     }
@@ -396,13 +296,6 @@ class LLMConfig {
       case typeChatCompletion:
       case typeResponses:
       case typeClaude:
-      case typeKimi:
-      case typeQwen:
-      case typeSeed:
-      case typeZhipu:
-      case typeDeepSeek:
-      case typeMinimax:
-      case typeMimo:
       case typeOpenRouter:
       case typeOllama:
       case typeGemini:
@@ -422,7 +315,7 @@ class LLMConfig {
     final base = baseUrl.endsWith('/')
         ? baseUrl.substring(0, baseUrl.length - 1)
         : baseUrl;
-    if (type == typeClaude || type == typeMinimax || type == typeMimo) {
+    if (type == typeClaude) {
       return base.endsWith('/v1') ? '$base/models' : '$base/v1/models';
     }
     return '$base/models';
@@ -455,36 +348,8 @@ class LLMConfig {
             id.contains('gpt-4.1') ||
             id.contains('gpt-5') ||
             id.contains('o3');
-      case typeZhipu:
-        return id.contains('glm-') && id.contains('v');
-      case typeKimi:
-        return id.startsWith('kimi-k3') ||
-            id.startsWith('kimi-k2.7') ||
-            id.startsWith('kimi-k2.6') ||
-            id.startsWith('kimi-k2.5');
-      case typeMimo:
-        return id == 'mimo-v2.5' || id == 'mimo-v2-omni' || id.contains('omni');
-      case typeQwen:
-        return id.startsWith('qwen3.8-') ||
-            id.startsWith('qwen3.7-plus') ||
-            id.startsWith('qwen3.7-flash') ||
-            id.startsWith('qwen3.6-') ||
-            id.startsWith('qwen3.5-') ||
-            id.contains('vl') ||
-            id.contains('vision') ||
-            id.contains('omni');
-      case typeSeed:
-        return id.startsWith('doubao-seed-2-0') ||
-            id.contains('vision') ||
-            id.contains('omni');
-      case typeMinimax:
-        return id == 'minimax-m3' ||
-            id.contains('vl') ||
-            id.contains('vision') ||
-            id.contains('omni');
       case typeOllama:
-        return id.startsWith('qwen3.5') ||
-            id.startsWith('gemma4') ||
+        return id.startsWith('gemma4') ||
             id.startsWith('llama4');
       case typeOpenRouter:
       case typeMemex:
@@ -494,11 +359,7 @@ class LLMConfig {
             id.contains('gpt-4.1') ||
             id.contains('gpt-5') ||
             id.contains('o3') ||
-            id.contains('qwen-vl') ||
-            id.contains('vision') ||
-            id.contains('mimo-v2.5') ||
-            id.contains('mimo-v2-omni') ||
-            (id.contains('glm-') && id.contains('v'));
+            id.contains('vision');
       default:
         return false;
     }
@@ -517,26 +378,12 @@ class LLMConfig {
         return 'https://api.openai.com/v1';
       case typeOpenAiOauth:
         return 'https://chatgpt.com/backend-api/codex';
-      case typeKimi:
-        return 'https://api.moonshot.cn/v1';
-      case typeQwen:
-        return 'https://dashscope.aliyuncs.com/compatible-mode/v1';
-      case typeSeed:
-        return 'https://ark.cn-beijing.volces.com/api/v3';
-      case typeZhipu:
-        return 'https://open.bigmodel.cn/api/paas/v4';
-      case typeDeepSeek:
-        return 'https://api.deepseek.com';
-      case typeMinimax:
-        return 'https://api.minimaxi.com/anthropic';
       case typeOpenRouter:
         return 'https://openrouter.ai/api/v1';
       case typeOllama:
         return 'http://localhost:11434/v1';
       case typeMemex:
         return ''; // Auto-filled after login via MemexCloudService
-      case typeMimo:
-        return 'https://api.xiaomimimo.com/anthropic';
       default:
         return '';
     }
@@ -606,13 +453,6 @@ class LLMConfig {
             type == typeChatCompletion ||
             type == typeClaude ||
             type == typeGemini ||
-            type == typeKimi ||
-            type == typeQwen ||
-            type == typeSeed ||
-            type == typeZhipu ||
-            type == typeDeepSeek ||
-            type == typeMinimax ||
-            type == typeMimo ||
             type == typeOpenRouter ||
             type == typeMemex) &&
         getEffectiveApiKey().isEmpty) {
@@ -624,15 +464,8 @@ class LLMConfig {
       typeChatCompletion,
       typeResponses,
       typeClaude,
-      typeKimi,
-      typeQwen,
-      typeSeed,
-      typeZhipu,
-      typeDeepSeek,
-      typeMinimax,
       typeOpenRouter,
       typeOllama,
-      typeMimo,
       typeMemex,
     ];
     if (typesRequiringBaseUrl.contains(type)) {
@@ -711,17 +544,6 @@ class LLMConfig {
   }
 
   static LLMConfig createDefaultClientConfig() {
-    if (AppFlavor.isCN) {
-      return const LLMConfig(
-        key: defaultClientKey,
-        baseUrl: 'https://api.moonshot.cn/v1',
-        type: typeKimi,
-        modelId: 'kimi-k2.5',
-        maxTokens: 65536,
-        apiKey: '',
-        extra: {},
-      );
-    }
     return const LLMConfig(
       key: defaultClientKey,
       baseUrl: "https://api.openai.com/v1",

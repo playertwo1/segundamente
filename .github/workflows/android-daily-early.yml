@@ -98,11 +98,6 @@ jobs:
           --build-name "${{ steps.version.outputs.build_name }}"
           --build-number "${{ steps.version.outputs.build_number }}"
 
-      - name: Build CN Early APK
-        run: >
-          flutter build apk --release --flavor cnEarly
-          --build-name "${{ steps.version.outputs.build_name }}"
-          --build-number "${{ steps.version.outputs.build_number }}"
 
       - name: Collect APK artifacts
         run: |
@@ -152,7 +147,6 @@ jobs:
           - Version: ${BUILD_NAME}+${BUILD_NUMBER}
           - Packages:
             - Global: com.memexlab.memex.early
-            - CN: com.memexlab.memex.cn.early
 
           EOF
 

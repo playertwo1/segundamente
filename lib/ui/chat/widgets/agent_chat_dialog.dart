@@ -2160,7 +2160,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                   const SizedBox(width: 8),
                   const Flexible(
                     child: Text(
-                      'Memex',
+                      'Segunda Mente',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -2369,8 +2369,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                           ),
                           decoration: BoxDecoration(
                             color: _canSubmitAttachments
-                                ? AppColors.textPrimary
-                                : AppColors.textTertiary,
+                                ? AppColors.primary
+                                : AppColors.iconBgLight,
                             borderRadius: BorderRadius.circular(24),
                           ),
                           child: Row(
@@ -2378,17 +2378,21 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                             children: [
                               Text(
                                 UserStorage.l10n.sendLabel,
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: _canSubmitAttachments
+                                      ? AppColors.onPrimary
+                                      : AppColors.textTertiary,
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Icon(
+                              Icon(
                                 Icons.arrow_upward,
                                 size: 17,
-                                color: Colors.white,
+                                color: _canSubmitAttachments
+                                    ? AppColors.onPrimary
+                                    : AppColors.textTertiary,
                               ),
                             ],
                           ),
@@ -2614,21 +2618,21 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            tile('attach_camera', Icons.camera_alt, l10n.camera,
+            tile('attach_camera', Icons.photo_camera_outlined, l10n.camera,
                 () => _pickImage(ImageSource.camera)),
-            tile('attach_gallery', Icons.photo_library, l10n.attachGallery,
+            tile('attach_gallery', Icons.photo_library_outlined, l10n.attachGallery,
                 () => _pickImage(ImageSource.gallery)),
             tile(
                 'attach_txt',
-                Icons.upload_file,
+                Icons.upload_file_outlined,
                 l10n.importTranscriptFile,
                 () => importTranscriptFile(
                       context,
                       onConfirmed: (text) => _sendMessage(text),
                     )),
-            tile('attach_pdf', Icons.picture_as_pdf, l10n.attachPdf,
+            tile('attach_pdf', Icons.picture_as_pdf_outlined, l10n.attachPdf,
                 () => _pickAttachment(FileType.custom, const ['pdf'])),
-            tile('attach_audio', Icons.audiotrack, l10n.attachAudio,
+            tile('attach_audio', Icons.graphic_eq, l10n.attachAudio,
                 () => _pickAttachment(FileType.audio, null)),
           ],
         ),

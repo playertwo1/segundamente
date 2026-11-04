@@ -93,6 +93,7 @@ dependencies:
   geolocator: ^14.0.2
   flutter_secure_storage: ^10.3.4
 
+  local_auth_android: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

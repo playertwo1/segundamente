@@ -218,7 +218,7 @@ class RadialMenuState extends State<RadialMenu> with TickerProviderStateMixin {
                     duration: const Duration(milliseconds: 300),
                     builder: (context, value, child) {
                       return Container(
-                        color: Colors.white.withOpacity(0.55 * value),
+                        color: Colors.black.withValues(alpha: 0.85 * value),
                       );
                     },
                   ),
@@ -257,21 +257,13 @@ class RadialMenuState extends State<RadialMenu> with TickerProviderStateMixin {
                   child: Container(
                     width: hubSize,
                     height: hubSize,
-                    decoration: BoxDecoration(
-                      color: Colors
-                          .white, // Hardcode to white for clarity if theme is tricky
+                    decoration: const BoxDecoration(
+                      color: AppColors.primary,
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        )
-                      ],
                     ),
                     alignment: Alignment.center,
-                    child: Icon(Icons.mic,
-                        color: TimelineTheme.colors.primary, size: 28),
+                    child: const Icon(Icons.mic_none,
+                        color: AppColors.onPrimary, size: 28),
                   ),
                 ),
               ),
@@ -288,11 +280,10 @@ class RadialMenuState extends State<RadialMenu> with TickerProviderStateMixin {
                       constraints:
                           const BoxConstraints(minWidth: 120, maxWidth: 260),
                       decoration: BoxDecoration(
-                        color: AppColors.cardBackground,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          TimelineTheme.shadows.float
-                        ], // Premium shadow
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(16),
+                        border:
+                            Border.all(color: AppColors.divider, width: 0.5),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -420,7 +411,8 @@ class RadialMenuState extends State<RadialMenu> with TickerProviderStateMixin {
             : TimelineTheme.colors.danger.withOpacity(0.1), // Soft Red Default
         isHovered: isHovered,
         curvatureRadius: radius,
-        textColor: isHovered ? Colors.white : TimelineTheme.colors.danger,
+        textColor:
+            isHovered ? AppColors.onPrimary : TimelineTheme.colors.danger,
       ),
       child: Container(
         width: 80,
@@ -429,7 +421,8 @@ class RadialMenuState extends State<RadialMenu> with TickerProviderStateMixin {
         child: Text(
           UserStorage.l10n.cancel,
           style: TimelineTheme.typography.body.copyWith(
-            color: isHovered ? Colors.white : TimelineTheme.colors.danger,
+            color:
+                isHovered ? AppColors.onPrimary : TimelineTheme.colors.danger,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),

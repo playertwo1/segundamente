@@ -432,7 +432,7 @@ class _CustomAgentEditPageState extends State<_CustomAgentEditPage> {
                   .map((t) => DropdownMenuItem(
                         value: t,
                         child: Text(
-                          t == HostAgentType.pure ? 'Pure' : 'Memex',
+                          t == HostAgentType.pure ? 'Pure' : 'Segunda Mente',
                           style: bodyStyle,
                         ),
                       ))

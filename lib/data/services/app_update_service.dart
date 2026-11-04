@@ -213,11 +213,8 @@ class AppUpdateEnvironment {
 
   factory AppUpdateEnvironment.current() {
     final flavorName = switch ((AppFlavor.current, AppFlavor.channel)) {
-      (AppFlavorType.cn, AppChannelType.early) => 'cnEarly',
       (AppFlavorType.global, AppChannelType.early) => 'globalEarly',
-      (AppFlavorType.cn, AppChannelType.dev) => 'cnDev',
       (AppFlavorType.global, AppChannelType.dev) => 'globalDev',
-      (AppFlavorType.cn, AppChannelType.stable) => 'cn',
       _ => 'global',
     };
 

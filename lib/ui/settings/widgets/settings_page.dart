@@ -29,7 +29,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   String _currentLocaleTag = 'en';
-  bool _useLocalSpeechToText = true;
   CommentSettings _commentSettings = const CommentSettings();
 
   @override
@@ -40,14 +39,12 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _loadSettings() async {
     final locale = await UserStorage.getLocale();
-    final useLocalSpeechToText = await UserStorage.getUseLocalSpeechToText();
     final commentSettings = await MemexRouter().getCommentSettings();
     if (mounted) {
       setState(() {
         _currentLocaleTag = UserStorage.localeTag(
           UserStorage.resolveToSupportedLocale(locale),
         );
-        _useLocalSpeechToText = useLocalSpeechToText;
         _commentSettings = commentSettings;
       });
     }
@@ -74,13 +71,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
     if (localeTag != null) {
       await _changeLanguage(localeTag);
-    }
-  }
-
-  Future<void> _updateUseLocalSpeechToText(bool value) async {
-    await UserStorage.setUseLocalSpeechToText(value);
-    if (mounted) {
-      setState(() => _useLocalSpeechToText = value);
     }
   }
 
@@ -172,50 +162,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 const SizedBox(height: 16),
                 _buildLanguageValueRow(),
               ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.textSecondary.withValues(alpha: 0.08),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              secondary: const Icon(
-                Icons.graphic_eq,
-                color: AppColors.primary,
-                size: 22,
-              ),
-              title: Text(
-                UserStorage.l10n.useLocalSpeechToTextTitle,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: Text(
-                  UserStorage.l10n.useLocalSpeechToTextDesc,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textSecondary,
-                    height: 1.4,
-                  ),
-                ),
-              ),
-              value: _useLocalSpeechToText,
-              onChanged: _updateUseLocalSpeechToText,
             ),
           ),
           const SizedBox(height: 16),

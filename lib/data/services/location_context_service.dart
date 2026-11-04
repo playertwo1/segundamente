@@ -200,7 +200,6 @@ class LocationContextService {
     return [
       config.enabled,
       config.provider.name,
-      config.amapApiKey.hashCode,
       config.granularity.name,
       config.ttlMinutes,
     ].join('|');

@@ -26,12 +26,26 @@ class TimelineCard extends StatelessWidget {
     this.customBackgroundColor,
   });
 
+  /// AMOLED editorial rows (DESIGN.md, D-017): no box, shadow or fill; the
+  /// timeline row draws the divider. Only [TimelineCardVariant.immersive]
+  /// keeps a quiet raised surface for emphasis.
+  bool get _isEditorial => variant != TimelineCardVariant.immersive;
+
   @override
   Widget build(BuildContext context) {
+    final edgeToEdge = padding == EdgeInsets.zero;
     return Container(
       margin: EdgeInsets.zero,
-      decoration: _buildDecoration(),
-      clipBehavior: Clip.antiAlias,
+      decoration: _isEditorial
+          ? BoxDecoration(
+              color: customBackgroundColor,
+              borderRadius: edgeToEdge ? BorderRadius.circular(12) : null,
+            )
+          : BoxDecoration(
+              color: customBackgroundColor ?? AppColors.surface,
+              borderRadius: BorderRadius.circular(12),
+            ),
+      clipBehavior: edgeToEdge || !_isEditorial ? Clip.antiAlias : Clip.none,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -42,62 +56,17 @@ class TimelineCard extends StatelessWidget {
     );
   }
 
-  BoxDecoration _buildDecoration() {
-    switch (variant) {
-      case TimelineCardVariant.receipt:
-        // Receipt has special shape handled by custom painter/clipper usually
-        // For now, standard box but white
-        return BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-              color: TimelineTheme.colors.textTertiary.withValues(alpha: 0.2)),
-          boxShadow: [TimelineTheme.shadows.card],
-        );
-      case TimelineCardVariant.immersive:
-        return BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: const [
-              AppColors.textPrimary, // Slate-800
-              AppColors.textPrimary, // Slate-900
-            ],
-          ),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [TimelineTheme.shadows.float],
-        );
-      case TimelineCardVariant.outline:
-        return BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-              color: TimelineTheme.colors.textTertiary.withValues(alpha: 0.3)),
-        );
-      case TimelineCardVariant.canvas:
-        return BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-              color: TimelineTheme.colors.glassBorder.withValues(alpha: 0.5)),
-          boxShadow: [TimelineTheme.shadows.card],
-        );
-      case TimelineCardVariant.glass:
-        return BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [TimelineTheme.shadows.card],
-        );
-    }
+  /// Editorial rows align with the timeline text column: keep vertical
+  /// rhythm, drop the side inset the old box needed.
+  EdgeInsetsGeometry get _effectivePadding {
+    if (!_isEditorial || padding == EdgeInsets.zero) return padding;
+    final p = padding.resolve(TextDirection.ltr);
+    return EdgeInsets.only(
+        top: p.top.clamp(0, 8), bottom: p.bottom.clamp(0, 8));
   }
 
   Widget _buildContent() {
-    Widget content = Padding(padding: padding, child: child);
-
-    if (variant == TimelineCardVariant.glass) {
-      // Simple white card — no backdrop blur
-      return content;
-    }
+    final content = Padding(padding: _effectivePadding, child: child);
 
     if (variant == TimelineCardVariant.canvas) {
       return Stack(

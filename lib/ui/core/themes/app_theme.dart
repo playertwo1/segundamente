@@ -182,14 +182,10 @@ abstract final class AppTheme {
         contentTextStyle: TextStyle(color: AppColors.textPrimary),
         actionTextColor: AppColors.primary,
       ),
+      // Only the hint color: theme-level borders would override the
+      // `border: InputBorder.none` that many fields rely on.
       inputDecorationTheme: const InputDecorationTheme(
         hintStyle: TextStyle(color: AppColors.textTertiary),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.divider),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary),
-        ),
       ),
       listTileTheme: const ListTileThemeData(
         iconColor: AppColors.textSecondary,

@@ -5,10 +5,12 @@ import 'package:memex/domain/models/llm_config.dart';
 
 void main() {
   group('AppConfig.availableProviders', () {
-    test('includes DeepSeek in global flavor', () {
+    test('offers no Chinese provider (D-024)', () {
       AppFlavor.init('global');
 
-      expect(AppConfig.availableProviders, contains(LLMConfig.typeDeepSeek));
+      for (final type in LLMConfig.removedTypes) {
+        expect(AppConfig.availableProviders, isNot(contains(type)));
+      }
     });
 
     test('excludes Memex proxy service from manual providers', () {
@@ -17,12 +19,6 @@ void main() {
       expect(
           AppConfig.availableProviders, isNot(contains(LLMConfig.typeMemex)));
       expect(AppConfig.enableMemexModelService, isTrue);
-    });
-
-    test('includes DeepSeek in CN flavor', () {
-      AppFlavor.init('cn');
-
-      expect(AppConfig.availableProviders, contains(LLMConfig.typeDeepSeek));
     });
   });
 }

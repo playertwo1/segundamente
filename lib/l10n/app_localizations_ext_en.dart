@@ -200,14 +200,14 @@ class AppLocalizationsExtEn extends AppLocalizationsEn
       'The authorization page will open in the browser.\n\n'
       'If the page does not respond after you tap Allow on the confirmation screen, '
       'try this: keep the page open, go to the home screen or app switcher, '
-      'then tap Memex again to bring it to the foreground.';
+      'then tap Segunda Mente again to bring it to the foreground.';
 
   @override
   String get oauthSuccessTitle => 'Authorization successful';
 
   @override
   String get oauthSuccessMessage =>
-      'You can now close this browser and return to Memex.';
+      'You can now close this browser and return to Segunda Mente.';
 
   @override
   String get sharePreviewTitle => 'Share Preview';
@@ -216,7 +216,7 @@ class AppLocalizationsExtEn extends AppLocalizationsEn
   String get shareNow => 'Share';
 
   @override
-  String get sharedFromMemex => 'Shared from Memex';
+  String get sharedFromMemex => 'Shared from Segunda Mente';
 
   @override
   String get appTagline => 'Record the Spark, Architect the Soul';
@@ -236,23 +236,23 @@ class AppLocalizationsExtEn extends AppLocalizationsEn
   @override
   MemexDemoCopy get demoCopy => const MemexDemoCopy(
         introText:
-            'Welcome to Memex - your AI-powered personal memory assistant.',
-        introTitle: 'Memex - Your AI Life Journal',
+            'Welcome to Segunda Mente - your AI-powered personal memory assistant.',
+        introTitle: 'Segunda Mente - Your AI Life Journal',
         introInsight:
-            'Memex is your AI memory assistant. Record text, photos, and voice; AI organizes them into structured cards, knowledge, and cross-record insights.',
-        introInsightSummary: 'Memex feature overview',
+            'Segunda Mente is your AI memory assistant. Record text, photos, and voice; AI organizes them into structured cards, knowledge, and cross-record insights.',
+        introInsightSummary: 'Segunda Mente feature overview',
         introComment:
             'Welcome! Try posting your first record and see how AI organizes it.',
-        kbFileName: 'Memex Guide.md',
+        kbFileName: 'Segunda Mente Guide.md',
         firstRecordTitle: 'My First Record',
         firstRecordInsight:
-            'Your first record is here. From now on, Memex can organize, categorize, and connect your notes.',
+            'Your first record is here. From now on, Segunda Mente can organize, categorize, and connect your notes.',
         firstRecordSummary: 'First record',
         firstRecordComment: 'First record saved. Keep going.',
         firstRecordKbTitle: 'User First Record',
         introHeroCaption: 'Your AI life journal',
         introSnippetText:
-            'Jot down a thought, snap a photo, or speak out loud. Memex turns it into a structured card automatically. AI can also extract knowledge, organize notes, and surface patterns you may have missed.\n\nEverything stays on your device.',
+            'Jot down a thought, snap a photo, or speak out loud. Segunda Mente turns it into a structured card automatically. AI can also extract knowledge, organize notes, and surface patterns you may have missed.\n\nEverything stays on your device.',
         smartCardTypesTitle: '22 Smart Card Types',
         productivityTitle: 'Productivity',
         productivityLabel: 'task · routine · event · duration · progress',
@@ -274,9 +274,9 @@ class AppLocalizationsExtEn extends AppLocalizationsEn
         viewGeneratedTask: 'View AI-generated cards and knowledge files',
         sloganContent:
             'Every record you make today becomes a useful thread for your future self.',
-        kbContent: '''# Memex Guide
+        kbContent: '''# Segunda Mente Guide
 
-Memex is a local-first, AI-native personal life recording app.
+Segunda Mente is a local-first, AI-native personal life recording app.
 
 ## What you can do
 

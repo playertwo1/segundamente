@@ -26,6 +26,8 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-020 | 2026-11-03 | Mecanismo de fallback resiliente entre modelos e provedores (FallbackLLMClient) | ACCEPTED |
 | D-021 | 2026-11-03 | Fazer o redesign visual em fase própria após o fechamento da fase F5 atual | SUPERSEDED |
 | D-022 | 2026-11-03 | Iniciar a fase F5V agora, em paralelo ao fechamento da F5 | ACCEPTED |
+| D-023 | 2026-11-04 | Sem espelho chinês no download do modelo de voz | ACCEPTED |
+| D-024 | 2026-11-04 | Remover tudo que é da China: provedores, sabores `cn*`, geocoding Amap e transcrição local SenseVoice | ACCEPTED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -127,3 +129,14 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Decisão: a F5V passa a `IN_PROGRESS` e é a fase de trabalho atual. A F5 continua aberta em paralelo: o que falta nela depende do S25 (7 critérios, migração do cofre no aparelho, medições).
 - Limite: a ordem muda, os portões não. F5V não fecha a F4 nem a F5, e o MVP só fica pronto com o portão da F5. F7/F8 continuam bloqueadas.
 
+## D-023 — Sem espelho chinês
+- Contexto: em 2026-11-04 o dono viu o botão "China Mirror (Faster in CN)" no download do modelo de voz e pediu: "retire esse china, não vamos usar nada da China".
+- Decisão: o download do modelo de voz vem só da release do GitHub (`k2-fsa/sherpa-onnx`). O caminho `hf-mirror.com`, a escolha de fonte e os textos dela saíram do app. Guarda em `test/data/services/speech_model_source_test.dart`.
+- Em aberto (não alterado, depende do dono): o próprio modelo de voz é o SenseVoice (Alibaba/FunAudioLLM), que a F2-11 já planeja trocar por Whisper; os sabores Android `cn*` (`AppFlavor.isCN`, com Kimi como modelo padrão); os provedores Kimi, Qwen, DeepSeek, Zhipu, MiniMax, Seed e Mimo na lista de modelos.
+
+## D-024 — Remover tudo da China
+- Contexto: em 2026-11-04 o dono pediu "Retire tudo que tiver de China do aplicativo".
+- Decisão: saíram os provedores Kimi, Qwen, Seed, Zhipu, DeepSeek, MiniMax e Mimo (tipos, textos, listas de modelos, parser de listagem), os modelos chineses das listas do OpenRouter e do Ollama, os sabores Android `cn`, `cnEarly` e `cnDev` (Gradle, `AppFlavor`, atualizador, CI, esquema `cn` do iOS), o geocoding Amap (fica só o OpenStreetMap; a config gravada com `amap` cai no OpenStreetMap) e a transcrição local SenseVoice (Alibaba).
+- Configs gravadas com os provedores removidos são descartadas ao carregar, junto com as chaves no cofre (`LLMConfig.removedTypes`; teste em `test/utils/secret_storage_test.dart`). Agentes que apontavam para elas caem no padrão.
+- Transcrição: sem modelo local até a F2-11 (Whisper multilíngue). `getUseLocalSpeechToText()` devolve sempre `false` e o interruptor saiu das configurações; a fala vai ao endpoint do ChatGPT (D-011). O código do `WhisperService`/`StreamingTranscriber` com SenseVoice continua no repositório, sem caminho de uso; a F2-11 o troca.
+- Em aberto, depende do dono: serviço Memex AI (`typeMemex`, upstream); bibliotecas de autores chineses (`wechat_assets_picker`, `photo_manager`, necessárias ao seletor de fotos); comentários em chinês e palavras-chave de busca em chinês no código; `cn.xcconfig` e as configurações `cn` do `project.pbxproj` do iOS (não dá para validar no Windows); `state_util` ainda repara sessões antigas do DeepSeek.

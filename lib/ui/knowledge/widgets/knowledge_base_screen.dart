@@ -109,7 +109,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                         ],
                         const SizedBox(height: 32),
                         _buildRecentChangesHeader(),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         _buildRecentChangesList(vm),
                         const SizedBox(
                             height: 160), // Bottom padding for nav bar
@@ -122,48 +122,37 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
     );
   }
 
+  /// P.A.R.A. as a grouped editorial list (D-017, board 01).
   Widget _buildParaGrid(BuildContext context, KnowledgeBaseViewModel vm) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
-      childAspectRatio: 0.8,
+    final l10n = UserStorage.l10n;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildParaCard(
-          title: UserStorage.l10n.pkmCategoryProject,
-          engTitle: 'PROJECTS',
-          desc: UserStorage.l10n.pkmCategoryProjectSubtitle,
+        _buildParaRow(
+          title: l10n.pkmCategoryProject,
+          desc: l10n.pkmCategoryProjectSubtitle,
           count: vm.countItems('Projects'),
-          color: AppColors.primary, // Indigo
           icon: Icons.track_changes_outlined,
           onTap: () => _navigateToFolder(context, path: 'Projects'),
         ),
-        _buildParaCard(
-          title: UserStorage.l10n.pkmCategoryArea,
-          engTitle: 'AREAS',
-          desc: UserStorage.l10n.pkmCategoryAreaSubtitle,
+        _buildParaRow(
+          title: l10n.pkmCategoryArea,
+          desc: l10n.pkmCategoryAreaSubtitle,
           count: vm.countItems('Areas'),
-          color: AppColors.success, // Emerald
-          icon: Icons.grid_view,
+          icon: Icons.grid_view_outlined,
           onTap: () => _navigateToFolder(context, path: 'Areas'),
         ),
-        _buildParaCard(
-          title: UserStorage.l10n.pkmCategoryResource,
-          engTitle: 'RESOURCES',
-          desc: UserStorage.l10n.pkmCategoryResourceSubtitle,
+        _buildParaRow(
+          title: l10n.pkmCategoryResource,
+          desc: l10n.pkmCategoryResourceSubtitle,
           count: vm.countItems('Resources'),
-          color: AppColors.warning, // Amber
           icon: Icons.layers_outlined,
           onTap: () => _navigateToFolder(context, path: 'Resources'),
         ),
-        _buildParaCard(
-          title: UserStorage.l10n.pkmCategoryArchive,
-          engTitle: 'ARCHIVES',
-          desc: UserStorage.l10n.pkmCategoryArchiveSubtitle,
+        _buildParaRow(
+          title: l10n.pkmCategoryArchive,
+          desc: l10n.pkmCategoryArchiveSubtitle,
           count: vm.countItems('Archives'),
-          color: AppColors.textSecondary, // Slate
           icon: Icons.inbox_outlined,
           onTap: () => _navigateToFolder(context, path: 'Archives'),
         ),
@@ -171,105 +160,19 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
     );
   }
 
-  Widget _buildParaCard({
+  Widget _buildParaRow({
     required String title,
-    required String engTitle,
     required String desc,
     required int count,
-    required Color color,
     required IconData icon,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
+    return _KnowledgeListRow(
+      icon: icon,
+      title: title,
+      subtitle: desc,
+      count: count,
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(28),
-          boxShadow: [
-            BoxShadow(
-                color: color.withValues(alpha: 0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 6)),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.1)),
-                      ),
-                      child: Icon(icon, color: Colors.white, size: 24),
-                    ),
-                    const Spacer(),
-                    Text(
-                      engTitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white.withValues(alpha: 0.6),
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                            child: Text(
-                          desc,
-                          maxLines: 1,
-                          style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.white.withValues(alpha: 0.9)),
-                          overflow: TextOverflow.ellipsis,
-                        )),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text('$count',
-                              style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -294,103 +197,23 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
     final path = (item['path'] ?? name).toString();
     final count = item['item_count'] ?? 0;
 
-    return GestureDetector(
+    return _KnowledgeListRow(
+      icon: Icons.folder_outlined,
+      title: name,
+      count: count is int ? count : int.tryParse('$count') ?? 0,
       onTap: () => _navigateToFolder(context, path: path),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.textSecondary.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: AppColors.iconBgLight,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.folder_rounded,
-                color: Color(0xFF3B82F6),
-                size: 24,
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '$count items',
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: AppColors.divider),
-          ],
-        ),
-      ),
     );
   }
 
   Widget _buildRecentChangesHeader() {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 1,
-            color: AppColors.divider, // Slate 200
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.access_time,
-                  size: 12, color: AppColors.textTertiary),
-              const SizedBox(width: 4),
-              Text(UserStorage.l10n.recentChanges,
-                  style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                      color: AppColors.textTertiary)),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: 1,
-            color: AppColors.divider, // Slate 200
-          ),
-        ),
-      ],
+    return Text(
+      UserStorage.l10n.recentChanges.toUpperCase(),
+      style: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 1.2,
+        color: AppColors.textSecondary,
+      ),
     );
   }
 
@@ -400,7 +223,8 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         alignment: Alignment.center,
         child: Text(UserStorage.l10n.noRecentChangesInThreeDays,
-            style: const TextStyle(color: AppColors.divider, fontSize: 13)),
+            style:
+                const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
       );
     }
 
@@ -415,6 +239,69 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
       context,
       MaterialPageRoute(
         builder: (_) => KnowledgeDirectoryPage(path: path),
+      ),
+    );
+  }
+}
+
+/// One editorial row: outline icon, label, optional subtitle, count, chevron.
+class _KnowledgeListRow extends StatelessWidget {
+  const _KnowledgeListRow({
+    required this.icon,
+    required this.title,
+    required this.count,
+    required this.onTap,
+    this.subtitle,
+  });
+
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final int count;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColors.divider, width: 0.5),
+        ),
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        minTileHeight: 56,
+        leading: Icon(icon, color: AppColors.textSecondary),
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 16, color: AppColors.textPrimary),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: subtitle == null
+            ? null
+            : Text(
+                subtitle!,
+                style: const TextStyle(
+                    fontSize: 12, color: AppColors.textSecondary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '$count',
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.chevron_right, color: AppColors.primary),
+          ],
+        ),
+        onTap: onTap,
       ),
     );
   }

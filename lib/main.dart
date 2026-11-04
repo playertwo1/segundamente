@@ -251,7 +251,7 @@ class RootShellState extends State<RootShell> {
                 UserStorage.l10n.loadingFromICloud,
                 style: const TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF6366F1),
+                  color: AppColors.primary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -1162,56 +1162,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
   void _showSpeechModelDownloadDialog() {
     final sizeMB = WhisperService.modelSizeMB.toInt();
-
-    // CN flavor: single download button
-    if (AppFlavor.isCN) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(UserStorage.l10n.speechModelDownloadTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(UserStorage.l10n.speechModelDownloadDesc(sizeMB)),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    _downloadSpeechModel(useChineseMirror: true);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(UserStorage.l10n.speechModelStartDownload),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(UserStorage.l10n.cancel),
-            ),
-          ],
-        ),
-      );
-      return;
-    }
-
-    // Global flavor: two source options
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surface,
         title: Text(UserStorage.l10n.speechModelDownloadTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1219,48 +1173,22 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           children: [
             Text(UserStorage.l10n.speechModelDownloadDesc(sizeMB)),
             const SizedBox(height: 20),
-            Text(
-              UserStorage.l10n.speechModelChooseSource,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pop(ctx);
-                  _downloadSpeechModel(useChineseMirror: true);
+                  _downloadSpeechModel();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.onPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Text(UserStorage.l10n.speechModelChinaMirror),
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  _downloadSpeechModel(useChineseMirror: false);
-                },
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(UserStorage.l10n.speechModelGithub),
+                child: Text(UserStorage.l10n.speechModelStartDownload),
               ),
             ),
           ],
@@ -1278,7 +1206,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   double _speechDownloadProgress = 0;
   StateSetter? _speechDownloadSetState;
 
-  Future<void> _downloadSpeechModel({required bool useChineseMirror}) async {
+  Future<void> _downloadSpeechModel() async {
     final l10n = UserStorage.l10n;
     _speechDownloadProgress = 0;
 
@@ -1289,7 +1217,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         builder: (ctx, setDialogState) {
           _speechDownloadSetState = setDialogState;
           return AlertDialog(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.surface,
             title: Text(l10n.speechModelDownloading),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1320,7 +1248,6 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
     try {
       await WhisperService.instance.downloadModel(
-        useChineseMirror: useChineseMirror,
         onProgress: (p) {
           _speechDownloadSetState?.call(() {
             _speechDownloadProgress = p;
@@ -1515,7 +1442,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     return showDialog<bool>(
       context: dialogContext,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surface,
         title: Text(UserStorage.l10n.dataImportTitle),
         content: Text(UserStorage.l10n.dataImportDescription),
         actions: [
@@ -1591,7 +1518,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         builder: (context, setState) {
           setProgressState = setState;
           return AlertDialog(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.surface,
             content: Row(
               children: [
                 const SizedBox(
@@ -1697,7 +1624,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         builder: (context, setState) {
           setProgressState = setState;
           return AlertDialog(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.surface,
             content: Row(
               children: [
                 const SizedBox(
@@ -1730,7 +1657,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         context: rootNavigator.context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.surface,
           title: Text(UserStorage.l10n.restoreComplete),
           content: Text(UserStorage.l10n.restoreRestartHint),
           actions: [
