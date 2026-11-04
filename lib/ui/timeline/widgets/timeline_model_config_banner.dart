@@ -82,17 +82,17 @@ class _TimelineModelConfigBannerState extends State<TimelineModelConfigBanner>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Colors.white.withValues(alpha: 0.92),
-                Colors.white.withValues(alpha: 0.82),
+              colors: const [
+                AppColors.surface,
+                AppColors.surface,
               ],
             ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.6),
+              color: AppColors.divider,
               width: 0.5,
             ),
             boxShadow: [
@@ -118,7 +118,7 @@ class _TimelineModelConfigBannerState extends State<TimelineModelConfigBanner>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color(0xFF818CF8),
+                      AppColors.primary,
                       AppColors.primary,
                     ],
                   ),

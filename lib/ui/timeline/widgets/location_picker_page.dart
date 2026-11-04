@@ -272,8 +272,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
           // Center Pin (Fixed)
           const Center(
             child: Padding(
-              padding:
-                  EdgeInsets.only(bottom: 40), // Adjust for pin anchor
+              padding: EdgeInsets.only(bottom: 40), // Adjust for pin anchor
               child: Icon(
                 Icons.location_on,
                 size: 48,

@@ -52,7 +52,7 @@ class DemoOverlay extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -95,7 +95,7 @@ class DemoOverlay extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(32),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.92),
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
                       color: AppColors.primary.withValues(alpha: 0.2),
@@ -326,7 +326,7 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -378,7 +378,7 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.9),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -424,7 +424,7 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.95),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(

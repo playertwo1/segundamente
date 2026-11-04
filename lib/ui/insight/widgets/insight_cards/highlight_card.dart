@@ -99,7 +99,7 @@ class HighlightCard extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 height: 0.2,
                 letterSpacing: 0.4,
-                color: const Color(0xFFD1D5DB),
+                color: AppColors.divider,
               ),
             ),
 
@@ -129,7 +129,7 @@ class HighlightCard extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   height: 0.4,
                   letterSpacing: 0.4,
-                  color: const Color(0xFFD1D5DB),
+                  color: AppColors.divider,
                 ),
               ),
             ),

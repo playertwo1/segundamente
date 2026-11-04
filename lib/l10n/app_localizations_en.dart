@@ -3503,4 +3503,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get licenseLegalese =>
       'Free software under GPL-3.0. Fork of Memex (github.com/memex-lab/memex). Source: github.com/playertwo1/segundamente.';
+
+  @override
+  String get navMenu => 'Menu';
+
+  @override
+  String get navTimeline => 'Timeline';
+
+  @override
+  String get navKnowledge => 'Knowledge';
+
+  @override
+  String get navChat => 'Chat';
+
+  @override
+  String get navProfile => 'Profile and settings';
+
+  @override
+  String get chatWithSegundaMente => 'Chat with Segunda Mente';
+
+  @override
+  String get captureButtonLabel => 'Capture';
 }

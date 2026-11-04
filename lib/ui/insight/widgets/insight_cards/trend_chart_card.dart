@@ -94,7 +94,7 @@ class TrendChartCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         height: 28 / 18,
                         letterSpacing: -0.44,
-                        color: Color(0xFF101828),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),

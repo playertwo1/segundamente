@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/l10n/app_localizations.dart';
 import 'package:memex/ui/insight/widgets/insight_cards/summary_card.dart';
-import 'package:memex/ui/main_screen/widgets/main_bottom_bar.dart';
+import 'package:memex/ui/main_screen/widgets/main_menu_drawer.dart';
 import 'package:memex/ui/timeline/view_models/timeline_viewmodel.dart';
 import 'package:memex/ui/timeline/widgets/timeline_screen.dart';
 import 'package:memex/utils/user_storage.dart';
@@ -50,28 +50,26 @@ void main() {
     expect(tester.takeException(), isNull);
   }
 
-  testWidgets('MainBottomBar lays out without overflow in Arabic RTL', (
+  testWidgets('MainMenuDrawer lays out without overflow in Arabic RTL', (
     tester,
   ) async {
     await pumpArabicRtl(
       tester,
       Scaffold(
-        body: Align(
-          alignment: Alignment.bottomCenter,
-          child: MainBottomBar(
-            currentTab: 0,
-            onTimelineTap: () {},
-            onLibraryTap: () {},
-            onCenterTap: () {},
-            onCenterLongPress: () {},
-          ),
+        body: MainMenuDrawer(
+          currentTab: 0,
+          onSelectTab: (_) {},
+          onOpenChat: () {},
+          onOpenCalendar: () {},
+          onOpenMemory: () {},
+          onOpenProfile: () {},
         ),
       ),
     );
 
-    expect(find.byType(MainBottomBar), findsOneWidget);
-    expect(find.text(UserStorage.l10n.bottomNavTimeline), findsOneWidget);
-    expect(find.text(UserStorage.l10n.bottomNavLibrary), findsOneWidget);
+    expect(find.byType(MainMenuDrawer), findsOneWidget);
+    expect(find.text(UserStorage.l10n.navTimeline), findsOneWidget);
+    expect(find.text(UserStorage.l10n.navKnowledge), findsOneWidget);
   });
 
   testWidgets('TimelineFilterBar lays out without overflow in Arabic RTL', (

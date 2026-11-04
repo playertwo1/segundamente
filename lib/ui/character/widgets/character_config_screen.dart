@@ -189,8 +189,8 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
                                 const SizedBox(height: 16),
                                 Text(
                                   UserStorage.l10n.noCharacters,
-                                  style:
-                                      const TextStyle(color: AppColors.textTertiary),
+                                  style: const TextStyle(
+                                      color: AppColors.textTertiary),
                                 ),
                               ],
                             ),
@@ -982,7 +982,7 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: enabled ? AppColors.background : const Color(0xFFF0F0F0),
+        color: enabled ? AppColors.background : AppColors.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: constant

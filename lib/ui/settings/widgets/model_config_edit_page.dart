@@ -1416,7 +1416,7 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
                   size: 14,
                   color: _testResult!.success
                       ? AppColors.success
-                      : const Color(0xFFDC2626),
+                      : AppColors.danger,
                 ),
                 const SizedBox(width: 5),
                 Text(
@@ -1428,7 +1428,7 @@ class _ModelConfigEditPageState extends State<ModelConfigEditPage>
                     fontWeight: FontWeight.w600,
                     color: _testResult!.success
                         ? AppColors.success
-                        : const Color(0xFFDC2626),
+                        : AppColors.danger,
                   ),
                 ),
                 const SizedBox(width: 8),

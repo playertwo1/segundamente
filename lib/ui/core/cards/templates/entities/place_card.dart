@@ -73,9 +73,9 @@ class PlaceCard extends StatelessWidget {
                                         begin: Alignment.centerLeft,
                                         end: Alignment.centerRight,
                                         colors: [
-                                          Colors.white,
-                                          Colors.white,
-                                          Colors.white,
+                                          AppColors.surface,
+                                          AppColors.surface,
+                                          AppColors.surface,
                                           Colors.transparent
                                         ],
                                         stops: [0.0, 0.8, 0.9, 1.0],

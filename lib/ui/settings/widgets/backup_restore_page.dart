@@ -1363,7 +1363,7 @@ class _StoredBackupTile extends StatelessWidget {
                 key: ValueKey('backup-delete-${snapshot.id}'),
                 tooltip: l10n.deleteThisBackup,
                 onPressed: onDelete,
-                color: const Color(0xFFDC2626),
+                color: AppColors.danger,
                 icon: isDeleting
                     ? const SizedBox(
                         width: 18,

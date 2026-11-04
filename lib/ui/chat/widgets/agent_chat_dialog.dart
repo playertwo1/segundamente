@@ -1904,7 +1904,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: const Color(0xFFEFF2F6)),
+            border: Border.all(color: AppColors.divider),
           ),
           child: Text(
             formatSuperAgentTimeDivider(timestamp),
@@ -2141,9 +2141,9 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         top: 16,
         bottom: 16,
       ),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.8),
-        border: const Border(bottom: BorderSide(color: AppColors.background)),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(bottom: BorderSide(color: AppColors.background)),
       ),
       child: SizedBox(
         height: 36,
@@ -2534,13 +2534,13 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                       ),
                       decoration: BoxDecoration(
                         color: _runMode == mode
-                            ? const Color(0xFFF0F4FF)
-                            : const Color(0xFFF9FAFB),
+                            ? AppColors.iconBgLight
+                            : AppColors.surface,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
                           color: _runMode == mode
                               ? AppColors.primary
-                              : const Color(0xFFEFF2F6),
+                              : AppColors.divider,
                         ),
                       ),
                       child: Row(
@@ -3034,7 +3034,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                 decoration: BoxDecoration(
                   color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: const Color(0xFFE6EAF2)),
+                  border: Border.all(color: AppColors.divider),
                   boxShadow: const [
                     BoxShadow(
                       color: Color(0x0A0F172A),
@@ -3188,12 +3188,13 @@ class _AgentChatDialogState extends State<AgentChatDialog>
             child: Container(
               padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
               decoration: BoxDecoration(
-                color: isPending ? const Color(0xFFFFFBEB) : Colors.white,
+                color: isPending
+                    ? AppColors.iconBgLight
+                    : AppColors.cardBackground,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isPending
-                      ? const Color(0xFFFDE68A)
-                      : const Color(0xFFE6EAF2),
+                  color:
+                      isPending ? const Color(0xFFFDE68A) : AppColors.divider,
                 ),
               ),
               child: Column(
@@ -3747,7 +3748,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         decoration: BoxDecoration(
           color: AppColors.background,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color(0xFFEFF2F6)),
+          border: Border.all(color: AppColors.divider),
         ),
         child: Text(
           formatSuperAgentTokenUsage(item),
@@ -3916,7 +3917,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
       decoration: BoxDecoration(
         color: const Color(0xFFFBFCFE),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE6EAF2)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

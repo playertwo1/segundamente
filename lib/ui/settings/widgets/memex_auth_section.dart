@@ -5,8 +5,8 @@ import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-const _memexAuthBorder = Color(0xFFC6C5D8);
-const _memexAuthSurface = Color(0xFFFFFFFF);
+const _memexAuthBorder = AppColors.divider;
+const _memexAuthSurface = AppColors.surface;
 const _memexAuthSecondary = Color(0xFF006397);
 const _memexPricingPurple = Color(0xFF7C3AED);
 const _memexPricingAmber = Color(0xFFFFB800);
@@ -729,9 +729,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected
-                        ? _memexPricingPurple
-                        : const Color(0xFFC6C5D8),
+                    color: isSelected ? _memexPricingPurple : AppColors.divider,
                     width: 1.6,
                   ),
                 ),
@@ -1059,7 +1057,8 @@ class _MemexHistorySheetState extends State<_MemexHistorySheet> {
               const Spacer(),
               Text(
                 '${_logs.length} records',
-                style: const TextStyle(fontSize: 12, color: AppColors.textTertiary),
+                style: const TextStyle(
+                    fontSize: 12, color: AppColors.textTertiary),
               ),
             ],
           ),
@@ -1133,7 +1132,8 @@ class _MemexHistorySheetState extends State<_MemexHistorySheet> {
                   isTopUp
                       ? timeStr
                       : '$timeStr · ${log.promptTokens}+${log.completionTokens} tokens',
-                  style: const TextStyle(fontSize: 11, color: AppColors.textTertiary),
+                  style: const TextStyle(
+                      fontSize: 11, color: AppColors.textTertiary),
                 ),
               ],
             ),

@@ -713,7 +713,7 @@ class _HtmlWebViewCardState extends State<HtmlWebViewCard> {
       return Container(
         height: widget.config.initialHeight,
         decoration: BoxDecoration(
-          color: const Color(0xFFFFFBEB),
+          color: AppColors.iconBgLight,
           borderRadius: BorderRadius.circular(widget.config.borderRadius),
           border: Border.all(color: const Color(0xFFFDE68A)),
         ),

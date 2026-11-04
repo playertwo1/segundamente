@@ -60,21 +60,10 @@ class _AICoreButtonState extends State<AICoreButton>
       behavior: HitTestBehavior.opaque,
       child: ScaleTransition(
         scale: _scaleController,
-        child: Container(
+        child: SizedBox(
           width: 88,
           height: 88,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x265B6CFF),
-                blurRadius: 6,
-                spreadRadius: -2,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          // SVG is 88×88 (68px circle + 10px shadow padding each side)
+          // SVG is 88×88: a 68px circle with 10px padding each side
           child: SvgPicture.asset(
             'assets/icons/nav_add_button.svg',
             width: 88,

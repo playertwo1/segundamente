@@ -68,7 +68,7 @@ class _CapabilityChip extends StatelessWidget {
     final l10n = UserStorage.l10n;
     final (color, verdictLabel) = switch (verdict) {
       CapabilityVerdict.yes => (AppColors.success, l10n.capabilityYes),
-      CapabilityVerdict.no => (const Color(0xFFDC2626), l10n.capabilityNo),
+      CapabilityVerdict.no => (AppColors.danger, l10n.capabilityNo),
       CapabilityVerdict.unknown => (
           AppColors.textSecondary,
           l10n.capabilityNotTested,

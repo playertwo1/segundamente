@@ -1,3 +1,4 @@
+import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class GlassCard extends StatelessWidget {
@@ -23,7 +24,7 @@ class GlassCard extends StatelessWidget {
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white,
+        color: backgroundColor ?? AppColors.cardBackground,
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(

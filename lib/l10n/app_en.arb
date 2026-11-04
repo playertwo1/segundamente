@@ -1613,5 +1613,12 @@
   "attachPdf": "PDF",
   "attachAudio": "Audio",
   "openSourceLicenses": "Licenses",
-  "licenseLegalese": "Free software under GPL-3.0. Fork of Memex (github.com/memex-lab/memex). Source: github.com/playertwo1/segundamente."
+  "licenseLegalese": "Free software under GPL-3.0. Fork of Memex (github.com/memex-lab/memex). Source: github.com/playertwo1/segundamente.",
+  "navMenu": "Menu",
+  "navTimeline": "Timeline",
+  "navKnowledge": "Knowledge",
+  "navChat": "Chat",
+  "navProfile": "Profile and settings",
+  "chatWithSegundaMente": "Chat with Segunda Mente",
+  "captureButtonLabel": "Capture"
 }

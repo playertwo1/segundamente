@@ -43,7 +43,7 @@ class PersonCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: _getStatusColor(status),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
+                      border: Border.all(color: AppColors.divider, width: 2),
                     ),
                   ),
                 ),

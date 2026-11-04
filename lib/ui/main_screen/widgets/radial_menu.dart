@@ -386,7 +386,7 @@ class RadialMenuState extends State<RadialMenu> with TickerProviderStateMixin {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 10),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.9),
+                                  color: AppColors.surface,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: _TranscriptAutoScroll(

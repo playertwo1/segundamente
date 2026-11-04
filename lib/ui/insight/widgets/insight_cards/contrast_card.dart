@@ -74,7 +74,7 @@ class ContrastCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFF0F4FF),
+                color: AppColors.iconBgLight,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(

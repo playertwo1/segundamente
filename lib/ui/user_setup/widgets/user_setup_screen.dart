@@ -288,11 +288,13 @@ class _UserSetupScreenState extends State<UserSetupScreen> {
                                 const Icon(Icons.person_outline, size: 20),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: AppColors.divider),
+                              borderSide:
+                                  const BorderSide(color: AppColors.divider),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: AppColors.divider),
+                              borderSide:
+                                  const BorderSide(color: AppColors.divider),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),

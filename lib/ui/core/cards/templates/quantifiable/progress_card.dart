@@ -91,9 +91,9 @@ class _ProgressCardState extends State<ProgressCard> {
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                       colors: [
-                        Colors.white,
-                        Colors.white,
-                        Colors.white,
+                        AppColors.surface,
+                        AppColors.surface,
+                        AppColors.surface,
                         Colors.transparent
                       ],
                       stops: [0.0, 0.8, 0.9, 1.0],
@@ -131,9 +131,9 @@ class _ProgressCardState extends State<ProgressCard> {
                         end: Alignment.centerRight,
                         colors: [
                           Colors.transparent,
-                          Colors.white,
-                          Colors.white,
-                          Colors.white,
+                          AppColors.surface,
+                          AppColors.surface,
+                          AppColors.surface,
                         ],
                         stops: [0.0, 0.1, 0.2, 1.0],
                       ).createShader(bounds);

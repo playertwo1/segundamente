@@ -244,7 +244,8 @@ class _DataStoragePageState extends State<DataStoragePage> {
       trailing: _location == StorageLocation.custom && _customPath != null
           ? Text(
               _customPath!,
-              style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+              style:
+                  const TextStyle(fontSize: 11, color: AppColors.textSecondary),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             )

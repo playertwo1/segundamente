@@ -47,6 +47,8 @@ class TimelineScreen extends StatefulWidget {
   final PersonaAvatarViewModel personaAvatarViewModel;
   final VoidCallback onInputTap;
   final VoidCallback? onRefreshAction;
+  final VoidCallback? onMenuTap;
+  final Key? menuButtonKey;
 
   const TimelineScreen({
     super.key,
@@ -55,6 +57,8 @@ class TimelineScreen extends StatefulWidget {
     required this.personaAvatarViewModel,
     required this.onInputTap,
     this.onRefreshAction,
+    this.onMenuTap,
+    this.menuButtonKey,
   });
 
   @override
@@ -249,11 +253,18 @@ class TimelineScreenState extends State<TimelineScreen> {
 
   Widget _buildChromeHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: const EdgeInsets.fromLTRB(8, 12, 20, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          if (widget.onMenuTap != null)
+            IconButton(
+              key: widget.menuButtonKey,
+              onPressed: widget.onMenuTap,
+              tooltip: UserStorage.l10n.navMenu,
+              icon: const Icon(Icons.menu, color: AppColors.textPrimary),
+            ),
           const Flexible(
             child: Align(
               alignment: Alignment.centerLeft,
@@ -373,12 +384,40 @@ class TimelineScreenState extends State<TimelineScreen> {
     );
   }
 
+  /// Explicit way into the conversation (D-017), near the top of the timeline.
+  Widget _buildChatEntry() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          border: Border.symmetric(
+            horizontal: BorderSide(color: AppColors.divider, width: 0.5),
+          ),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          minTileHeight: 52,
+          leading:
+              const Icon(Icons.chat_bubble_outline, color: AppColors.primary),
+          title: Text(
+            UserStorage.l10n.chatWithSegundaMente,
+            style: const TextStyle(fontSize: 16, color: AppColors.textPrimary),
+          ),
+          trailing:
+              const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+          onTap: widget.onInputTap,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         _buildChromeHeader(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
+        _buildChatEntry(),
         Expanded(
           child: ListenableBuilder(
             listenable:
@@ -407,17 +446,17 @@ class TimelineScreenState extends State<TimelineScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 14),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            colors: [
-                              Colors.white.withValues(alpha: 0.92),
-                              Colors.white.withValues(alpha: 0.82),
+                            colors: const [
+                              AppColors.surface,
+                              AppColors.surface,
                             ],
                           ),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.6),
+                            color: AppColors.divider,
                             width: 0.5,
                           ),
                           boxShadow: [
@@ -915,8 +954,12 @@ class TimelineFilterBar extends StatelessWidget {
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF1A1A1A) : Colors.white,
+          color: isSelected ? AppColors.iconBgLight : AppColors.cardBackground,
           borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: isSelected ? AppColors.primary : AppColors.divider,
+            width: 0.5,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -924,7 +967,7 @@ class TimelineFilterBar extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.white : AppColors.textSecondary,
+                color: isSelected ? AppColors.primary : AppColors.textSecondary,
                 fontWeight: FontWeight.w500,
                 fontSize: 14,
                 letterSpacing: -0.15,

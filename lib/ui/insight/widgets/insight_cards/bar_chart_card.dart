@@ -83,7 +83,7 @@ class BarChartCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   height: 28 / 18,
                   letterSpacing: -0.44,
-                  color: Color(0xFF101828),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -126,7 +126,7 @@ class BarChartCard extends StatelessWidget {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF2F4FF),
+                          color: AppColors.iconBgLight,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
@@ -168,7 +168,7 @@ class BarChartCard extends StatelessWidget {
                                     fontWeight: FontWeight.w500,
                                     height: 20 / 14,
                                     letterSpacing: -0.15,
-                                    color: const Color(0xFF101828),
+                                    color: AppColors.textPrimary,
                                   ),
                                 ),
                               ],

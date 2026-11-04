@@ -55,7 +55,7 @@ class KnowledgeFileCard extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: const Color(0xFFF2F4FF),
+                color: AppColors.iconBgLight,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(

@@ -219,7 +219,7 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                     const SizedBox(height: 24),
                     Container(
                       decoration: const BoxDecoration(
-                        color: Color(0xFFF8F9FA),
+                        color: AppColors.surface,
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(24)),
                       ),

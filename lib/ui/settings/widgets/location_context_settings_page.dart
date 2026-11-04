@@ -511,8 +511,8 @@ class _LocationContextSettingsPageState
                   const SizedBox(height: 6),
                   Text(
                     feedback.message,
-                    style:
-                        const TextStyle(color: AppColors.textSecondary, height: 1.35),
+                    style: const TextStyle(
+                        color: AppColors.textSecondary, height: 1.35),
                   ),
                 ],
               ),
@@ -526,7 +526,8 @@ class _LocationContextSettingsPageState
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 detail,
-                style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                style: const TextStyle(
+                    fontSize: 13, color: AppColors.textSecondary),
               ),
             ),
           ),

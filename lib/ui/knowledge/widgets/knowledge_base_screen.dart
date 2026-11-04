@@ -10,9 +10,14 @@ import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Knowledge base page. Receives [viewModel] from parent (Compass-style).
 class KnowledgeBaseScreen extends StatefulWidget {
-  const KnowledgeBaseScreen({super.key, required this.viewModel});
+  const KnowledgeBaseScreen({
+    super.key,
+    required this.viewModel,
+    this.onMenuTap,
+  });
 
   final KnowledgeBaseViewModel viewModel;
+  final VoidCallback? onMenuTap;
 
   @override
   State<KnowledgeBaseScreen> createState() => KnowledgeBaseScreenState();
@@ -46,9 +51,16 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
       builder: (context, _) {
         final vm = widget.viewModel;
         return Scaffold(
-          backgroundColor: const Color(
-              0xFFF7F8FA), // Match Timeline, Insights and bottom nav background
+          backgroundColor: AppColors.background,
           appBar: AppBar(
+            leading: widget.onMenuTap == null
+                ? null
+                : IconButton(
+                    onPressed: widget.onMenuTap,
+                    tooltip: UserStorage.l10n.navMenu,
+                    icon: const Icon(Icons.menu, color: AppColors.textPrimary),
+                  ),
+            automaticallyImplyLeading: false,
             title: const MemexBrandTitle(),
             backgroundColor: AppColors.background,
             surfaceTintColor: AppColors.background,

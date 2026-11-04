@@ -1115,7 +1115,8 @@ class _ModelStatsPageState extends State<ModelStatsPage>
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            style:
+                const TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
           Expanded(
             child: Text(

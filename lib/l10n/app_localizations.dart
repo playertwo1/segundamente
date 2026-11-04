@@ -6302,6 +6302,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Free software under GPL-3.0. Fork of Memex (github.com/memex-lab/memex). Source: github.com/playertwo1/segundamente.'**
   String get licenseLegalese;
+
+  /// No description provided for @navMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get navMenu;
+
+  /// No description provided for @navTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get navTimeline;
+
+  /// No description provided for @navKnowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowledge'**
+  String get navKnowledge;
+
+  /// No description provided for @navChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get navChat;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile and settings'**
+  String get navProfile;
+
+  /// No description provided for @chatWithSegundaMente.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with Segunda Mente'**
+  String get chatWithSegundaMente;
+
+  /// No description provided for @captureButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture'**
+  String get captureButtonLabel;
 }
 
 class _AppLocalizationsDelegate

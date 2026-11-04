@@ -820,8 +820,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   const SizedBox(height: 16),
                   Text(
                     l10n.deleteAccountTypeName(userId),
-                    style:
-                        const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                    style: const TextStyle(
+                        fontSize: 13, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 8),
                   TextField(

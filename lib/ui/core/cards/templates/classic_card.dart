@@ -289,14 +289,14 @@ class _ClassicCardState extends State<ClassicCard> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                const Color(0xFFF8F9FA).withValues(alpha: 0.97),
-                Colors.white,
+                AppColors.surface.withValues(alpha: 0.97),
+                AppColors.surface,
               ],
             ),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            border: Border(
-              top: BorderSide(
-                color: Colors.white.withValues(alpha: 0.6),
+            border: const Border(
+              top: const BorderSide(
+                color: AppColors.divider,
                 width: 0.5,
               ),
             ),

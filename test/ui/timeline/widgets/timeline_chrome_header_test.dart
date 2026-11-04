@@ -48,4 +48,37 @@ void main() {
     await tester.pump();
     expect(find.byType(MemexBrandTitle), findsOneWidget);
   });
+
+  testWidgets('header menu and chat entry call their callbacks',
+      (tester) async {
+    final timeline = TimelineViewModel.forTest(autoLoad: false);
+    final insight = InsightViewModel(router: MemexRouter());
+    final persona = PersonaAvatarViewModel(router: MemexRouter());
+    addTearDown(timeline.dispose);
+    addTearDown(insight.dispose);
+    addTearDown(persona.dispose);
+    var menuTaps = 0;
+    var chatTaps = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: TimelineScreen(
+            viewModel: timeline,
+            insightViewModel: insight,
+            personaAvatarViewModel: persona,
+            onInputTap: () => chatTaps++,
+            onMenuTap: () => menuTaps++,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byTooltip(UserStorage.l10n.navMenu));
+    await tester.tap(find.text(UserStorage.l10n.chatWithSegundaMente));
+    await tester.pump();
+
+    expect(menuTaps, 1);
+    expect(chatTaps, 1);
+  });
 }

@@ -46,7 +46,10 @@ import 'package:health/health.dart';
 import 'package:memex/utils/logger.dart';
 import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/ui/agent_activity/widgets/agent_activity_widget.dart';
-import 'package:memex/ui/main_screen/widgets/main_bottom_bar.dart';
+import 'package:memex/ui/main_screen/widgets/ai_core_button.dart';
+import 'package:memex/ui/main_screen/widgets/main_menu_drawer.dart';
+import 'package:memex/ui/settings/widgets/personal_center_screen.dart';
+import 'package:memex/routing/routes.dart';
 import 'package:memex/db/app_database.dart';
 import 'package:memex/data/services/local_server_service.dart';
 import 'package:memex/data/services/app_update_service.dart';
@@ -112,10 +115,10 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.transparent,
       systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.light,
       systemNavigationBarContrastEnforced: false,
     ),
   );
@@ -507,6 +510,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   final GlobalKey<RadialMenuState> _radialMenuKey =
       GlobalKey<RadialMenuState>();
   final GlobalKey _aiButtonKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey _mainStackKey = GlobalKey();
   bool _isInvalidConfigDialogShowing = false;
   bool _isErrorNotificationDialogShowing = false;
@@ -1354,7 +1358,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       final result = await finalizeQuickRecordingTranscript(
         pcmBytes: List<int>.from(_quickPcmBuffer),
         existingText: _quickTranscribedText,
-        transcribeSamples: SpeechTranscriptionService.instance.transcribeSamples,
+        transcribeSamples:
+            SpeechTranscriptionService.instance.transcribeSamples,
       );
       _quickTranscribedText = result.text;
       _quickTranscriptionError = result.error;
@@ -1867,12 +1872,28 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       value: const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent,
         systemNavigationBarDividerColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.light,
         systemNavigationBarContrastEnforced: false,
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
+        key: _scaffoldKey,
+        drawer: MainMenuDrawer(
+          currentTab: _currentTab,
+          onSelectTab: (tab) =>
+              tab == 0 ? _handleTimelineTabTap() : _handleLibraryTabTap(),
+          onOpenChat: _openSuperAgentDialog,
+          onOpenCalendar: () =>
+              context.push(AppRoutes.calendar, extra: DateTime.now()),
+          onOpenMemory: () => context.push(AppRoutes.memory),
+          onOpenProfile: () => showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) => const PersonalCenterScreen(),
+          ),
+        ),
         extendBody: true,
         resizeToAvoidBottomInset: false,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -1898,10 +1919,13 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                             setState(() => _homeClipboardCandidate = null);
                             _openSuperAgentDialog();
                           },
+                          onMenuTap: _handleMenuTap,
+                          menuButtonKey: DemoService.instance.knowledgeTabKey,
                         ),
                         KnowledgeBaseScreen(
                           key: _knowledgeBaseKey,
                           viewModel: context.read<KnowledgeBaseViewModel>(),
+                          onMenuTap: _handleMenuTap,
                         ),
                       ],
                     ),
@@ -1912,11 +1936,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
             if (_homeClipboardCandidate != null) _buildHomeClipboardPreview(),
 
-            // Floating bottom bar overlay
-            _buildBottomBar(),
+            _buildCaptureButton(),
 
             const Positioned(
-              bottom: 164,
+              bottom: 112,
               left: 0,
               right: 0,
               child: Center(child: AgentActivityWidget()),
@@ -1961,32 +1984,40 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     );
   }
 
-  Widget _buildBottomBar() {
+  /// Floating capture button (D-017: no persistent bottom bar). Same tap
+  /// and long-press (radial quick record) behavior as the old center button.
+  Widget _buildCaptureButton() {
     return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: MainBottomBar(
-        currentTab: _currentTab,
-        onTimelineTap: _handleTimelineTabTap,
-        onLibraryTap: () {
-          _handleLibraryTabTap();
-          DemoService.instance.tryAdvance(DemoStep.tapKnowledgeTab);
-        },
-        onCenterTap: () {
-          // Advance first so _handleAICoreButtonTap sees tapSend step for prefill
-          DemoService.instance.tryAdvance(DemoStep.tapAddButton);
-          _handleAICoreButtonTap();
-        },
-        onCenterLongPress: _handleAICoreButtonLongPressStart,
-        onCenterLongPressMoveUpdate: _handleAICoreButtonLongPressMoveUpdate,
-        onCenterLongPressEnd: _handleAICoreButtonLongPressEnd,
-        centerButtonKey: DemoService.instance.isActive
-            ? DemoService.instance.addButtonKey
-            : _aiButtonKey,
-        libraryTabKey: DemoService.instance.knowledgeTabKey,
+      right: 12,
+      bottom: MediaQuery.paddingOf(context).bottom + 8,
+      child: Semantics(
+        button: true,
+        label: UserStorage.l10n.captureButtonLabel,
+        child: AICoreButton(
+          key: DemoService.instance.isActive
+              ? DemoService.instance.addButtonKey
+              : _aiButtonKey,
+          onTap: () {
+            // Advance first so _handleAICoreButtonTap sees tapSend step for prefill
+            DemoService.instance.tryAdvance(DemoStep.tapAddButton);
+            _handleAICoreButtonTap();
+          },
+          onLongPress: _handleAICoreButtonLongPressStart,
+          onLongPressMoveUpdate: _handleAICoreButtonLongPressMoveUpdate,
+          onLongPressEnd: _handleAICoreButtonLongPressEnd,
+        ),
       ),
     );
+  }
+
+  void _handleMenuTap() {
+    // The demo's "open Knowledge" step targets the menu button; go straight there.
+    if (DemoService.instance.currentStep == DemoStep.tapKnowledgeTab) {
+      _handleLibraryTabTap();
+      DemoService.instance.tryAdvance(DemoStep.tapKnowledgeTab);
+      return;
+    }
+    _scaffoldKey.currentState?.openDrawer();
   }
 
   void _handleTimelineTabTap() {

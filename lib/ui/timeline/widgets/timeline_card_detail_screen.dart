@@ -974,7 +974,8 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(body: const Center(child: const AgentLogoLoading()));
+      return const Scaffold(
+          body: const Center(child: const AgentLogoLoading()));
     }
 
     if (_errorMessage != null) {
@@ -1245,7 +1246,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
       child: Container(
         padding: const EdgeInsetsDirectional.fromSTEB(14, 12, 10, 12),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.96),
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFE0E7FF)),
           boxShadow: [
@@ -2317,7 +2318,8 @@ class _CommentInputWidgetState extends State<_CommentInputWidget> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.reply_rounded, size: 16, color: AppColors.primary),
+                const Icon(Icons.reply_rounded,
+                    size: 16, color: AppColors.primary),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -2367,7 +2369,8 @@ class _CommentInputWidgetState extends State<_CommentInputWidget> {
                       fontSize: 14,
                     ),
                   ),
-                  style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+                  style: const TextStyle(
+                      fontSize: 14, color: AppColors.textPrimary),
                   maxLines: null,
                   textInputAction: TextInputAction.send,
                   onSubmitted: (_) => _postComment(),
@@ -2412,7 +2415,7 @@ class CardProcessingBanner extends StatelessWidget {
         color: AppColors.iconBgLight,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF818CF8).withValues(alpha: 0.35),
+          color: AppColors.primary.withValues(alpha: 0.35),
           width: 0.8,
         ),
       ),

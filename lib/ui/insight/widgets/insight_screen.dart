@@ -94,7 +94,7 @@ class _InsightScreenState extends State<InsightScreen> {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.9),
+          color: AppColors.surface,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
@@ -212,8 +212,8 @@ class _InsightScreenState extends State<InsightScreen> {
                   onTap: () => vm.setActiveCardId(null),
                   child: Container(
                     padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.9),
+                    decoration: const BoxDecoration(
+                      color: AppColors.surface,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(

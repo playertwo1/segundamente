@@ -132,8 +132,8 @@ class _CompanionAvatarFrame extends StatelessWidget {
             child: Container(
               width: 4,
               height: 4,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.82),
+              decoration: const BoxDecoration(
+                color: AppColors.surface,
                 shape: BoxShape.circle,
               ),
             ),
@@ -160,7 +160,7 @@ class _UnreadBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.white, width: 1),
+          border: Border.all(color: AppColors.divider, width: 1),
         ),
         child: Center(
           child: Text(

@@ -119,8 +119,8 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 ## F5V — Redesign visual da versão nova
 | ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
 |---|---|---|---|---|---|
-| F5V-01 | Atualizar tokens/tema AMOLED e navegação superior; remover a barra inferior persistente | P1 | D-017, D-022 | IN_PROGRESS | Rotas mapeadas; widget tests; captura da navegação |
-| F5V-02 | Aplicar a direção às telas de timeline, conhecimento, insights e memórias | P1 | F5V-01 | READY | Estados principais cobertos por widget tests e capturas comparadas às referências |
+| F5V-01 | Atualizar tokens/tema AMOLED e navegação superior; remover a barra inferior persistente | P1 | D-017, D-022 | REVIEW | Rotas mapeadas; widget tests; captura da navegação |
+| F5V-02 | Aplicar a direção às telas de timeline, conhecimento, insights e memórias | P1 | F5V-01 | IN_PROGRESS | Estados principais cobertos por widget tests e capturas comparadas às referências |
 | F5V-03 | Atualizar entrada, conversa e acesso explícito “Conversar” | P1 | F5V-01 | READY | Teste de navegação/ação do chat, estados de envio e captura |
 | F5V-04 | Atualizar calendário, detalhes, relatórios, configurações, modelos, agentes e backup | P1 | F5V-01 | READY | Widget tests dos comportamentos e capturas de cada família |
 | F5V-05 | Revisar estados vazios/erro, escala de texto, contraste, leitor de tela e validar no aparelho | P1 | F5V-02, F5V-03, F5V-04 | READY | Verificações de acessibilidade; capturas finais; validação no S25 quando disponível |

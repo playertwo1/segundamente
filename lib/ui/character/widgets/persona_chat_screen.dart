@@ -1,3 +1,4 @@
+import 'package:memex/ui/core/themes/app_colors.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
@@ -13,7 +14,7 @@ import 'package:memex/ui/core/widgets/local_image.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:intl/intl.dart';
 
-const _personaStageInk = Color(0xFF080B12);
+const _personaStageInk = AppColors.textPrimary;
 const _personaPanel = Color(0xFF101217);
 const _personaPanelSoft = Color(0xFF1B1D24);
 const _personaText = Color(0xFFF2ECE0);
@@ -980,9 +981,9 @@ class _ChatAtmosphereBackground extends StatelessWidget {
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   colors: [
-                    const Color(0xFF080B12),
-                    const Color(0xFF080B12).withValues(alpha: 0.92),
-                    const Color(0xFF080B12).withValues(alpha: 0.55),
+                    AppColors.textPrimary,
+                    AppColors.textPrimary.withValues(alpha: 0.92),
+                    AppColors.textPrimary.withValues(alpha: 0.55),
                     Colors.transparent,
                     Colors.transparent,
                   ],

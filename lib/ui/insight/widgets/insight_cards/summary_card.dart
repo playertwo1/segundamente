@@ -136,7 +136,7 @@ class SummaryCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 height: 32 / 24,
                 letterSpacing: 0.07,
-                color: Color(0xFF101828),
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 12),
@@ -275,7 +275,7 @@ class SummaryCard extends StatelessWidget {
                     height: 24,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFFF3F4F6),
+                      color: AppColors.surface,
                     ),
                     child: Center(
                       child: Text(

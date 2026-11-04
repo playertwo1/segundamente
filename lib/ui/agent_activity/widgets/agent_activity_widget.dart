@@ -100,9 +100,9 @@ class _AgentActivityWidgetState extends State<AgentActivityWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.white.withValues(alpha: 0.88),
+        color: AppColors.surface,
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.5),
+          color: AppColors.divider,
           width: 0.5,
         ),
         boxShadow: [

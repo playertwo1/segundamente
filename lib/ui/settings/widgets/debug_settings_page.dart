@@ -314,7 +314,7 @@ class DebugSettingsPage extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.cardBackground,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white),
+            border: Border.all(color: AppColors.divider),
             boxShadow: [
               BoxShadow(
                 color: AppColors.textSecondary.withValues(alpha: 0.08),

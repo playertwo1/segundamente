@@ -175,7 +175,7 @@ class SharePreviewDialog extends StatelessWidget {
               border: isPrimary
                   ? null
                   : Border.all(
-                      color: Colors.white.withValues(alpha: 0.3),
+                      color: AppColors.divider,
                       width: 1.5,
                     ),
               boxShadow: isPrimary
