@@ -187,7 +187,8 @@ class FileToolFactory {
   String _displayPath(String absolutePath) {
     if (absolutePath.startsWith(workingDirectory)) {
       final relative = p.relative(absolutePath, from: workingDirectory);
-      return relative == '.' ? '/' : '/$relative';
+      // The agent always sees '/'-separated paths, whatever the host OS.
+      return relative == '.' ? '/' : '/${p.split(relative).join('/')}';
     }
     return absolutePath;
   }

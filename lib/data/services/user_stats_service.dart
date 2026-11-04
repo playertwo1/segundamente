@@ -318,10 +318,11 @@ class UserStatsService {
       final date = _dateOnly(stat.modified);
       if (!_dateInRange(date, range)) continue;
       final key = _dateKey(date);
-      final relative = path.join(
+      // Shown to the user and the agent, so always '/'-separated.
+      final relative = [
         'PKM',
-        path.relative(entity.path, from: root.path),
-      );
+        ...path.split(path.relative(entity.path, from: root.path)),
+      ].join('/');
       daily[key]?.knowledgeUnits += 1;
       details[key]?.knowledgePaths.add(relative);
     }

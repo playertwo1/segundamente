@@ -124,7 +124,7 @@ void main() {
 
     test('includes the latest frontier models for hosted providers', () {
       final expectedFirstModel = <String, String>{
-        LLMConfig.typeClaude: 'claude-fable-5',
+        LLMConfig.typeClaude: 'claude-sonnet-5-5',
         LLMConfig.typeBedrockClaude: 'anthropic.claude-fable-5',
         LLMConfig.typeGemini: 'gemini-3.6-flash',
         LLMConfig.typeOpenRouter: 'anthropic/claude-fable-5',

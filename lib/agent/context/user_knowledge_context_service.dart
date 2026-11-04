@@ -59,7 +59,7 @@ class UserKnowledgeContextService {
         contextRadius: contextRadius,
       );
       cards.add(
-          '### $pathKey${item['rank'] == null ? '' : ' (rank: ${item['rank']})'}\n$snippet');
+          '### ${p.split(pathKey).join('/')}${item['rank'] == null ? '' : ' (rank: ${item['rank']})'}\n$snippet');
     }
 
     return cards.join('\n\n');

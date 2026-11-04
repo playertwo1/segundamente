@@ -117,6 +117,8 @@ class FileOperationService {
     if (!workingDirectory.endsWith(path.separator) &&
         !workingDirectory.endsWith('/')) {
       result = result.replaceAll('$workingDirectory/', '/');
+      // On Windows the child path follows the directory with a backslash.
+      result = result.replaceAll('$workingDirectory${path.separator}', '/');
     }
     return result.replaceAll(workingDirectory, '/');
   }

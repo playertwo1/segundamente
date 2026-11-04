@@ -74,7 +74,9 @@ void main() {
 
     test('task handlers are registered before LocalTaskExecutor starts', () {
       final source =
-          File('lib/data/repositories/memex_router.dart').readAsStringSync();
+          File('lib/data/repositories/memex_router.dart')
+              .readAsStringSync()
+              .replaceAll('\r\n', '\n');
 
       final handlerRegistration = source.indexOf(
         '_registerTaskHandlers(LocalTaskExecutor.instance);',
@@ -90,7 +92,9 @@ void main() {
 
     test('primary companion wake loop is restored after task startup', () {
       final source =
-          File('lib/data/repositories/memex_router.dart').readAsStringSync();
+          File('lib/data/repositories/memex_router.dart')
+              .readAsStringSync()
+              .replaceAll('\r\n', '\n');
       final executorStart = source.indexOf(
         'await LocalTaskExecutor.instance.start(userId: userId);',
       );
@@ -104,7 +108,9 @@ void main() {
 
     test('history acquaintance is scheduled before the initiative wake', () {
       final source =
-          File('lib/data/repositories/memex_router.dart').readAsStringSync();
+          File('lib/data/repositories/memex_router.dart')
+              .readAsStringSync()
+              .replaceAll('\r\n', '\n');
       final acquaintance = source.indexOf(
         'CharacterHistoryAcquaintanceService.instance.ensureScheduled(',
       );
@@ -120,7 +126,9 @@ void main() {
     test('sendMessage waits for full router initialization before delegating',
         () {
       final source =
-          File('lib/data/repositories/memex_router.dart').readAsStringSync();
+          File('lib/data/repositories/memex_router.dart')
+              .readAsStringSync()
+              .replaceAll('\r\n', '\n');
 
       final sendMessage = source.indexOf('Stream<ChatEvent> sendMessage(');
       final ensureInitialized = source.indexOf(
@@ -140,7 +148,9 @@ void main() {
 
     test('timeline init completes core before awaiting deferred work', () {
       final source =
-          File('lib/data/repositories/memex_router.dart').readAsStringSync();
+          File('lib/data/repositories/memex_router.dart')
+              .readAsStringSync()
+              .replaceAll('\r\n', '\n');
 
       final initCore = source.indexOf('Future<String?> _initCore() async {');
       final completeCore = source.indexOf('coreCompleter.complete();');
@@ -160,7 +170,9 @@ void main() {
 
     test('user changes serialize and invalidate deferred initialization', () {
       final source =
-          File('lib/data/repositories/memex_router.dart').readAsStringSync();
+          File('lib/data/repositories/memex_router.dart')
+              .readAsStringSync()
+              .replaceAll('\r\n', '\n');
 
       expect(source, contains('await previousLifecycle;'));
       expect(source, contains('generation != _initGeneration'));
@@ -175,7 +187,9 @@ void main() {
 
     test('fetchTimelineCards waits only for core initialization', () {
       final source =
-          File('lib/data/repositories/memex_router.dart').readAsStringSync();
+          File('lib/data/repositories/memex_router.dart')
+              .readAsStringSync()
+              .replaceAll('\r\n', '\n');
 
       final fetch = source.indexOf(
         'Future<Result<List<TimelineCardModel>>> fetchTimelineCards(',

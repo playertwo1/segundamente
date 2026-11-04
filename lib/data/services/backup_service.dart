@@ -1771,7 +1771,8 @@ Future<int> _addDirectoryToBackupArchive(
     }
 
     final relativePath = path.relative(entity.path, from: dirPath);
-    final archivePath = '$archivePrefix/$relativePath';
+    // Zip entry names are always '/'-separated, whatever the host OS.
+    final archivePath = '$archivePrefix/${path.split(relativePath).join('/')}';
     await _addFileToBackupArchive(
       encoder,
       entity,

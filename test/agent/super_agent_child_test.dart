@@ -43,10 +43,19 @@ void main() {
     });
 
     tearDown(() async {
-      if (await tempRoot.exists()) {
-        await tempRoot.delete(recursive: true);
+      try {
+        // On Windows a just-read file can stay locked for a moment.
+        for (var attempt = 0; await tempRoot.exists(); attempt++) {
+          try {
+            await tempRoot.delete(recursive: true);
+          } on PathAccessException {
+            if (attempt >= 20) rethrow;
+            await Future<void>.delayed(const Duration(milliseconds: 100));
+          }
+        }
+      } finally {
+        await db.close();
       }
-      await db.close();
     });
 
     SuperAgentChildConfig cfg(ChildToolProfile profile) =>

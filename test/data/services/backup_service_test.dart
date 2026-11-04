@@ -53,10 +53,18 @@ void main() {
     _clearPathProviderChannelMock();
     _clearBackupStorageChannelMock();
     PathProviderPlatform.instance = originalPathProvider;
-    try {
-      await tempDir.delete(recursive: true);
-    } on PathNotFoundException {
-      // Some restore paths can remove the fake temp root before tearDown runs.
+    // On Windows SQLite can hold the database file for a moment after close.
+    for (var attempt = 0;; attempt++) {
+      try {
+        await tempDir.delete(recursive: true);
+        break;
+      } on PathNotFoundException {
+        // Some restore paths can remove the fake temp root before tearDown runs.
+        break;
+      } on PathAccessException {
+        if (attempt >= 20) rethrow;
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+      }
     }
   });
 
