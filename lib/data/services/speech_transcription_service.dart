@@ -238,8 +238,10 @@ Rules:
       if (sourcePath != null && mimeType != 'audio/wav') {
         final wavPath = await AudioConverter.toWav16kMono(sourcePath);
         if (wavPath != null) {
-          final wavBytes = await File(wavPath).readAsBytes();
-          return transcribeViaChatGpt(client, wavBytes, mimeType: 'audio/wav');
+          return _transcribeWavInChunks(
+            client,
+            await File(wavPath).readAsBytes(),
+          );
         }
       }
       return transcribeViaChatGpt(client, bytes, mimeType: mimeType);
@@ -442,6 +444,51 @@ Rules:
     }
   }
 
+  /// Splits a 16 kHz mono WAV (44-byte header) into WAVs of at most
+  /// [chunkSeconds] each. The endpoint answers 413 above ~20 MB, which a
+  /// 50 min recording (~96 MB) far exceeds.
+  /// shortcut: cuts at fixed offsets, so a word at a boundary can be split;
+  /// upgrade to silence-aware cuts if that shows up in real recordings.
+  @visibleForTesting
+  static List<List<int>> splitWavForUpload(
+    Uint8List wav, {
+    int chunkSeconds = 600,
+  }) {
+    const headerSize = 44;
+    final chunkBytes = 16000 * 2 * chunkSeconds;
+    if (wav.length <= headerSize + chunkBytes) return [wav];
+    return [
+      for (var o = headerSize; o < wav.length; o += chunkBytes)
+        _pcm16ToWav(Uint8List.sublistView(
+          wav,
+          o,
+          o + chunkBytes < wav.length ? o + chunkBytes : wav.length,
+        )),
+    ];
+  }
+
+  Future<SpeechTranscriptionResult> _transcribeWavInChunks(
+    CodexResponsesClient client,
+    Uint8List wav,
+  ) async {
+    final chunks = splitWavForUpload(wav);
+    if (chunks.length == 1) {
+      return transcribeViaChatGpt(client, chunks.single, mimeType: 'audio/wav');
+    }
+    final parts = <String>[];
+    for (final chunk in chunks) {
+      final result =
+          await transcribeViaChatGpt(client, chunk, mimeType: 'audio/wav');
+      final text = result.text;
+      if (text != null && text.isNotEmpty) parts.add(text);
+    }
+    return SpeechTranscriptionResult(
+      text: parts.join(' '),
+      usage: null,
+      model: 'chatgpt-transcribe',
+    );
+  }
+
   List<int> _samplesToWavBytes(Float32List samples) {
     final pcm = Int16List(samples.length);
     for (int i = 0; i < samples.length; i++) {
@@ -449,7 +496,11 @@ Rules:
       pcm[i] = scaled;
     }
 
-    final pcmBytes = pcm.buffer.asUint8List();
+    return _pcm16ToWav(pcm.buffer.asUint8List());
+  }
+
+  /// Wraps 16 kHz mono 16-bit PCM in a WAV header.
+  static List<int> _pcm16ToWav(Uint8List pcmBytes) {
     final dataSize = pcmBytes.length;
     final fileSize = 36 + dataSize;
     final header = ByteData(44);

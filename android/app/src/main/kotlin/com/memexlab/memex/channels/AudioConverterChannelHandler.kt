@@ -6,10 +6,11 @@ import android.media.MediaExtractor
 import android.media.MediaFormat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import java.io.BufferedOutputStream
+import java.io.FileOutputStream
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import kotlin.math.roundToInt
 
 /**
  * Handles `com.memexlab.memex/audio_converter` MethodChannel.
@@ -19,6 +20,8 @@ class AudioConverterChannelHandler {
 
     companion object {
         private const val CHANNEL = "com.memexlab.memex/audio_converter"
+        private const val TARGET_RATE = 16000
+        private const val WAV_HEADER_SIZE = 44
 
         fun register(flutterEngine: FlutterEngine, activity: Activity) {
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
@@ -72,7 +75,13 @@ class AudioConverterChannelHandler {
             decoder.configure(inputFormat, null, null, 0)
             decoder.start()
 
-            val pcmSamples = mutableListOf<Short>()
+            // Streams to disk: a long recording (50 min ≈ 96 MB of 16 kHz PCM) must
+            // not be held in memory, or the whole app dies with OutOfMemoryError.
+            val out = BufferedOutputStream(FileOutputStream(outputPath), 1 shl 16)
+            out.write(ByteArray(WAV_HEADER_SIZE))
+            val ratio = inputSampleRate.toDouble() / TARGET_RATE
+            var outIndex = 0L
+            var chunkStart = 0L
             val bufferInfo = MediaCodec.BufferInfo()
             var inputDone = false
             var outputDone = false
@@ -102,17 +111,24 @@ class AudioConverterChannelHandler {
                     val samples = ShortArray(shortBuffer.remaining())
                     shortBuffer.get(samples)
 
-                    if (inputChannels > 1) {
-                        for (i in samples.indices step inputChannels) {
+                    val mono = if (inputChannels > 1) {
+                        ShortArray(samples.size / inputChannels) { frame ->
                             var sum = 0L
-                            for (ch in 0 until inputChannels) {
-                                if (i + ch < samples.size) sum += samples[i + ch]
-                            }
-                            pcmSamples.add((sum / inputChannels).toInt().toShort())
+                            for (ch in 0 until inputChannels) sum += samples[frame * inputChannels + ch]
+                            (sum / inputChannels).toInt().toShort()
                         }
                     } else {
-                        pcmSamples.addAll(samples.toList())
+                        samples
                     }
+
+                    // Nearest-sample resampling, continuous across chunks.
+                    val bytes = ByteBuffer.allocate(mono.size * 2).order(ByteOrder.LITTLE_ENDIAN)
+                    while ((outIndex * ratio).toLong() < chunkStart + mono.size) {
+                        bytes.putShort(mono[((outIndex * ratio).toLong() - chunkStart).toInt()])
+                        outIndex++
+                    }
+                    out.write(bytes.array(), 0, bytes.position())
+                    chunkStart += mono.size
 
                     decoder.releaseOutputBuffer(outputBufferIndex, false)
                     if (bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) {
@@ -124,52 +140,19 @@ class AudioConverterChannelHandler {
             decoder.stop()
             decoder.release()
             extractor.release()
+            out.close()
 
-            val monoSamples = if (inputSampleRate != 16000) {
-                resample(pcmSamples.toShortArray(), inputSampleRate, 16000)
-            } else {
-                pcmSamples.toShortArray()
-            }
-
-            writeWav(outputPath, monoSamples, 16000)
+            patchWavHeader(outputPath, outIndex * 2)
         }
 
-        private fun resample(input: ShortArray, fromRate: Int, toRate: Int): ShortArray {
-            val ratio = fromRate.toDouble() / toRate.toDouble()
-            val outputLength = (input.size / ratio).roundToInt()
-            val output = ShortArray(outputLength)
-            for (i in output.indices) {
-                val srcIndex = (i * ratio).toInt().coerceAtMost(input.size - 1)
-                output[i] = input[srcIndex]
-            }
-            return output
-        }
-
-        private fun writeWav(path: String, samples: ShortArray, sampleRate: Int) {
-            val dataSize = samples.size * 2
-            val fileSize = 36 + dataSize
-            val raf = RandomAccessFile(path, "rw")
-
-            raf.writeBytes("RIFF")
-            raf.writeInt(Integer.reverseBytes(fileSize))
-            raf.writeBytes("WAVE")
-            raf.writeBytes("fmt ")
-            raf.writeInt(Integer.reverseBytes(16))
-            raf.writeShort(java.lang.Short.reverseBytes(1).toInt())
-            raf.writeShort(java.lang.Short.reverseBytes(1).toInt())
-            raf.writeInt(Integer.reverseBytes(sampleRate))
-            raf.writeInt(Integer.reverseBytes(sampleRate * 2))
-            raf.writeShort(java.lang.Short.reverseBytes(2).toInt())
-            raf.writeShort(java.lang.Short.reverseBytes(16).toInt())
-            raf.writeBytes("data")
-            raf.writeInt(Integer.reverseBytes(dataSize))
-
-            val buffer = ByteBuffer.allocate(samples.size * 2).order(ByteOrder.LITTLE_ENDIAN)
-            for (sample in samples) {
-                buffer.putShort(sample)
-            }
-            raf.write(buffer.array())
-            raf.close()
+        private fun patchWavHeader(path: String, dataSize: Long) {
+            val header = ByteBuffer.allocate(WAV_HEADER_SIZE).order(ByteOrder.LITTLE_ENDIAN)
+            header.put("RIFF".toByteArray()).putInt((36 + dataSize).toInt())
+            header.put("WAVE".toByteArray()).put("fmt ".toByteArray())
+            header.putInt(16).putShort(1).putShort(1)
+            header.putInt(TARGET_RATE).putInt(TARGET_RATE * 2).putShort(2).putShort(16)
+            header.put("data".toByteArray()).putInt(dataSize.toInt())
+            RandomAccessFile(path, "rw").use { it.write(header.array()) }
         }
     }
 }
