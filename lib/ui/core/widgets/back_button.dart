@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
-/// Back button using btn_back.svg from Figma design.
+/// Outline back arrow on the AMOLED background (DESIGN.md), 48dp target.
 class AppBackButton extends StatelessWidget {
   final VoidCallback? onTap;
 
@@ -15,18 +15,18 @@ class AppBackButton extends StatelessWidget {
       label: MaterialLocalizations.of(context).backButtonTooltip,
       excludeSemantics: true,
       onTap: action,
-      // 48dp touch target around the 36dp icon.
+      // 48dp touch target around the 24dp icon.
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: action,
-        child: SizedBox(
+        child: const SizedBox(
           width: 48,
           height: 48,
           child: Center(
-            child: SvgPicture.asset(
-              'assets/icons/btn_back.svg',
-              width: 36,
-              height: 36,
+            child: Icon(
+              Icons.arrow_back,
+              size: 24,
+              color: AppColors.textPrimary,
             ),
           ),
         ),

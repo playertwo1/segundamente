@@ -196,7 +196,7 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
                             ),
                           )
                         : ListView.builder(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
                             itemCount: vm.characters.length,
                             itemBuilder: (context, index) {
                               final character = vm.characters[index];
@@ -211,28 +211,18 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
     );
   }
 
+  /// Open list row with a hairline divider, no panel (DESIGN.md).
   Widget _buildCharacterItem(CharacterViewModel vm, CharacterModel character) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.background),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.textSecondary.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
           onTap: () => _showEditCharacterDialog(vm, character),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -279,49 +269,29 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    SizedBox(
-                      height: 32,
-                      child: Transform.scale(
-                        scale: 0.9,
-                        alignment: Alignment.centerRight,
-                        child: Switch(
-                          value: character.enabled,
-                          onChanged: (enabled) =>
-                              _toggleCharacterEnabled(vm, character, enabled),
-                          activeThumbColor: Colors.white,
-                          activeTrackColor: AppColors.primary,
-                          inactiveThumbColor: Colors.white,
-                          inactiveTrackColor: AppColors.divider,
-                        ),
+                    Semantics(
+                      label: character.name,
+                      child: Switch(
+                        value: character.enabled,
+                        onChanged: (enabled) =>
+                            _toggleCharacterEnabled(vm, character, enabled),
+                        activeThumbColor: Colors.white,
+                        activeTrackColor: AppColors.primary,
+                        inactiveThumbColor: Colors.white,
+                        inactiveTrackColor: AppColors.divider,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    GestureDetector(
-                      onTap: () => _deleteCharacter(vm, character),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.delete_outline_rounded,
-                              size: 14,
-                              color: Colors.red[300],
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              UserStorage.l10n.delete,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.red[300],
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
+                    TextButton.icon(
+                      key: ValueKey('character_delete_${character.id}'),
+                      onPressed: () => _deleteCharacter(vm, character),
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.textSecondary,
+                        minimumSize: const Size(48, 48),
+                      ),
+                      icon: const Icon(Icons.delete_outline_rounded, size: 18),
+                      label: Text(
+                        UserStorage.l10n.delete,
+                        style: const TextStyle(fontSize: 13),
                       ),
                     ),
                   ],
