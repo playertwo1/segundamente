@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:logging/logging.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:memex/utils/secret_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'local_server_service.dart';
 import 'package:memex/utils/user_storage.dart';
@@ -289,8 +290,8 @@ class OpenAiAuthService {
     required int expiresAt,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('openai_access_token', accessToken);
-    await prefs.setString('openai_refresh_token', refreshToken);
+    await SecretStorage.write('openai_access_token', accessToken);
+    await SecretStorage.write('openai_refresh_token', refreshToken);
     await prefs.setString('openai_account_id', accountId);
     await prefs.setInt('openai_expires_at', expiresAt);
   }
@@ -298,8 +299,10 @@ class OpenAiAuthService {
   /// Get the saved tokens as a Map
   static Future<Map<String, dynamic>?> getSavedTokens() async {
     final prefs = await SharedPreferences.getInstance();
-    final accessToken = prefs.getString('openai_access_token');
-    final refreshToken = prefs.getString('openai_refresh_token');
+    final accessToken =
+        await SecretStorage.readMigrating(prefs, 'openai_access_token');
+    final refreshToken =
+        await SecretStorage.readMigrating(prefs, 'openai_refresh_token');
     final accountId = prefs.getString('openai_account_id');
     final expiresAt = prefs.getInt('openai_expires_at');
 
@@ -320,6 +323,8 @@ class OpenAiAuthService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('openai_access_token');
     await prefs.remove('openai_refresh_token');
+    await SecretStorage.delete('openai_access_token');
+    await SecretStorage.delete('openai_refresh_token');
     await prefs.remove('openai_account_id');
     await prefs.remove('openai_expires_at');
   }

@@ -1,6 +1,6 @@
 # F5-02 — Privacidade
 
-**Data:** 2026-11-02. Revisão desta sessão, com o código aberto. Uma passagem sem histórico leu os mesmos arquivos e devolveu achados; esta nota incorpora os que eram fato. Essa passagem não é isolada. A F5-02 fica `IN_PROGRESS`.
+**Data:** 2026-11-02. Revisão desta sessão, com o código aberto. Uma passagem sem histórico leu os mesmos arquivos e devolveu achados; esta nota incorpora os que eram fato. Essa passagem não é isolada. A F5-02 fica `IN_PROGRESS` até a migração ser vista no S25.
 
 ## O que mudou neste turno
 
@@ -10,23 +10,23 @@ A falha da troca de código do Gemini montava a exceção com `tokenResponse.bod
 
 Guarda em `test/data/services/openai_auth_log_test.dart`. O teste recusa a interpolação `${tokenResponse.body}` nos dois serviços e ainda exige o `jsonDecode`.
 
-## Achado aberto
+## Cofre do sistema (2026-11-03)
 
-Tokens e a configuração de modelo ficam em `SharedPreferences`, sem cofre do Android e sem `flutter_secure_storage` (o pacote não está no `pubspec.yaml`).
+Os segredos saíram do `SharedPreferences` e foram para o `flutter_secure_storage` (Android Keystore), por `lib/utils/secret_storage.dart`.
 
-Chaves:
+- `openai_*`, `gemini_*` e `claude_*` `_access_token` e `_refresh_token` ficam no cofre. E-mail, id da conta, validade e `gemini_project_id` continuam em `SharedPreferences`.
+- `llm_client_configs` continua em `SharedPreferences`, mas com `apiKey`, `extra.accessKeyId` e `extra.secretAccessKey` vazios. Os valores ficam no cofre, na chave `llm_config_secrets`, por chave de configuração.
+- Migração: na primeira leitura, um token ou uma `apiKey` em texto puro no `SharedPreferences` vai para o cofre e sai do XML. O mesmo vale para o que um backup antigo restaurar.
+- Backup `.memex`: ele copia todas as chaves do `SharedPreferences`. Antes desta mudança, levava os tokens OAuth e as `apiKey`. Agora não leva mais. Restaurar num aparelho novo exige entrar de novo nas contas e redigitar as chaves.
+- `clearAllData` (exclusão de conta) apaga também o cofre. `resetLLMConfigs` apaga `llm_config_secrets`.
+- Testes: `test/utils/secret_storage_test.dart` (migração dos tokens, chaves fora do XML, `apiKey` antiga migrada). Mock global do cofre em `test/flutter_test_config.dart`.
+- No aparelho: `NOT_RUN`. Falta abrir no S25 um app que já tinha login e confirmar que a sessão continua, sem pedir login de novo.
 
-- `openai_access_token`, `openai_refresh_token`, `openai_account_id`, `openai_expires_at`
-- `gemini_access_token`, `gemini_refresh_token`, `gemini_email`, `gemini_expires_at`
-- `llm_client_configs` — o JSON de `LLMConfig` inclui `apiKey`
+## Logs
 
-O ID token da OpenAI entra em `_saveTokens` e não é gravado nessas chaves. Access token e refresh token são gravados. Nada disso entra no git. Este turno não migra o armazenamento. Por isso "chaves e tokens protegidos" não está atendido.
+`gemini_oauth_project.dart` e `model_list_service.dart` registram só o status HTTP, sem `response.body`. A guarda em `openai_auth_log_test.dart` cobre esses dois arquivos e o `claude_auth_service.dart`.
 
-## O que ficou de fora, de propósito
-
-`lib/llm_client/gemini_oauth_project.dart` registra `response.body` quando `retrieveUserQuota`, `loadCodeAssist` ou `onboardUser` falham. O access token desse cliente vai no cabeçalho `Authorization`. `lib/data/services/model_list_service.dart` registra `endpoint` e `response.body` quando a lista de modelos não volta 200. No Gemini, a `apiKey` vai na query `key=` da URI pedida; a variável `endpoint` que entra no log não leva essa query. Nos outros tipos, a chave vai em `Authorization` ou `x-api-key`. Severidade baixa. Não foram alterados.
-
-O `catch` dos dois logins ainda grava `OAuth error: $e` ou `Google OAuth error: $e`. Depois deste turno, a exceção da troca de código não inclui o corpo. Uma falha de `jsonDecode` ou de JWT pode ainda carregar um pedaço da resposta. Isso não foi reproduzido.
+O `catch` dos logins ainda grava `OAuth error: $e`, `Google OAuth error: $e` e `Claude OAuth error: $e`. Uma falha de `jsonDecode` ou de JWT pode carregar um pedaço da resposta. Isso não foi reproduzido nem alterado.
 
 ## Envio
 

@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 import 'package:memex/utils/logger.dart';
+import 'package:memex/utils/secret_storage.dart';
 import 'package:memex/domain/models/llm_config.dart';
 import 'package:memex/domain/models/model_catalog.dart';
 import 'package:memex/domain/models/agent_config.dart';
@@ -318,20 +319,54 @@ class UserStorage {
   static const String _keyDefaultLLMConfigKey = 'default_llm_config_key';
   static const String _keyModelCatalogs = 'model_catalog_v1';
 
+  /// Secrets of each LLMConfig, by config key, kept in [SecretStorage].
+  static const String _keyLLMConfigSecrets = 'llm_config_secrets';
+  static const _secretExtraKeys = ['accessKeyId', 'secretAccessKey'];
+
+  static bool _hasSecrets(LLMConfig c) =>
+      c.apiKey.isNotEmpty ||
+      _secretExtraKeys.any((k) => (c.extra[k] as String? ?? '').isNotEmpty);
+
+  static LLMConfig _withSecrets(LLMConfig c, dynamic secrets) {
+    if (secrets is! Map) return c;
+    return c.copyWith(
+      apiKey: secrets['apiKey'] as String? ?? '',
+      extra: {
+        ...c.extra,
+        for (final k in _secretExtraKeys)
+          if (secrets[k] != null) k: secrets[k],
+      },
+    );
+  }
+
   /// Get stored LLM config list. Creates default config if none.
   static Future<List<LLMConfig>> getLLMConfigs() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonString = prefs.getString(_keyLLMConfigs);
 
+      final secretsJson = await SecretStorage.read(_keyLLMConfigSecrets);
+      final secrets = secretsJson == null
+          ? const <String, dynamic>{}
+          : jsonDecode(secretsJson) as Map<String, dynamic>;
+
       List<LLMConfig> configs = [];
+      bool changed = false;
       if (jsonString != null) {
         final List<dynamic> jsonList = jsonDecode(jsonString);
-        configs = jsonList.map((j) => LLMConfig.fromJson(j)).toList();
+        configs = jsonList.map((j) {
+          final config = LLMConfig.fromJson(j);
+          // A plain secret comes from an older version or a restored backup:
+          // it wins, and saving below moves it to the keystore.
+          if (_hasSecrets(config)) {
+            changed = true;
+            return config;
+          }
+          return _withSecrets(config, secrets[config.key]);
+        }).toList();
       }
 
       // Ensure default Gpt config exists
-      bool changed = false;
       if (!configs.any((c) => c.key == LLMConfig.defaultClientKey)) {
         configs.add(LLMConfig.createDefaultClientConfig());
         changed = true;
@@ -353,7 +388,29 @@ class UserStorage {
   static Future<void> saveLLMConfigs(List<LLMConfig> configs) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final jsonString = jsonEncode(configs.map((c) => c.toJson()).toList());
+      // Keystore first: if the app dies in between, the plain copy still
+      // in prefs is migrated again on the next read.
+      await SecretStorage.write(
+        _keyLLMConfigSecrets,
+        jsonEncode({
+          for (final c in configs)
+            if (_hasSecrets(c))
+              c.key: {
+                'apiKey': c.apiKey,
+                for (final k in _secretExtraKeys)
+                  if (c.extra[k] != null) k: c.extra[k],
+              },
+        }),
+      );
+      final jsonString = jsonEncode(configs
+          .map((c) => c
+              .copyWith(
+                apiKey: '',
+                extra: Map.of(c.extra)
+                  ..removeWhere((k, _) => _secretExtraKeys.contains(k)),
+              )
+              .toJson())
+          .toList());
       await prefs.setString(_keyLLMConfigs, jsonString);
 
       final defaultKey = prefs.getString(_keyDefaultLLMConfigKey);
@@ -650,6 +707,7 @@ class UserStorage {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_keyLLMConfigs);
       await prefs.remove(_keyDefaultLLMConfigKey);
+      await SecretStorage.delete(_keyLLMConfigSecrets);
       // Force reload to ensure defaults are re-populated
       await getLLMConfigs();
     } catch (e) {
@@ -925,7 +983,8 @@ class UserStorage {
           final token = await ClaudeAuthService.getValidAccessToken();
           return token != null;
         default:
-          return config.apiKey.isNotEmpty || config.type == LLMConfig.typeOllama;
+          return config.apiKey.isNotEmpty ||
+              config.type == LLMConfig.typeOllama;
       }
     } catch (_) {
       return false;
@@ -1412,6 +1471,11 @@ class UserStorage {
       await prefs.clear();
     } catch (e) {
       _logger.warning('Failed to clear SharedPreferences: $e');
+    }
+    try {
+      await SecretStorage.deleteAll();
+    } catch (e) {
+      _logger.warning('Failed to clear secure storage: $e');
     }
   }
 

@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:memex/llm_client/codex_responses_client.dart'
     show configureProxy;
+import 'package:memex/utils/secret_storage.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -203,7 +204,8 @@ class ClaudeAuthService {
       );
 
       if (tokenResponse.statusCode != 200) {
-        _logger.severe('Claude token exchange failed: ${tokenResponse.statusCode}');
+        _logger.severe(
+            'Claude token exchange failed: ${tokenResponse.statusCode}');
         throw Exception('Failed to get token: ${tokenResponse.statusCode}');
       }
 
@@ -211,7 +213,8 @@ class ClaudeAuthService {
       final accessToken = data['access_token'] as String?;
       final refreshToken = data['refresh_token'] as String?;
       final expiresIn = (data['expires_in'] as num?)?.toInt() ?? 3600;
-      final expiresAt = DateTime.now().millisecondsSinceEpoch + expiresIn * 1000;
+      final expiresAt =
+          DateTime.now().millisecondsSinceEpoch + expiresIn * 1000;
 
       if (accessToken == null || refreshToken == null) {
         throw Exception('Missing tokens in response');
@@ -247,16 +250,18 @@ class ClaudeAuthService {
     required int expiresAt,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('claude_access_token', accessToken);
-    await prefs.setString('claude_refresh_token', refreshToken);
+    await SecretStorage.write('claude_access_token', accessToken);
+    await SecretStorage.write('claude_refresh_token', refreshToken);
     await prefs.setString('claude_email', email);
     await prefs.setInt('claude_expires_at', expiresAt);
   }
 
   static Future<Map<String, dynamic>?> getSavedTokens() async {
     final prefs = await SharedPreferences.getInstance();
-    final accessToken = prefs.getString('claude_access_token');
-    final refreshToken = prefs.getString('claude_refresh_token');
+    final accessToken =
+        await SecretStorage.readMigrating(prefs, 'claude_access_token');
+    final refreshToken =
+        await SecretStorage.readMigrating(prefs, 'claude_refresh_token');
     final email = prefs.getString('claude_email');
     final expiresAt = prefs.getInt('claude_expires_at');
 
@@ -304,15 +309,16 @@ class ClaudeAuthService {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       final newAccessToken = data['access_token'] as String?;
       final expiresIn = (data['expires_in'] as num?)?.toInt() ?? 3600;
-      final expiresAt = DateTime.now().millisecondsSinceEpoch + expiresIn * 1000;
+      final expiresAt =
+          DateTime.now().millisecondsSinceEpoch + expiresIn * 1000;
 
       if (newAccessToken == null) return null;
 
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('claude_access_token', newAccessToken);
+      await SecretStorage.write('claude_access_token', newAccessToken);
       await prefs.setInt('claude_expires_at', expiresAt);
       if (data['refresh_token'] != null) {
-        await prefs.setString(
+        await SecretStorage.write(
           'claude_refresh_token',
           data['refresh_token'] as String,
         );
@@ -329,6 +335,8 @@ class ClaudeAuthService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('claude_access_token');
     await prefs.remove('claude_refresh_token');
+    await SecretStorage.delete('claude_access_token');
+    await SecretStorage.delete('claude_refresh_token');
     await prefs.remove('claude_email');
     await prefs.remove('claude_expires_at');
   }

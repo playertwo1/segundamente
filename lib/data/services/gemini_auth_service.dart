@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
+import 'package:memex/utils/secret_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,15 +14,116 @@ import 'package:memex/utils/user_storage.dart';
 
 /// Google OAuth constants (from Gemini CLI)
 final _clientId = String.fromCharCodes(const [
-  49, 48, 55, 49, 48, 48, 54, 48, 54, 48, 53, 57, 49, 45, 116, 109, 104, 115,
-  115, 105, 110, 50, 104, 50, 49, 108, 99, 114, 101, 50, 51, 53, 118, 116,
-  111, 108, 111, 106, 104, 52, 103, 52, 48, 51, 101, 112, 46, 97, 112, 112,
-  115, 46, 103, 111, 111, 103, 108, 101, 117, 115, 101, 114, 99, 111, 110,
-  116, 101, 110, 116, 46, 99, 111, 109,
+  49,
+  48,
+  55,
+  49,
+  48,
+  48,
+  54,
+  48,
+  54,
+  48,
+  53,
+  57,
+  49,
+  45,
+  116,
+  109,
+  104,
+  115,
+  115,
+  105,
+  110,
+  50,
+  104,
+  50,
+  49,
+  108,
+  99,
+  114,
+  101,
+  50,
+  51,
+  53,
+  118,
+  116,
+  111,
+  108,
+  111,
+  106,
+  104,
+  52,
+  103,
+  52,
+  48,
+  51,
+  101,
+  112,
+  46,
+  97,
+  112,
+  112,
+  115,
+  46,
+  103,
+  111,
+  111,
+  103,
+  108,
+  101,
+  117,
+  115,
+  101,
+  114,
+  99,
+  111,
+  110,
+  116,
+  101,
+  110,
+  116,
+  46,
+  99,
+  111,
+  109,
 ]);
 final _clientSecret = String.fromCharCodes(const [
-  71, 79, 67, 83, 80, 88, 45, 75, 53, 56, 70, 87, 82, 52, 56, 54, 76, 100, 76,
-  74, 49, 109, 76, 66, 56, 115, 88, 67, 52, 122, 54, 113, 68, 65, 102,
+  71,
+  79,
+  67,
+  83,
+  80,
+  88,
+  45,
+  75,
+  53,
+  56,
+  70,
+  87,
+  82,
+  52,
+  56,
+  54,
+  76,
+  100,
+  76,
+  74,
+  49,
+  109,
+  76,
+  66,
+  56,
+  115,
+  88,
+  67,
+  52,
+  122,
+  54,
+  113,
+  68,
+  65,
+  102,
 ]);
 const _redirectUri = 'http://localhost:8085/oauth2callback';
 const _scopes = [
@@ -252,16 +354,18 @@ class GeminiAuthService {
     required int expiresAt,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('gemini_access_token', accessToken);
-    await prefs.setString('gemini_refresh_token', refreshToken);
+    await SecretStorage.write('gemini_access_token', accessToken);
+    await SecretStorage.write('gemini_refresh_token', refreshToken);
     await prefs.setString('gemini_email', email);
     await prefs.setInt('gemini_expires_at', expiresAt);
   }
 
   static Future<Map<String, dynamic>?> getSavedTokens() async {
     final prefs = await SharedPreferences.getInstance();
-    final accessToken = prefs.getString('gemini_access_token');
-    final refreshToken = prefs.getString('gemini_refresh_token');
+    final accessToken =
+        await SecretStorage.readMigrating(prefs, 'gemini_access_token');
+    final refreshToken =
+        await SecretStorage.readMigrating(prefs, 'gemini_refresh_token');
     final email = prefs.getString('gemini_email');
     final expiresAt = prefs.getInt('gemini_expires_at');
 
@@ -318,11 +422,11 @@ class GeminiAuthService {
       if (newAccessToken == null) return null;
 
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('gemini_access_token', newAccessToken);
+      await SecretStorage.write('gemini_access_token', newAccessToken);
       await prefs.setInt('gemini_expires_at', expiresAt);
       // Rotate refresh token if provided
       if (data['refresh_token'] != null) {
-        await prefs.setString(
+        await SecretStorage.write(
             'gemini_refresh_token', data['refresh_token'] as String);
       }
 
@@ -337,6 +441,8 @@ class GeminiAuthService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('gemini_access_token');
     await prefs.remove('gemini_refresh_token');
+    await SecretStorage.delete('gemini_access_token');
+    await SecretStorage.delete('gemini_refresh_token');
     await prefs.remove('gemini_email');
     await prefs.remove('gemini_expires_at');
     await prefs.remove('gemini_project_id');

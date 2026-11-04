@@ -1604,5 +1604,7 @@
   "addAttachment": "Anexar",
   "attachGallery": "Galeria",
   "attachPdf": "PDF",
-  "attachAudio": "Áudio"
+  "attachAudio": "Áudio",
+  "openSourceLicenses": "Licenças",
+  "licenseLegalese": "Software livre sob a GPL-3.0. Fork do Memex (github.com/memex-lab/memex). Código-fonte: github.com/playertwo1/segundamente."
 }

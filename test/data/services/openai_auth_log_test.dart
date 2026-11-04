@@ -25,4 +25,15 @@ void main() {
     expect(source, contains('jsonDecode(tokenResponse.body)'));
     expect(source, contains('Token exchange failed:'));
   });
+
+  test('model list and Gemini project errors log only the status', () {
+    for (final path in [
+      'lib/data/services/model_list_service.dart',
+      'lib/llm_client/gemini_oauth_project.dart',
+      'lib/data/services/claude_auth_service.dart',
+    ]) {
+      expect(File(path).readAsStringSync(),
+          isNot(contains(r'${response.body}')), reason: path);
+    }
+  });
 }

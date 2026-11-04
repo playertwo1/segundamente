@@ -6290,6 +6290,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Audio'**
   String get attachAudio;
+
+  /// No description provided for @openSourceLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get openSourceLicenses;
+
+  /// No description provided for @licenseLegalese.
+  ///
+  /// In en, this message translates to:
+  /// **'Free software under GPL-3.0. Fork of Memex (github.com/memex-lab/memex). Source: github.com/playertwo1/segundamente.'**
+  String get licenseLegalese;
 }
 
 class _AppLocalizationsDelegate

@@ -130,7 +130,7 @@ class GeminiOAuthProject {
 
       if (!response.ok) {
         _logger.warning(
-            'retrieveUserQuota failed: ${response.statusCode} ${response.body}');
+            'retrieveUserQuota failed: ${response.statusCode}');
         return [];
       }
 
@@ -177,7 +177,7 @@ class GeminiOAuthProject {
 
     if (!response.ok) {
       _logger.warning(
-          'loadCodeAssist failed: ${response.statusCode} ${response.body}');
+          'loadCodeAssist failed: ${response.statusCode}');
       return null;
     }
 
@@ -201,7 +201,7 @@ class GeminiOAuthProject {
 
     if (!response.ok) {
       _logger.warning(
-          'onboardUser failed: ${response.statusCode} ${response.body}');
+          'onboardUser failed: ${response.statusCode}');
       return null;
     }
 

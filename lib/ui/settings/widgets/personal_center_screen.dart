@@ -335,6 +335,17 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                             },
                           ),
                           const SizedBox(height: 12),
+                          _buildFunctionTab(
+                            icon: Icons.gavel_outlined,
+                            title: UserStorage.l10n.openSourceLicenses,
+                            onTap: () => showLicensePage(
+                              context: context,
+                              applicationName: 'Segunda Mente',
+                              applicationLegalese:
+                                  UserStorage.l10n.licenseLegalese,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
                           const SizedBox(height: 24),
                         ],
                       ),

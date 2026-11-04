@@ -52,7 +52,7 @@ class ModelListService {
 
       if (response.statusCode != 200) {
         _log.warning(
-          'Failed to fetch models: HTTP ${response.statusCode} from $endpoint\n${response.body}',
+          'Failed to fetch models: HTTP ${response.statusCode} from $endpoint',
         );
         return [];
       }

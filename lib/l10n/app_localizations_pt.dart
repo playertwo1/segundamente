@@ -3526,4 +3526,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get attachAudio => 'Áudio';
+
+  @override
+  String get openSourceLicenses => 'Licenças';
+
+  @override
+  String get licenseLegalese =>
+      'Software livre sob a GPL-3.0. Fork do Memex (github.com/memex-lab/memex). Código-fonte: github.com/playertwo1/segundamente.';
 }
