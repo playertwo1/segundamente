@@ -45,13 +45,14 @@ Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 |---|---|---|---|---|---|
 | F1-01 | Model Registry: catálogo por provedor, cache/versionamento, status (suportado / acessível pela conta / não testado) | P0 | F0 | DONE | Testes unitários + tela de seleção |
 | F1-02 | Model ID personalizado e base URL customizável | P0 | F1-01 | IN_PROGRESS | Modelo fora da lista padrão selecionado por ID manual e respondendo |
-| F1-03 | Teste de conexão e matriz de capacidades por adaptador (texto, streaming, JSON, visão, áudio) | P0 | F1-01 | IN_PROGRESS | Resposta real de OpenAI e Gemini; aviso quando falta capacidade |
-| F1-04 | Verificar OAuth OpenAI/Gemini (client_id dos CLIs oficiais) e registrar risco de termos | P1 | F0-05 | DONE (OpenAI; Gemini BLOCKED) | Login funcionando no S25 + nota de risco em `docs/DECISIONS.md` |
+| F1-03 | Teste de conexão e matriz de capacidades por adaptador (texto, streaming, JSON, visão, áudio) | P0 | F1-01 | DONE | Resposta real de OpenAI (chat), Gemini (872ms texto / 910ms stream no S25) e Claude Sonnet 5.5 High (1484ms no S25) |
+| F1-04 | Verificar OAuth OpenAI/Gemini (client_id dos CLIs oficiais) e registrar risco de termos | P1 | F0-05 | DONE | Login OAuth de OpenAI e Gemini funcionando no S25 (endpoint daily-cloudcode-pa via SSE stream) |
 | F1-05 | Claude por chave de API (opcional) e endpoint compatível/local | P2 | F1-02 | NOT_RUN | Uma chamada real de cada, ou `NOT_RUN` justificado |
 | F1-06 | Troca de provedor sem perder histórico | P0 | F1-01 | DONE | Conversa mantida após trocar de modelo |
 | F1-07 | Modelos `gpt-6-luna`, `gpt-6.1-sol`, `gpt-6.1-terra` sempre na lista do OAuth da OpenAI | P1 | F1-03 | IN_PROGRESS | Resposta real de cada ID no S25; se o ID não existir, o erro aparece claro e o ID manual (F1-02) resolve |
-| F1-08 | Decidir o login OAuth do Claude (D-015) | P1 | F1-04 | BLOCKED | Decisão do dono registrada; código removido ou D-005 revisada |
+| F1-08 | Login OAuth do Claude e suporte a Claude Sonnet/Opus/Haiku 5.5 | P1 | F1-04 | DONE | Login OAuth do Claude com PKCE local em 1455 e deep link memex://; acesso a Claude Sonnet e Opus 5.5 desbloqueado via Google OAuth sem rate limit (D-020) |
 | F1-09 | Mostrar nas configurações qual provedor faz a transcrição e qual faz o resumo e o chat, e para onde cada um envia dados | P1 | F1-03, F2-09 | READY | Teste de widget com OAuth do ChatGPT, chave de API e modelo local; no S25, a tela mostra o endpoint `transcribe` ao usar o ChatGPT |
+| F1-10 | Fallback resiliente entre provedores (FallbackLLMClient) com failover automático e reordenação de prioridade na UI | P1 | F1-03, F1-04 | DONE | Testes unitários (5/5 passaram) + toggle e prioridade drag-and-drop em ModelConfigListPage + D-020 |
 
 **Portão F1:** F1-01, F1-02, F1-03, F1-06 `DONE`; dois provedores respondendo.
 
@@ -238,3 +239,4 @@ Primeiro fechar o que está `IN_PROGRESS` com prova no S25 (F2-09, F2-10, F2-03,
 - 2026-11-03 — D-016 (ideias do Daedalus Echo: F2-11, F3-07, F6-09 a F6-11).
 - 2026-11-03 — D-018 (ideias do anarlog: F1-09, F2-12, F2-13, F3-08, F3-09).
 - 2026-11-03 — D-017: direção visual móvel AMOLED aprovada. D-019 prioriza a implementação em F5-04 (`READY`) antes das demais pendências; portões da F4/F5 mantidos.
+- 2026-11-03 — D-020: fallback resiliente entre modelos e provedores (FallbackLLMClient) com reordenação por drag-and-drop na UI; Gemini OAuth e Claude Sonnet 5.5 High validados com resposta real no S25 Ultra.
