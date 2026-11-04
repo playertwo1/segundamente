@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class ConversationCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -33,14 +34,14 @@ class ConversationCard extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF99A1AF)),
+                  color: AppColors.textTertiary),
             ),
           ),
 
           if (messages.isEmpty)
             Center(
                 child: Text(UserStorage.l10n.noMessages,
-                    style: const TextStyle(color: Color(0xFF99A1AF)))),
+                    style: const TextStyle(color: AppColors.textTertiary))),
 
           // Chat Bubbles
           ...messages.map((m) {
@@ -56,8 +57,7 @@ class ConversationCard extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 constraints: const BoxConstraints(maxWidth: 240), // Limit width
                 decoration: BoxDecoration(
-                  color:
-                      isMe ? const Color(0xFF3B82F6) : const Color(0xFFF7F8FA),
+                  color: isMe ? const Color(0xFF3B82F6) : AppColors.background,
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(12),
                     topRight: const Radius.circular(12),
@@ -79,13 +79,13 @@ class ConversationCard extends StatelessWidget {
                             style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xFF4A5565))),
+                                color: AppColors.textSecondary)),
                       ),
                     Text(
                       text,
                       style: TextStyle(
                         fontSize: 13,
-                        color: isMe ? Colors.white : const Color(0xFF334155),
+                        color: isMe ? Colors.white : AppColors.textSecondary,
                       ),
                     ),
                   ],

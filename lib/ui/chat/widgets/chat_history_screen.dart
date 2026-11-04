@@ -77,7 +77,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(UserStorage.l10n.confirmDelete),
         content: Text(UserStorage.l10n.confirmDeleteSessionMessage),
         actions: [
@@ -157,7 +157,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
       builder: (context, _) {
         final vm = widget.viewModel;
         return Scaffold(
-          backgroundColor: const Color(0xFFF7F8FA),
+          backgroundColor: AppColors.background,
           appBar: AppBar(
             title: Text(
               widget.title ?? UserStorage.l10n.chatHistory,
@@ -185,14 +185,14 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
             ],
           ),
           body: vm.isLoading
-              ? Center(child: AgentLogoLoading())
+              ? const Center(child: const AgentLogoLoading())
               : vm.sessions.isEmpty
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(Icons.chat_bubble_outline,
-                              size: 48, color: Color(0xFFCBD5E1)),
+                              size: 48, color: AppColors.divider),
                           const SizedBox(height: 16),
                           Text(
                             UserStorage.l10n.noConversations,
@@ -220,10 +220,9 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                           return Container(
                             margin: const EdgeInsets.only(bottom: 12),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.cardBackground,
                               borderRadius: BorderRadius.circular(16),
-                              border:
-                                  Border.all(color: const Color(0xFFF7F8FA)),
+                              border: Border.all(color: AppColors.background),
                               boxShadow: [
                                 BoxShadow(
                                   color: AppColors.textSecondary
@@ -330,8 +329,10 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                                         key: ValueKey(
                                           'open_session_report_$sessionId',
                                         ),
-                                        tooltip: UserStorage.l10n.openSessionReport,
-                                        icon: const Icon(Icons.article_outlined),
+                                        tooltip:
+                                            UserStorage.l10n.openSessionReport,
+                                        icon:
+                                            const Icon(Icons.article_outlined),
                                         onPressed: () => _openReport(sessionId),
                                       ),
                                       IconButton(

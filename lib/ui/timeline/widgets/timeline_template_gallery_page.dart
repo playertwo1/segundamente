@@ -3,6 +3,7 @@ import 'package:memex/l10n/template_gallery_l10n.dart';
 import 'package:memex/ui/core/cards/native_card_factory.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Timeline 卡片模板展示页面
 /// 展示所有支持的 Timeline 卡片模板及示例数据
@@ -21,16 +22,16 @@ class TimelineTemplateGalleryPage extends StatelessWidget {
             fontFamily: 'PingFang SC',
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF0A0A0A),
+            color: AppColors.textPrimary,
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFFF7F8FA),
-        surfaceTintColor: const Color(0xFFF7F8FA),
+        backgroundColor: AppColors.background,
+        surfaceTintColor: AppColors.background,
         elevation: 0,
         leading: const AppBackButton(),
       ),
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -73,7 +74,7 @@ class TimelineTemplateGalleryPage extends StatelessWidget {
             width: 4,
             height: 16,
             decoration: BoxDecoration(
-              color: const Color(0xFF6366F1),
+              color: AppColors.primary,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -83,7 +84,7 @@ class TimelineTemplateGalleryPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF0F172A),
+              color: AppColors.textPrimary,
             ),
           ),
         ],
@@ -109,7 +110,7 @@ class TimelineTemplateGalleryPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF4A5565),
+              color: AppColors.textSecondary,
             ),
           ),
         ),
@@ -142,7 +143,7 @@ class TimelineTemplateGalleryPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF4A5565),
+              color: AppColors.textSecondary,
             ),
           ),
         ),
@@ -151,7 +152,7 @@ class TimelineTemplateGalleryPage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.cardBackground,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
@@ -205,7 +206,7 @@ class _TemplatePreviewPage extends StatelessWidget {
     final tags = (data['tags'] as List<dynamic>?)?.cast<String>() ?? [];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -221,7 +222,7 @@ class _TemplatePreviewPage extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF99A1AF),
+                      color: AppColors.textTertiary,
                     ),
                   ),
                   const SizedBox(width: 32),
@@ -245,7 +246,7 @@ class _TemplatePreviewPage extends StatelessWidget {
                             fontFamily: 'PingFang SC',
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF0A0A0A),
+                            color: AppColors.textPrimary,
                             height: 1.375,
                             letterSpacing: -0.45,
                           ),
@@ -264,7 +265,7 @@ class _TemplatePreviewPage extends StatelessWidget {
                                       fontFamily: 'PingFang SC',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
-                                      color: Color(0xFF5B6CFF),
+                                      color: AppColors.primary,
                                     ),
                                   ))
                               .toList(),

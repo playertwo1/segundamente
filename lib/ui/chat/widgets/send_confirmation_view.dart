@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class SendConfirmationView extends StatelessWidget {
   const SendConfirmationView({
@@ -78,7 +79,7 @@ Future<bool> showSendConfirmationDialog({
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         content: SizedBox(
           width: double.maxFinite,
           height: 320,

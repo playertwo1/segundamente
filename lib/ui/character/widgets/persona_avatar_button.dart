@@ -112,7 +112,7 @@ class _CompanionAvatarFrame extends StatelessWidget {
               height: 18,
               padding: const EdgeInsets.all(1.5),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.cardBackground,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: AppColors.primary.withValues(alpha: 0.18),

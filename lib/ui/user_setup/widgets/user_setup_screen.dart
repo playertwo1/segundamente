@@ -161,7 +161,7 @@ class _UserSetupScreenState extends State<UserSetupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -182,7 +182,7 @@ class _UserSetupScreenState extends State<UserSetupScreen> {
                           width: 100,
                           height: 100,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppColors.cardBackground,
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: AppColors.primary.withValues(alpha: 0.3),
@@ -206,7 +206,7 @@ class _UserSetupScreenState extends State<UserSetupScreen> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.edit,
+                            const Icon(Icons.edit,
                                 size: 13, color: AppColors.textTertiary),
                             const SizedBox(width: 4),
                             Text(
@@ -252,13 +252,13 @@ class _UserSetupScreenState extends State<UserSetupScreen> {
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.cardBackground,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: AppColors.shadowLight,
                           blurRadius: 16,
-                          offset: const Offset(0, 2),
+                          offset: Offset(0, 2),
                         ),
                       ],
                     ),
@@ -288,11 +288,11 @@ class _UserSetupScreenState extends State<UserSetupScreen> {
                                 const Icon(Icons.person_outline, size: 20),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.grey[300]!),
+                              borderSide: const BorderSide(color: AppColors.divider),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.grey[200]!),
+                              borderSide: const BorderSide(color: AppColors.divider),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -343,7 +343,7 @@ class _UserSetupScreenState extends State<UserSetupScreen> {
                       onPressed: _isSubmitting ? null : _handleSubmit,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.onPrimary,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),

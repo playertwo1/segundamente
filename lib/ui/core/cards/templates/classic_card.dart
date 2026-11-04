@@ -7,6 +7,7 @@ import 'package:memex/ui/core/cards/ui/timeline_common.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
 import 'package:memex/ui/core/widgets/local_audio_source.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Classic Card Template
 ///
@@ -162,7 +163,7 @@ class _ClassicCardState extends State<ClassicCard> {
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
                 height: 1.6,
-                color: Color(0xFF4A5565),
+                color: AppColors.textSecondary,
               ),
             ),
             if (imageUrls.isNotEmpty || audioUrl != null || tags.isNotEmpty)
@@ -240,13 +241,13 @@ class _ClassicCardState extends State<ClassicCard> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              const Color(0xFFEF4444).withValues(alpha: 0.06),
-              const Color(0xFFEF4444).withValues(alpha: 0.03),
+              AppColors.danger.withValues(alpha: 0.06),
+              AppColors.danger.withValues(alpha: 0.03),
             ],
           ),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: const Color(0xFFEF4444).withValues(alpha: 0.12),
+            color: AppColors.danger.withValues(alpha: 0.12),
             width: 0.5,
           ),
         ),
@@ -259,13 +260,12 @@ class _ClassicCardState extends State<ClassicCard> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFFEF4444).withValues(alpha: 0.8),
+                color: AppColors.danger.withValues(alpha: 0.8),
               ),
             ),
             const SizedBox(width: 6),
             Icon(Icons.chevron_right,
-                size: 14,
-                color: const Color(0xFFEF4444).withValues(alpha: 0.5)),
+                size: 14, color: AppColors.danger.withValues(alpha: 0.5)),
           ],
         ),
       ),
@@ -311,7 +311,7 @@ class _ClassicCardState extends State<ClassicCard> {
                   width: 36,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF99A1AF).withValues(alpha: 0.3),
+                    color: AppColors.textTertiary.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -329,18 +329,18 @@ class _ClassicCardState extends State<ClassicCard> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            const Color(0xFFEF4444).withValues(alpha: 0.15),
-                            const Color(0xFFEF4444).withValues(alpha: 0.08),
+                            AppColors.danger.withValues(alpha: 0.15),
+                            AppColors.danger.withValues(alpha: 0.08),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+                          color: AppColors.danger.withValues(alpha: 0.1),
                           width: 0.5,
                         ),
                       ),
                       child: const Icon(Icons.warning_amber_rounded,
-                          size: 20, color: Color(0xFFEF4444)),
+                          size: 20, color: AppColors.danger),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -349,7 +349,7 @@ class _ClassicCardState extends State<ClassicCard> {
                         style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF0A0A0A),
+                          color: AppColors.textPrimary,
                           letterSpacing: -0.3,
                         ),
                       ),
@@ -360,14 +360,13 @@ class _ClassicCardState extends State<ClassicCard> {
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          color:
-                              const Color(0xFF99A1AF).withValues(alpha: 0.12),
+                          color: AppColors.textTertiary.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(Icons.close_rounded,
                             size: 16,
                             color:
-                                const Color(0xFF4A5565).withValues(alpha: 0.8)),
+                                AppColors.textSecondary.withValues(alpha: 0.8)),
                       ),
                     ),
                   ],
@@ -382,10 +381,10 @@ class _ClassicCardState extends State<ClassicCard> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF0A0A0A).withValues(alpha: 0.03),
+                      color: AppColors.textPrimary.withValues(alpha: 0.03),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: const Color(0xFF99A1AF).withValues(alpha: 0.12),
+                        color: AppColors.textTertiary.withValues(alpha: 0.12),
                         width: 0.5,
                       ),
                     ),
@@ -395,7 +394,7 @@ class _ClassicCardState extends State<ClassicCard> {
                         reason,
                         style: const TextStyle(
                           fontSize: 13,
-                          color: Color(0xFF4A5565),
+                          color: AppColors.textSecondary,
                           height: 1.6,
                           fontFamily: 'monospace',
                           letterSpacing: -0.2,
@@ -422,7 +421,7 @@ class _ClassicCardState extends State<ClassicCard> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F8FA), // Slate-100 (Light Grey)
+        color: AppColors.background, // Slate-100 (Light Grey)
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -558,7 +557,7 @@ class AudioWaveformPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 4.0; // Thicker bars
 
-    final count = 24; // Less bars for chunkier look
+    const count = 24; // Less bars for chunkier look
     final spacing = size.width / count;
 
     for (int i = 0; i < count; i++) {

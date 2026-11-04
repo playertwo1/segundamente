@@ -10,6 +10,7 @@ import 'package:memex/data/services/asset_safety_service.dart';
 import 'package:memex/data/services/file_system_service.dart';
 import 'package:memex/data/services/image_preview_cache_service.dart';
 import 'package:memex/utils/logger.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 final Logger _logger = getLogger('LocalImage');
 
@@ -364,12 +365,12 @@ class _LocalImageState extends State<LocalImage> {
   /// Build skeleton placeholder
   Widget _buildSkeleton() {
     Widget skeleton = Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: AppColors.divider,
+      highlightColor: AppColors.surface,
       child: Container(
         width: widget.width ?? double.infinity,
         height: widget.height ?? double.infinity,
-        color: Colors.white,
+        color: AppColors.cardBackground,
       ),
     );
 
@@ -402,11 +403,11 @@ class _LocalImageState extends State<LocalImage> {
     return Container(
       width: widget.width ?? double.infinity,
       height: widget.height ?? double.infinity,
-      color: Colors.grey[100],
+      color: AppColors.surface,
       alignment: Alignment.center,
-      child: Icon(
+      child: const Icon(
         Icons.image_not_supported_outlined,
-        color: Colors.grey[500],
+        color: AppColors.textTertiary,
         size: 28,
       ),
     );

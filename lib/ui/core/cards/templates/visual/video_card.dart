@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 import 'dart:io';
 import 'package:chewie/chewie.dart';
@@ -114,14 +115,14 @@ class _VideoCardState extends State<VideoCard> {
                     title,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF0A0A0A),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
                 if (duration.isNotEmpty)
                   Text(duration,
                       style: const TextStyle(
-                          fontSize: 12, color: Color(0xFF99A1AF)))
+                          fontSize: 12, color: AppColors.textTertiary))
               ],
             ),
           ),

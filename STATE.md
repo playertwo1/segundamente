@@ -110,6 +110,12 @@ A F0 está `DONE` e seu portão FECHADO: o Galaxy S25 Ultra (SM-S938B, Android 1
 - `flutter analyze` e a suíte inteira não foram reexecutados.
 - Este `flutter test` reescreveu `analysis_options.yaml` de novo. Revertido com `git checkout`. `android/gradle.properties` não mudou.
 
+## Evidência da F5V (2026-11-03, D-022)
+- F5V-01 `IN_PROGRESS`, etapa 1 de 2 (tema). `AppColors` com a paleta AMOLED v3 (preto, marfim `#F3EEE6`, cinza `#AAA6A0`, divisor `#33312E`, âmbar `#E99A3D`, `onPrimary` preto) e `AppTheme.amoledTheme` como único tema (`main.dart`). Codemod em `lib/ui` (110 arquivos): as ~25 cores fixas mais comuns viraram tokens; `Colors.white` só foi trocado quando é fundo; branco em texto ou ícone ficou. Botões âmbar com texto preto.
+- `flutter analyze lib`: 0 erro, 120 avisos (antes 171). `flutter test test/ui`: 308 passaram, 5 falharam; as 5 falham igual sem a mudança (`local_image_safety`, `lazy_secondary_loads`, `share_intent_handler`).
+- Emulador: cadastro e "Modelos e serviços de IA" já em AMOLED. O emulador caiu antes de chegar à timeline, então timeline, chat e configurações não foram vistos. A abertura nativa continua branca (`assets/startup.png` com fundo branco em `fill`) e o avatar padrão de traço preto some no fundo escuro.
+- Falta na F5V-01, etapa 2: navegação no topo sem a barra inferior (`MainBottomBar` em `main.dart`); o botão central de captura precisa de outro lugar; abertura nativa preta; checar as telas ainda não vistas.
+
 ## Evidência da F6 (2026-11-02)
 - Aberta por pedido do dono, com a F0, a F1, a F2, a F3, a F4 e a F5 ainda abertas (D-010). A fase fica `IN_PROGRESS`. Este é o commit da F6. O portão não fecha. A F7 não começou.
 - F6-01 `IN_PROGRESS`. A busca `escopo` acha o item da sessão do relatório e não acha o item descartado nem o texto da outra sessão. É busca de texto local. Busca semântica: `NOT_RUN`.

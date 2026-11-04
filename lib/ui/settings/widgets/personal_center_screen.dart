@@ -14,6 +14,7 @@ import 'package:memex/utils/permission_utils.dart';
 import 'package:memex/ui/core/widgets/avatar_picker.dart';
 import 'package:memex/ui/core/widgets/character_avatar.dart';
 import 'package:memex/data/services/media_service.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Personal center screen
 class PersonalCenterScreen extends StatefulWidget {
@@ -97,7 +98,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
           builder: (context, scrollController) {
             return Container(
               decoration: const BoxDecoration(
-                color: Color(0xFFF7F8FA),
+                color: AppColors.background,
                 borderRadius: BorderRadiusDirectional.only(
                   topStart: Radius.circular(20),
                   topEnd: Radius.circular(20),
@@ -108,7 +109,8 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                   children: [
                     // Header
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 12, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 16, 12, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -131,7 +133,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                                 vertical: 8,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF1F5F9),
+                                color: AppColors.surface,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Row(
@@ -139,7 +141,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                                 children: [
                                   const Icon(
                                     Icons.search,
-                                    color: Color(0xFF94A3B8),
+                                    color: AppColors.textTertiary,
                                     size: 16,
                                   ),
                                   const SizedBox(width: 6),
@@ -147,7 +149,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                                     UserStorage.l10n.settingsSearchPlaceholder,
                                     style: const TextStyle(
                                       fontSize: 13,
-                                      color: Color(0xFF94A3B8),
+                                      color: AppColors.textTertiary,
                                     ),
                                   ),
                                 ],
@@ -158,7 +160,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                           IconButton(
                             icon: const Icon(Icons.close),
                             onPressed: () => Navigator.of(context).pop(),
-                            color: const Color(0xFF64748B),
+                            color: AppColors.textSecondary,
                           ),
                         ],
                       ),
@@ -178,7 +180,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                                 width: 80,
                                 height: 80,
                                 decoration: const BoxDecoration(
-                                  color: Color(0xFFEEF2FF),
+                                  color: AppColors.iconBgLight,
                                   shape: BoxShape.circle,
                                 ),
                                 child: CharacterAvatar(
@@ -195,10 +197,10 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                                   width: 26,
                                   height: 26,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF6366F1),
+                                    color: AppColors.primary,
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: const Color(0xFFF7F8FA),
+                                      color: AppColors.background,
                                       width: 2,
                                     ),
                                   ),
@@ -221,7 +223,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF0F172A),
+                            color: AppColors.textPrimary,
                           ),
                         ),
 
@@ -233,7 +235,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                             _userEmail!,
                             style: const TextStyle(
                               fontSize: 14,
-                              color: Color(0xFF64748B),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                       ],
@@ -375,12 +377,12 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.white),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF64748B).withValues(alpha: 0.08),
+                color: AppColors.textSecondary.withValues(alpha: 0.08),
                 blurRadius: 16,
                 offset: const Offset(0, 4),
               ),
@@ -391,7 +393,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Icon(icon, color: const Color(0xFF6366F1), size: 24),
+                  Icon(icon, color: AppColors.primary, size: 24),
                   if (showBadge)
                     Positioned(
                       right: -2,
@@ -414,8 +416,8 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     color: isLoading
-                        ? const Color(0xFF94A3B8)
-                        : const Color(0xFF0F172A),
+                        ? AppColors.textTertiary
+                        : AppColors.textPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -427,7 +429,7 @@ class _PersonalCenterScreenState extends State<PersonalCenterScreen> {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               else
-                const Icon(Icons.chevron_right, color: Color(0xFFCBD5E1)),
+                const Icon(Icons.chevron_right, color: AppColors.divider),
             ],
           ),
         ),

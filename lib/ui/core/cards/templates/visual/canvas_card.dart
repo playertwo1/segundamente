@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class CanvasCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -34,8 +35,8 @@ class CanvasCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0))),
-                  color: Color(0xFFF7F8FA),
+                  border: Border(bottom: BorderSide(color: AppColors.divider)),
+                  color: AppColors.background,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,21 +44,21 @@ class CanvasCard extends StatelessWidget {
                     Row(
                       children: [
                         const Icon(Icons.gesture,
-                            size: 14, color: Color(0xFF4A5565)),
+                            size: 14, color: AppColors.textSecondary),
                         const SizedBox(width: 8),
                         Text(title,
                             style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF334155))),
+                                color: AppColors.textSecondary)),
                       ],
                     ),
                     Row(
                       // Fake tools
                       children: [
-                        _buildTool(const Color(0xFF0A0A0A)),
-                        _buildTool(const Color(0xFFEF4444)),
-                        _buildTool(const Color(0xFF5B6CFF)),
+                        _buildTool(AppColors.textPrimary),
+                        _buildTool(AppColors.danger),
+                        _buildTool(AppColors.primary),
                       ],
                     )
                   ],
@@ -67,7 +68,7 @@ class CanvasCard extends StatelessWidget {
               Container(
                 height: 180,
                 width: double.infinity,
-                color: Colors.white
+                color: AppColors.cardBackground
                     .withValues(alpha: 0.5), // Translucent to show grid
                 child: imageUrl != null
                     ? LocalImage(url: imageUrl, fit: BoxFit.contain)
@@ -76,13 +77,14 @@ class CanvasCard extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                               border: Border.all(
-                                  color: const Color(0xFF5B6CFF)
-                                      .withValues(alpha: 0.2),
+                                  color:
+                                      AppColors.primary.withValues(alpha: 0.2),
                                   width: 2),
                               borderRadius: BorderRadius.circular(12)),
                           child: Text(UserStorage.l10n.sketchContent,
                               style: const TextStyle(
-                                  color: Color(0xFF4A5565), fontSize: 12)),
+                                  color: AppColors.textSecondary,
+                                  fontSize: 12)),
                         ),
                       ),
               )
@@ -107,7 +109,7 @@ class DotGridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF99A1AF).withValues(alpha: 0.2);
+      ..color = AppColors.textTertiary.withValues(alpha: 0.2);
     const spacing = 20.0;
     for (var x = 0.0; x < size.width; x += spacing) {
       for (var y = 0.0; y < size.height; y += spacing) {

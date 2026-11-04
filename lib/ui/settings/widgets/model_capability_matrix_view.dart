@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/domain/models/model_catalog.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Shows the five adapter capabilities and warns when a probe came back missing.
 class ModelCapabilityMatrixView extends StatelessWidget {
@@ -23,7 +24,8 @@ class ModelCapabilityMatrixView extends StatelessWidget {
             for (final capability in ModelCapability.values)
               _CapabilityChip(
                 label: _label(capability),
-                verdict: matrix.verdicts[capability] ?? CapabilityVerdict.unknown,
+                verdict:
+                    matrix.verdicts[capability] ?? CapabilityVerdict.unknown,
               ),
           ],
         ),
@@ -34,7 +36,7 @@ class ModelCapabilityMatrixView extends StatelessWidget {
             key: const ValueKey('model_capability_warning'),
             style: const TextStyle(
               fontSize: 12,
-              color: Color(0xFFD97706),
+              color: AppColors.warning,
               height: 1.3,
             ),
           ),
@@ -65,10 +67,10 @@ class _CapabilityChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = UserStorage.l10n;
     final (color, verdictLabel) = switch (verdict) {
-      CapabilityVerdict.yes => (const Color(0xFF16A34A), l10n.capabilityYes),
+      CapabilityVerdict.yes => (AppColors.success, l10n.capabilityYes),
       CapabilityVerdict.no => (const Color(0xFFDC2626), l10n.capabilityNo),
       CapabilityVerdict.unknown => (
-          const Color(0xFF64748B),
+          AppColors.textSecondary,
           l10n.capabilityNotTested,
         ),
     };
@@ -82,7 +84,8 @@ class _CapabilityChip extends StatelessWidget {
       ),
       child: Text(
         '$label · $verdictLabel',
-        style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600),
+        style:
+            TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600),
       ),
     );
   }

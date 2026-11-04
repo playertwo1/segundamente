@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/style/timeline_theme.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 enum TimelineCardVariant {
   glass,
@@ -47,7 +48,7 @@ class TimelineCard extends StatelessWidget {
         // Receipt has special shape handled by custom painter/clipper usually
         // For now, standard box but white
         return BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
               color: TimelineTheme.colors.textTertiary.withValues(alpha: 0.2)),
@@ -55,12 +56,12 @@ class TimelineCard extends StatelessWidget {
         );
       case TimelineCardVariant.immersive:
         return BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              const Color(0xFF0A0A0A), // Slate-800
-              const Color(0xFF0A0A0A), // Slate-900
+            colors: const [
+              AppColors.textPrimary, // Slate-800
+              AppColors.textPrimary, // Slate-900
             ],
           ),
           borderRadius: BorderRadius.circular(24),
@@ -75,7 +76,7 @@ class TimelineCard extends StatelessWidget {
         );
       case TimelineCardVariant.canvas:
         return BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
               color: TimelineTheme.colors.glassBorder.withValues(alpha: 0.5)),
@@ -83,7 +84,7 @@ class TimelineCard extends StatelessWidget {
         );
       case TimelineCardVariant.glass:
         return BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [TimelineTheme.shadows.card],
         );

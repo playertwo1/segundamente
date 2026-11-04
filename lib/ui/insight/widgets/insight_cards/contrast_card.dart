@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class ContrastCard extends StatelessWidget {
   final String title;
@@ -27,7 +28,7 @@ class ContrastCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -50,7 +51,7 @@ class ContrastCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 height: 28 / 18,
                 letterSpacing: -0.15,
-                color: Color(0xFF0A0A0A),
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 4),
@@ -64,7 +65,7 @@ class ContrastCard extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 height: 20 / 14,
                 letterSpacing: -0.15,
-                color: Color(0xFF9CA3AF),
+                color: AppColors.textTertiary,
               ),
             ),
             const SizedBox(height: 14),

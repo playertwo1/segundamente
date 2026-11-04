@@ -244,7 +244,7 @@ class _DataStoragePageState extends State<DataStoragePage> {
       trailing: _location == StorageLocation.custom && _customPath != null
           ? Text(
               _customPath!,
-              style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+              style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             )
@@ -305,7 +305,7 @@ class _DataStoragePageState extends State<DataStoragePage> {
                   onPressed: () => Navigator.of(context).pop(true),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.onPrimary,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -331,7 +331,8 @@ class _DataStoragePageState extends State<DataStoragePage> {
                     child: Text(
                       _dataStorageDescription,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      style: const TextStyle(
+                          fontSize: 14, color: AppColors.textSecondary),
                     ),
                   ),
                 )
@@ -342,9 +343,9 @@ class _DataStoragePageState extends State<DataStoragePage> {
                       children: [
                         Text(
                           _dataStorageDescription,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[600],
+                            color: AppColors.textSecondary,
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -365,8 +366,8 @@ class _DataStoragePageState extends State<DataStoragePage> {
                             padding: const EdgeInsets.only(top: 4),
                             child: Text(
                               _customPath!,
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.grey[600]),
+                              style: const TextStyle(
+                                  fontSize: 12, color: AppColors.textSecondary),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -422,10 +423,10 @@ class _DataStoragePageState extends State<DataStoragePage> {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: selected ? AppColors.primary : Colors.grey[300]!,
+              color: selected ? AppColors.primary : AppColors.divider,
               width: selected ? 2 : 1,
             ),
             boxShadow: const [
@@ -441,8 +442,8 @@ class _DataStoragePageState extends State<DataStoragePage> {
               Icon(
                 icon,
                 color: enabled
-                    ? (selected ? AppColors.primary : Colors.grey[600])
-                    : Colors.grey[400],
+                    ? (selected ? AppColors.primary : AppColors.textSecondary)
+                    : AppColors.textTertiary,
                 size: 24,
               ),
               const SizedBox(width: 12),
@@ -461,9 +462,9 @@ class _DataStoragePageState extends State<DataStoragePage> {
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
-                        color: Colors.grey[600],
+                        color: AppColors.textSecondary,
                       ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,

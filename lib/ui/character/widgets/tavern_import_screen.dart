@@ -123,7 +123,7 @@ class _TavernImportScreenState extends State<TavernImportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
           UserStorage.l10n.importCharacterCard,
@@ -133,7 +133,7 @@ class _TavernImportScreenState extends State<TavernImportScreen> {
             color: AppColors.textPrimary,
           ),
         ),
-        backgroundColor: const Color(0xFFF7F8FA),
+        backgroundColor: AppColors.background,
         surfaceTintColor: AppColors.background,
         elevation: 0,
         centerTitle: true,
@@ -296,9 +296,9 @@ class _TavernImportScreenState extends State<TavernImportScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: AppColors.divider),
         boxShadow: [
           BoxShadow(
             color: AppColors.textSecondary.withValues(alpha: 0.04),
@@ -473,9 +473,9 @@ class _TavernImportScreenState extends State<TavernImportScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: SwitchListTile(
         contentPadding: EdgeInsets.zero,
@@ -502,7 +502,7 @@ class _TavernImportScreenState extends State<TavernImportScreen> {
         onPressed: _isImporting ? null : _doImport,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.onPrimary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

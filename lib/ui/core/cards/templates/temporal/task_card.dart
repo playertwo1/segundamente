@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/utils/date_util.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class TaskCard extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -117,12 +118,11 @@ class _TaskCardState extends State<TaskCard> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0xFF5B6CFF),
+                      color: AppColors.primary,
                       width: 2,
                     ),
-                    color: _isCompleted
-                        ? const Color(0xFF5B6CFF)
-                        : Colors.transparent,
+                    color:
+                        _isCompleted ? AppColors.primary : Colors.transparent,
                   ),
                   child: _isCompleted
                       ? const Icon(Icons.check, size: 12, color: Colors.white)
@@ -136,10 +136,10 @@ class _TaskCardState extends State<TaskCard> {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0A0A0A),
+                    color: AppColors.textPrimary,
                     decoration:
                         _isCompleted ? TextDecoration.lineThrough : null,
-                    decorationColor: const Color(0xFF99A1AF),
+                    decorationColor: AppColors.textTertiary,
                   ),
                 ),
               ),
@@ -179,8 +179,8 @@ class _TaskCardState extends State<TaskCard> {
                               : Icons.check_box_outline_blank,
                           size: 18,
                           color: done
-                              ? const Color(0xFF99A1AF)
-                              : const Color(0xFF4A5565),
+                              ? AppColors.textTertiary
+                              : AppColors.textSecondary,
                         ),
                       ),
                     ),
@@ -190,8 +190,8 @@ class _TaskCardState extends State<TaskCard> {
                         style: TextStyle(
                           fontSize: 13,
                           color: done
-                              ? const Color(0xFF99A1AF)
-                              : const Color(0xFF334155),
+                              ? AppColors.textTertiary
+                              : AppColors.textSecondary,
                           decoration: done ? TextDecoration.lineThrough : null,
                         ),
                       ),
@@ -208,7 +208,7 @@ class _TaskCardState extends State<TaskCard> {
                   dueDateLabel,
                   style: const TextStyle(
                     fontSize: 11,
-                    color: Color(0xFF99A1AF),
+                    color: AppColors.textTertiary,
                   ),
                 ),
               ),

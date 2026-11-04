@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class LinkCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -33,7 +34,7 @@ class LinkCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF0A0A0A),
+                      color: AppColors.textPrimary,
                       height: 1.3,
                     ),
                   ),

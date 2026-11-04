@@ -139,7 +139,7 @@ class _AgentConfigListPageState extends State<AgentConfigListPage> {
               final confirmed = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.cardBackground,
                   title: Text(l10n.resetAllAgentConfigurationsTitle),
                   content: Text(l10n.resetAllAgentConfigurationsMessage),
                   actions: [
@@ -212,7 +212,7 @@ class _AgentConfigListPageState extends State<AgentConfigListPage> {
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.cardBackground,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(

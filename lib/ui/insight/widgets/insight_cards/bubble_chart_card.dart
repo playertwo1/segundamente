@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class InsightBubble {
   final String label;
@@ -56,7 +57,7 @@ class BubbleChartCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           // Gradient border or shadow if needed, but design looks clean flat/soft
           boxShadow: [
@@ -78,7 +79,7 @@ class BubbleChartCard extends StatelessWidget {
                 fontFamily: 'PingFang SC',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF0A0A0A),
+                color: AppColors.textPrimary,
                 height: 20 / 14,
                 letterSpacing: -0.08,
               ),
@@ -139,7 +140,7 @@ class BubbleChartCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF99A1AF),
+                  color: AppColors.textTertiary,
                   height: 18 / 12,
                   letterSpacing: 0,
                 ),
@@ -201,7 +202,7 @@ class BubbleChartCard extends StatelessWidget {
       case 'white':
         return Colors.white;
       default:
-        return const Color(0xFF5B6CFF);
+        return AppColors.primary;
     }
   }
 }

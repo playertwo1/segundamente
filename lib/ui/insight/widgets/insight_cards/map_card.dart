@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Model for a location on the map
 class MapLocation {
@@ -65,9 +66,9 @@ class MapCard extends StatelessWidget {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFF7F8FA)),
+        border: Border.all(color: AppColors.background),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -107,7 +108,7 @@ class MapCard extends StatelessWidget {
                             height: 40,
                             child: const Icon(
                               Icons.location_on,
-                              color: Color(0xFF5B6CFF), // Unified color for now
+                              color: AppColors.primary, // Unified color for now
                               size: 40,
                             ),
                           ))
@@ -139,7 +140,7 @@ class MapCard extends StatelessWidget {
                   const Icon(
                     Icons.map,
                     size: 16,
-                    color: Color(0xFF5B6CFF),
+                    color: AppColors.primary,
                   ),
                   const SizedBox(width: 8),
                   Flexible(
@@ -148,7 +149,7 @@ class MapCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -168,7 +169,7 @@ class MapCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -184,7 +185,7 @@ class MapCard extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEFF6FF),
+                        color: AppColors.iconBgLight,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
@@ -204,7 +205,7 @@ class MapCard extends StatelessWidget {
                               infoTitle!,
                               style: const TextStyle(
                                 fontSize: 11,
-                                color: Color(0xFF4A5565),
+                                color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -218,7 +219,7 @@ class MapCard extends StatelessWidget {
                               infoDetail!,
                               style: const TextStyle(
                                 fontSize: 15,
-                                color: Color(0xFF0A0A0A),
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -227,7 +228,7 @@ class MapCard extends StatelessWidget {
                     ),
                     const Icon(
                       Icons.chevron_right,
-                      color: Color(0xFF99A1AF),
+                      color: AppColors.textTertiary,
                       size: 18,
                     ),
                   ],
@@ -263,9 +264,9 @@ class MapCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFF7F8FA),
+              color: AppColors.background,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
+              border: Border.all(color: AppColors.divider),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,12 +275,12 @@ class MapCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFEEF2FF),
+                    color: AppColors.iconBgLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.map_outlined,
-                    color: Color(0xFF5B6CFF),
+                    color: AppColors.primary,
                     size: 24,
                   ),
                 ),
@@ -293,7 +294,7 @@ class MapCard extends StatelessWidget {
                           infoTitle!,
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Color(0xFF4A5565),
+                            color: AppColors.textSecondary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -303,7 +304,7 @@ class MapCard extends StatelessWidget {
                           infoDetail!,
                           style: const TextStyle(
                             fontSize: 18,
-                            color: Color(0xFF0A0A0A),
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.bold,
                             height: 1.4,
                           ),
@@ -322,9 +323,9 @@ class MapCard extends StatelessWidget {
         Container(
           height: 240, // Reduced height for details as requested
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFFF7F8FA)),
+            border: Border.all(color: AppColors.background),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.05),
@@ -361,7 +362,7 @@ class MapCard extends StatelessWidget {
                           height: 40,
                           child: const Icon(
                             Icons.location_on,
-                            color: Color(0xFF5B6CFF),
+                            color: AppColors.primary,
                             size: 40,
                           ),
                         ))
@@ -379,7 +380,7 @@ class MapCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF0A0A0A),
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -392,8 +393,8 @@ class MapCard extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: const Color(0xFFF7F8FA)),
+                color: AppColors.cardBackground,
+                border: Border.all(color: AppColors.background),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -403,7 +404,7 @@ class MapCard extends StatelessWidget {
                     height: 24,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF7F8FA),
+                      color: AppColors.background,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -411,7 +412,7 @@ class MapCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF4A5565),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ),
@@ -422,7 +423,7 @@ class MapCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF334155),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ),

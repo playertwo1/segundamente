@@ -10,7 +10,7 @@ Future<String?> showLanguagePickerSheet({
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: AppColors.cardBackground,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -57,7 +57,7 @@ class LanguageValueButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE5E7EB)),
+            border: Border.all(color: AppColors.divider),
           ),
           child: Row(
             children: [
@@ -191,7 +191,7 @@ class LanguagePickerSheet extends StatelessWidget {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: AppColors.divider,
                 borderRadius: BorderRadius.circular(999),
               ),
             ),

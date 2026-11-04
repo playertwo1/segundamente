@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/native_widget_factory.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 @visibleForTesting
 String insightTemplateBuildError(String templateId) =>
@@ -22,16 +23,16 @@ class InsightTemplateGalleryPage extends StatelessWidget {
             fontFamily: 'PingFang SC',
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF0A0A0A),
+            color: AppColors.textPrimary,
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFFF7F8FA),
-        surfaceTintColor: const Color(0xFFF7F8FA),
+        backgroundColor: AppColors.background,
+        surfaceTintColor: AppColors.background,
         elevation: 0,
         leading: const AppBackButton(),
       ),
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -54,7 +55,7 @@ class InsightTemplateGalleryPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF4A5565),
+              color: AppColors.textSecondary,
             ),
           ),
         ),

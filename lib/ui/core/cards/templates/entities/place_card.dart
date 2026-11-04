@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class PlaceCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -52,7 +53,7 @@ class PlaceCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF0A0A0A),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       if (address.isNotEmpty)
@@ -61,7 +62,7 @@ class PlaceCard extends StatelessWidget {
                           child: Row(
                             children: [
                               const Icon(Icons.location_on_outlined,
-                                  size: 14, color: Color(0xFF4A5565)),
+                                  size: 14, color: AppColors.textSecondary),
                               const SizedBox(width: 4),
                               Expanded(
                                 child: SizedBox(
@@ -90,7 +91,7 @@ class PlaceCard extends StatelessWidget {
                                             address,
                                             style: const TextStyle(
                                               fontSize: 13,
-                                              color: Color(0xFF4A5565),
+                                              color: AppColors.textSecondary,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -110,9 +111,9 @@ class PlaceCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF7F8FA),
+                    color: AppColors.background,
                     shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                    border: Border.all(color: AppColors.divider),
                   ),
                   child: const Text('📍', style: TextStyle(fontSize: 18)),
                 ),
@@ -148,7 +149,7 @@ class PlaceCard extends StatelessWidget {
               height: 40,
               child: const Icon(
                 Icons.location_on,
-                color: Color(0xFFEF4444),
+                color: AppColors.danger,
                 size: 40,
               ),
             ),

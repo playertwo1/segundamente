@@ -50,7 +50,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             title: Text(
               DateFormat.yMMM(UserStorage.l10n.localeName)
                   .format(vm.focusedMonth),
-              style: TextStyle(
+              style: const TextStyle(
                   color: AppColors.textPrimary, fontWeight: FontWeight.bold),
             ),
             backgroundColor: AppColors.background,
@@ -205,9 +205,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       Icon(
                         Icons.check_circle,
                         size: 10,
-                        color: isSelected
-                            ? AppColors.primary
-                            : const Color(0xFF10B981),
+                        color:
+                            isSelected ? AppColors.primary : AppColors.success,
                       ),
                       const SizedBox(width: 2),
                       Text(
@@ -236,7 +235,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final cards = vm.getSelectedDayCards();
 
     if (vm.isLoading) {
-      return Center(child: AgentLogoLoading());
+      return const Center(child: const AgentLogoLoading());
     }
 
     if (cards.isEmpty) {
@@ -245,7 +244,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.calendar_today_outlined,
-                size: 48, color: Color(0xFFCBD5E1)),
+                size: 48, color: AppColors.divider),
             const SizedBox(height: 16),
             Text(
               UserStorage.l10n.noRecordsOnDate(
@@ -270,7 +269,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           margin: const EdgeInsets.only(bottom: 12),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Color(0xFFE2E8F0)),
+            side: const BorderSide(color: AppColors.divider),
             borderRadius: BorderRadius.circular(12),
           ),
           child: InkWell(
@@ -305,7 +304,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF7F8FA),
+                              color: AppColors.background,
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(

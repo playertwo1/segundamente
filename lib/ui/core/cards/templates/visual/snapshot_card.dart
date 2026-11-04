@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class SnapshotCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -18,7 +19,7 @@ class SnapshotCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(24),
           boxShadow: const [
             BoxShadow(
@@ -45,10 +46,10 @@ class SnapshotCard extends StatelessWidget {
                         width: double.infinity,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => Container(
-                          color: const Color(0xFFF7F8FA),
+                          color: AppColors.background,
                           child: const Center(
                             child: Icon(Icons.broken_image,
-                                color: Color(0xFF99A1AF)),
+                                color: AppColors.textTertiary),
                           ),
                         ),
                       ),
@@ -102,7 +103,7 @@ class SnapshotCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     height: 23 / 20,
                     letterSpacing: -0.45,
-                    color: const Color(0xFF0A0A0A),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),

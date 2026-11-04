@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:memex/ui/timeline/widgets/location_picker_page.dart';
 import 'package:memex/ui/calendar/view_models/calendar_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:memex/domain/models/card_detail_model.dart';
@@ -282,7 +283,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
 
     final timeResult = await showModalBottomSheet<DateTime>(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -413,7 +414,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(UserStorage.l10n.confirmDelete),
         content: Text(UserStorage.l10n.confirmDeleteCardMessage),
         actions: [
@@ -510,7 +511,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFFCBD5E1),
+                    color: AppColors.divider,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -524,7 +525,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                         const Icon(
                           Icons.location_on_outlined,
                           size: 14,
-                          color: Color(0xFF94A3B8),
+                          color: AppColors.textTertiary,
                         ),
                         const SizedBox(width: 4),
                         Flexible(
@@ -533,7 +534,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF94A3B8),
+                              color: AppColors.textTertiary,
                               letterSpacing: 0.5,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -591,7 +592,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
     return Container(
       width: 400,
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 20),
-      color: Colors.white,
+      color: AppColors.cardBackground,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -623,7 +624,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                   fontFamily: 'PingFang SC',
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF334155),
+                  color: AppColors.textSecondary,
                   height: 1.375,
                   letterSpacing: -0.45,
                 ),
@@ -639,7 +640,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                     text: detail.rawContent,
                     style: const TextStyle(
                       fontSize: 16,
-                      color: Color(0xFF334155),
+                      color: AppColors.textSecondary,
                       height: 1.6,
                     ),
                   ),
@@ -650,7 +651,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                       text: '#$tag',
                       style: const TextStyle(
                         fontSize: 16,
-                        color: Color(0xFF6366F1),
+                        color: AppColors.primary,
                         fontWeight: FontWeight.w400,
                         height: 1.25,
                         letterSpacing: 0,
@@ -669,7 +670,8 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
             children: [
               Text(
                 DateFormat('MM-dd').format(detail.timestamp),
-                style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
+                style: const TextStyle(
+                    fontSize: 13, color: AppColors.textTertiary),
               ),
               if (shouldShowCardAddress(detail.address)) ...[
                 const SizedBox(width: 6),
@@ -677,7 +679,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                   detail.address,
                   style: const TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF94A3B8),
+                    color: AppColors.textTertiary,
                   ),
                 ),
               ],
@@ -685,7 +687,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
           ),
 
           const SizedBox(height: 24),
-          const Divider(height: 1, color: Color(0xFFE2E8F0)),
+          const Divider(height: 1, color: AppColors.divider),
           const SizedBox(height: 16),
 
           // 5. Related Memories (same as detail page)
@@ -726,7 +728,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF4A5565),
+                color: AppColors.textSecondary,
                 letterSpacing: -0.15,
               ),
             ),
@@ -766,7 +768,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF334155),
+                          color: AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -774,7 +776,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                         card.date,
                         style: const TextStyle(
                           fontSize: 11,
-                          color: Color(0xFF94A3B8),
+                          color: AppColors.textTertiary,
                         ),
                       ),
                     ],
@@ -862,12 +864,12 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
         avatar: avatar,
         name: name,
         size: 36,
-        backgroundColor: const Color(0xFFEEF2FF),
+        backgroundColor: AppColors.iconBgLight,
       );
     } else if (isMemexSystem || (characterId == null || characterId == '0')) {
       avatarWidget = CircleAvatar(
         radius: 18,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         child: ClipOval(
           child: Image.asset(
             'assets/icon.png',
@@ -882,7 +884,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
         avatar: avatar,
         name: name,
         size: 36,
-        backgroundColor: const Color(0xFFEEF2FF),
+        backgroundColor: AppColors.iconBgLight,
       );
     }
 
@@ -902,9 +904,9 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                 children: [
                   Text(name, style: AppTextStyles.commentName),
                   if (replyToName != null) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: Icon(
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 6),
+                      child: const Icon(
                         Icons.subdirectory_arrow_right_rounded,
                         size: 14,
                         color: AppColors.textTertiary,
@@ -945,7 +947,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
         ),
         child: Container(
           padding: const EdgeInsets.all(16),
-          color: Colors.white,
+          color: AppColors.cardBackground,
           child: _CommentInputWidget(
             cardId: cardId,
             replyToId: replyId,
@@ -972,7 +974,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Scaffold(body: Center(child: AgentLogoLoading()));
+      return const Scaffold(body: const Center(child: const AgentLogoLoading()));
     }
 
     if (_errorMessage != null) {
@@ -1003,12 +1005,12 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
     final detail = _detail!;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       body: Column(
         children: [
           // Top Navigation Buttons
           Container(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             child: SafeArea(
               bottom: false,
               child: Padding(
@@ -1025,7 +1027,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.cardBackground,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -1038,7 +1040,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                           child: Icon(
                             Icons.chevron_left,
                             size: 22,
-                            color: Color(0xFF99A1AF),
+                            color: AppColors.textTertiary,
                           ),
                         ),
                       ),
@@ -1125,7 +1127,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                             fontFamily: 'PingFang SC',
                                             fontSize: 24,
                                             fontWeight: FontWeight.w600,
-                                            color: Color(0xFF334155),
+                                            color: AppColors.textSecondary,
                                             height: 1.375, // 33/24
                                             letterSpacing: -0.45,
                                           ),
@@ -1159,7 +1161,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                           ).format(detail.timestamp),
                                           style: const TextStyle(
                                             fontSize: 13,
-                                            color: Color(0xFF94A3B8),
+                                            color: AppColors.textTertiary,
                                           ),
                                         ),
                                       ),
@@ -1172,7 +1174,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                             detail.address,
                                             style: const TextStyle(
                                               fontSize: 13,
-                                              color: Color(0xFF94A3B8),
+                                              color: AppColors.textTertiary,
                                             ),
                                             maxLines: null,
                                             softWrap: true,
@@ -1185,7 +1187,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                   const SizedBox(height: 24),
                                   const Divider(
                                     height: 1,
-                                    color: Color(0xFFE2E8F0),
+                                    color: AppColors.divider,
                                   ),
                                   const SizedBox(height: 16),
 
@@ -1261,13 +1263,13 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
               width: 28,
               height: 28,
               decoration: BoxDecoration(
-                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.auto_awesome,
                 size: 16,
-                color: Color(0xFF6366F1),
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(width: 10),
@@ -1275,7 +1277,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
               child: Text(
                 UserStorage.l10n.demoDetailHint,
                 style: const TextStyle(
-                  color: Color(0xFF334155),
+                  color: AppColors.textSecondary,
                   fontSize: 14,
                   height: 1.35,
                   fontWeight: FontWeight.w500,
@@ -1286,12 +1288,12 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
             InkWell(
               borderRadius: BorderRadius.circular(18),
               onTap: () => setState(() => _showDemoHint = false),
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: Icon(
+              child: const Padding(
+                padding: EdgeInsets.all(4),
+                child: const Icon(
                   Icons.close,
                   size: 18,
-                  color: Colors.grey[500],
+                  color: AppColors.textTertiary,
                 ),
               ),
             ),
@@ -1338,7 +1340,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                       final asset = detail.assets[index];
                       if (asset.isImage) {
                         return Container(
-                          color: const Color(0xFFF7F8FA),
+                          color: AppColors.background,
                           child: LocalImage(
                             url: asset.url,
                             fit: BoxFit.contain,
@@ -1346,7 +1348,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                         );
                       } else if (asset.isAudio) {
                         return Container(
-                          color: const Color(0xFF0A0A0A),
+                          color: AppColors.textPrimary,
                           child: Center(
                             child: AudioPlayerWidget(url: asset.url),
                           ),
@@ -1373,8 +1375,8 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: isSelected
-                            ? const Color(0xFF5B6CFF)
-                            : const Color(0xFF99A1AF),
+                            ? AppColors.primary
+                            : AppColors.textTertiary,
                       ),
                     );
                   }),
@@ -1497,13 +1499,13 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
         avatar: avatar,
         name: name,
         size: 36,
-        backgroundColor: const Color(0xFFEEF2FF),
+        backgroundColor: AppColors.iconBgLight,
       );
     } else if (isMemexSystem || (characterId == null || characterId == '0')) {
       // Memex logo
       avatarWidget = CircleAvatar(
         radius: 18,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         child: ClipOval(
           child: Image.asset(
             'assets/icon.png',
@@ -1519,7 +1521,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
         avatar: avatar,
         name: name,
         size: 36,
-        backgroundColor: const Color(0xFFEEF2FF),
+        backgroundColor: AppColors.iconBgLight,
       );
     }
 
@@ -1563,9 +1565,9 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                 children: [
                   Text(name, style: AppTextStyles.commentName),
                   if (replyToName != null) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: Icon(
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 6),
+                      child: const Icon(
                         Icons.subdirectory_arrow_right_rounded,
                         size: 14,
                         color: AppColors.textTertiary,
@@ -1594,7 +1596,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                     ),
                     em: const TextStyle(fontStyle: FontStyle.italic),
                     listBullet: const TextStyle(color: AppColors.primary),
-                    code: TextStyle(
+                    code: const TextStyle(
                       fontSize: 13,
                       color: AppColors.textSecondary,
                       backgroundColor: AppColors.background,
@@ -1665,7 +1667,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.edit_outlined,
                         size: 16,
                         color: AppColors.textTertiary,
@@ -1673,7 +1675,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                       const SizedBox(width: 8),
                       Text(
                         UserStorage.l10n.saySomething,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           color: AppColors.textTertiary,
                         ),
@@ -1729,7 +1731,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF4A5565),
+                    color: AppColors.textSecondary,
                     letterSpacing: -0.15,
                   ),
                 ),
@@ -1785,7 +1787,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
     return Container(
       width: 170,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -1892,7 +1894,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            color: const Color(0xFFF8FAFC),
+            color: AppColors.background,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1912,11 +1914,11 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                       const style = TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFF64748B),
+                        color: AppColors.textSecondary,
                         height: 1.6,
                       );
                       final tp = TextPainter(
-                        text: TextSpan(text: 'A', style: style),
+                        text: const TextSpan(text: 'A', style: style),
                         textDirection: ui.TextDirection.ltr,
                       )..layout();
                       final maxLines = (constraints.maxHeight / tp.height)
@@ -1992,7 +1994,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.6,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
@@ -2000,7 +2002,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0))),
+                border: Border(bottom: BorderSide(color: AppColors.divider)),
               ),
               child: Center(
                 child: Text(
@@ -2041,7 +2043,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFF334155),
+                                    color: AppColors.textSecondary,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -2049,7 +2051,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                                   card.date,
                                   style: const TextStyle(
                                     fontSize: 12,
-                                    color: Color(0xFF94A3B8),
+                                    color: AppColors.textTertiary,
                                   ),
                                 ),
                               ],
@@ -2058,7 +2060,7 @@ class _TimelineCardDetailScreenState extends State<TimelineCardDetailScreen> {
                           const Icon(
                             Icons.arrow_forward_ios,
                             size: 14,
-                            color: Color(0xFFCBD5E1),
+                            color: AppColors.divider,
                           ),
                         ],
                       ),
@@ -2098,7 +2100,7 @@ class TimelineCardDetailBodySection extends StatelessWidget {
               text: detail.rawContent,
               style: const TextStyle(
                 fontSize: 16,
-                color: Color(0xFF334155),
+                color: AppColors.textSecondary,
                 height: 1.6,
               ),
             ),
@@ -2109,7 +2111,7 @@ class TimelineCardDetailBodySection extends StatelessWidget {
                 text: '#$tag',
                 style: const TextStyle(
                   fontSize: 16,
-                  color: Color(0xFF6366F1),
+                  color: AppColors.primary,
                   fontWeight: FontWeight.w400,
                   height: 1.25,
                   letterSpacing: 0,
@@ -2315,12 +2317,12 @@ class _CommentInputWidgetState extends State<_CommentInputWidget> {
             ),
             child: Row(
               children: [
-                Icon(Icons.reply_rounded, size: 16, color: AppColors.primary),
+                const Icon(Icons.reply_rounded, size: 16, color: AppColors.primary),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     UserStorage.l10n.replyTo(widget.replyToName!),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       color: AppColors.primary,
                       fontWeight: FontWeight.w500,
@@ -2360,12 +2362,12 @@ class _CommentInputWidgetState extends State<_CommentInputWidget> {
                       horizontal: 16,
                       vertical: 12,
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: AppColors.textTertiary,
                       fontSize: 14,
                     ),
                   ),
-                  style: TextStyle(fontSize: 14, color: AppColors.textPrimary),
+                  style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
                   maxLines: null,
                   textInputAction: TextInputAction.send,
                   onSubmitted: (_) => _postComment(),
@@ -2373,17 +2375,17 @@ class _CommentInputWidgetState extends State<_CommentInputWidget> {
               ),
               IconButton(
                 icon: _isPosting
-                    ? SizedBox(
+                    ? const SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(
+                        child: const CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
+                          valueColor: const AlwaysStoppedAnimation<Color>(
                             AppColors.primary,
                           ),
                         ),
                       )
-                    : Icon(
+                    : const Icon(
                         Icons.send_rounded,
                         color: AppColors.primary,
                         size: 20,
@@ -2407,7 +2409,7 @@ class CardProcessingBanner extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFEEF2FF),
+        color: AppColors.iconBgLight,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: const Color(0xFF818CF8).withValues(alpha: 0.35),

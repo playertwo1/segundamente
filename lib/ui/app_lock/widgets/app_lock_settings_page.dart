@@ -136,7 +136,7 @@ class _AppLockSettingsPageState extends State<AppLockSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
           UserStorage.l10n.appLockSettings,
@@ -229,7 +229,7 @@ class _AppLockSettingsPageState extends State<AppLockSettingsPage> {
   Widget _buildSettingCard({required Widget child}) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -323,7 +323,7 @@ class _SetPasswordSheetState extends State<_SetPasswordSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -333,7 +333,7 @@ class _SetPasswordSheetState extends State<_SetPasswordSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: AppColors.divider,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -367,7 +367,7 @@ class _SetPasswordSheetState extends State<_SetPasswordSheet> {
                 height: 16,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isFilled ? AppColors.primary : const Color(0xFFE2E8F0),
+                  color: isFilled ? AppColors.primary : AppColors.divider,
                 ),
               );
             }),
@@ -426,8 +426,8 @@ class _SetPasswordSheetState extends State<_SetPasswordSheet> {
         height: 72,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white,
-          border: Border.all(color: const Color(0xFFE2E8F0)),
+          color: AppColors.cardBackground,
+          border: Border.all(color: AppColors.divider),
         ),
         alignment: Alignment.center,
         child: Text(

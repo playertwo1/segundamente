@@ -90,7 +90,7 @@ Future<String?> showAvatarPicker(
 }) {
   return showModalBottomSheet<String>(
     context: context,
-    backgroundColor: Colors.white,
+    backgroundColor: AppColors.cardBackground,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -155,7 +155,7 @@ class _AvatarPickerSheetState extends State<_AvatarPickerSheet> {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: AppColors.divider,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -212,7 +212,7 @@ class _AvatarPickerSheetState extends State<_AvatarPickerSheet> {
                     child: DiceBearAvatar(
                       seed: seed,
                       size: 56,
-                      backgroundColor: Colors.grey[50],
+                      backgroundColor: AppColors.surface,
                     ),
                   ),
                 );

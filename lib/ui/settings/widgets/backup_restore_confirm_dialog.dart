@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/data/services/backup_service.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class BackupRestoreConfirmDialog extends StatelessWidget {
   const BackupRestoreConfirmDialog({super.key, required this.backupInfo});
@@ -13,7 +14,7 @@ class BackupRestoreConfirmDialog extends StatelessWidget {
     final createdAt = manifest?.createdAt.toLocal();
 
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       title: Text(UserStorage.l10n.confirmRestore),
       content: SingleChildScrollView(
         child: Column(

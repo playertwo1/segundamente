@@ -6,6 +6,7 @@ import 'package:memex/ui/core/widgets/html_webview_card.dart';
 import 'package:memex/ui/timeline/widgets/timeline_card_detail_screen.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class RelatedFactsList extends StatefulWidget {
   final List<String> factIds;
@@ -53,9 +54,9 @@ class _RelatedFactsListState extends State<RelatedFactsList> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Center(child: AgentLogoLoading()),
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: const Center(child: const AgentLogoLoading()),
       );
     }
 
@@ -68,7 +69,7 @@ class _RelatedFactsListState extends State<RelatedFactsList> {
       mainAxisSize: MainAxisSize.min, // Ensure it doesn't take infinite height
       children: [
         const SizedBox(height: 16),
-        const Divider(height: 32, thickness: 1, color: Color(0xFFE2E8F0)),
+        const Divider(height: 32, thickness: 1, color: AppColors.divider),
         const Padding(
           padding: EdgeInsets.only(bottom: 16),
           child: Text(
@@ -76,7 +77,7 @@ class _RelatedFactsListState extends State<RelatedFactsList> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1E293B), // Slate-800
+              color: AppColors.textPrimary, // Slate-800
             ),
           ),
         ),
@@ -107,9 +108,9 @@ class _RelatedFactsListState extends State<RelatedFactsList> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFCBD5E1)),
+          border: Border.all(color: AppColors.divider),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -119,7 +120,7 @@ class _RelatedFactsListState extends State<RelatedFactsList> {
               card.displayTime(UserStorage.l10n),
               style: const TextStyle(
                 fontSize: 12,
-                color: Color(0xFF64748B),
+                color: AppColors.textSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),

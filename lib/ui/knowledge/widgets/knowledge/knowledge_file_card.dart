@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:memex/ui/knowledge/widgets/knowledge_file_page.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:path/path.dart' as path;
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class KnowledgeFileCard extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -37,11 +38,11 @@ class KnowledgeFileCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF4A5565).withValues(alpha: 0.05),
+              color: AppColors.textSecondary.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -77,7 +78,7 @@ class KnowledgeFileCard extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       height: 20 / 14,
                       letterSpacing: -0.15,
-                      color: Color(0xFF0A0A0A),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   if (isAiGenerated) ...[
@@ -97,7 +98,7 @@ class KnowledgeFileCard extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                             height: 20 / 10,
                             letterSpacing: -0.15,
-                            color: Color(0xFF5B6CFF),
+                            color: AppColors.primary,
                           ),
                         ),
                       ],

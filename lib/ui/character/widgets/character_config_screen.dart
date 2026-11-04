@@ -75,7 +75,7 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(UserStorage.l10n.confirmDelete),
         content: Text(UserStorage.l10n.confirmDeleteCharacter(character.name)),
         actions: [
@@ -129,7 +129,7 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
       builder: (context, _) {
         final vm = widget.viewModel;
         return Scaffold(
-          backgroundColor: const Color(0xFFF7F8FA),
+          backgroundColor: AppColors.background,
           appBar: AppBar(
             title: Text(
               UserStorage.l10n.configureAiCharacter,
@@ -139,7 +139,7 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
                 color: AppColors.textPrimary,
               ),
             ),
-            backgroundColor: const Color(0xFFF7F8FA),
+            backgroundColor: AppColors.background,
             surfaceTintColor: AppColors.background,
             elevation: 0,
             centerTitle: true,
@@ -184,12 +184,13 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.person_off_outlined,
-                                    size: 48, color: Colors.grey[300]),
+                                const Icon(Icons.person_off_outlined,
+                                    size: 48, color: AppColors.divider),
                                 const SizedBox(height: 16),
                                 Text(
                                   UserStorage.l10n.noCharacters,
-                                  style: TextStyle(color: Colors.grey[400]),
+                                  style:
+                                      const TextStyle(color: AppColors.textTertiary),
                                 ),
                               ],
                             ),
@@ -214,9 +215,9 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF7F8FA)),
+        border: Border.all(color: AppColors.background),
         boxShadow: [
           BoxShadow(
             color: AppColors.textSecondary.withValues(alpha: 0.04),
@@ -290,7 +291,7 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
                           activeThumbColor: Colors.white,
                           activeTrackColor: AppColors.primary,
                           inactiveThumbColor: Colors.white,
-                          inactiveTrackColor: const Color(0xFFE2E8F0),
+                          inactiveTrackColor: AppColors.divider,
                         ),
                       ),
                     ),
@@ -530,9 +531,9 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
       child: Container(
         height: 120,
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F8FA),
+          color: AppColors.background,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
+          border: Border.all(color: AppColors.divider),
           image: hasBackground
               ? DecorationImage(
                   image: LocalImage.provider(preview),
@@ -563,14 +564,14 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.add_photo_alternate_outlined,
-                        size: 32, color: Colors.grey[400]),
+                    const Icon(Icons.add_photo_alternate_outlined,
+                        size: 32, color: AppColors.textTertiary),
                     const SizedBox(height: 8),
                     Text(
                       UserStorage.l10n.chooseChatBackgroundImage,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
-                        color: Colors.grey[400],
+                        color: AppColors.textTertiary,
                       ),
                     ),
                   ],
@@ -671,7 +672,7 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         appBar: AppBar(
           title: Text(
             _character == null
@@ -809,16 +810,16 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
               const SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF7F8FA),
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  border: Border.all(color: AppColors.divider),
                 ),
                 child: TextFormField(
                   controller: _personaController,
                   decoration: InputDecoration(
                     hintText: UserStorage.l10n.characterPersonaHint,
-                    hintStyle: TextStyle(
-                      color: Colors.grey[400],
+                    hintStyle: const TextStyle(
+                      color: AppColors.textTertiary,
                       fontSize: 14,
                       height: 1.5,
                     ),
@@ -828,7 +829,7 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
                   style: const TextStyle(
                     fontSize: 15,
                     height: 1.6,
-                    color: Color(0xFF334155),
+                    color: AppColors.textSecondary,
                   ),
                   maxLines: null,
                   minLines: 15,
@@ -981,12 +982,12 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: enabled ? const Color(0xFFF7F8FA) : const Color(0xFFF0F0F0),
+        color: enabled ? AppColors.background : const Color(0xFFF0F0F0),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: constant
               ? AppColors.primary.withValues(alpha: 0.3)
-              : const Color(0xFFE2E8F0),
+              : AppColors.divider,
         ),
       ),
       child: Column(
@@ -1075,9 +1076,9 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F8FA),
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1148,7 +1149,7 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.cardBackground,
           title: Text(index == null
               ? UserStorage.l10n.addWorldEntry
               : UserStorage.l10n.editWorldEntry),
@@ -1258,7 +1259,7 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.cardBackground,
           title: Text(index == null
               ? UserStorage.l10n.addMemory
               : UserStorage.l10n.editMemory),
@@ -1347,16 +1348,16 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F8FA),
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(
-            color: Colors.grey[400],
+          hintStyle: const TextStyle(
+            color: AppColors.textTertiary,
             fontSize: 14,
             height: 1.5,
           ),
@@ -1366,7 +1367,7 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
         style: const TextStyle(
           fontSize: 15,
           height: 1.6,
-          color: Color(0xFF334155),
+          color: AppColors.textSecondary,
         ),
         maxLines: null,
         minLines: minLines,
@@ -1390,17 +1391,17 @@ class _CharacterEditPageState extends State<CharacterEditPage> {
   InputDecoration _buildInputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+      hintStyle: const TextStyle(color: AppColors.textTertiary, fontSize: 14),
       filled: true,
-      fillColor: const Color(0xFFF7F8FA),
+      fillColor: AppColors.background,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+        borderSide: const BorderSide(color: AppColors.divider),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+        borderSide: const BorderSide(color: AppColors.divider),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

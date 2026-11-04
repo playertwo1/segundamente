@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class RadarDimension {
   final String label;
@@ -51,7 +52,7 @@ class RadarChartCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -77,7 +78,7 @@ class RadarChartCard extends StatelessWidget {
                         fontFamily: 'PingFang SC',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                         height: 20 / 14,
                         letterSpacing: -0.15,
                       ),
@@ -93,7 +94,7 @@ class RadarChartCard extends StatelessWidget {
                         fontFamily: 'PingFang SC',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                         height: 20 / 14,
                         letterSpacing: -0.15,
                       ),
@@ -129,7 +130,7 @@ class RadarChartCard extends StatelessWidget {
                                 height: 1.1,
                                 shadows: [
                                   Shadow(
-                                    color: const Color(0xFF5B6CFF)
+                                    color: AppColors.primary
                                         .withValues(alpha: 0.6),
                                     blurRadius: 12,
                                   ),
@@ -146,7 +147,7 @@ class RadarChartCard extends StatelessWidget {
                                 height: 1.3,
                                 shadows: [
                                   Shadow(
-                                    color: const Color(0xFF5B6CFF)
+                                    color: AppColors.primary
                                         .withValues(alpha: 0.6),
                                     blurRadius: 8,
                                   ),
@@ -183,12 +184,12 @@ class _RadarPainter extends CustomPainter {
     const startAngle = -pi / 2;
 
     final gridPaint = Paint()
-      ..color = const Color(0xFFE5E7EB)
+      ..color = AppColors.divider
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
     final axisPaint = Paint()
-      ..color = const Color(0xFFE5E7EB)
+      ..color = AppColors.divider
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.8;
 
@@ -244,17 +245,17 @@ class _RadarPainter extends CustomPainter {
 
     // Border
     final borderPaint = Paint()
-      ..color = const Color(0xFF5B6CFF)
+      ..color = AppColors.primary
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
     canvas.drawPath(dataPath, borderPaint);
 
     // Draw labels
-    final labelStyle = TextStyle(
+    const labelStyle = TextStyle(
       fontFamily: 'Inter',
       fontSize: 11,
       fontWeight: FontWeight.w400,
-      color: const Color(0xFF9CA3AF),
+      color: AppColors.textTertiary,
     );
 
     for (int i = 0; i < n; i++) {

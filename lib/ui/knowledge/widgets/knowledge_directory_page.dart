@@ -5,6 +5,7 @@ import 'package:memex/ui/knowledge/widgets/knowledge/knowledge_file_card.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class KnowledgeDirectoryPage extends StatefulWidget {
   final String path;
@@ -96,20 +97,20 @@ class _KnowledgeDirectoryPageState extends State<KnowledgeDirectoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(widget.path,
             style: const TextStyle(
-                color: Color(0xFF1E293B),
+                color: AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.w700)),
         centerTitle: false,
-        backgroundColor: const Color(0xFFF7F8FA),
+        backgroundColor: AppColors.background,
         elevation: 0,
         leading: const AppBackButton(),
       ),
       body: _isLoading
-          ? Center(child: AgentLogoLoading())
+          ? const Center(child: const AgentLogoLoading())
           : KnowledgeDirectoryBody(
               folders: _folders,
               files: _files,
@@ -132,11 +133,11 @@ class _KnowledgeDirectoryPageState extends State<KnowledgeDirectoryPage> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.05),
+                color: AppColors.textSecondary.withOpacity(0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4)),
           ],
@@ -147,7 +148,7 @@ class _KnowledgeDirectoryPageState extends State<KnowledgeDirectoryPage> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: const Color(0xFFEFF6FF), // Blue 50
+                color: AppColors.iconBgLight, // Blue 50
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(Icons.folder_rounded,
@@ -162,15 +163,15 @@ class _KnowledgeDirectoryPageState extends State<KnowledgeDirectoryPage> {
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E293B))),
+                          color: AppColors.textPrimary)),
                   const SizedBox(height: 4),
                   Text('${item['item_count'] ?? 0} items',
                       style: const TextStyle(
-                          fontSize: 13, color: Color(0xFF94A3B8))),
+                          fontSize: 13, color: AppColors.textTertiary)),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Color(0xFFCBD5E1)),
+            const Icon(Icons.chevron_right, color: AppColors.divider),
           ],
         ),
       ),
@@ -200,7 +201,7 @@ class KnowledgeDirectoryBody extends StatelessWidget {
             padding: const EdgeInsets.all(40),
             alignment: Alignment.center,
             child: Text(UserStorage.l10n.emptyFolder,
-                style: const TextStyle(color: Color(0xFFCBD5E1))),
+                style: const TextStyle(color: AppColors.divider)),
           ),
         ],
       );

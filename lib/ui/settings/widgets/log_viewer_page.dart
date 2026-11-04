@@ -249,7 +249,7 @@ class _LogViewerPageState extends State<LogViewerPage> {
           _buildControlBar(filteredLines.length),
           Expanded(
             child: _isLoading && _logLines.isEmpty
-                ? Center(child: AgentLogoLoading())
+                ? const Center(child: const AgentLogoLoading())
                 : SelectionArea(
                     child: Scrollbar(
                       controller: _scrollController,
@@ -352,7 +352,7 @@ class _LogViewerPageState extends State<LogViewerPage> {
   Widget _buildControlBar(int currentCount) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: Colors.grey[100],
+      color: AppColors.surface,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -397,7 +397,8 @@ class _LogViewerPageState extends State<LogViewerPage> {
             // Level
             Row(
               children: [
-                Text(UserStorage.l10n.logLevel, style: const TextStyle(fontSize: 12)),
+                Text(UserStorage.l10n.logLevel,
+                    style: const TextStyle(fontSize: 12)),
                 DropdownButton<String>(
                   value: _levelFilter,
                   isDense: true,

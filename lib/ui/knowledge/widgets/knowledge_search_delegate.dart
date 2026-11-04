@@ -7,6 +7,7 @@ import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
 import 'package:path/path.dart' as p;
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Search delegate for knowledge base files.
 /// Greps file names and content in the PKM directory.
@@ -44,10 +45,11 @@ class KnowledgeSearchDelegate extends SearchDelegate<String?> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.search, size: 48, color: Color(0xFFCBD5E1)),
+            const Icon(Icons.search, size: 48, color: AppColors.divider),
             const SizedBox(height: 12),
             Text(UserStorage.l10n.searchKnowledgeHint,
-                style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+                style: const TextStyle(
+                    color: AppColors.textTertiary, fontSize: 14)),
           ],
         ),
       );
@@ -122,7 +124,7 @@ class _SearchResultsWidgetState extends State<_SearchResultsWidget> {
   @override
   Widget build(BuildContext context) {
     if (_isSearching && _results.isEmpty) {
-      return Center(child: AgentLogoLoading());
+      return const Center(child: const AgentLogoLoading());
     }
 
     if (!_isSearching && _results.isEmpty && _lastQuery.isNotEmpty) {
@@ -130,10 +132,11 @@ class _SearchResultsWidgetState extends State<_SearchResultsWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.search_off, size: 48, color: Color(0xFFCBD5E1)),
+            const Icon(Icons.search_off, size: 48, color: AppColors.divider),
             const SizedBox(height: 12),
             Text(UserStorage.l10n.noSearchResults(_lastQuery),
-                style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+                style: const TextStyle(
+                    color: AppColors.textTertiary, fontSize: 14)),
           ],
         ),
       );
@@ -155,11 +158,11 @@ class _SearchResultsWidgetState extends State<_SearchResultsWidget> {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF64748B).withOpacity(0.05),
+            color: AppColors.textSecondary.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -171,30 +174,31 @@ class _SearchResultsWidgetState extends State<_SearchResultsWidget> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFFF7F8FA),
+            color: AppColors.background,
             borderRadius: BorderRadius.circular(10),
           ),
           child: const Icon(Icons.description_outlined,
-              color: Color(0xFF64748B), size: 20),
+              color: AppColors.textSecondary, size: 20),
         ),
         title: Text(name,
             style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1E293B))),
+                color: AppColors.textPrimary)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 4),
             Text(filePath,
-                style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8))),
+                style: const TextStyle(
+                    fontSize: 11, color: AppColors.textTertiary)),
             if (snippet != null) ...[
               const SizedBox(height: 4),
               Text(snippet,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style:
-                      const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+                  style: const TextStyle(
+                      fontSize: 12, color: AppColors.textSecondary)),
             ],
           ],
         ),

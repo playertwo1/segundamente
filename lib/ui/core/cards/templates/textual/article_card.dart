@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class ArticleCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -29,8 +30,7 @@ class ArticleCard extends StatelessWidget {
               child: LocalImage(
                 url: imageUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (c, e, s) =>
-                    Container(color: const Color(0xFFE2E8F0)),
+                errorBuilder: (c, e, s) => Container(color: AppColors.divider),
               ),
             ),
 
@@ -46,7 +46,7 @@ class ArticleCard extends StatelessWidget {
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     height: 1.3,
-                    color: Color(0xFF0A0A0A),
+                    color: AppColors.textPrimary,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -60,30 +60,31 @@ class ArticleCard extends StatelessWidget {
                     p: const TextStyle(
                       fontSize: 15,
                       height: 1.6,
-                      color: Color(0xFF4A5565), // Slate-600
+                      color: AppColors.textSecondary, // Slate-600
                     ),
                     // Add other styles as needed to match the app's theme
                     h1: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF0A0A0A)),
+                        color: AppColors.textPrimary),
                     h2: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF0A0A0A)),
+                        color: AppColors.textPrimary),
                     h3: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF0A0A0A)),
+                        color: AppColors.textPrimary),
                     blockquote: const TextStyle(
-                        color: Color(0xFF4A5565), fontStyle: FontStyle.italic),
+                        color: AppColors.textSecondary,
+                        fontStyle: FontStyle.italic),
                     code: const TextStyle(
-                      backgroundColor: Color(0xFFF7F8FA),
-                      color: Color(0xFF0A0A0A),
+                      backgroundColor: AppColors.background,
+                      color: AppColors.textPrimary,
                       fontFamily: 'monospace',
                     ),
                     codeblockDecoration: BoxDecoration(
-                      color: const Color(0xFFF7F8FA),
+                      color: AppColors.background,
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),

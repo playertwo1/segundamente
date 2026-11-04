@@ -123,7 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.cardBackground,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -159,9 +159,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           const SizedBox(height: 2),
                           Text(
                             UserStorage.l10n.languageSettingsDesc,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[500],
+                              color: AppColors.textTertiary,
                             ),
                           ),
                         ],
@@ -178,7 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.cardBackground,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -207,9 +207,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding: const EdgeInsets.only(top: 6),
                 child: Text(
                   UserStorage.l10n.useLocalSpeechToTextDesc,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
-                    color: Colors.grey[600],
+                    color: AppColors.textSecondary,
                     height: 1.4,
                   ),
                 ),
@@ -227,7 +227,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.cardBackground,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -256,9 +256,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding: const EdgeInsets.only(top: 6),
                 child: Text(
                   UserStorage.l10n.showInsightTextDesc,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
-                    color: Colors.grey[600],
+                    color: AppColors.textSecondary,
                     height: 1.4,
                   ),
                 ),
@@ -272,7 +272,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.cardBackground,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -301,9 +301,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding: const EdgeInsets.only(top: 6),
                 child: Text(
                   UserStorage.l10n.enableCharacterCommentDesc,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
-                    color: Colors.grey[600],
+                    color: AppColors.textSecondary,
                     height: 1.4,
                   ),
                 ),
@@ -318,7 +318,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.cardBackground,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -354,9 +354,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             const SizedBox(height: 2),
                             Text(
                               UserStorage.l10n.maxCommentCharactersDesc,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey[600],
+                                color: AppColors.textSecondary,
                                 height: 1.4,
                               ),
                             ),
@@ -414,7 +414,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.cardBackground,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -447,9 +447,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             const SizedBox(height: 2),
                             Text(
                               UserStorage.l10n.dataStorageDescriptionIOS,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey[500],
+                                color: AppColors.textTertiary,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -457,7 +457,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right, color: Color(0xFFCBD5E1)),
+                      const Icon(Icons.chevron_right, color: AppColors.divider),
                     ],
                   ),
                 ),
@@ -480,7 +480,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -513,9 +513,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           const SizedBox(height: 2),
                           Text(
                             UserStorage.l10n.locationContextDescription,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[500],
+                              color: AppColors.textTertiary,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -523,7 +523,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ],
                       ),
                     ),
-                    const Icon(Icons.chevron_right, color: Color(0xFFCBD5E1)),
+                    const Icon(Icons.chevron_right, color: AppColors.divider),
                   ],
                 ),
               ),
@@ -547,7 +547,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -580,9 +580,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           const SizedBox(height: 2),
                           Text(
                             UserStorage.l10n.dataImportSettingsDescription,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[500],
+                              color: AppColors.textTertiary,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -590,7 +590,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ],
                       ),
                     ),
-                    const Icon(Icons.chevron_right, color: Color(0xFFCBD5E1)),
+                    const Icon(Icons.chevron_right, color: AppColors.divider),
                   ],
                 ),
               ),
@@ -613,7 +613,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -646,9 +646,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           const SizedBox(height: 2),
                           Text(
                             UserStorage.l10n.backupDescription,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[500],
+                              color: AppColors.textTertiary,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -656,7 +656,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ],
                       ),
                     ),
-                    const Icon(Icons.chevron_right, color: Color(0xFFCBD5E1)),
+                    const Icon(Icons.chevron_right, color: AppColors.divider),
                   ],
                 ),
               ),
@@ -679,7 +679,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -712,9 +712,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           const SizedBox(height: 2),
                           Text(
                             UserStorage.l10n.privacyPolicyDesc,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[500],
+                              color: AppColors.textTertiary,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -724,7 +724,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const Icon(
                       Icons.open_in_new,
-                      color: Color(0xFFCBD5E1),
+                      color: AppColors.divider,
                       size: 20,
                     ),
                   ],
@@ -742,7 +742,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -775,9 +775,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           const SizedBox(height: 2),
                           Text(
                             UserStorage.l10n.deleteAccountDesc,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[500],
+                              color: AppColors.textTertiary,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -785,7 +785,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ],
                       ),
                     ),
-                    const Icon(Icons.chevron_right, color: Color(0xFFCBD5E1)),
+                    const Icon(Icons.chevron_right, color: AppColors.divider),
                   ],
                 ),
               ),
@@ -810,7 +810,7 @@ class _SettingsPageState extends State<SettingsPage> {
             final isMatch = controller.text == userId;
             final showError = controller.text.isNotEmpty && !isMatch;
             return AlertDialog(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.cardBackground,
               title: Text(l10n.deleteAccountConfirmTitle),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -820,7 +820,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   const SizedBox(height: 16),
                   Text(
                     l10n.deleteAccountTypeName(userId),
-                    style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                    style:
+                        const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 8),
                   TextField(

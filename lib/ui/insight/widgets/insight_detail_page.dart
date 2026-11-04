@@ -16,6 +16,7 @@ import 'package:memex/utils/user_storage.dart';
 import 'package:memex/utils/share_service.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Unified AI Insight detail page
 class InsightDetailPage extends StatefulWidget {
@@ -102,18 +103,18 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
         p: style,
         strong: style.copyWith(
           fontWeight: FontWeight.w700,
-          color: const Color(0xFF1E293B),
+          color: AppColors.textPrimary,
         ),
         em: style.copyWith(fontStyle: FontStyle.italic),
-        listBullet: style.copyWith(color: const Color(0xFF5B6CFF)),
+        listBullet: style.copyWith(color: AppColors.primary),
         code: TextStyle(
           fontSize: (style.fontSize ?? 14) - 1,
-          color: const Color(0xFF334155),
-          backgroundColor: const Color(0xFFF7F8FA),
+          color: AppColors.textSecondary,
+          backgroundColor: AppColors.background,
           fontFamily: 'monospace',
         ),
         codeblockDecoration: BoxDecoration(
-          color: const Color(0xFFF7F8FA),
+          color: AppColors.background,
           borderRadius: BorderRadius.circular(8),
         ),
       ),
@@ -242,7 +243,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
     return Container(
       width: 400,
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
-      color: const Color(0xFFF7F8FA),
+      color: AppColors.background,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -264,7 +265,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF7F8FA),
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -275,7 +276,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
                       child: Icon(
                         Icons.auto_awesome,
                         size: 16,
-                        color: Color(0xFF5B6CFF),
+                        color: AppColors.primary,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -285,7 +286,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF4A5565),
+                          color: AppColors.textSecondary,
                           height: 1.6,
                           letterSpacing: 0,
                         ),
@@ -303,7 +304,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
               _content,
               style: const TextStyle(
                 fontSize: 17,
-                color: Color(0xFF334155),
+                color: AppColors.textSecondary,
                 height: 1.7,
                 letterSpacing: 0,
               ),
@@ -318,7 +319,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0A0A0A),
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 16),
@@ -358,17 +359,17 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(child: AgentLogoLoading()),
+      return const Scaffold(
+        backgroundColor: AppColors.cardBackground,
+        body: const Center(child: const AgentLogoLoading()),
       );
     }
 
     if (_errorMessage != null || _metadata == null) {
       return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.cardBackground,
           elevation: 0,
           leading: const AppBackButton(),
         ),
@@ -377,13 +378,13 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(Icons.error_outline,
-                  size: 48, color: Color(0xFF99A1AF)),
+                  size: 48, color: AppColors.textTertiary),
               const SizedBox(height: 12),
               Text(
                 _errorMessage ?? UserStorage.l10n.loadFailed,
                 style: const TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF99A1AF),
+                  color: AppColors.textTertiary,
                 ),
               ),
               const SizedBox(height: 16),
@@ -449,7 +450,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF7F8FA),
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -460,7 +461,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
                       child: Icon(
                         Icons.auto_awesome,
                         size: 16,
-                        color: Color(0xFF5B6CFF),
+                        color: AppColors.primary,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -470,7 +471,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
                         GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF4A5565),
+                          color: AppColors.textSecondary,
                           height: 1.6,
                           letterSpacing: 0,
                         ),
@@ -487,7 +488,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
               _content,
               const TextStyle(
                 fontSize: 17,
-                color: Color(0xFF334155), // Slate-700
+                color: AppColors.textSecondary, // Slate-700
                 height: 1.7,
                 letterSpacing: 0,
               ),
@@ -502,7 +503,7 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0A0A0A),
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 16),
@@ -529,9 +530,9 @@ class _InsightDetailPageState extends State<InsightDetailPage> {
                 padding: const EdgeInsets.all(32.0),
                 child: Text(
                   UserStorage.l10n.noRelatedRecords,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF99A1AF),
+                    color: AppColors.textTertiary,
                   ),
                 ),
               ),

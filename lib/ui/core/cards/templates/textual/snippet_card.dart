@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class SnippetCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -29,12 +30,12 @@ class SnippetCard extends StatelessWidget {
               styleSheet: MarkdownStyleSheet(
                 p: _getTextStyle(style),
                 code: const TextStyle(
-                  backgroundColor: Color(0xFFF7F8FA),
-                  color: Color(0xFF0A0A0A),
+                  backgroundColor: AppColors.background,
+                  color: AppColors.textPrimary,
                   fontFamily: 'monospace',
                 ),
                 codeblockDecoration: BoxDecoration(
-                  color: const Color(0xFFF7F8FA),
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -50,7 +51,7 @@ class SnippetCard extends StatelessWidget {
                             fontFamily: 'PingFang SC',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            color: Color(0xFF5B6CFF),
+                            color: AppColors.primary,
                           ),
                         ))
                     .toList(),
@@ -69,14 +70,14 @@ class SnippetCard extends StatelessWidget {
           fontFamily: 'monospace',
           fontSize: 15,
           height: 1.5,
-          color: Color(0xFF4A5565),
+          color: AppColors.textSecondary,
         );
       case 'handwritten':
         return const TextStyle(
           fontStyle: FontStyle.italic,
           fontSize: 18,
           height: 1.4,
-          color: Color(0xFF0A0A0A),
+          color: AppColors.textPrimary,
         );
       default:
         return const TextStyle(
@@ -84,7 +85,7 @@ class SnippetCard extends StatelessWidget {
           fontSize: 15,
           fontWeight: FontWeight.w400,
           height: 1.6,
-          color: Color(0xFF4A5565),
+          color: AppColors.textSecondary,
         );
     }
   }

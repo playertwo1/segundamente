@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class SharePosterDecorator extends StatelessWidget {
   final Widget content;
@@ -19,8 +20,8 @@ class SharePosterDecorator extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color(0xFFF7F8FA),
-            Color(0xFFE2E8F0),
+            AppColors.background,
+            AppColors.divider,
           ],
         ),
       ),
@@ -31,7 +32,7 @@ class SharePosterDecorator extends StatelessWidget {
           // 1. Core Content Area with floating premium shadow
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.cardBackground,
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
@@ -40,7 +41,7 @@ class SharePosterDecorator extends StatelessWidget {
                   offset: const Offset(0, 12),
                 ),
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.03),
+                  color: AppColors.primary.withValues(alpha: 0.03),
                   blurRadius: 40,
                   offset: const Offset(0, 20),
                 ),
@@ -88,7 +89,7 @@ class SharePosterDecorator extends StatelessWidget {
                             blendMode: BlendMode.srcIn,
                             shaderCallback: (bounds) => const LinearGradient(
                               colors: [
-                                Color(0xFF6366F1),
+                                AppColors.primary,
                                 Color(0xFFA855F7),
                                 Color(0xFFEC4899),
                               ],
@@ -110,7 +111,7 @@ class SharePosterDecorator extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF64748B),
+                              color: AppColors.textSecondary,
                               letterSpacing: 0.2,
                             ),
                           ),

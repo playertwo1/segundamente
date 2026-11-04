@@ -46,7 +46,7 @@ class _CustomAgentConfigPageState extends State<CustomAgentConfigPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(l10n.deleteAgent),
         content: Text(l10n.deleteAgentConfirm(agentName)),
         actions: [
@@ -113,7 +113,7 @@ class _CustomAgentConfigPageState extends State<CustomAgentConfigPage> {
         ],
       ),
       body: _isLoading
-          ? Center(child: AgentLogoLoading())
+          ? const Center(child: const AgentLogoLoading())
           : _configs.isEmpty
               ? Center(child: Text(l10n.noCustomAgents))
               : ListView.builder(
@@ -301,12 +301,12 @@ class _CustomAgentEditPageState extends State<_CustomAgentEditPage> {
     if (!text.startsWith(_defaultSkillDirPrefix)) {
       _skillDirCtrl.removeListener(_protectSkillDirPrefix);
       _skillDirCtrl.text = _defaultSkillDirPrefix;
-      _skillDirCtrl.selection = TextSelection.collapsed(
+      _skillDirCtrl.selection = const TextSelection.collapsed(
         offset: _defaultSkillDirPrefix.length,
       );
       _skillDirCtrl.addListener(_protectSkillDirPrefix);
     } else if (_skillDirCtrl.selection.start < _defaultSkillDirPrefix.length) {
-      _skillDirCtrl.selection = TextSelection.collapsed(
+      _skillDirCtrl.selection = const TextSelection.collapsed(
         offset: _defaultSkillDirPrefix.length,
       );
     }
@@ -318,12 +318,12 @@ class _CustomAgentEditPageState extends State<_CustomAgentEditPage> {
     if (!text.startsWith(_defaultWorkDirPrefix)) {
       _workDirCtrl.removeListener(_protectWorkDirPrefix);
       _workDirCtrl.text = _defaultWorkDirPrefix;
-      _workDirCtrl.selection = TextSelection.collapsed(
+      _workDirCtrl.selection = const TextSelection.collapsed(
         offset: _defaultWorkDirPrefix.length,
       );
       _workDirCtrl.addListener(_protectWorkDirPrefix);
     } else if (_workDirCtrl.selection.start < _defaultWorkDirPrefix.length) {
-      _workDirCtrl.selection = TextSelection.collapsed(
+      _workDirCtrl.selection = const TextSelection.collapsed(
         offset: _defaultWorkDirPrefix.length,
       );
     }
@@ -465,7 +465,7 @@ class _CustomAgentEditPageState extends State<_CustomAgentEditPage> {
                 // Ensure cursor stays after the prefix.
                 if (_skillDirCtrl.selection.start <
                     _defaultSkillDirPrefix.length) {
-                  _skillDirCtrl.selection = TextSelection.collapsed(
+                  _skillDirCtrl.selection = const TextSelection.collapsed(
                     offset: _defaultSkillDirPrefix.length,
                   );
                 }
@@ -496,7 +496,7 @@ class _CustomAgentEditPageState extends State<_CustomAgentEditPage> {
               onTap: () {
                 if (_workDirCtrl.selection.start <
                     _defaultWorkDirPrefix.length) {
-                  _workDirCtrl.selection = TextSelection.collapsed(
+                  _workDirCtrl.selection = const TextSelection.collapsed(
                     offset: _defaultWorkDirPrefix.length,
                   );
                 }

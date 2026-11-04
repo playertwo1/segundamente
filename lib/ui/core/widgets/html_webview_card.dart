@@ -6,6 +6,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:memex/utils/logger.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Global height cache to avoid recalculating heights for the same HTML content
 /// Key is the hash of the HTML content, value is the calculated height
@@ -99,7 +100,7 @@ class _TimelineConfig extends HtmlWebViewConfig {
           showContainerDecoration: true,
           borderRadius: 24,
           backgroundColor: null, // Transparent to allow HTML background to show
-          borderColor: const Color(0xFFF7F8FA),
+          borderColor: AppColors.background,
         );
 }
 
@@ -114,8 +115,8 @@ class _InsightConfig extends HtmlWebViewConfig {
               0, // No extra padding, height should match content exactly
           showContainerDecoration: true,
           borderRadius: 24,
-          backgroundColor: Colors.white,
-          borderColor: const Color(0xFFF7F8FA),
+          backgroundColor: AppColors.cardBackground,
+          borderColor: AppColors.background,
         );
 }
 
@@ -144,8 +145,8 @@ class _RelatedCardConfig extends HtmlWebViewConfig {
               0, // No extra padding, height should match content exactly
           showContainerDecoration: true,
           borderRadius: 16,
-          backgroundColor: Colors.white,
-          borderColor: const Color(0xFFE2E8F0),
+          backgroundColor: AppColors.cardBackground,
+          borderColor: AppColors.divider,
         );
 }
 

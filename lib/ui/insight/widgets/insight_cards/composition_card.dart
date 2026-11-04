@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class CompositionItem {
   final String label;
@@ -28,23 +29,23 @@ class CompositionItem {
       // Simple named color fallback (extend as needed if agent uses names)
       switch (colorStr.toLowerCase()) {
         case 'purple':
-          return const Color(0xFF5B6CFF);
+          return AppColors.primary;
         case 'blue':
           return const Color(0xFF3B82F6);
         case 'green':
-          return const Color(0xFF10B981);
+          return AppColors.success;
         case 'orange':
           return const Color(0xFFF97316);
         case 'red':
-          return const Color(0xFFEF4444);
+          return AppColors.danger;
         case 'grey':
         case 'gray':
-          return const Color(0xFF99A1AF);
+          return AppColors.textTertiary;
         case 'black':
           return Colors.black;
       }
     }
-    return const Color(0xFF99A1AF); // Default slate-400
+    return AppColors.textTertiary; // Default slate-400
   }
 }
 
@@ -96,7 +97,7 @@ class CompositionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20), // Extra rounded per design
           boxShadow: [
             BoxShadow(
@@ -125,7 +126,7 @@ class CompositionCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         letterSpacing: -0.15,
-                        color: Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -140,7 +141,7 @@ class CompositionCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         height: 20 / 14,
                         letterSpacing: -0.15,
-                        color: Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                 ],
@@ -155,7 +156,7 @@ class CompositionCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF0A0A0A),
+                    color: AppColors.textPrimary,
                     height: 1.3,
                   ),
                   children: headlineItems
@@ -164,7 +165,7 @@ class CompositionCard extends StatelessWidget {
                     return TextSpan(
                       text: item.text,
                       style: TextStyle(
-                        color: item.color ?? const Color(0xFF0A0A0A),
+                        color: item.color ?? AppColors.textPrimary,
                         fontWeight:
                             item.color != null && item.color != Colors.black
                                 ? FontWeight.bold
@@ -204,7 +205,7 @@ class CompositionCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                           height: 20 / 14,
                           letterSpacing: -0.15,
-                          color: Color(0xFF99A1AF),
+                          color: AppColors.textTertiary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -227,7 +228,7 @@ class CompositionCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: Container(
         height: 24, // Thicker bar
-        color: const Color(0xFFF7F8FA), // Background track
+        color: AppColors.background, // Background track
         child: Row(
           children: items.map((item) {
             final flex = (item.percentage * 10).round();
@@ -272,7 +273,7 @@ class CompositionCard extends StatelessWidget {
                   '${item.label} (${item.percentage.toInt()}%)',
                   style: const TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF4A5565),
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                   overflow: TextOverflow.ellipsis,

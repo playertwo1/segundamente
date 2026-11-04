@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/main_screen/widgets/ai_core_button.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Home bottom bar: Timeline / capture / Library, scaled from the 393-wide
 /// Figma canvas. Tab hit targets are enlarged and lifted above the system
@@ -40,7 +41,7 @@ class MainBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     const selectedColor = Color(0xFF1F1F1F);
-    const idleColor = Color(0xFF99A1AF);
+    const idleColor = AppColors.textTertiary;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -63,7 +64,7 @@ class MainBottomBar extends StatelessWidget {
                   bottom: -100.0,
                   left: 0,
                   right: 0,
-                  child: ColoredBox(color: Colors.white),
+                  child: ColoredBox(color: AppColors.cardBackground),
                 ),
                 PositionedDirectional(
                   top: -16.0,
@@ -123,7 +124,7 @@ class MainBottomBar extends StatelessWidget {
         ),
         if (bottomInset > 0)
           ColoredBox(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             child: SizedBox(height: bottomInset),
           ),
       ],
@@ -185,7 +186,7 @@ class _NavTab extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: selected
                       ? const Color(0xFF1F1F1F)
-                      : const Color(0xFF99A1AF),
+                      : AppColors.textTertiary,
                   letterSpacing: 0.14,
                   height: 1.0,
                 ),

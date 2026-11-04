@@ -216,9 +216,8 @@ class ShareIntentHandler {
       if (filePaths.isNotEmpty) {
         onSharedDraft(
           SharedDraft(
-            images: filePaths
-                .map((path) => XFile(path))
-                .toList(growable: false),
+            images:
+                filePaths.map((path) => XFile(path)).toList(growable: false),
           ),
         );
       }

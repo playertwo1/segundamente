@@ -103,7 +103,7 @@ class _SkillsManagementPageState extends State<SkillsManagementPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(l10n.deleteConfirm),
         content: Text(l10n.deleteConfirmMessage(name)),
         actions: [
@@ -143,7 +143,7 @@ class _SkillsManagementPageState extends State<SkillsManagementPage> {
     final name = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(l10n.newFolder),
         content: Form(
           key: formKey,
@@ -193,7 +193,7 @@ class _SkillsManagementPageState extends State<SkillsManagementPage> {
     final name = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(l10n.newFile),
         content: Form(
           key: formKey,
@@ -263,7 +263,7 @@ class _SkillsManagementPageState extends State<SkillsManagementPage> {
     final url = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(l10n.downloadSkill),
         content: Form(
           key: formKey,
@@ -319,7 +319,7 @@ class _SkillsManagementPageState extends State<SkillsManagementPage> {
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         content: Row(
           children: [
             const CircularProgressIndicator(),
@@ -471,7 +471,7 @@ class _SkillsManagementPageState extends State<SkillsManagementPage> {
           ),
           Expanded(
             child: _isLoading
-                ? Center(child: AgentLogoLoading())
+                ? const Center(child: const AgentLogoLoading())
                 : _entries.isEmpty
                     ? Center(child: Text(l10n.skillsManagementEmpty))
                     : ListView.builder(
@@ -574,7 +574,7 @@ class _FileEditorPageState extends State<_FileEditorPage> {
         ],
       ),
       body: _isLoading
-          ? Center(child: AgentLogoLoading())
+          ? const Center(child: const AgentLogoLoading())
           : Padding(
               padding: const EdgeInsets.all(12),
               child: TextField(

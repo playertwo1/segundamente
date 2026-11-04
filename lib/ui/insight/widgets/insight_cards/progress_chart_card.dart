@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class ProgressItem {
   final String label;
@@ -51,7 +52,7 @@ class ProgressChartCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 24, 24, 24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -93,7 +94,7 @@ class ProgressChartCard extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               height: 36 / 24,
                               letterSpacing: 0.4,
-                              color: const Color(0xFF0A0A0A),
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ),
@@ -118,7 +119,7 @@ class ProgressChartCard extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                           height: 24 / 16,
                           letterSpacing: -0.31,
-                          color: Color(0xFF0A0A0A),
+                          color: AppColors.textPrimary,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -135,7 +136,7 @@ class ProgressChartCard extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                             height: 20 / 14,
                             letterSpacing: -0.15,
-                            color: Color(0xFF0A0A0A),
+                            color: AppColors.textPrimary,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -167,7 +168,7 @@ class ProgressChartCard extends StatelessWidget {
                                         fontWeight: FontWeight.w400,
                                         height: 16 / 12,
                                         letterSpacing: 0,
-                                        color: Color(0xFF9CA3AF),
+                                        color: AppColors.textTertiary,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -204,7 +205,7 @@ class ProgressChartCard extends StatelessWidget {
     final remainder = target - current;
     return [
       PieChartSectionData(
-        color: const Color(0xFF5B6CFF),
+        color: AppColors.primary,
         value: current,
         title: '',
         radius: 10,
@@ -212,7 +213,7 @@ class ProgressChartCard extends StatelessWidget {
       ),
       if (remainder > 0)
         PieChartSectionData(
-          color: const Color(0xFFE2E8F0),
+          color: AppColors.divider,
           value: remainder,
           title: '',
           radius: 10,
@@ -228,9 +229,9 @@ class ProgressChartCard extends StatelessWidget {
     switch (colorStr.toLowerCase()) {
       case 'grey':
       case 'gray':
-        return const Color(0xFF9CA3AF);
+        return AppColors.textTertiary;
       default:
-        return const Color(0xFFE2E8F0);
+        return AppColors.divider;
     }
   }
 }

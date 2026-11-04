@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:memex/data/services/demo_service.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Full-screen spotlight overlay for the onboarding demo.
 ///
@@ -59,7 +60,7 @@ class DemoOverlay extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF64748B),
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ),
@@ -97,7 +98,7 @@ class DemoOverlay extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.92),
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: const Color(0xFF6366F1).withValues(alpha: 0.2),
+                      color: AppColors.primary.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Column(
@@ -106,7 +107,7 @@ class DemoOverlay extends StatelessWidget {
                       const Icon(
                         Icons.auto_awesome,
                         size: 48,
-                        color: Color(0xFF6366F1),
+                        color: AppColors.primary,
                       ),
                       const SizedBox(height: 20),
                       Text(
@@ -115,7 +116,7 @@ class DemoOverlay extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1E293B),
+                          color: AppColors.textPrimary,
                           height: 1.5,
                         ),
                       ),
@@ -125,8 +126,8 @@ class DemoOverlay extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: demo.advance,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6366F1),
-                            foregroundColor: Colors.white,
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.onPrimary,
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
@@ -148,9 +149,9 @@ class DemoOverlay extends StatelessWidget {
                           onTap: demo.skip,
                           child: Text(
                             demo.skipText,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[500],
+                              color: AppColors.textTertiary,
                             ),
                           ),
                         ),
@@ -333,7 +334,7 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF64748B),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ),
@@ -385,7 +386,7 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF64748B),
+                  color: AppColors.textSecondary,
                 ),
               ),
             ),
@@ -427,13 +428,13 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.15),
+                  color: AppColors.primary.withValues(alpha: 0.15),
                   blurRadius: 24,
                   offset: const Offset(0, 8),
                 ),
               ],
               border: Border.all(
-                color: const Color(0xFF6366F1).withValues(alpha: 0.2),
+                color: AppColors.primary.withValues(alpha: 0.2),
               ),
             ),
             child: Row(
@@ -442,12 +443,12 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.auto_awesome,
-                    color: Color(0xFF6366F1),
+                    color: AppColors.primary,
                     size: 16,
                   ),
                 ),
@@ -458,7 +459,7 @@ class _SpotlightOverlayState extends State<_SpotlightOverlay>
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1E293B),
+                      color: AppColors.textPrimary,
                       height: 1.4,
                     ),
                   ),
@@ -502,7 +503,7 @@ class _SpotlightPainter extends CustomPainter {
 
     // Glow border around cutout
     final glowPaint = Paint()
-      ..color = const Color(0xFF6366F1).withValues(alpha: 0.4)
+      ..color = AppColors.primary.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
     canvas.drawRRect(cutout, glowPaint);

@@ -130,7 +130,7 @@ class _SystemAuthorizationPageState extends State<SystemAuthorizationPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(UserStorage.l10n.permissionRequiredTitle),
         content: Text(UserStorage.l10n.permissionPermanentlyDeniedMessage),
         actions: [
@@ -195,7 +195,7 @@ class _SystemAuthorizationPageState extends State<SystemAuthorizationPage> {
       ),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
       subtitle: Text(subtitle,
-          style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -234,11 +234,11 @@ class _SystemAuthorizationPageState extends State<SystemAuthorizationPage> {
         foregroundColor: Colors.black,
         elevation: 0.5,
       ),
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       body: ListView(
         children: [
           Container(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             child: Column(
               children: [
                 _buildPermissionItem(

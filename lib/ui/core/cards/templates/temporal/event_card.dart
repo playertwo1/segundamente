@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:memex/utils/date_util.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class EventCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -16,7 +17,8 @@ class EventCard extends StatelessWidget {
     final startTime = parseLocalDateTime(data['start_time']);
     final endTime = parseLocalDateTime(data['end_time']);
 
-    final String title = data['title'] ?? UserStorage.l10n.eventCardDefaultTitle;
+    final String title =
+        data['title'] ?? UserStorage.l10n.eventCardDefaultTitle;
     final String? location = data['location'];
 
     final localeName = UserStorage.l10n.localeName;
@@ -50,7 +52,7 @@ class EventCard extends StatelessWidget {
               width: 47,
               height: 50,
               decoration: BoxDecoration(
-                color: const Color(0xFF5B6CFF).withValues(alpha: 0.12),
+                color: AppColors.primary.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -64,7 +66,7 @@ class EventCard extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       letterSpacing: -0.45,
-                      color: const Color(0xFF5B6CFF),
+                      color: AppColors.primary,
                     ),
                   ),
                   Text(
@@ -74,7 +76,7 @@ class EventCard extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       height: 1.0,
                       letterSpacing: -0.45,
-                      color: const Color(0xFF5B6CFF),
+                      color: AppColors.primary,
                     ),
                   ),
                 ],
@@ -94,7 +96,7 @@ class EventCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       height: 23 / 18,
                       letterSpacing: -0.45,
-                      color: const Color(0xFF0A0A0A),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -119,7 +121,7 @@ class EventCard extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                           height: 23 / 14,
                           letterSpacing: -0.45,
-                          color: const Color(0xFF99A1AF),
+                          color: AppColors.textTertiary,
                         ),
                       ),
                     ],
@@ -129,7 +131,7 @@ class EventCard extends StatelessWidget {
                     Row(
                       children: [
                         const Icon(Icons.location_on_outlined,
-                            size: 14, color: Color(0xFF99A1AF)),
+                            size: 14, color: AppColors.textTertiary),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
@@ -139,7 +141,7 @@ class EventCard extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               height: 23 / 14,
                               letterSpacing: -0.45,
-                              color: const Color(0xFF99A1AF),
+                              color: AppColors.textTertiary,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

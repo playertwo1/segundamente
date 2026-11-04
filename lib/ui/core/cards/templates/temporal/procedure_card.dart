@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class ProcedureCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -24,7 +25,7 @@ class ProcedureCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF0A0A0A),
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -44,17 +45,17 @@ class ProcedureCard extends StatelessWidget {
                           width: 24,
                           height: 24,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFEEF2FF),
+                            color: AppColors.iconBgLight,
                             shape: BoxShape.circle,
                             border: Border.all(color: const Color(0xFFC7D2FE)),
                           ),
                           child: Center(
                             child: Text(
                               '${index + 1}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF3730A3),
+                                color: Color(0xFF3730A3),
                               ),
                             ),
                           ),
@@ -63,7 +64,7 @@ class ProcedureCard extends StatelessWidget {
                           Expanded(
                             child: Container(
                               width: 2,
-                              color: const Color(0xFFEEF2FF), // vertical line
+                              color: AppColors.iconBgLight, // vertical line
                             ),
                           ),
                       ],
@@ -77,7 +78,7 @@ class ProcedureCard extends StatelessWidget {
                           steps[index],
                           style: const TextStyle(
                             fontSize: 15,
-                            color: Color(0xFF334155),
+                            color: AppColors.textSecondary,
                             height: 1.4,
                           ),
                         ),

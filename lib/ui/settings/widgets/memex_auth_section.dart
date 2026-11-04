@@ -184,7 +184,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
       decoration: BoxDecoration(
         color: color.withValues(alpha: color == AppColors.primary ? 0.16 : 1),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE2E2E5)),
+        border: Border.all(color: AppColors.divider),
       ),
     );
   }
@@ -240,8 +240,8 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
             ),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.primary,
-              disabledBackgroundColor: const Color(0xFFE2E2E5),
-              disabledForegroundColor: const Color(0xFF757687),
+              disabledBackgroundColor: AppColors.divider,
+              disabledForegroundColor: AppColors.textSecondary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -281,7 +281,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
       obscureText: obscureText,
       decoration: InputDecoration(
         hintText: label,
-        prefixIcon: Icon(icon, color: const Color(0xFF757687)),
+        prefixIcon: Icon(icon, color: AppColors.textSecondary),
         filled: true,
         fillColor: _memexAuthSurface,
         contentPadding:
@@ -370,7 +370,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
       decoration: BoxDecoration(
         color: const Color(0xFFF7F8FC),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E2E5)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Row(
         children: [
@@ -380,7 +380,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
             decoration: BoxDecoration(
               color: balance > 0
                   ? AppColors.success.withValues(alpha: 0.1)
-                  : const Color(0xFFFFF7ED),
+                  : AppColors.iconBgLight,
               borderRadius: BorderRadius.circular(11),
             ),
             child: Icon(
@@ -401,7 +401,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF1A1C1E),
+                    color: AppColors.textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -411,7 +411,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
                       .memexBalanceLabel('\$${balance.toStringAsFixed(3)}'),
                   style: const TextStyle(
                     fontSize: 12,
-                    color: Color(0xFF757687),
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -451,7 +451,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF7ED),
+        color: AppColors.iconBgLight,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xFFFED7AA)),
       ),
@@ -460,7 +460,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
           const Icon(
             Icons.info_outline_rounded,
             size: 17,
-            color: Color(0xFFD97706),
+            color: AppColors.warning,
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -468,7 +468,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
               UserStorage.l10n.memexTopUp,
               style: const TextStyle(
                 fontSize: 12,
-                color: Color(0xFFD97706),
+                color: AppColors.warning,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -538,7 +538,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w900,
-                              color: Color(0xFF1A1C1E),
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ),
@@ -547,7 +547,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
                               ? null
                               : () => Navigator.pop(sheetContext),
                           icon: const Icon(Icons.close_rounded),
-                          color: const Color(0xFF757687),
+                          color: AppColors.textSecondary,
                           visualDensity: VisualDensity.compact,
                         ),
                       ],
@@ -590,7 +590,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w900,
-            color: Color(0xFF1A1C1E),
+            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -624,7 +624,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
         label: Text(UserStorage.l10n.memexPayAmount('\$$amount')),
         style: FilledButton.styleFrom(
           backgroundColor: _memexPricingAmber,
-          foregroundColor: const Color(0xFF1A1C1E),
+          foregroundColor: AppColors.textPrimary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -696,8 +696,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
     required String estimate,
     required VoidCallback? onPressed,
   }) {
-    final borderColor =
-        isSelected ? _memexPricingPurple : const Color(0xFFE2E2E5);
+    final borderColor = isSelected ? _memexPricingPurple : AppColors.divider;
     return Material(
       color: isSelected
           ? _memexPricingPurple.withValues(alpha: 0.07)
@@ -762,7 +761,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w900,
-                              color: Color(0xFF1A1C1E),
+                              color: AppColors.textPrimary,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -774,7 +773,7 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
                       subtitle,
                       style: const TextStyle(
                         fontSize: 11,
-                        color: Color(0xFF757687),
+                        color: AppColors.textSecondary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -798,9 +797,8 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w900,
-                  color: isSelected
-                      ? _memexPricingPurple
-                      : const Color(0xFF1A1C1E),
+                  color:
+                      isSelected ? _memexPricingPurple : AppColors.textPrimary,
                 ),
               ),
             ],
@@ -818,9 +816,9 @@ class _MemexAuthSectionState extends State<MemexAuthSection> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E2E5)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Column(
         children: rows
@@ -1045,7 +1043,7 @@ class _MemexHistorySheetState extends State<_MemexHistorySheet> {
           width: 40,
           height: 4,
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: AppColors.divider,
             borderRadius: BorderRadius.circular(2),
           ),
         ),
@@ -1061,7 +1059,7 @@ class _MemexHistorySheetState extends State<_MemexHistorySheet> {
               const Spacer(),
               Text(
                 '${_logs.length} records',
-                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                style: const TextStyle(fontSize: 12, color: AppColors.textTertiary),
               ),
             ],
           ),
@@ -1135,7 +1133,7 @@ class _MemexHistorySheetState extends State<_MemexHistorySheet> {
                   isTopUp
                       ? timeStr
                       : '$timeStr · ${log.promptTokens}+${log.completionTokens} tokens',
-                  style: TextStyle(fontSize: 11, color: Colors.grey[500]),
+                  style: const TextStyle(fontSize: 11, color: AppColors.textTertiary),
                 ),
               ],
             ),
@@ -1194,7 +1192,7 @@ class _MemexPaymentWebViewState extends State<_MemexPaymentWebView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(UserStorage.l10n.completePayment),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         foregroundColor: Colors.black87,
         elevation: 0,
         leading: IconButton(

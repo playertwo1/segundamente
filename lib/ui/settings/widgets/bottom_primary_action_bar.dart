@@ -22,8 +22,8 @@ class BottomPrimaryActionBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: const Border(top: BorderSide(color: Color(0xFFE5E7EB))),
+          color: AppColors.cardBackground,
+          border: const Border(top: BorderSide(color: AppColors.divider)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.06),
@@ -48,7 +48,7 @@ class BottomPrimaryActionBar extends StatelessWidget {
             ),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.onPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),

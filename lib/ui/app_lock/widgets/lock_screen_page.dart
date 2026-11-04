@@ -102,7 +102,7 @@ class _LockScreenState extends State<LockScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(UserStorage.l10n.wrongPassword),
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             backgroundColor: Colors.red,
           ),
         );
@@ -122,7 +122,7 @@ class _LockScreenState extends State<LockScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       body: SafeArea(
         child: Column(
           children: [
@@ -136,7 +136,7 @@ class _LockScreenState extends State<LockScreen> {
             const SizedBox(height: 24),
             Text(
               UserStorage.l10n.enterPassword,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
@@ -157,13 +157,11 @@ class _LockScreenState extends State<LockScreen> {
                     height: 12,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: isFilled
-                          ? AppColors.primary
-                          : const Color(0xFFE2E8F0),
+                      color: isFilled ? AppColors.primary : AppColors.divider,
                       border: isFilled
                           ? null
                           : Border.all(
-                              color: const Color(0xFFCBD5E1),
+                              color: AppColors.divider,
                               width: 1,
                             ),
                     ),
@@ -197,7 +195,7 @@ class _LockScreenState extends State<LockScreen> {
                             alignment: Alignment.center,
                             child: Text(
                               UserStorage.l10n.cancel,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.textSecondary,
@@ -221,7 +219,7 @@ class _LockScreenState extends State<LockScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.cardBackground,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -263,16 +261,16 @@ class _LockScreenState extends State<LockScreen> {
         height: 72,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white,
+          color: AppColors.cardBackground,
           border: Border.all(
-            color: const Color(0xFFE2E8F0),
+            color: AppColors.divider,
             width: 1,
           ),
         ),
         alignment: Alignment.center,
         child: Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w400,
             color: AppColors.textPrimary,
@@ -289,7 +287,7 @@ class PrivacyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -302,10 +300,10 @@ class PrivacyScreen extends StatelessWidget {
             const SizedBox(height: 24),
             Text(
               UserStorage.l10n.memexLocked,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: Colors.grey[600],
+                color: AppColors.textSecondary,
               ),
             ),
           ],

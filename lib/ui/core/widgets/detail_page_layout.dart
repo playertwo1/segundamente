@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class DetailPageLayout extends StatelessWidget {
   final String title;
@@ -25,7 +26,7 @@ class DetailPageLayout extends StatelessWidget {
     final topPadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
           CustomScrollView(
@@ -51,7 +52,7 @@ class DetailPageLayout extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              color: const Color(0xFFF7F8FA),
+              color: AppColors.background,
               padding: EdgeInsets.fromLTRB(16, topPadding + 8, 16, 12),
               child: Row(
                 children: [
@@ -63,7 +64,7 @@ class DetailPageLayout extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),

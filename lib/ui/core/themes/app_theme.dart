@@ -2,6 +2,7 @@
 // Compass-aligned: ui/core/themes/
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 
@@ -10,10 +11,7 @@ abstract final class AppTheme {
   AppTheme._();
 
   /// App background — delegates to AppColors
-  static const Color scaffoldBackgroundLight = AppColors.background;
-
-  /// Indigo seed
-  static const Color seedColor = Color(0xFF6366F1);
+  static const Color scaffoldBackground = AppColors.background;
 
   static TextTheme _buildTextTheme(Brightness brightness) {
     final base = GoogleFonts.interTextTheme(
@@ -111,52 +109,105 @@ abstract final class AppTheme {
     );
   }
 
-  static ThemeData get lightTheme {
-    final textTheme = _buildTextTheme(Brightness.light);
-    return ThemeData(
-      scaffoldBackgroundColor: scaffoldBackgroundLight,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: seedColor,
-        brightness: Brightness.light,
-      ),
-      useMaterial3: true,
-      textTheme: textTheme,
-      appBarTheme: AppBarTheme(
-        backgroundColor: const Color(0xFFF7F8FA),
-        elevation: 0,
-        centerTitle: true,
-        titleTextStyle: textTheme.titleLarge?.copyWith(
-          color: const Color(0xFF0F172A),
-        ),
-        iconTheme: const IconThemeData(
-          color: Color(0xFF64748B),
-          size: 20,
-        ),
-      ),
+  /// The only theme: AMOLED black, ivory text, amber accent (D-017).
+  static ThemeData get amoledTheme {
+    final textTheme = _buildTextTheme(Brightness.dark).apply(
+      bodyColor: AppColors.textPrimary,
+      displayColor: AppColors.textPrimary,
     );
-  }
-
-  static ThemeData get darkTheme {
-    final textTheme = _buildTextTheme(Brightness.dark);
+    const colorScheme = ColorScheme.dark(
+      primary: AppColors.primary,
+      onPrimary: AppColors.onPrimary,
+      secondary: AppColors.primary,
+      onSecondary: AppColors.onPrimary,
+      surface: AppColors.background,
+      onSurface: AppColors.textPrimary,
+      onSurfaceVariant: AppColors.textSecondary,
+      surfaceContainerLowest: AppColors.background,
+      surfaceContainerLow: AppColors.surface,
+      surfaceContainer: AppColors.surface,
+      surfaceContainerHigh: AppColors.surface,
+      surfaceContainerHighest: AppColors.iconBgLight,
+      outline: AppColors.divider,
+      outlineVariant: AppColors.divider,
+      error: AppColors.danger,
+      onError: AppColors.onPrimary,
+    );
     return ThemeData(
-      scaffoldBackgroundColor: const Color(0xFF0F172A),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: seedColor,
-        brightness: Brightness.dark,
-      ),
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: scaffoldBackground,
+      colorScheme: colorScheme,
       useMaterial3: true,
       textTheme: textTheme,
+      dividerTheme: const DividerThemeData(
+        color: AppColors.divider,
+        thickness: 0.5,
+        space: 1,
+      ),
       appBarTheme: AppBarTheme(
-        backgroundColor: const Color(0xFF0F172A),
+        backgroundColor: AppColors.background,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
-        centerTitle: true,
-        titleTextStyle: textTheme.titleLarge?.copyWith(
-          color: const Color(0xFFF7F8FA),
-        ),
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        titleTextStyle: textTheme.headlineMedium,
         iconTheme: const IconThemeData(
-          color: Color(0xFF94A3B8),
-          size: 20,
+          color: AppColors.textPrimary,
+          size: 22,
         ),
+      ),
+      cardTheme: const CardThemeData(
+        color: AppColors.background,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: AppColors.divider, width: 0.5),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+      ),
+      dialogTheme: const DialogThemeData(
+        backgroundColor: AppColors.surface,
+        surfaceTintColor: Colors.transparent,
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: AppColors.surface,
+        surfaceTintColor: Colors.transparent,
+      ),
+      popupMenuTheme: const PopupMenuThemeData(
+        color: AppColors.surface,
+        surfaceTintColor: Colors.transparent,
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: AppColors.surface,
+        contentTextStyle: TextStyle(color: AppColors.textPrimary),
+        actionTextColor: AppColors.primary,
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        hintStyle: TextStyle(color: AppColors.textTertiary),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.divider),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.primary),
+        ),
+      ),
+      listTileTheme: const ListTileThemeData(
+        iconColor: AppColors.textSecondary,
+        textColor: AppColors.textPrimary,
+        minVerticalPadding: 12,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) =>
+            states.contains(WidgetState.selected)
+                ? AppColors.onPrimary
+                : AppColors.textSecondary),
+        trackColor: WidgetStateProperty.resolveWith((states) =>
+            states.contains(WidgetState.selected)
+                ? AppColors.primary
+                : AppColors.surface),
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.primary,
       ),
     );
   }

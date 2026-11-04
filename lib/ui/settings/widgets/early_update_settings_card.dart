@@ -389,9 +389,9 @@ class _EarlyUpdateSettingsCardState extends State<EarlyUpdateSettingsCard> {
                     const SizedBox(height: 4),
                     Text(
                       UserStorage.l10n.earlyUpdateSettingsDesc,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
-                        color: Colors.grey[600],
+                        color: AppColors.textSecondary,
                         height: 1.35,
                       ),
                     ),
@@ -514,7 +514,7 @@ class _EarlyUpdateSettingsCardState extends State<EarlyUpdateSettingsCard> {
         ],
       ),
       child: Material(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: borderRadius,
         clipBehavior: Clip.antiAlias,
         child: Padding(
@@ -546,7 +546,8 @@ class _EarlyUpdateSettingsCardState extends State<EarlyUpdateSettingsCard> {
         padding: const EdgeInsets.only(top: 2),
         child: Text(
           subtitle,
-          style: TextStyle(fontSize: 12, color: Colors.grey[600], height: 1.35),
+          style: const TextStyle(
+              fontSize: 12, color: AppColors.textSecondary, height: 1.35),
         ),
       ),
       value: value,

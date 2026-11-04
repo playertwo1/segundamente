@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/widgets/adaptive_icon.dart';
 import 'package:memex/domain/models/tag_model.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Compact Card Template
 ///
@@ -76,7 +77,7 @@ class CompactCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF0A0A0A), // Slate-800
+                        color: AppColors.textPrimary, // Slate-800
                         height: 1.2,
                       ),
                     ),
@@ -88,7 +89,7 @@ class CompactCard extends StatelessWidget {
                         text: details.join(' · '),
                         style: const TextStyle(
                           fontSize: 13,
-                          color: Color(0xFF4A5565), // Slate-500
+                          color: AppColors.textSecondary, // Slate-500
                           fontWeight: FontWeight.w500,
                           height: 1.2,
                         ),

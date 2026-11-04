@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class MetricCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -73,7 +74,7 @@ class MetricCard extends StatelessWidget {
                   width: 4,
                   height: 18,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF5B6CFF), // Indigo 500
+                    color: AppColors.primary, // Indigo 500
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -84,7 +85,7 @@ class MetricCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF0A0A0A), // Slate 900
+                      color: AppColors.textPrimary, // Slate 900
                       letterSpacing: 0.2,
                     ),
                     maxLines: 1,
@@ -105,10 +106,10 @@ class MetricCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F8FA).withValues(alpha: 0.5), // Slate 50
+        color: AppColors.background.withValues(alpha: 0.5), // Slate 50
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFFF7F8FA), // Slate 100
+          color: AppColors.background, // Slate 100
           width: 1,
         ),
       ),
@@ -144,15 +145,15 @@ class MetricCard extends StatelessWidget {
 
     if (trend == 'up') {
       trendIcon = Icons.trending_up_rounded;
-      trendColor = const Color(0xFF10B981); // Emerald 500
+      trendColor = AppColors.success; // Emerald 500
       hasTrend = true;
     } else if (trend == 'down') {
       trendIcon = Icons.trending_down_rounded;
-      trendColor = const Color(0xFFEF4444); // Red 500
+      trendColor = AppColors.danger; // Red 500
       hasTrend = true;
     } else {
       trendIcon = Icons.horizontal_rule_rounded;
-      trendColor = const Color(0xFF99A1AF); // Slate 400
+      trendColor = AppColors.textTertiary; // Slate 400
       hasTrend = false;
     }
 
@@ -165,10 +166,10 @@ class MetricCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F8FA).withValues(alpha: 0.5), // Slate 50
+        color: AppColors.background.withValues(alpha: 0.5), // Slate 50
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFFF7F8FA), // Slate 100
+          color: AppColors.background, // Slate 100
           width: 1,
         ),
       ),
@@ -210,7 +211,7 @@ class MetricCard extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         height: 1.25,
-                        color: Color(0xFF4A5565), // Slate 600
+                        color: AppColors.textSecondary, // Slate 600
                         letterSpacing: -0.2,
                       ),
                       maxLines: 3,
@@ -238,7 +239,7 @@ class MetricCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF0A0A0A), // Slate 900
+                          color: AppColors.textPrimary, // Slate 900
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -251,7 +252,7 @@ class MetricCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF99A1AF), // Slate 400
+                        color: AppColors.textTertiary, // Slate 400
                       ),
                     ),
                   ],
@@ -264,7 +265,7 @@ class MetricCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF4A5565), // Slate 500
+                    color: AppColors.textSecondary, // Slate 500
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -308,15 +309,15 @@ class MetricCard extends StatelessWidget {
 
     if (trend == 'up') {
       trendIcon = Icons.trending_up_rounded;
-      trendColor = const Color(0xFF10B981); // Emerald 500
+      trendColor = AppColors.success; // Emerald 500
       hasTrend = true;
     } else if (trend == 'down') {
       trendIcon = Icons.trending_down_rounded;
-      trendColor = const Color(0xFFEF4444); // Red 500
+      trendColor = AppColors.danger; // Red 500
       hasTrend = true;
     } else {
       trendIcon = Icons.horizontal_rule_rounded;
-      trendColor = const Color(0xFF99A1AF); // Slate 400
+      trendColor = AppColors.textTertiary; // Slate 400
       hasTrend = false;
     }
 
@@ -362,7 +363,7 @@ class MetricCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF0A0A0A), // Slate 800
+                  color: AppColors.textPrimary, // Slate 800
                   letterSpacing: -0.2,
                 ),
                 maxLines: 1,
@@ -375,7 +376,7 @@ class MetricCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF4A5565), // Slate 500
+                    color: AppColors.textSecondary, // Slate 500
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -400,7 +401,7 @@ class MetricCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF0A0A0A), // Slate 900
+                      color: AppColors.textPrimary, // Slate 900
                       letterSpacing: -0.5,
                     ),
                   ),
@@ -410,7 +411,7 @@ class MetricCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF99A1AF), // Slate 400
+                        color: AppColors.textTertiary, // Slate 400
                       ),
                     ),
                   ],
@@ -428,11 +429,11 @@ class MetricCard extends StatelessWidget {
       case 'emerald':
         return {
           'bg': const Color(0xFFECFDF5),
-          'primary': const Color(0xFF10B981),
+          'primary': AppColors.success,
         };
       case 'orange':
         return {
-          'bg': const Color(0xFFFFF7ED),
+          'bg': AppColors.iconBgLight,
           'primary': const Color(0xFFF97316),
         };
       case 'purple':
@@ -442,13 +443,13 @@ class MetricCard extends StatelessWidget {
         };
       case 'blue':
         return {
-          'bg': const Color(0xFFEFF6FF),
+          'bg': AppColors.iconBgLight,
           'primary': const Color(0xFF3B82F6),
         };
       default: // Indigo as default
         return {
-          'bg': const Color(0xFFEEF2FF),
-          'primary': const Color(0xFF5B6CFF),
+          'bg': AppColors.iconBgLight,
+          'primary': AppColors.primary,
         };
     }
   }

@@ -230,7 +230,7 @@ class _LocationContextSettingsPageState
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(UserStorage.l10n.discardChangesTitle),
         content: Text(UserStorage.l10n.discardChangesMessage),
         actions: [
@@ -264,7 +264,7 @@ class _LocationContextSettingsPageState
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFF7F8FA),
+        backgroundColor: AppColors.background,
         appBar: AppBar(
           title: Text(l10n.locationContextTitle),
           backgroundColor: AppColors.background,
@@ -345,9 +345,9 @@ class _LocationContextSettingsPageState
                           const SizedBox(height: 8),
                           Text(
                             l10n.amapGcj02Note,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[600],
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -470,9 +470,9 @@ class _LocationContextSettingsPageState
                           const SizedBox(height: 12),
                           SelectableText(
                             _testResult!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[700],
+                              color: AppColors.textSecondary,
                               height: 1.4,
                             ),
                           ),
@@ -511,7 +511,8 @@ class _LocationContextSettingsPageState
                   const SizedBox(height: 6),
                   Text(
                     feedback.message,
-                    style: TextStyle(color: Colors.grey[700], height: 1.35),
+                    style:
+                        const TextStyle(color: AppColors.textSecondary, height: 1.35),
                   ),
                 ],
               ),
@@ -525,7 +526,7 @@ class _LocationContextSettingsPageState
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 detail,
-                style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
               ),
             ),
           ),
@@ -663,7 +664,7 @@ class _LocationContextSettingsPageState
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           boxShadow: [
             BoxShadow(
               color: AppColors.textSecondary.withValues(alpha: 0.08),
@@ -713,7 +714,7 @@ class _LocationContextSettingsPageState
         ],
       ),
       child: Material(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: borderRadius,
         clipBehavior: Clip.antiAlias,
         child: Padding(padding: const EdgeInsets.all(20), child: child),

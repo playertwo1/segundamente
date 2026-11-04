@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:memex/domain/models/shortcut_item.dart';
 import 'package:memex/ui/core/cards/style/timeline_theme.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class RadialMenu extends StatefulWidget {
   final List<ShortcutItem> items;
@@ -287,7 +288,7 @@ class RadialMenuState extends State<RadialMenu> with TickerProviderStateMixin {
                       constraints:
                           const BoxConstraints(minWidth: 120, maxWidth: 260),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.cardBackground,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           TimelineTheme.shadows.float

@@ -352,7 +352,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
 
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -589,7 +589,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(UserStorage.l10n.confirmDeleteBackup),
         content: Text(
           UserStorage.l10n.confirmDeleteBackupMessage(snapshot.name),
@@ -644,7 +644,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       context: context,
       builder: (context) => backupInfo == null
           ? AlertDialog(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.cardBackground,
               title: Text(UserStorage.l10n.confirmRestore),
               content: Text(UserStorage.l10n.confirmRestoreMessage),
               actions: [
@@ -695,7 +695,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.cardBackground,
             title: Text(UserStorage.l10n.restoreComplete),
             content: Text(UserStorage.l10n.restoreRestartHint),
             actions: [
@@ -795,7 +795,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                         fontSize: 14,
                         color: isBusy
                             ? AppColors.textSecondary
-                            : const Color(0xFF16A34A),
+                            : AppColors.success,
                       ),
                     ),
                   ),
@@ -1165,7 +1165,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.onPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -1192,7 +1192,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -1324,7 +1324,7 @@ class _StoredBackupTile extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFE5E7EB)),
+          border: Border.all(color: AppColors.divider),
           borderRadius: BorderRadius.circular(12),
         ),
         child: ListTile(

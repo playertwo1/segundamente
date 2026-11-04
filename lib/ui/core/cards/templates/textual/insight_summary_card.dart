@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/ui/core/cards/card_action_notification.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Insight Summary Card Template
 ///
@@ -57,12 +58,12 @@ class InsightSummaryCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF59E0B).withValues(alpha: 0.1),
+                      color: AppColors.warning.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.auto_awesome,
-                      color: Color(0xFFF59E0B),
+                      color: AppColors.warning,
                       size: 20,
                     ),
                   ),
@@ -76,7 +77,7 @@ class InsightSummaryCard extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF0A0A0A),
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         if (content.isNotEmpty) ...[
@@ -85,7 +86,7 @@ class InsightSummaryCard extends StatelessWidget {
                             content,
                             style: const TextStyle(
                               fontSize: 13,
-                              color: Color(0xFF4A5565),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -98,12 +99,12 @@ class InsightSummaryCard extends StatelessWidget {
           ),
           if (added.isNotEmpty || updated.isNotEmpty) ...[
             const SizedBox(height: 16),
-            const Divider(height: 1, color: Color(0xFFE2E8F0)),
+            const Divider(height: 1, color: AppColors.divider),
             const SizedBox(height: 16),
           ],
           if (added.isNotEmpty)
-            _buildListSection(context, l10n.sectionNewInsights, added,
-                const Color(0xFF10B981)),
+            _buildListSection(
+                context, l10n.sectionNewInsights, added, AppColors.success),
           if (updated.isNotEmpty)
             _buildListSection(context, l10n.sectionUpdatedInsights, updated,
                 const Color(0xFF3B82F6)),
@@ -124,7 +125,7 @@ class InsightSummaryCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF99A1AF),
+              color: AppColors.textTertiary,
               letterSpacing: 0.5,
             ),
           ),
@@ -154,7 +155,7 @@ class InsightSummaryCard extends StatelessWidget {
                         itemTitle,
                         style: const TextStyle(
                           fontSize: 15,
-                          color: Color(0xFF334155),
+                          color: AppColors.textSecondary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

@@ -189,7 +189,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(UserStorage.l10n.confirmLocationName),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -206,7 +206,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                 border: const OutlineInputBorder(),
                 labelText: UserStorage.l10n.nameLabel,
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
               autofocus: true,
             ),
@@ -270,11 +270,11 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
           ),
 
           // Center Pin (Fixed)
-          Center(
+          const Center(
             child: Padding(
               padding:
-                  const EdgeInsets.only(bottom: 40), // Adjust for pin anchor
-              child: const Icon(
+                  EdgeInsets.only(bottom: 40), // Adjust for pin anchor
+              child: Icon(
                 Icons.location_on,
                 size: 48,
                 color: AppColors.primary,
@@ -302,7 +302,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.cardBackground,
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
@@ -317,9 +317,9 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                               decoration: InputDecoration(
                                 hintText: UserStorage.l10n.inputPlaceNameHint,
                                 border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 14),
-                                suffixIcon: Icon(Icons.search,
+                                suffixIcon: const Icon(Icons.search,
                                     color: AppColors.textTertiary),
                               ),
                               style: const TextStyle(fontSize: 16),
@@ -337,7 +337,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                         child: Container(
                           constraints: const BoxConstraints(maxHeight: 200),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppColors.cardBackground,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
@@ -397,7 +397,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
             child: Container(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 40),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.cardBackground,
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(24)),
                 boxShadow: [
@@ -435,7 +435,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                     ),
                     child: Text(
                       UserStorage.l10n.confirmLocation,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

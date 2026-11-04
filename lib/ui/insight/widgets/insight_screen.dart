@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 import 'package:flutter/material.dart';
 
@@ -109,15 +110,14 @@ class _InsightScreenState extends State<InsightScreen> {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5B6CFF)),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
               )
             : Icon(
                 item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
                 size: 20,
-                color: item.isPinned
-                    ? const Color(0xFF5B6CFF)
-                    : const Color(0xFF99A1AF),
+                color:
+                    item.isPinned ? AppColors.primary : AppColors.textTertiary,
               ),
       ),
     );
@@ -145,7 +145,7 @@ class _InsightScreenState extends State<InsightScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF59E0B),
+                          color: AppColors.warning,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -171,7 +171,7 @@ class _InsightScreenState extends State<InsightScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEF4444),
+                          color: AppColors.danger,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -218,7 +218,7 @@ class _InsightScreenState extends State<InsightScreen> {
                     ),
                     child: const Icon(
                       Icons.close,
-                      color: Color(0xFF4A5565),
+                      color: AppColors.textSecondary,
                       size: 20,
                     ),
                   ),
@@ -268,7 +268,7 @@ class _InsightScreenState extends State<InsightScreen> {
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0A0A0A),
+                  color: AppColors.textPrimary,
                 ),
               )
             else if (vm.isReordering)
@@ -303,7 +303,8 @@ class _InsightScreenState extends State<InsightScreen> {
             children: [
               Text(
                 vm.errorMessage!,
-                style: const TextStyle(fontSize: 14, color: Color(0xFF99A1AF)),
+                style: const TextStyle(
+                    fontSize: 14, color: AppColors.textTertiary),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
@@ -423,7 +424,7 @@ class _InsightScreenState extends State<InsightScreen> {
                                       style: const TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xFF0A0A0A),
+                                        color: AppColors.textPrimary,
                                       ),
                                     )
                                   else
@@ -468,7 +469,7 @@ class _InsightScreenState extends State<InsightScreen> {
             final wrappedContent = widget.isEmbedded
                 ? content
                 : Scaffold(
-                    backgroundColor: const Color(0xFFF7F8FA),
+                    backgroundColor: AppColors.background,
                     body: SafeArea(child: content),
                   );
 
@@ -491,10 +492,10 @@ class _InsightScreenState extends State<InsightScreen> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: const Color(0xFF6366F1).withValues(alpha: 0.08),
+            color: AppColors.primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.15),
+              color: AppColors.primary.withValues(alpha: 0.15),
             ),
           ),
           child: Row(
@@ -502,7 +503,7 @@ class _InsightScreenState extends State<InsightScreen> {
               const Icon(
                 Icons.auto_awesome,
                 size: 18,
-                color: Color(0xFF6366F1),
+                color: AppColors.primary,
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -510,7 +511,7 @@ class _InsightScreenState extends State<InsightScreen> {
                   UserStorage.l10n.noKnowledgeInsight,
                   style: const TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF6366F1),
+                    color: AppColors.primary,
                     fontWeight: FontWeight.w500,
                     height: 1.4,
                   ),

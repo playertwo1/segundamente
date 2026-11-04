@@ -171,7 +171,7 @@ class _AsyncTaskListPageState extends State<AsyncTaskListPage> {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.cardBackground,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                             color: hasError
@@ -220,18 +220,18 @@ class _AsyncTaskListPageState extends State<AsyncTaskListPage> {
                           if (task.bizId != null) ...[
                             Text(
                               UserStorage.l10n.taskBizIdLabel(task.bizId!),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey[600],
+                                color: AppColors.textSecondary,
                               ),
                             ),
                             const SizedBox(height: 4),
                           ],
                           Text(
                             UserStorage.l10n.taskIdLabel(task.id),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[500],
+                              color: AppColors.textTertiary,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -240,15 +240,15 @@ class _AsyncTaskListPageState extends State<AsyncTaskListPage> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.access_time,
-                                      size: 14, color: Colors.grey[500]),
+                                  const Icon(Icons.access_time,
+                                      size: 14, color: AppColors.textTertiary),
                                   const SizedBox(width: 4),
                                   Text(
                                     UserStorage.l10n.createdAtDate(
                                         _formatDate(task.createdAt)),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey[500],
+                                      color: AppColors.textTertiary,
                                     ),
                                   ),
                                 ],
@@ -257,15 +257,16 @@ class _AsyncTaskListPageState extends State<AsyncTaskListPage> {
                                 const SizedBox(height: 4),
                                 Row(
                                   children: [
-                                    Icon(Icons.update,
-                                        size: 14, color: Colors.grey[500]),
+                                    const Icon(Icons.update,
+                                        size: 14,
+                                        color: AppColors.textTertiary),
                                     const SizedBox(width: 4),
                                     Text(
                                       UserStorage.l10n.updatedAtDate(
                                           _formatDate(task.updatedAt)),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey[500],
+                                        color: AppColors.textTertiary,
                                       ),
                                     ),
                                   ],
@@ -277,30 +278,32 @@ class _AsyncTaskListPageState extends State<AsyncTaskListPage> {
                                 Row(
                                   children: [
                                     if (durationStr != null) ...[
-                                      Icon(Icons.timer_outlined,
-                                          size: 14, color: Colors.grey[500]),
+                                      const Icon(Icons.timer_outlined,
+                                          size: 14,
+                                          color: AppColors.textTertiary),
                                       const SizedBox(width: 4),
                                       Text(
                                         UserStorage.l10n
                                             .durationLabel(durationStr),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 12,
-                                          color: Colors.grey[500],
+                                          color: AppColors.textTertiary,
                                         ),
                                       ),
                                       if (task.retryCount > 0)
                                         const SizedBox(width: 12),
                                     ],
                                     if (task.retryCount > 0) ...[
-                                      Icon(Icons.refresh,
-                                          size: 14, color: Colors.grey[500]),
+                                      const Icon(Icons.refresh,
+                                          size: 14,
+                                          color: AppColors.textTertiary),
                                       const SizedBox(width: 4),
                                       Text(
                                         UserStorage.l10n
                                             .retryCount(task.retryCount),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 12,
-                                          color: Colors.grey[500],
+                                          color: AppColors.textTertiary,
                                         ),
                                       ),
                                     ],
@@ -353,7 +356,7 @@ class AsyncTaskDetailDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       title: Text('${task.type} Details'),
       content: SingleChildScrollView(
         child: Column(
@@ -372,13 +375,15 @@ class AsyncTaskDetailDialog extends StatelessWidget {
               UserStorage.l10n.createdAtDate(_formatDate(task.createdAt)),
             ),
             SelectableText(
-              UserStorage.l10n.taskScheduledLabel(_formatDate(task.scheduledAt)),
+              UserStorage.l10n
+                  .taskScheduledLabel(_formatDate(task.scheduledAt)),
             ),
             SelectableText(
               UserStorage.l10n.updatedAtDate(_formatDate(task.updatedAt)),
             ),
             SelectableText(
-              UserStorage.l10n.taskCompletedLabel(_formatDate(task.completedAt)),
+              UserStorage.l10n
+                  .taskCompletedLabel(_formatDate(task.completedAt)),
             ),
             const SizedBox(height: 12),
             const Text(
@@ -388,7 +393,7 @@ class AsyncTaskDetailDialog extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(8),
-              color: Colors.grey[100],
+              color: AppColors.surface,
               child: SelectableText(task.payload ?? 'null'),
             ),
             if (task.error != null && task.error!.isNotEmpty) ...[

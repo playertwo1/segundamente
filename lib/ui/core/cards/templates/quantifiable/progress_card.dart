@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class ProgressCard extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -109,7 +110,7 @@ class _ProgressCardState extends State<ProgressCard> {
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF0A0A0A),
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -150,7 +151,7 @@ class _ProgressCardState extends State<ProgressCard> {
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF4A5565),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -167,8 +168,8 @@ class _ProgressCardState extends State<ProgressCard> {
             height: 16,
             child: SliderTheme(
               data: SliderTheme.of(context).copyWith(
-                activeTrackColor: const Color(0xFF5B6CFF),
-                inactiveTrackColor: const Color(0xFFF7F8FA),
+                activeTrackColor: AppColors.primary,
+                inactiveTrackColor: AppColors.background,
                 thumbColor: Colors.white,
                 trackHeight: 12,
                 thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),

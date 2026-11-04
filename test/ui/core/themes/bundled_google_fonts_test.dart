@@ -25,7 +25,7 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
-        theme: AppTheme.lightTheme,
+        theme: AppTheme.amoledTheme,
         home: const Scaffold(
           body: Column(
             children: [

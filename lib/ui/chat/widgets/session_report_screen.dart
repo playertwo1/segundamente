@@ -5,6 +5,7 @@ import 'package:memex/ui/chat/widgets/session_report_view.dart';
 import 'package:memex/utils/result.dart';
 import 'package:memex/utils/share_service.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class SessionReportScreen extends StatefulWidget {
   const SessionReportScreen({super.key, required this.viewModel});
@@ -28,11 +29,11 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(UserStorage.l10n.sessionReportTitle),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
+        surfaceTintColor: AppColors.cardBackground,
         elevation: 0,
       ),
       body: ListenableBuilder(

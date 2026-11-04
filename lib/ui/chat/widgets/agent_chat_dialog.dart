@@ -555,8 +555,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
           if (item.prepared != null) XFile(item.prepared!.path),
       ];
 
-  PhotoAttachmentsViewModel get _attachments => _galleryAttachments ??=
-      PhotoAttachmentsViewModel(router: _router)
+  PhotoAttachmentsViewModel get _attachments =>
+      _galleryAttachments ??= PhotoAttachmentsViewModel(router: _router)
         ..addListener(_onAttachmentsChanged);
 
   void _onAttachmentsChanged() {
@@ -1396,7 +1396,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     return showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         title: Text(UserStorage.l10n.refreshSuperAgentStateTitle),
         content: Text(message),
         actions: [
@@ -1433,12 +1433,18 @@ class _AgentChatDialogState extends State<AgentChatDialog>
       try {
         final picker = widget.imagePickerForTesting;
         if (picker == null && defaultTargetPlatform == TargetPlatform.iOS) {
-          final existing = _photoSuggestionClusters.expand((cluster) => cluster)
-              .where((photo) => _selectedImages.any((image) => image.path == photo.xFile.path))
-              .map((photo) => photo.entity.id).toSet();
-          final result = await _attachments.pickNativePhotos(excludedAssetIds: existing);
+          final existing = _photoSuggestionClusters
+              .expand((cluster) => cluster)
+              .where((photo) => _selectedImages
+                  .any((image) => image.path == photo.xFile.path))
+              .map((photo) => photo.entity.id)
+              .toSet();
+          final result =
+              await _attachments.pickNativePhotos(excludedAssetIds: existing);
           if (mounted) {
-            result.when(onOk: (_) {}, onError: (error, _) => ToastHelper.showError(context, error));
+            result.when(
+                onOk: (_) {},
+                onError: (error, _) => ToastHelper.showError(context, error));
           }
           return;
         }
@@ -1602,116 +1608,116 @@ class _AgentChatDialogState extends State<AgentChatDialog>
 
   void _applyChatEvent(ChatEvent event) {
     if (event is ChatAgentStartedEvent) {
-        _messageFocusNode.unfocus();
-        _isStreaming = true;
-        _isLoadingAgent = true;
-        _nextResponseStartsNewMessage = true;
-        _discardPendingReplyArtifactsExcept(event.turnId);
-        return;
-      }
-      if (event is ChatAgentStoppedEvent) {
-        _isLoadingAgent = false;
-        _forceNextChatScroll = true;
-        return;
-      }
-      if (event is ChatTokenUsageEvent) {
-        _lastTokenUsage = event;
-        return;
-      }
-      if (event is ChatSessionCreatedEvent) {
-        _currentSessionId = event.sessionId;
-        AgentActionApprovalService.instance.attachSession(event.sessionId);
-        unawaited(
-          UserStorage.setLatestSuperAgentHomeSessionId(event.sessionId),
-        );
-        return;
-      }
+      _messageFocusNode.unfocus();
+      _isStreaming = true;
+      _isLoadingAgent = true;
+      _nextResponseStartsNewMessage = true;
+      _discardPendingReplyArtifactsExcept(event.turnId);
+      return;
+    }
+    if (event is ChatAgentStoppedEvent) {
+      _isLoadingAgent = false;
+      _forceNextChatScroll = true;
+      return;
+    }
+    if (event is ChatTokenUsageEvent) {
+      _lastTokenUsage = event;
+      return;
+    }
+    if (event is ChatSessionCreatedEvent) {
+      _currentSessionId = event.sessionId;
+      AgentActionApprovalService.instance.attachSession(event.sessionId);
+      unawaited(
+        UserStorage.setLatestSuperAgentHomeSessionId(event.sessionId),
+      );
+      return;
+    }
 
-      // Handle Thoughts and Tools (Grouping)
-      if (event is ChatThoughtChunkEvent ||
-          event is ChatTraceStartedEvent ||
-          event is ChatTraceCompletedEvent) {
-        final processItem = _ensureProcessItem();
+    // Handle Thoughts and Tools (Grouping)
+    if (event is ChatThoughtChunkEvent ||
+        event is ChatTraceStartedEvent ||
+        event is ChatTraceCompletedEvent) {
+      final processItem = _ensureProcessItem();
 
-        if (event is ChatThoughtChunkEvent) {
-          if (processItem.children.isNotEmpty &&
-              processItem.children.last is ThinkingItem) {
-            (processItem.children.last as ThinkingItem).text += event.text;
-          } else {
-            processItem.children.add(ThinkingItem(event.text));
-          }
-        } else if (event is ChatTraceStartedEvent) {
-          _upsertTraceStart(processItem, event);
-        } else if (event is ChatTraceCompletedEvent) {
-          _completeTrace(processItem, event);
-        }
-        return; // Handled
-      }
-
-      if (event is ChatArtifactsEvent) {
-        if (event.artifacts.isEmpty) return;
-        _attachArtifactsToCurrentReply(
-          event.turnId,
-          event.artifacts
-              .map(
-                (artifact) => ArtifactItem(
-                  artifact,
-                  timestamp: DateTime.now(),
-                ),
-              )
-              .toList(),
-        );
-        return;
-      }
-
-      // Handle Response (Finish Progress)
-      if (event is ChatResponseChunkEvent) {
-        final primary = _lastPrimaryItem();
-        if (primary is ProcessItem) {
-          primary.isFinished = true;
-          primary.needsAttention = false;
-          primary.isExpanded = false; // Collapse when answer starts
-        }
-
-        if (shouldAttachArtifactsToAssistantReply(
-              turnId: event.turnId,
-              primaryItem: primary,
-            ) &&
-            !_nextResponseStartsNewMessage) {
-          final reply = primary as AIMessageItem;
-          reply.text += event.text;
-          reply.isStreaming = !event.isDone;
-        } else if (shouldCreateAIMessageForResponseChunk(
-              text: event.text,
-              isDone: event.isDone,
-            ) ||
-            _hasPendingReplyArtifacts(event.turnId)) {
-          _items.add(
-            AIMessageItem(
-              event.text,
-              turnId: event.turnId,
-              isStreaming: !event.isDone,
-              artifacts: _takePendingReplyArtifacts(event.turnId),
-              timestamp: DateTime.now(),
-            ),
-          );
-        }
-        if (event.isDone) {
-          _nextResponseStartsNewMessage = true;
-          _forceNextChatScroll = true;
+      if (event is ChatThoughtChunkEvent) {
+        if (processItem.children.isNotEmpty &&
+            processItem.children.last is ThinkingItem) {
+          (processItem.children.last as ThinkingItem).text += event.text;
         } else {
-          _nextResponseStartsNewMessage = false;
+          processItem.children.add(ThinkingItem(event.text));
         }
-      } else if (event is ChatErrorEvent) {
-        final primary = _lastPrimaryItem();
-        if (primary is ProcessItem) {
-          primary.isFinished = true;
-          primary.needsAttention = true;
-          primary.isExpanded = false;
-        }
-        _items.add(ErrorItem(event.error));
-        _forceNextChatScroll = true;
+      } else if (event is ChatTraceStartedEvent) {
+        _upsertTraceStart(processItem, event);
+      } else if (event is ChatTraceCompletedEvent) {
+        _completeTrace(processItem, event);
       }
+      return; // Handled
+    }
+
+    if (event is ChatArtifactsEvent) {
+      if (event.artifacts.isEmpty) return;
+      _attachArtifactsToCurrentReply(
+        event.turnId,
+        event.artifacts
+            .map(
+              (artifact) => ArtifactItem(
+                artifact,
+                timestamp: DateTime.now(),
+              ),
+            )
+            .toList(),
+      );
+      return;
+    }
+
+    // Handle Response (Finish Progress)
+    if (event is ChatResponseChunkEvent) {
+      final primary = _lastPrimaryItem();
+      if (primary is ProcessItem) {
+        primary.isFinished = true;
+        primary.needsAttention = false;
+        primary.isExpanded = false; // Collapse when answer starts
+      }
+
+      if (shouldAttachArtifactsToAssistantReply(
+            turnId: event.turnId,
+            primaryItem: primary,
+          ) &&
+          !_nextResponseStartsNewMessage) {
+        final reply = primary as AIMessageItem;
+        reply.text += event.text;
+        reply.isStreaming = !event.isDone;
+      } else if (shouldCreateAIMessageForResponseChunk(
+            text: event.text,
+            isDone: event.isDone,
+          ) ||
+          _hasPendingReplyArtifacts(event.turnId)) {
+        _items.add(
+          AIMessageItem(
+            event.text,
+            turnId: event.turnId,
+            isStreaming: !event.isDone,
+            artifacts: _takePendingReplyArtifacts(event.turnId),
+            timestamp: DateTime.now(),
+          ),
+        );
+      }
+      if (event.isDone) {
+        _nextResponseStartsNewMessage = true;
+        _forceNextChatScroll = true;
+      } else {
+        _nextResponseStartsNewMessage = false;
+      }
+    } else if (event is ChatErrorEvent) {
+      final primary = _lastPrimaryItem();
+      if (primary is ProcessItem) {
+        primary.isFinished = true;
+        primary.needsAttention = true;
+        primary.isExpanded = false;
+      }
+      _items.add(ErrorItem(event.error));
+      _forceNextChatScroll = true;
+    }
   }
 
   void _attachArtifactsToCurrentReply(
@@ -1896,7 +1902,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
-            color: const Color(0xFFF7F8FA),
+            color: AppColors.background,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: const Color(0xFFEFF2F6)),
           ),
@@ -1967,7 +1973,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                   width: double.infinity,
                   height: dialogHeight,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.cardBackground,
                     borderRadius: borderRadius,
                     boxShadow: const [
                       BoxShadow(
@@ -1989,7 +1995,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                             behavior: HitTestBehavior.translucent,
                             onTap: _messageFocusNode.unfocus,
                             child: Container(
-                              color: Colors.white,
+                              color: AppColors.cardBackground,
                               child: _items.isEmpty
                                   ? _isLoading
                                       ? const SizedBox.expand()
@@ -2050,7 +2056,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFFF7F8FA),
+      color: AppColors.background,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
@@ -2137,7 +2143,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
       ),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.8),
-        border: const Border(bottom: BorderSide(color: Color(0xFFF7F8FA))),
+        border: const Border(bottom: BorderSide(color: AppColors.background)),
       ),
       child: SizedBox(
         height: 36,
@@ -2226,8 +2232,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
       decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Color(0xFFF7F8FA))),
+        color: AppColors.cardBackground,
+        border: Border(top: BorderSide(color: AppColors.background)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -2294,8 +2300,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
           Container(
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: const Color(0xFFE2E8F0)),
+              color: AppColors.cardBackground,
+              border: Border.all(color: AppColors.divider),
               borderRadius: BorderRadius.circular(28),
               boxShadow: [
                 BoxShadow(
@@ -2447,7 +2453,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         height: 42,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F8FA),
+          color: AppColors.background,
           borderRadius: BorderRadius.circular(21),
         ),
         child: Row(
@@ -2490,7 +2496,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
   void _showRunModePicker() {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -2603,7 +2609,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         );
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       builder: (_) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -2670,7 +2676,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         width: 42,
         height: 42,
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F8FA),
+          color: AppColors.background,
           borderRadius: BorderRadius.circular(21),
         ),
         child: Icon(icon, size: 20, color: AppColors.textSecondary),
@@ -2945,11 +2951,11 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                         vertical: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.cardBackground,
                         borderRadius: BorderRadius.circular(
                           16,
                         ).copyWith(topLeft: const Radius.circular(4)),
-                        border: Border.all(color: const Color(0xFFF7F8FA)),
+                        border: Border.all(color: AppColors.background),
                       ),
                       child: MarkdownBody(
                         data: item.text,
@@ -2970,11 +2976,11 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                           code: const TextStyle(
                             fontSize: 13,
                             color: AppColors.textPrimary,
-                            backgroundColor: Color(0xFFF7F8FA),
+                            backgroundColor: AppColors.background,
                             fontFamily: 'monospace',
                           ),
                           codeblockDecoration: BoxDecoration(
-                            color: const Color(0xFFF7F8FA),
+                            color: AppColors.background,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           blockquote: const TextStyle(
@@ -2982,7 +2988,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                             fontStyle: FontStyle.italic,
                           ),
                           blockquoteDecoration: BoxDecoration(
-                            color: const Color(0xFFF7F8FA),
+                            color: AppColors.background,
                             borderRadius: BorderRadius.circular(8),
                             border: const Border(
                               left: BorderSide(
@@ -2998,7 +3004,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                     _buildAssistantArtifactSection(item.artifacts),
                   if (!item.isStreaming && item.text.trim().isNotEmpty)
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 2, top: 6),
+                      padding:
+                          const EdgeInsetsDirectional.only(start: 2, top: 6),
                       child: _CopyMessageButton(
                         text: item.text,
                         onCopied: () {
@@ -3025,7 +3032,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(color: const Color(0xFFE6EAF2)),
                   boxShadow: const [
@@ -3068,7 +3075,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 13,
-                                          color: Color(0xFF0F172A),
+                                          color: AppColors.textPrimary,
                                           fontWeight: FontWeight.w700,
                                           letterSpacing: 0,
                                         ),
@@ -3113,7 +3120,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                         padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
                         decoration: const BoxDecoration(
                           border: Border(
-                            top: BorderSide(color: Color(0xFFF1F5F9)),
+                            top: BorderSide(color: AppColors.surface),
                           ),
                         ),
                         child: Column(
@@ -3227,7 +3234,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                               : Icons.cancel_outlined,
                           size: 16,
                           color: isApproved
-                              ? const Color(0xFF16A34A)
+                              ? AppColors.success
                               : AppColors.textTertiary,
                         ),
                     ],
@@ -3270,7 +3277,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                                 _resolveApproval(item, approved: false),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.textSecondary,
-                              side: const BorderSide(color: Color(0xFFE2E8F0)),
+                              side: const BorderSide(color: AppColors.divider),
                               padding: const EdgeInsets.symmetric(vertical: 9),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -3422,7 +3429,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
       case ChatArtifact.kindTimelineCard:
         return AppColors.primary;
       default:
-        return const Color(0xFF10B981);
+        return AppColors.success;
     }
   }
 
@@ -3484,7 +3491,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
               fallbackBuilder: () => Container(
                 width: 64,
                 height: 64,
-                color: const Color(0xFFF7F8FA),
+                color: AppColors.background,
                 child: const Icon(
                   Icons.broken_image_outlined,
                   size: 18,
@@ -3538,7 +3545,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     final content = Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: accentColor.withValues(alpha: 0.22)),
         boxShadow: const [
@@ -3658,7 +3665,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF7F8FA),
+                        color: AppColors.background,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -3692,7 +3699,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                     heightPadding: 0,
                     showContainerDecoration: true,
                     borderRadius: 14,
-                    borderColor: Color(0xFFF1F5F9),
+                    borderColor: AppColors.surface,
                   ),
                 ),
               ),
@@ -3738,7 +3745,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         key: const ValueKey('agent_chat_token_usage_debug'),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F8FA),
+          color: AppColors.background,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: const Color(0xFFEFF2F6)),
         ),
@@ -3759,8 +3766,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     final state = superAgentProcessVisualState(item);
     final color = switch (state) {
       SuperAgentProcessVisualState.running => AppColors.primary,
-      SuperAgentProcessVisualState.needsAttention => const Color(0xFFEF4444),
-      SuperAgentProcessVisualState.done => const Color(0xFF10B981),
+      SuperAgentProcessVisualState.needsAttention => AppColors.danger,
+      SuperAgentProcessVisualState.done => AppColors.success,
     };
     return Container(
       width: 28,
@@ -3799,8 +3806,8 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     };
     final color = switch (state) {
       SuperAgentProcessVisualState.running => AppColors.primary,
-      SuperAgentProcessVisualState.needsAttention => const Color(0xFFEF4444),
-      SuperAgentProcessVisualState.done => const Color(0xFF10B981),
+      SuperAgentProcessVisualState.needsAttention => AppColors.danger,
+      SuperAgentProcessVisualState.done => AppColors.success,
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -3880,9 +3887,9 @@ class _AgentChatDialogState extends State<AgentChatDialog>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -3928,7 +3935,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
           ),
           for (var index = 0; index < tools.length; index++) ...[
             if (index > 0)
-              const Divider(height: 1, thickness: 1, color: Color(0xFFF1F5F9)),
+              const Divider(height: 1, thickness: 1, color: AppColors.surface),
             _buildToolCallItem(tools[index]),
           ],
         ],
@@ -4140,7 +4147,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
         children: [
           Row(
             children: [
-              const Icon(Icons.psychology, size: 12, color: Color(0xFFCBD5E1)),
+              const Icon(Icons.psychology, size: 12, color: AppColors.divider),
               const SizedBox(width: 6),
               Text(
                 _agentChat.thinking,
@@ -4171,10 +4178,10 @@ class _AgentChatDialogState extends State<AgentChatDialog>
 
   Widget _buildToolCallItem(ToolCallItem item) {
     final statusColor = item.isError
-        ? const Color(0xFFEF4444)
+        ? AppColors.danger
         : item.isRunning
             ? AppColors.primary
-            : const Color(0xFF10B981);
+            : AppColors.success;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -4215,7 +4222,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF334155),
+                          color: AppColors.textSecondary,
                           letterSpacing: 0,
                         ),
                       ),
@@ -4263,9 +4270,9 @@ class _AgentChatDialogState extends State<AgentChatDialog>
             margin: const EdgeInsets.fromLTRB(12, 0, 12, 10),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
+              color: AppColors.background,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
+              border: Border.all(color: AppColors.divider),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -4282,9 +4289,9 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                   const SizedBox(height: 6),
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.cardBackground,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                      border: Border.all(color: AppColors.divider),
                     ),
                     child: Column(
                       children: [
@@ -4295,7 +4302,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                             const Divider(
                               height: 1,
                               thickness: 1,
-                              color: Color(0xFFF1F5F9),
+                              color: AppColors.surface,
                             ),
                           _buildToolCallItem(item.childToolCalls[index]),
                         ],
@@ -4318,7 +4325,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                     item.result!,
                     style: const TextStyle(
                       fontSize: 11,
-                      color: Color(0xFF334155),
+                      color: AppColors.textSecondary,
                       height: 1.35,
                     ),
                   ),
@@ -4338,7 +4345,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                   style: const TextStyle(
                     fontSize: 11,
                     fontFamily: 'monospace',
-                    color: Color(0xFF334155),
+                    color: AppColors.textSecondary,
                     height: 1.35,
                   ),
                 ),
@@ -4358,7 +4365,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                     style: const TextStyle(
                       fontSize: 11,
                       fontFamily: 'monospace',
-                      color: Color(0xFF334155),
+                      color: AppColors.textSecondary,
                       height: 1.35,
                     ),
                   ),

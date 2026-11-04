@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class SummaryMetric {
   final String label;
@@ -69,7 +70,7 @@ class SummaryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -96,7 +97,7 @@ class SummaryCard extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                       height: 16 / 14,
                       letterSpacing: 0.6,
-                      color: const Color(0xFF99A1AF),
+                      color: AppColors.textTertiary,
                     ),
                   ),
                   if (badge != null)
@@ -116,7 +117,7 @@ class SummaryCard extends StatelessWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             height: 16 / 14,
-                            color: const Color(0xFF5B6CFF),
+                            color: AppColors.primary,
                           ),
                         ),
                       ],
@@ -148,7 +149,7 @@ class SummaryCard extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 height: 20 / 14,
                 letterSpacing: -0.15,
-                color: const Color(0xFF9CA3AF),
+                color: AppColors.textTertiary,
               ),
             ),
             const SizedBox(height: 16),
@@ -157,7 +158,7 @@ class SummaryCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
-                color: const Color(0xFFF7F8FA),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -176,7 +177,7 @@ class SummaryCard extends StatelessWidget {
                         fontFamily: 'PingFang SC',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -200,7 +201,7 @@ class SummaryCard extends StatelessWidget {
                       margin: EdgeInsetsDirectional.only(end: isLast ? 0 : 10),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF7F8FA),
+                        color: AppColors.background,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Column(
@@ -211,7 +212,7 @@ class SummaryCard extends StatelessWidget {
                               fontFamily: 'PingFang SC',
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
-                              color: Color(0xFF9CA3AF),
+                              color: AppColors.textTertiary,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -224,7 +225,7 @@ class SummaryCard extends StatelessWidget {
                               letterSpacing: 0.07,
                               color: metric.color != null
                                   ? _parseColor(metric.color!)
-                                  : const Color(0xFF0A0A0A),
+                                  : AppColors.textPrimary,
                             ),
                           ),
                         ],
@@ -250,7 +251,7 @@ class SummaryCard extends StatelessWidget {
                               fontFamily: 'PingFang SC',
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF0A0A0A),
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           if (highlightsTitle.contains('('))
@@ -260,7 +261,7 @@ class SummaryCard extends StatelessWidget {
                                 fontFamily: 'PingFang SC',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
-                                color: Color(0xFF9CA3AF),
+                                color: AppColors.textTertiary,
                               ),
                             ),
                         ],
@@ -309,9 +310,9 @@ class SummaryCard extends StatelessWidget {
                         errorBuilder: (_, __, ___) => Container(
                           width: 120,
                           height: 120,
-                          color: const Color(0xFFF7F8FA),
+                          color: AppColors.background,
                           child: const Icon(Icons.broken_image,
-                              color: Color(0xFF9CA3AF)),
+                              color: AppColors.textTertiary),
                         ),
                       ),
                     );
@@ -329,6 +330,6 @@ class SummaryCard extends StatelessWidget {
     if (colorStr.startsWith('#')) {
       return Color(int.parse(colorStr.substring(1), radix: 16) + 0xFF000000);
     }
-    return const Color(0xFF5B6CFF);
+    return AppColors.primary;
   }
 }

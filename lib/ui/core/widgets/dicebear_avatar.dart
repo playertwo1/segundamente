@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:memex/data/services/avatar_media_service.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Builds a DiceBear Notionists avatar URL from a seed string.
 String dicebearUrl(String seed) => AvatarMediaService.diceBearUrl(seed);
@@ -64,7 +65,7 @@ class _DiceBearAvatarState extends State<DiceBearAvatar> {
       child: Container(
         width: widget.size,
         height: widget.size,
-        color: widget.backgroundColor ?? const Color(0xFFEEF2FF),
+        color: widget.backgroundColor ?? AppColors.iconBgLight,
         child: FutureBuilder<File?>(
           future: _avatarFileFuture,
           builder: (context, snapshot) {
@@ -97,13 +98,13 @@ class _DiceBearAvatarState extends State<DiceBearAvatar> {
       width: widget.size,
       height: widget.size,
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? const Color(0xFFEEF2FF),
+        color: widget.backgroundColor ?? AppColors.iconBgLight,
         shape: BoxShape.circle,
       ),
       child: Icon(
         Icons.person,
         size: widget.size * 0.5,
-        color: const Color(0xFF5B6CFF),
+        color: AppColors.primary,
       ),
     );
   }
@@ -112,14 +113,14 @@ class _DiceBearAvatarState extends State<DiceBearAvatar> {
     return Container(
       width: widget.size,
       height: widget.size,
-      color: widget.backgroundColor ?? const Color(0xFFEEF2FF),
+      color: widget.backgroundColor ?? AppColors.iconBgLight,
       child: Center(
         child: SizedBox(
           width: widget.size * 0.3,
           height: widget.size * 0.3,
           child: const CircularProgressIndicator(
             strokeWidth: 2,
-            color: Color(0xFF5B6CFF),
+            color: AppColors.primary,
           ),
         ),
       ),

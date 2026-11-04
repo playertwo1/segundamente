@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memex/data/services/agent_background_status.dart';
 import 'package:memex/data/services/local_task_executor.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class AgentActivityWidget extends StatefulWidget {
   final bool forceVisible;
@@ -106,7 +107,7 @@ class _AgentActivityWidgetState extends State<AgentActivityWidget> {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withValues(alpha: 0.08),
+            color: AppColors.primary.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -128,7 +129,7 @@ class _AgentActivityWidgetState extends State<AgentActivityWidget> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    color: Color(0xFF1E293B),
+                    color: AppColors.textPrimary,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
@@ -140,7 +141,7 @@ class _AgentActivityWidgetState extends State<AgentActivityWidget> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: const Color(0xFF64748B).withValues(alpha: 0.8),
+                    color: AppColors.textSecondary.withValues(alpha: 0.8),
                     fontSize: 11,
                   ),
                 ),

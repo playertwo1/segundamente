@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -130,7 +131,7 @@ class TimelineScreenState extends State<TimelineScreen> {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               UserStorage.l10n.skipAnyway,
-              style: const TextStyle(color: Color(0xFFEF4444)),
+              style: const TextStyle(color: AppColors.danger),
             ),
           ),
         ],
@@ -250,129 +251,126 @@ class TimelineScreenState extends State<TimelineScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Flexible(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
-                        child: MemexBrandTitle(),
-                      ),
-                    ),
-                  ),
-                  // Header actions: notification, companion, user avatar
-                  SizedBox(
-                    height: 36,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Notification button
-                        if (AppDatabase.isInitialized)
-                          ListenableBuilder(
-                            listenable: widget.viewModel,
-                            builder: (context, _) {
-                              final pendingCount =
-                                  widget.viewModel.pendingAttachmentCount;
-                              return GestureDetector(
-                                onTap: () {
-                                  if (pendingCount > 0) {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      builder: (context) =>
-                                          const ActionCenterSheet(),
-                                    );
-                                  } else {
-                                    ToastHelper.showSuccess(context,
-                                        UserStorage.l10n.noPendingActionsToast);
-                                  }
-                                },
-                                child: SizedBox(
-                                  width: 36,
-                                  height: 36,
-                                  child: Stack(
-                                    children: [
-                                      Center(
-                                        child: SvgPicture.asset(
-                                          'assets/icons/notification_bell.svg',
-                                          width: 19,
-                                          height: 20,
-                                        ),
-                                      ),
-                                      if (pendingCount > 0)
-                                        PositionedDirectional(
-                                          top: 6,
-                                          end: 6,
-                                          child: Container(
-                                            width: 8,
-                                            height: 8,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFF5B6CFF),
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        const SizedBox(width: 6),
-                        // Companion character button (next to user avatar)
-                        PersonaAvatarButton(
-                          viewModel: widget.personaAvatarViewModel,
-                          onTap: (character) => context.push(
-                            '${AppRoutes.personaChat}/${character.id}',
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        // Avatar button
-                        GestureDetector(
-                          onTap: () {
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Flexible(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: MemexBrandTitle(),
+              ),
+            ),
+          ),
+          // Header actions: notification, companion, user avatar
+          SizedBox(
+            height: 36,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Notification button
+                if (AppDatabase.isInitialized)
+                  ListenableBuilder(
+                    listenable: widget.viewModel,
+                    builder: (context, _) {
+                      final pendingCount =
+                          widget.viewModel.pendingAttachmentCount;
+                      return GestureDetector(
+                        onTap: () {
+                          if (pendingCount > 0) {
                             showModalBottomSheet(
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
-                              builder: (context) =>
-                                  const PersonalCenterScreen(),
-                            ).then((_) {
-                              _checkPermissionBadge();
-                              _checkFitnessBanner();
-                              _loadUserAvatar();
-                            });
-                          },
-                          child: Badge(
-                            isLabelVisible: _showPermissionBadge,
-                            smallSize: 10,
-                            backgroundColor: Colors.red,
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFEEF2FF),
+                              builder: (context) => const ActionCenterSheet(),
+                            );
+                          } else {
+                            ToastHelper.showSuccess(context,
+                                UserStorage.l10n.noPendingActionsToast);
+                          }
+                        },
+                        child: SizedBox(
+                          width: 36,
+                          height: 36,
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: SvgPicture.asset(
+                                  'assets/icons/notification_bell.svg',
+                                  width: 19,
+                                  height: 20,
+                                ),
                               ),
-                              child: CharacterAvatar(
-                                avatar: _userAvatar ??
-                                    UserStorage.defaultAvatarSeed,
-                                name: '',
-                                size: 32,
-                                backgroundColor: Colors.transparent,
-                              ),
-                            ),
+                              if (pendingCount > 0)
+                                PositionedDirectional(
+                                  top: 6,
+                                  end: 6,
+                                  child: Container(
+                                    width: 8,
+                                    height: 8,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.primary,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
-                      ],
+                      );
+                    },
+                  ),
+                const SizedBox(width: 6),
+                // Companion character button (next to user avatar)
+                PersonaAvatarButton(
+                  viewModel: widget.personaAvatarViewModel,
+                  onTap: (character) => context.push(
+                    '${AppRoutes.personaChat}/${character.id}',
+                  ),
+                ),
+                const SizedBox(width: 6),
+                // Avatar button
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => const PersonalCenterScreen(),
+                    ).then((_) {
+                      _checkPermissionBadge();
+                      _checkFitnessBanner();
+                      _loadUserAvatar();
+                    });
+                  },
+                  child: Badge(
+                    isLabelVisible: _showPermissionBadge,
+                    smallSize: 10,
+                    backgroundColor: Colors.red,
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.iconBgLight,
+                      ),
+                      child: CharacterAvatar(
+                        avatar: _userAvatar ?? UserStorage.defaultAvatarSeed,
+                        name: '',
+                        size: 32,
+                        backgroundColor: Colors.transparent,
+                      ),
                     ),
                   ),
-                ],
-              ),
-            );
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -389,217 +387,218 @@ class TimelineScreenState extends State<TimelineScreen> {
               final vm = widget.viewModel;
               return Column(
                 children: [
-            TimelineModelConfigBanner(
-              onConfigureTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AppConfig.enableMemexModelService
-                        ? const AiServiceSetupPage()
-                        : const ModelConfigListPage(),
+                  TimelineModelConfigBanner(
+                    onConfigureTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AppConfig.enableMemexModelService
+                                  ? const AiServiceSetupPage()
+                                  : const ModelConfigListPage(),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-            if (_showFitnessBanner)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white.withValues(alpha: 0.92),
-                        Colors.white.withValues(alpha: 0.82),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.6),
-                      width: 0.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.06),
-                        blurRadius: 16,
-                        offset: const Offset(0, 4),
+                  if (_showFitnessBanner)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.white.withValues(alpha: 0.92),
+                              Colors.white.withValues(alpha: 0.82),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.6),
+                            width: 0.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.06),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
+                            ),
+                            BoxShadow(
+                              color: AppColors.success.withValues(alpha: 0.08),
+                              blurRadius: 24,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SystemAuthorizationPage(),
+                                  ),
+                                ).then((_) {
+                                  _checkPermissionBadge();
+                                  _checkFitnessBanner();
+                                });
+                              },
+                              child: Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(0xFF34D399),
+                                      AppColors.success,
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Icon(Icons.favorite_rounded,
+                                    size: 18, color: Colors.white),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SystemAuthorizationPage(),
+                                    ),
+                                  ).then((_) {
+                                    _checkPermissionBadge();
+                                    _checkFitnessBanner();
+                                  });
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      UserStorage.l10n.enableFitness,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.textPrimary,
+                                        letterSpacing: -0.2,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      UserStorage.l10n.fitnessBannerMessage,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: AppColors.textSecondary
+                                            .withValues(alpha: 0.9),
+                                        height: 1.3,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            GestureDetector(
+                              onTap: _dismissFitnessBanner,
+                              child: Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: AppColors.textTertiary
+                                      .withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Icon(Icons.close_rounded,
+                                    size: 14, color: AppColors.textTertiary),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      BoxShadow(
-                        color: const Color(0xFF10B981).withValues(alpha: 0.08),
-                        blurRadius: 24,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: SizedBox(
+                      height: 36,
+                      child: _buildInlineTagChips(vm),
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
+
+                  // Content
+                  Expanded(
+                    child: NotificationListener<CardActionNotification>(
+                      onNotification: (notification) {
+                        final action = notification.action;
+                        if (action['action'] == 'filter_tag' &&
+                            action['tag'] != null) {
+                          vm.setActiveFilter(action['tag'] as String);
+                          vm.setViewMode(action['tag'] == 'insight'
+                              ? TimelineViewMode.insight
+                              : TimelineViewMode.timeline);
+                          if (action['tag'] == 'insight') {
+                            unawaited(widget.insightViewModel.ensureLoaded());
+                          }
+                          final toastContext = context;
+                          vm.loadCards(refresh: true).catchError((e) {
+                            if (toastContext.mounted) {
+                              ToastHelper.showError(toastContext, e);
+                            }
+                          });
+                          // Also sync PageView
+                          final pageIdx = _filterToPageIndex(vm);
+                          _jumpToPage(pageIdx);
+                          return true;
+                        } else if (action['action'] == 'navigate_to_card' &&
+                            action['card_id'] != null) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const SystemAuthorizationPage(),
+                              builder: (context) => InsightDetailPage(
+                                  id: action['card_id'] as String),
                             ),
-                          ).then((_) {
-                            _checkPermissionBadge();
-                            _checkFitnessBanner();
-                          });
+                          );
+                          return true;
+                        } else if (action['action'] == 'refresh_timeline') {
+                          vm.refresh();
+                          return true;
+                        } else if (action['action'] == 'delete_card' &&
+                            action['card_id'] != null) {
+                          vm.removeCardById(action['card_id'] as String);
+                          return true;
+                        }
+                        return false;
+                      },
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: _totalPageCount(vm),
+                        onPageChanged: (index) => _onPageChanged(index, vm),
+                        itemBuilder: (context, index) {
+                          if (index == 1) {
+                            // Insight page
+                            return _DeferredActivePage(
+                              isActive: _currentPageIndex == 1,
+                              builder: (_) => InsightScreen(
+                                isEmbedded: true,
+                                viewModel: widget.insightViewModel,
+                              ),
+                            );
+                          }
+                          // Timeline page (All or filtered by tag)
+                          return _buildTimelineBody(vm);
                         },
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF34D399),
-                                Color(0xFF10B981),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(Icons.favorite_rounded,
-                              size: 18, color: Colors.white),
-                        ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const SystemAuthorizationPage(),
-                              ),
-                            ).then((_) {
-                              _checkPermissionBadge();
-                              _checkFitnessBanner();
-                            });
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                UserStorage.l10n.enableFitness,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF1E293B),
-                                  letterSpacing: -0.2,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                UserStorage.l10n.fitnessBannerMessage,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: const Color(0xFF64748B)
-                                      .withValues(alpha: 0.9),
-                                  height: 1.3,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      GestureDetector(
-                        onTap: _dismissFitnessBanner,
-                        child: Container(
-                          width: 28,
-                          height: 28,
-                          decoration: BoxDecoration(
-                            color:
-                                const Color(0xFF94A3B8).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(Icons.close_rounded,
-                              size: 14, color: Color(0xFF94A3B8)),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: SizedBox(
-                height: 36,
-                child: _buildInlineTagChips(vm),
-              ),
-            ),
-
-            // Content
-            Expanded(
-              child: NotificationListener<CardActionNotification>(
-                onNotification: (notification) {
-                  final action = notification.action;
-                  if (action['action'] == 'filter_tag' &&
-                      action['tag'] != null) {
-                    vm.setActiveFilter(action['tag'] as String);
-                    vm.setViewMode(action['tag'] == 'insight'
-                        ? TimelineViewMode.insight
-                        : TimelineViewMode.timeline);
-                    if (action['tag'] == 'insight') {
-                      unawaited(widget.insightViewModel.ensureLoaded());
-                    }
-                    final toastContext = context;
-                    vm.loadCards(refresh: true).catchError((e) {
-                      if (toastContext.mounted) {
-                        ToastHelper.showError(toastContext, e);
-                      }
-                    });
-                    // Also sync PageView
-                    final pageIdx = _filterToPageIndex(vm);
-                    _jumpToPage(pageIdx);
-                    return true;
-                  } else if (action['action'] == 'navigate_to_card' &&
-                      action['card_id'] != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            InsightDetailPage(id: action['card_id'] as String),
-                      ),
-                    );
-                    return true;
-                  } else if (action['action'] == 'refresh_timeline') {
-                    vm.refresh();
-                    return true;
-                  } else if (action['action'] == 'delete_card' &&
-                      action['card_id'] != null) {
-                    vm.removeCardById(action['card_id'] as String);
-                    return true;
-                  }
-                  return false;
-                },
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: _totalPageCount(vm),
-                  onPageChanged: (index) => _onPageChanged(index, vm),
-                  itemBuilder: (context, index) {
-                    if (index == 1) {
-                      // Insight page
-                      return _DeferredActivePage(
-                        isActive: _currentPageIndex == 1,
-                        builder: (_) => InsightScreen(
-                          isEmbedded: true,
-                          viewModel: widget.insightViewModel,
-                        ),
-                      );
-                    }
-                    // Timeline page (All or filtered by tag)
-                    return _buildTimelineBody(vm);
-                  },
-                ),
-              ),
-            ),
                 ],
               );
             },
@@ -645,13 +644,13 @@ class TimelineScreenState extends State<TimelineScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.wifi_off,
-                      size: 48, color: Color(0xFF94A3B8)),
+                      size: 48, color: AppColors.textTertiary),
                   const SizedBox(height: 12),
                   Text(
                     vm.errorMessage!,
                     style: const TextStyle(
                       fontSize: 14,
-                      color: Color(0xFF94A3B8),
+                      color: AppColors.textTertiary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -706,7 +705,7 @@ class TimelineScreenState extends State<TimelineScreen> {
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF64748B),
+                      color: AppColors.textSecondary,
                       letterSpacing: -0.2,
                     ),
                   ),
@@ -925,7 +924,7 @@ class TimelineFilterBar extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.white : const Color(0xFF4A5565),
+                color: isSelected ? Colors.white : AppColors.textSecondary,
                 fontWeight: FontWeight.w500,
                 fontSize: 14,
                 letterSpacing: -0.15,
@@ -1221,7 +1220,7 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF99A1AF),
+              color: AppColors.textTertiary,
               letterSpacing: -0.15,
             ),
           ),
@@ -1235,14 +1234,14 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
                     card.uiConfigs.isNotEmpty &&
                     card.uiConfigs.first.templateId != 'classic_card') ...[
                   const Icon(Icons.auto_awesome_outlined,
-                      size: 11, color: Color(0xFF99A1AF)),
+                      size: 11, color: AppColors.textTertiary),
                   const SizedBox(width: 3),
                   Flexible(
                     child: Text(
                       UserStorage.l10n.pendingAiProcessingHint,
                       style: const TextStyle(
                         fontSize: 11,
-                        color: Color(0xFF99A1AF),
+                        color: AppColors.textTertiary,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -1253,7 +1252,7 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
                   const Icon(
                     Icons.location_on_outlined,
                     size: 14,
-                    color: Color(0xFF94A3B8),
+                    color: AppColors.textTertiary,
                   ),
                   const SizedBox(width: 4),
                   Flexible(
@@ -1262,7 +1261,8 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF94A3B8), // Using the requested color
+                        color:
+                            AppColors.textTertiary, // Using the requested color
                         letterSpacing: 0.5,
                       ),
                       overflow: TextOverflow.ellipsis,

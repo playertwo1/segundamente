@@ -101,7 +101,7 @@ class DebugSettingsPage extends StatelessWidget {
         foregroundColor: Colors.black,
         elevation: 0.5,
       ),
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         children: [
@@ -312,7 +312,7 @@ class DebugSettingsPage extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.white),
             boxShadow: [
@@ -336,7 +336,9 @@ class DebugSettingsPage extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 16,
-                    color: isLoading ? Colors.grey[400] : AppColors.textPrimary,
+                    color: isLoading
+                        ? AppColors.textTertiary
+                        : AppColors.textPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -350,9 +352,9 @@ class DebugSettingsPage extends StatelessWidget {
                   ),
                 )
               else
-                Icon(
+                const Icon(
                   Icons.chevron_right,
-                  color: Colors.grey[400],
+                  color: AppColors.textTertiary,
                 ),
             ],
           ),

@@ -54,7 +54,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
             elevation: 0,
             iconTheme: const IconThemeData(color: AppColors.textPrimary),
           ),
-          backgroundColor: const Color(0xFFF7F8FA),
+          backgroundColor: AppColors.background,
           body: _buildBody(vm),
         );
       },
@@ -63,7 +63,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
 
   Widget _buildBody(MemoryViewModel vm) {
     if (vm.isLoading) {
-      return Center(child: AgentLogoLoading());
+      return const Center(child: const AgentLogoLoading());
     }
 
     if (vm.error != null) {
@@ -85,7 +85,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
       child: Column(
         children: [
           Container(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             child: TabBar(
               labelColor: AppColors.primary,
               unselectedLabelColor: Colors.grey,
@@ -135,7 +135,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
           h3: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF334155)),
+              color: AppColors.textSecondary),
           p: const TextStyle(
               fontSize: 15, color: AppColors.textSecondary, height: 1.5),
           listBullet: const TextStyle(color: AppColors.primary),
@@ -166,7 +166,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
           elevation: 0,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: Colors.grey.shade200)),
+              side: const BorderSide(color: AppColors.divider)),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -182,7 +182,8 @@ class _MemoryScreenState extends State<MemoryScreen> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        item['subject'] ?? UserStorage.l10n.memoryGeneralSubject,
+                        item['subject'] ??
+                            UserStorage.l10n.memoryGeneralSubject,
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.primary,
@@ -193,9 +194,9 @@ class _MemoryScreenState extends State<MemoryScreen> {
                     const Spacer(),
                     Text(
                       _formatDate(item['created_at']),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[400],
+                        color: AppColors.textTertiary,
                       ),
                     ),
                   ],
@@ -205,7 +206,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
                   item['content'] ?? '',
                   style: const TextStyle(
                     fontSize: 15,
-                    color: Color(0xFF334155),
+                    color: AppColors.textSecondary,
                     height: 1.4,
                   ),
                 ),

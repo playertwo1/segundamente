@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/widgets/emoji_icon.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class TimelineItem {
   final String time;
@@ -52,7 +53,7 @@ class TimelineCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -71,7 +72,7 @@ class TimelineCard extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF0A0A0A),
+                color: AppColors.textPrimary,
                 height: 1.3,
               ),
             ),
@@ -117,7 +118,7 @@ class TimelineCard extends StatelessWidget {
                   Expanded(
                     child: Container(
                       width: 1.5,
-                      color: const Color(0xFFE2E8F0),
+                      color: AppColors.divider,
                     ),
                   ),
               ],
@@ -142,7 +143,7 @@ class TimelineCard extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF99A1AF),
+                            color: AppColors.textTertiary,
                             height: 19.5 / 13,
                             letterSpacing: -0.08,
                           ),
@@ -160,8 +161,8 @@ class TimelineCard extends StatelessWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: item.isFilledDot
-                            ? const Color(0xFF99A1AF)
-                            : const Color(0xFF0A0A0A),
+                            ? AppColors.textTertiary
+                            : AppColors.textPrimary,
                         height: 1.4,
                       ),
                     ),
@@ -172,7 +173,7 @@ class TimelineCard extends StatelessWidget {
                       item.content!,
                       style: const TextStyle(
                         fontSize: 14,
-                        color: Color(0xFF99A1AF),
+                        color: AppColors.textTertiary,
                         height: 1.5,
                       ),
                     ),
@@ -190,6 +191,6 @@ class TimelineCard extends StatelessWidget {
     if (colorStr.startsWith('#')) {
       return Color(int.parse(colorStr.substring(1), radix: 16) + 0xFF000000);
     }
-    return const Color(0xFF5B6CFF);
+    return AppColors.primary;
   }
 }

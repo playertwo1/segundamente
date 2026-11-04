@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 import 'package:flutter/material.dart';
 import 'package:memex/data/repositories/memex_router.dart';
@@ -151,13 +152,13 @@ class _CardDetailNotificationWidgetState
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.12),
+                  color: AppColors.primary.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.notifications_none_rounded,
                   size: 18,
-                  color: Color(0xFF6366F1),
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(width: 12),

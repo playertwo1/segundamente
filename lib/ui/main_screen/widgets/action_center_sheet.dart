@@ -490,11 +490,11 @@ class _DismissOptionsSheet extends StatelessWidget {
   Color _typeColor(String type) {
     switch (type) {
       case CardAttachmentType.systemAction:
-        return const Color(0xFF10B981);
+        return AppColors.success;
       case CardAttachmentType.clarificationRequest:
-        return const Color(0xFFF59E0B);
+        return AppColors.warning;
       case CardAttachmentType.cardDetailNotification:
-        return const Color(0xFF6366F1);
+        return AppColors.primary;
       default:
         return AppColors.primary;
     }

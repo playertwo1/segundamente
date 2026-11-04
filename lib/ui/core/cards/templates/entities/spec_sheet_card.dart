@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class SpecSheetCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -28,7 +29,7 @@ class SpecSheetCard extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF7F8FA),
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(12),
                   border:
                       Border.all(color: Colors.white.withValues(alpha: 0.5)),
@@ -45,7 +46,7 @@ class SpecSheetCard extends StatelessWidget {
                     ? LocalImage(url: imageUrl, fit: BoxFit.cover)
                     : const Center(
                         child: Icon(Icons.inventory_2_outlined,
-                            color: Color(0xFF99A1AF), size: 32)),
+                            color: AppColors.textTertiary, size: 32)),
               ),
               const SizedBox(width: 16),
 
@@ -59,7 +60,7 @@ class SpecSheetCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                         height: 1.2,
                       ),
                     ),
@@ -71,7 +72,7 @@ class SpecSheetCard extends StatelessWidget {
                           data['subtitle'],
                           style: const TextStyle(
                             fontSize: 13,
-                            color: Color(0xFF4A5565),
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ),
@@ -82,7 +83,7 @@ class SpecSheetCard extends StatelessWidget {
           ),
           if (specs.isNotEmpty) ...[
             const SizedBox(height: 16),
-            const Divider(height: 1, thickness: 0.5, color: Color(0xFFE2E8F0)),
+            const Divider(height: 1, thickness: 0.5, color: AppColors.divider),
             const SizedBox(height: 16),
 
             // Spec Grid using Wrap for flexibility or GridView
@@ -105,7 +106,7 @@ class SpecSheetCard extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w700,
-                              color: Color(0xFF99A1AF),
+                              color: AppColors.textTertiary,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -115,7 +116,7 @@ class SpecSheetCard extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF334155),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],

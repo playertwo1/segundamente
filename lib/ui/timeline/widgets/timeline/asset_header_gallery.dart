@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:memex/domain/models/card_detail_model.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
 import 'package:memex/ui/core/widgets/local_audio_source.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Asset header gallery that supports:
 /// 1. Swipeable image gallery
@@ -88,7 +89,7 @@ class _AssetHeaderGalleryState extends State<AssetHeaderGallery> {
       return Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF475569), Color(0xFF0F172A)],
+            colors: [Color(0xFF475569), AppColors.textPrimary],
           ),
         ),
       );
@@ -134,7 +135,7 @@ class _AssetHeaderGalleryState extends State<AssetHeaderGallery> {
                       height: double.infinity,
                       alignment: Alignment.center,
                       errorBuilder: (context, error, stackTrace) {
-                        return Container(color: Colors.grey[900]);
+                        return Container(color: AppColors.textPrimary);
                       },
                     ),
                   );
@@ -188,7 +189,7 @@ class _AssetHeaderGalleryState extends State<AssetHeaderGallery> {
                       height: double.infinity,
                       alignment: Alignment.center,
                       errorBuilder: (context, error, stackTrace) {
-                        return Container(color: Colors.grey[900]);
+                        return Container(color: AppColors.textPrimary);
                       },
                     ),
                   ),
@@ -196,7 +197,7 @@ class _AssetHeaderGalleryState extends State<AssetHeaderGallery> {
               } else if (asset.isAudio) {
                 return Container(
                   color:
-                      const Color(0xFF1E293B), // Slate 800 background for audio
+                      AppColors.textPrimary, // Slate 800 background for audio
                   child: Center(
                     child: AudioPlayerWidget(url: asset.url),
                   ),

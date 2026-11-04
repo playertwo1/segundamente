@@ -436,7 +436,7 @@ class _MemexOfficialServicePageState extends State<MemexOfficialServicePage> {
                   label: Text(l10n.setupModelConfigComplete),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    disabledBackgroundColor: const Color(0xFFE2E2E5),
+                    disabledBackgroundColor: AppColors.divider,
                     disabledForegroundColor: AppColors.textTertiary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -652,7 +652,7 @@ class _AiServiceOptionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE2E2E5)),
+        border: Border.all(color: AppColors.divider),
         boxShadow: const [
           BoxShadow(
             color: AppColors.shadowLight,

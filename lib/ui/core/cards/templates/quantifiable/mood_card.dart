@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class MoodCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -24,10 +25,10 @@ class MoodCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: const BoxDecoration(
-              color: Color(0xFFF7F8FA),
+              color: AppColors.background,
               shape: BoxShape.circle,
             ),
-            child: Icon(moodIcon, color: const Color(0xFF5B6CFF), size: 22),
+            child: Icon(moodIcon, color: AppColors.primary, size: 22),
           ),
           const SizedBox(width: 14),
 
@@ -42,7 +43,7 @@ class MoodCard extends StatelessWidget {
                     fontFamily: 'PingFang SC',
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF0A0A0A),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 if (data.containsKey('trigger')) ...[
@@ -53,7 +54,7 @@ class MoodCard extends StatelessWidget {
                       fontFamily: 'PingFang SC',
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFF9CA3AF),
+                      color: AppColors.textTertiary,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -72,7 +73,7 @@ class MoodCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF0A0A0A),
+                  color: AppColors.textPrimary,
                   height: 1.0,
                 ),
               ),
@@ -81,7 +82,7 @@ class MoodCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 10,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF9CA3AF),
+                  color: AppColors.textTertiary,
                 ),
               ),
             ],

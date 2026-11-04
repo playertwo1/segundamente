@@ -33,12 +33,12 @@ class ClipboardPreviewCard extends StatelessWidget {
     return Padding(
       padding: margin,
       child: Material(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(20),
         elevation: 0,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: AppColors.primary.withValues(alpha: 0.14),
@@ -152,7 +152,7 @@ class ClipboardPreviewCard extends StatelessWidget {
                     icon: const Icon(Icons.close_rounded),
                     color: AppColors.textTertiary,
                     style: IconButton.styleFrom(
-                      backgroundColor: const Color(0xFFF7F8FA),
+                      backgroundColor: AppColors.background,
                       fixedSize: const Size(42, 42),
                     ),
                   ),

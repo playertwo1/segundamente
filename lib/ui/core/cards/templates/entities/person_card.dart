@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class PersonCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -23,13 +24,13 @@ class PersonCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 28,
-                backgroundColor: const Color(0xFFE2E8F0),
+                backgroundColor: AppColors.divider,
                 backgroundImage:
                     avatarUrl != null ? NetworkImage(avatarUrl) : null,
                 child: avatarUrl == null
                     ? Text(name.substring(0, 1).toUpperCase(),
                         style: const TextStyle(
-                            fontSize: 24, color: Color(0xFF99A1AF)))
+                            fontSize: 24, color: AppColors.textTertiary))
                     : null,
               ),
               if (status != null)
@@ -58,7 +59,7 @@ class PersonCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0A0A0A),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 if (relation != null)
@@ -68,14 +69,14 @@ class PersonCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF5B6CFF).withValues(alpha: 0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         relation,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
-                          color: const Color(0xFF5B6CFF),
+                          color: AppColors.primary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -84,7 +85,7 @@ class PersonCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: Color(0xFF99A1AF)),
+          const Icon(Icons.chevron_right, color: AppColors.textTertiary),
         ],
       ),
     );
@@ -93,13 +94,13 @@ class PersonCard extends StatelessWidget {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'online':
-        return const Color(0xFF10B981);
+        return AppColors.success;
       case 'busy':
-        return const Color(0xFFEF4444);
+        return AppColors.danger;
       case 'away':
         return Colors.amber;
       default:
-        return const Color(0xFF99A1AF);
+        return AppColors.textTertiary;
     }
   }
 }

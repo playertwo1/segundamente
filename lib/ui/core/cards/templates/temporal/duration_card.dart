@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/l10n/app_localizations.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class DurationCard extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -181,7 +182,7 @@ class _DurationCardState extends State<DurationCard>
 
     return GlassCard(
       onTap: widget.onTap,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       padding: EdgeInsets.zero,
       child: Stack(
         children: [
@@ -195,7 +196,7 @@ class _DurationCardState extends State<DurationCard>
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF5B6CFF).withValues(alpha: 0.08),
+                  color: AppColors.primary.withValues(alpha: 0.08),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -216,18 +217,18 @@ class _DurationCardState extends State<DurationCard>
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF7F8FA),
+                            color: AppColors.background,
                             shape: BoxShape.circle,
                             border: Border.all(
                                 color: _isRunning
                                     ? const Color(0xFF34D399) // Emerald
-                                    : const Color(0xFFE2E8F0)),
+                                    : AppColors.divider),
                           ),
                           child: Icon(
                               _isRunning ? Icons.timer : Icons.timer_outlined,
                               color: _isRunning
                                   ? const Color(0xFF34D399) // Emerald
-                                  : const Color(0xFF5B6CFF), // Indigo-200
+                                  : AppColors.primary, // Indigo-200
                               size: 20),
                         ),
                       ),
@@ -239,14 +240,15 @@ class _DurationCardState extends State<DurationCard>
                             Row(
                               children: [
                                 const Icon(Icons.access_time,
-                                    size: 12, color: Color(0xFF4A5565)),
+                                    size: 12, color: AppColors.textSecondary),
                                 const SizedBox(width: 6),
                                 Text(
                                   durationStr,
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF4A5565), // Indigo-100
+                                    color:
+                                        AppColors.textSecondary, // Indigo-100
                                   ),
                                 ),
                               ],
@@ -254,10 +256,10 @@ class _DurationCardState extends State<DurationCard>
                             const SizedBox(height: 2),
                             Text(
                               title,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: const Color(0xFF99A1AF),
+                                color: AppColors.textTertiary,
                               ),
                             ),
                           ],
@@ -285,11 +287,11 @@ class _DurationCardState extends State<DurationCard>
                         const SizedBox(height: 2),
                         Text(
                           AppLocalizations.of(context)!.timesLabel,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
                             letterSpacing: 0.5,
-                            color: const Color(0xFF99A1AF),
+                            color: AppColors.textTertiary,
                           ),
                         ),
                       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class RoutineCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -34,7 +35,7 @@ class RoutineCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF9CA3AF),
+                      color: AppColors.textTertiary,
                       letterSpacing: 0.6,
                     ),
                   ),
@@ -48,7 +49,7 @@ class RoutineCard extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF0A0A0A),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -57,7 +58,7 @@ class RoutineCard extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: const Color(0xFF9CA3AF),
+                          color: AppColors.textTertiary,
                         ),
                       ),
                     ],
@@ -67,12 +68,12 @@ class RoutineCard extends StatelessWidget {
               Container(
                 width: 44,
                 height: 44,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFFF7F8FA),
+                  color: AppColors.background,
                 ),
                 child: const Center(
-                  child: Icon(Icons.replay, color: Color(0xFF5B6CFF), size: 22),
+                  child: Icon(Icons.replay, color: AppColors.primary, size: 22),
                 ),
               ),
             ],
@@ -87,9 +88,7 @@ class RoutineCard extends StatelessWidget {
                 width: 8,
                 height: 28,
                 decoration: BoxDecoration(
-                  color: completed
-                      ? const Color(0xFF5B6CFF)
-                      : const Color(0xFFE5E7EB),
+                  color: completed ? AppColors.primary : AppColors.divider,
                   borderRadius: BorderRadius.circular(4),
                 ),
               );
@@ -104,7 +103,7 @@ class RoutineCard extends StatelessWidget {
               fontFamily: 'PingFang SC',
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF0A0A0A),
+              color: AppColors.textPrimary,
             ),
           ),
         ],

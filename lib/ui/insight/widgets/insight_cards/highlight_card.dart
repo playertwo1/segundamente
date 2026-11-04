@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class HighlightCard extends StatelessWidget {
   final String title;
@@ -30,7 +31,7 @@ class HighlightCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -59,7 +60,7 @@ class HighlightCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         height: 16 / 12,
                         letterSpacing: 0,
-                        color: const Color(0xFF0A0A0A),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -69,7 +70,7 @@ class HighlightCard extends StatelessWidget {
                     Container(
                       width: 1,
                       height: 9,
-                      color: const Color(0xFF99A1AF),
+                      color: AppColors.textTertiary,
                     ),
                     const SizedBox(width: 10),
                     // Date
@@ -80,7 +81,7 @@ class HighlightCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         height: 20 / 14,
                         letterSpacing: -0.15,
-                        color: const Color(0xFF99A1AF),
+                        color: AppColors.textTertiary,
                       ),
                     ),
                   ],
@@ -112,7 +113,7 @@ class HighlightCard extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 height: 38 / 30,
                 letterSpacing: 0.4,
-                color: const Color(0xFF0A0A0A),
+                color: AppColors.textPrimary,
               ),
             ),
 
@@ -144,7 +145,7 @@ class HighlightCard extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   height: 24 / 16,
                   letterSpacing: -0.31,
-                  color: const Color(0xFF99A1AF),
+                  color: AppColors.textTertiary,
                 ),
               ),
           ],

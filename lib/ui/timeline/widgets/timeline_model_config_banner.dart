@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/data/services/event_bus_service.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class TimelineModelConfigBanner extends StatefulWidget {
   const TimelineModelConfigBanner({super.key, required this.onConfigureTap});
@@ -101,7 +102,7 @@ class _TimelineModelConfigBannerState extends State<TimelineModelConfigBanner>
                 offset: const Offset(0, 4),
               ),
               BoxShadow(
-                color: const Color(0xFF6366F1).withValues(alpha: 0.08),
+                color: AppColors.primary.withValues(alpha: 0.08),
                 blurRadius: 24,
                 offset: const Offset(0, 2),
               ),
@@ -118,7 +119,7 @@ class _TimelineModelConfigBannerState extends State<TimelineModelConfigBanner>
                     end: Alignment.bottomRight,
                     colors: [
                       Color(0xFF818CF8),
-                      Color(0xFF6366F1),
+                      AppColors.primary,
                     ],
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -139,7 +140,7 @@ class _TimelineModelConfigBannerState extends State<TimelineModelConfigBanner>
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF1E293B),
+                        color: AppColors.textPrimary,
                         letterSpacing: 0,
                       ),
                     ),
@@ -148,7 +149,7 @@ class _TimelineModelConfigBannerState extends State<TimelineModelConfigBanner>
                       UserStorage.l10n.modelNotConfiguredBanner,
                       style: TextStyle(
                         fontSize: 12,
-                        color: const Color(0xFF64748B).withValues(alpha: 0.9),
+                        color: AppColors.textSecondary.withValues(alpha: 0.9),
                         height: 1.3,
                       ),
                     ),
@@ -160,13 +161,13 @@ class _TimelineModelConfigBannerState extends State<TimelineModelConfigBanner>
                 width: 28,
                 height: 28,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.arrow_forward_ios,
                   size: 12,
-                  color: Color(0xFF6366F1),
+                  color: AppColors.primary,
                 ),
               ),
             ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/widgets/emoji_icon.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class BarItem {
   final String label;
@@ -58,7 +59,7 @@ class BarChartCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -98,7 +99,7 @@ class BarChartCard extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   height: 20 / 14,
                   letterSpacing: -0.15,
-                  color: Color(0xFF9CA3AF),
+                  color: AppColors.textTertiary,
                 ),
               ),
             ],
@@ -112,7 +113,7 @@ class BarChartCard extends StatelessWidget {
               final percent = (item.value / maxY).clamp(0.0, 1.0);
               final barColor = item.color != null
                   ? _parseColor(item.color!)
-                  : const Color(0xFF5B6CFF);
+                  : AppColors.primary;
 
               return Padding(
                 padding: EdgeInsets.only(bottom: isLast ? 0 : 24),
@@ -182,7 +183,7 @@ class BarChartCard extends StatelessWidget {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFE5E7EB),
+                                    color: AppColors.divider,
                                     borderRadius: BorderRadius.circular(3),
                                   ),
                                 ),
@@ -212,14 +213,14 @@ class BarChartCard extends StatelessWidget {
   }
 
   Color _parseColor(String colorStr) {
-    if (colorStr.isEmpty) return const Color(0xFF5B6CFF);
+    if (colorStr.isEmpty) return AppColors.primary;
     try {
       String hex = colorStr.replaceAll('#', '').trim();
       final match = RegExp(r'^[0-9a-fA-F]{6,8}').firstMatch(hex);
       if (match != null) {
         hex = match.group(0)!;
       } else {
-        return const Color(0xFF5B6CFF);
+        return AppColors.primary;
       }
       if (hex.length == 6) {
         return Color(int.parse(hex, radix: 16) + 0xFF000000);
@@ -229,6 +230,6 @@ class BarChartCard extends StatelessWidget {
     } catch (e) {
       debugPrint('Error parsing color: $colorStr - $e');
     }
-    return const Color(0xFF5B6CFF);
+    return AppColors.primary;
   }
 }

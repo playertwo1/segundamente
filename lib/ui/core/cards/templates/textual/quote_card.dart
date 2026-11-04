@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class QuoteCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -41,7 +42,7 @@ class QuoteCard extends StatelessWidget {
               fontWeight: FontWeight.w700,
               height: 1.5,
               letterSpacing: 0.2,
-              color: const Color(0xFF0A0A0A),
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 8),
@@ -71,7 +72,7 @@ class QuoteCard extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   height: 20 / 14,
                   letterSpacing: -0.15,
-                  color: const Color(0xFF99A1AF),
+                  color: AppColors.textTertiary,
                 ),
               ),
             if (source != null)
@@ -82,7 +83,7 @@ class QuoteCard extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF99A1AF),
+                    color: AppColors.textTertiary,
                   ),
                 ),
               ),

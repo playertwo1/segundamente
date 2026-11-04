@@ -157,7 +157,7 @@ class _AgentStateViewerPageState extends State<AgentStateViewerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(UserStorage.l10n.agentStates),
         backgroundColor: AppColors.background,
@@ -214,7 +214,7 @@ class _AgentStateViewerPageState extends State<AgentStateViewerPage> {
 
   Widget _buildStateList() {
     return Material(
-      color: Colors.white,
+      color: AppColors.cardBackground,
       child: ListView.separated(
         itemCount: _states.length,
         separatorBuilder: (_, __) => const Divider(height: 1),
@@ -262,7 +262,7 @@ class _AgentStateViewerPageState extends State<AgentStateViewerPage> {
     return Column(
       children: [
         Container(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

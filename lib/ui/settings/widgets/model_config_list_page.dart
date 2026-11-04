@@ -162,7 +162,7 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
       await showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.cardBackground,
           title: Text(l10n.cannotDeleteConfigurationTitle),
           content: Text(l10n.configUsedByAgentsMessage(usingAgents.join('\n'))),
           actions: [
@@ -181,7 +181,7 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
     return await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.cardBackground,
             title: Text(l10n.deleteConfigurationTitle),
             content: Text(l10n.confirmDeleteConfigMessage(config.key)),
             actions: [
@@ -396,7 +396,7 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: Color(0xFFE2E2E5)),
+          side: const BorderSide(color: AppColors.divider),
         ),
         child: Theme(
           key: const ValueKey('advanced-agent-model-settings-theme'),
@@ -489,7 +489,7 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
               final confirmed = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.cardBackground,
                   title: Text(l10n.resetAllConfigurationsTitle),
                   content: Text(l10n.resetAllModelConfigurationsMessage),
                   actions: [

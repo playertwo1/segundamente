@@ -3,6 +3,7 @@ import 'package:memex/data/services/clarification_request_service.dart';
 import 'package:memex/db/app_database.dart';
 import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class ClarificationRequestCard extends StatefulWidget {
   const ClarificationRequestCard({
@@ -248,9 +249,8 @@ class _ClarificationRequestCardState extends State<ClarificationRequestCard> {
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color:
-                    (isAnswered ? colorScheme.primary : const Color(0xFF5B6CFF))
-                        .withValues(alpha: 0.12),
+                color: (isAnswered ? colorScheme.primary : AppColors.primary)
+                    .withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -258,8 +258,7 @@ class _ClarificationRequestCardState extends State<ClarificationRequestCard> {
                     ? Icons.check_circle_outline_rounded
                     : Icons.help_outline_rounded,
                 size: 18,
-                color:
-                    isAnswered ? colorScheme.primary : const Color(0xFF5B6CFF),
+                color: isAnswered ? colorScheme.primary : AppColors.primary,
               ),
             ),
             const SizedBox(width: 8),
@@ -269,9 +268,8 @@ class _ClarificationRequestCardState extends State<ClarificationRequestCard> {
                     ? UserStorage.l10n.clarificationAnswered
                     : UserStorage.l10n.clarificationNeeded,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: isAnswered
-                          ? colorScheme.primary
-                          : const Color(0xFF5B6CFF),
+                      color:
+                          isAnswered ? colorScheme.primary : AppColors.primary,
                       fontWeight: FontWeight.w700,
                     ),
               ),

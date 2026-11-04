@@ -1,3 +1,4 @@
+import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'map_card.dart'; // For MapLocation
@@ -43,9 +44,9 @@ class RouteMapCard extends StatelessWidget {
       height: height,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFF7F8FA)),
+        border: Border.all(color: AppColors.background),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -80,7 +81,7 @@ class RouteMapCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0A0A0A),
+                    color: AppColors.textPrimary,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -89,7 +90,7 @@ class RouteMapCard extends StatelessWidget {
               const SizedBox(width: 8),
               const Icon(
                 Icons.chevron_right,
-                color: Color(0xFFCBD5E1),
+                color: AppColors.divider,
               ),
             ],
           ),
@@ -101,7 +102,7 @@ class RouteMapCard extends StatelessWidget {
                 color: const Color(
                     0xFFFAFAFA), // Light grey inner bg like dotted paper
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFF7F8FA)),
+                border: Border.all(color: AppColors.background),
               ),
               child: CustomPaint(
                 painter: _RoutePainter(locations),
@@ -203,7 +204,7 @@ class _RoutePainter extends CustomPainter {
     final textSpan = TextSpan(
       text: text,
       style: const TextStyle(
-        color: Color(0xFF4A5565),
+        color: AppColors.textSecondary,
         fontSize: 12,
         fontWeight: FontWeight.bold,
       ),
@@ -261,7 +262,7 @@ class _RoutePainter extends CustomPainter {
       const Radius.circular(8),
     );
 
-    final bgPaint = Paint()..color = const Color(0xFF5B6CFF); // Indigo bubble
+    final bgPaint = Paint()..color = AppColors.primary; // Indigo bubble
 
     canvas.drawRRect(bgRect, bgPaint);
 

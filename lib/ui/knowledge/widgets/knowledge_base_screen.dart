@@ -6,6 +6,7 @@ import 'package:memex/utils/user_storage.dart';
 import 'knowledge_directory_page.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/memex_brand_title.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 /// Knowledge base page. Receives [viewModel] from parent (Compass-style).
 class KnowledgeBaseScreen extends StatefulWidget {
@@ -49,8 +50,8 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
               0xFFF7F8FA), // Match Timeline, Insights and bottom nav background
           appBar: AppBar(
             title: const MemexBrandTitle(),
-            backgroundColor: const Color(0xFFF7F8FA),
-            surfaceTintColor: const Color(0xFFF7F8FA),
+            backgroundColor: AppColors.background,
+            surfaceTintColor: AppColors.background,
             elevation: 0,
             centerTitle: false,
             actions: [
@@ -64,7 +65,8 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                 child: const SizedBox(
                   width: 36,
                   height: 36,
-                  child: Icon(Icons.search, color: Color(0xFF4A5565), size: 24),
+                  child: Icon(Icons.search,
+                      color: AppColors.textSecondary, size: 24),
                 ),
               ),
               const SizedBox(width: 16),
@@ -122,7 +124,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
           engTitle: 'PROJECTS',
           desc: UserStorage.l10n.pkmCategoryProjectSubtitle,
           count: vm.countItems('Projects'),
-          color: const Color(0xFF6366F1), // Indigo
+          color: AppColors.primary, // Indigo
           icon: Icons.track_changes_outlined,
           onTap: () => _navigateToFolder(context, path: 'Projects'),
         ),
@@ -131,7 +133,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
           engTitle: 'AREAS',
           desc: UserStorage.l10n.pkmCategoryAreaSubtitle,
           count: vm.countItems('Areas'),
-          color: const Color(0xFF10B981), // Emerald
+          color: AppColors.success, // Emerald
           icon: Icons.grid_view,
           onTap: () => _navigateToFolder(context, path: 'Areas'),
         ),
@@ -140,7 +142,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
           engTitle: 'RESOURCES',
           desc: UserStorage.l10n.pkmCategoryResourceSubtitle,
           count: vm.countItems('Resources'),
-          color: const Color(0xFFF59E0B), // Amber
+          color: AppColors.warning, // Amber
           icon: Icons.layers_outlined,
           onTap: () => _navigateToFolder(context, path: 'Resources'),
         ),
@@ -149,7 +151,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
           engTitle: 'ARCHIVES',
           desc: UserStorage.l10n.pkmCategoryArchiveSubtitle,
           count: vm.countItems('Archives'),
-          color: const Color(0xFF64748B), // Slate
+          color: AppColors.textSecondary, // Slate
           icon: Icons.inbox_outlined,
           onTap: () => _navigateToFolder(context, path: 'Archives'),
         ),
@@ -286,11 +288,11 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withValues(alpha: 0.05),
+              color: AppColors.textSecondary.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -302,7 +304,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: const Color(0xFFEFF6FF),
+                color: AppColors.iconBgLight,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
@@ -321,7 +323,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF1E293B),
+                      color: AppColors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -331,13 +333,13 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
                     '$count items',
                     style: const TextStyle(
                       fontSize: 13,
-                      color: Color(0xFF94A3B8),
+                      color: AppColors.textTertiary,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Color(0xFFCBD5E1)),
+            const Icon(Icons.chevron_right, color: AppColors.divider),
           ],
         ),
       ),
@@ -350,7 +352,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
         Expanded(
           child: Container(
             height: 1,
-            color: const Color(0xFFE2E8F0), // Slate 200
+            color: AppColors.divider, // Slate 200
           ),
         ),
         Padding(
@@ -358,21 +360,22 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.access_time, size: 12, color: Color(0xFF94A3B8)),
+              const Icon(Icons.access_time,
+                  size: 12, color: AppColors.textTertiary),
               const SizedBox(width: 4),
               Text(UserStorage.l10n.recentChanges,
                   style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
-                      color: Color(0xFF94A3B8))),
+                      color: AppColors.textTertiary)),
             ],
           ),
         ),
         Expanded(
           child: Container(
             height: 1,
-            color: const Color(0xFFE2E8F0), // Slate 200
+            color: AppColors.divider, // Slate 200
           ),
         ),
       ],
@@ -385,7 +388,7 @@ class KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         alignment: Alignment.center,
         child: Text(UserStorage.l10n.noRecentChangesInThreeDays,
-            style: const TextStyle(color: Color(0xFFCBD5E1), fontSize: 13)),
+            style: const TextStyle(color: AppColors.divider, fontSize: 13)),
       );
     }
 

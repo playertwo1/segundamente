@@ -75,7 +75,7 @@ class _DataImportPageState extends State<DataImportPage> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -111,9 +111,9 @@ class _DataImportPageState extends State<DataImportPage> {
                               const SizedBox(height: 4),
                               Text(
                                 UserStorage.l10n.dataImportDescription,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 13,
-                                  color: Colors.grey[600],
+                                  color: AppColors.textSecondary,
                                   height: 1.4,
                                 ),
                               ),
@@ -179,7 +179,7 @@ class _ImportProcessingOptionsDialogState
   Widget build(BuildContext context) {
     final l10n = UserStorage.l10n;
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       title: Text(l10n.dataImportProcessTitle),
       content: SingleChildScrollView(
         child: Column(
@@ -188,9 +188,9 @@ class _ImportProcessingOptionsDialogState
           children: [
             Text(
               l10n.dataImportProcessPrompt(widget.result.importedFileCount),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 13,
-                color: Colors.grey[700],
+                color: AppColors.textSecondary,
                 height: 1.4,
               ),
             ),

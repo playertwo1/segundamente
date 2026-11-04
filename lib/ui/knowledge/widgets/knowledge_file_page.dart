@@ -11,6 +11,7 @@ import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
 import 'package:memex/ui/core/widgets/back_button.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 final _logger = getLogger('KnowledgeFilePage');
 
@@ -140,17 +141,17 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.cardBackground,
       appBar: AppBar(
         title: Text(path.basename(widget.filePath),
             style: const TextStyle(
-                color: Color(0xFF1E293B),
+                color: AppColors.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.cardBackground,
         elevation: 0,
         leading: const AppBackButton(),
-        iconTheme: const IconThemeData(color: Color(0xFF64748B)),
+        iconTheme: const IconThemeData(color: AppColors.textSecondary),
         actions: [
           IconButton(
             key: const ValueKey('knowledge_file_download_button'),
@@ -192,16 +193,16 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                         p: const TextStyle(
                             fontSize: 15,
                             height: 1.8,
-                            color: Color(0xFF334155)),
+                            color: AppColors.textSecondary),
                         blockquote: const TextStyle(
-                            color: Color(0xFF6366F1),
+                            color: AppColors.primary,
                             fontStyle: FontStyle.italic),
                         blockquoteDecoration: BoxDecoration(
-                          color: const Color(0xFFEEF2FF),
+                          color: AppColors.iconBgLight,
                           borderRadius: BorderRadius.circular(8),
                           border: const Border(
                               left: BorderSide(
-                                  color: Color(0xFF6366F1), width: 4)),
+                                  color: AppColors.primary, width: 4)),
                         ),
                       ),
                       onTapLink: (text, href, title) {
@@ -233,7 +234,7 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                                 Expanded(
                                   child: Container(
                                     height: 1,
-                                    color: const Color(0xFFE2E8F0), // Slate 200
+                                    color: AppColors.divider, // Slate 200
                                   ),
                                 ),
                                 Padding(
@@ -243,7 +244,8 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       const Icon(Icons.link,
-                                          size: 12, color: Color(0xFF94A3B8)),
+                                          size: 12,
+                                          color: AppColors.textTertiary),
                                       const SizedBox(width: 4),
                                       Text(
                                           UserStorage.l10n.sourceTraceWithCount(
@@ -251,7 +253,7 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                                           style: const TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.bold,
-                                              color: Color(0xFF94A3B8),
+                                              color: AppColors.textTertiary,
                                               letterSpacing: 1.2)),
                                     ],
                                   ),
@@ -259,7 +261,7 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                                 Expanded(
                                   child: Container(
                                     height: 1,
-                                    color: const Color(0xFFE2E8F0), // Slate 200
+                                    color: AppColors.divider, // Slate 200
                                   ),
                                 ),
                               ],
@@ -322,7 +324,7 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFFCBD5E1), // Slate 300
+                  color: AppColors.divider, // Slate 300
                   letterSpacing: 1.5,
                 ),
               ),
@@ -337,7 +339,7 @@ class _KnowledgeFilePageState extends State<KnowledgeFilePage> {
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFFCBD5E1), // Slate 300
+                  color: AppColors.divider, // Slate 300
                   letterSpacing: 1.5,
                 ),
               ),

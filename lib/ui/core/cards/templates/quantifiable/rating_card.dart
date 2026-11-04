@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class RatingCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -28,7 +29,7 @@ class RatingCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0A0A0A),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -74,7 +75,7 @@ class RatingCard extends StatelessWidget {
               comment,
               style: const TextStyle(
                 fontSize: 15,
-                color: Color(0xFF4A5565),
+                color: AppColors.textSecondary,
                 fontStyle: FontStyle.italic,
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class TrendPoint {
   final String label;
@@ -44,7 +45,7 @@ class TrendChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const lineColor = Color(0xFF6366F1);
+    const lineColor = AppColors.primary;
 
     final spots = points.asMap().entries.map((e) {
       return FlSpot(e.key.toDouble(), e.value.value);
@@ -64,7 +65,7 @@ class TrendChartCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -106,7 +107,7 @@ class TrendChartCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         height: 20 / 14,
                         letterSpacing: -0.15,
-                        color: Color(0xFF9CA3AF),
+                        color: AppColors.textTertiary,
                       ),
                     ),
                 ],
@@ -125,7 +126,7 @@ class TrendChartCard extends StatelessWidget {
                     horizontalInterval: interval,
                     getDrawingHorizontalLine: (value) {
                       return const FlLine(
-                        color: Color(0xFFE5E7EB),
+                        color: AppColors.divider,
                         strokeWidth: 1,
                       );
                     },
@@ -150,7 +151,7 @@ class TrendChartCard extends StatelessWidget {
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
-                                  color: const Color(0xFF9CA3AF),
+                                  color: AppColors.textTertiary,
                                   height: 1.0,
                                 ),
                               ),
@@ -171,7 +172,7 @@ class TrendChartCard extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
-                              color: const Color(0xFF9CA3AF),
+                              color: AppColors.textTertiary,
                               height: 1.0,
                             ),
                           );

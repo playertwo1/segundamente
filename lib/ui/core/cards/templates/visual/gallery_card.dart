@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
 import 'package:memex/utils/user_storage.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class GalleryCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -40,7 +41,7 @@ class GalleryCard extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 17,
-                  color: Color(0xFF0A0A0A),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -145,14 +146,14 @@ class GalleryCard extends StatelessWidget {
 
   Widget _buildImage(String url) {
     return Container(
-      color: const Color(0xFFF7F8FA),
+      color: AppColors.background,
       child: LocalImage(
         url: url,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
         errorBuilder: (_, __, ___) => const Center(
-            child: Icon(Icons.broken_image, color: Color(0xFF99A1AF))),
+            child: Icon(Icons.broken_image, color: AppColors.textTertiary)),
       ),
     );
   }

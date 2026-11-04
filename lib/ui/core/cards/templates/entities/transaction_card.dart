@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/core/cards/ui/glass_card.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 
 class TransactionCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -38,12 +39,12 @@ class TransactionCard extends StatelessWidget {
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.cardBackground,
                           shape: BoxShape.circle,
-                          border: Border.all(color: const Color(0xFFE2E8F0)),
+                          border: Border.all(color: AppColors.divider),
                         ),
                         child: const Icon(Icons.shopping_bag_outlined,
-                            color: Color(0xFF4A5565), size: 20),
+                            color: AppColors.textSecondary, size: 20),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -55,7 +56,7 @@ class TransactionCard extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF0A0A0A),
+                                color: AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -63,7 +64,7 @@ class TransactionCard extends StatelessWidget {
                               location,
                               style: const TextStyle(
                                 fontSize: 11,
-                                color: Color(0xFF99A1AF),
+                                color: AppColors.textTertiary,
                               ),
                             ),
                           ],
@@ -80,7 +81,7 @@ class TransactionCard extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF99A1AF),
+                                color: AppColors.textTertiary,
                                 letterSpacing: 1.0,
                               ),
                             ),
@@ -91,7 +92,7 @@ class TransactionCard extends StatelessWidget {
                                 fontSize: 20,
                                 fontWeight: FontWeight.w900,
                                 fontFamily: 'monospace',
-                                color: Color(0xFF0A0A0A),
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ],
@@ -106,7 +107,7 @@ class TransactionCard extends StatelessWidget {
                 if (items.isNotEmpty)
                   Container(
                     width: double.infinity,
-                    color: const Color(0xFFF7F8FA), // Slight offset color
+                    color: AppColors.background, // Slight offset color
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
@@ -123,7 +124,7 @@ class TransactionCard extends StatelessWidget {
                 // Bottom
                 Container(
                   height: 12,
-                  color: const Color(0xFFF7F8FA),
+                  color: AppColors.background,
                 ),
               ],
             ),
@@ -140,7 +141,8 @@ class TransactionCard extends StatelessWidget {
         Expanded(
           child: Text(
             name,
-            style: const TextStyle(fontSize: 13, color: Color(0xFF4A5565)),
+            style:
+                const TextStyle(fontSize: 13, color: AppColors.textSecondary),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -149,7 +151,9 @@ class TransactionCard extends StatelessWidget {
         Text(
           price,
           style: const TextStyle(
-              fontSize: 13, fontFamily: 'monospace', color: Color(0xFF334155)),
+              fontSize: 13,
+              fontFamily: 'monospace',
+              color: AppColors.textSecondary),
         ),
       ],
     );
@@ -163,11 +167,11 @@ class TransactionCard extends StatelessWidget {
         final dashCount = (boxWidth / (2 * dashWidth)).floor();
         return Flex(
           children: List.generate(dashCount, (_) {
-            return SizedBox(
+            return const SizedBox(
               width: dashWidth,
               height: 1,
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: Colors.grey[300]),
+              child: const DecoratedBox(
+                decoration: const BoxDecoration(color: AppColors.divider),
               ),
             );
           }),
@@ -183,7 +187,7 @@ class DashedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Colors.grey[300]!
+      ..color = AppColors.divider
       ..strokeWidth = 1;
     var max = size.width;
     var dashWidth = 5;
