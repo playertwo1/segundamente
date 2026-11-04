@@ -20,7 +20,7 @@ Uso pessoal do dono do repositório, no Galaxy S25 Ultra. Não há distribuiçã
 7. Controle: nada de responsável/prazo inferido, ideia registrada como decisão ou tarefa definitiva sem confirmação do usuário; dado local por padrão; envio remoto só com escolha explícita e prévia do conteúdo.
 
 ## Fora do MVP
-Voz full duplex, NotebookLM, grafo temporal (Graphiti), ponte Claude Code/Codex CLI, memória longitudinal avançada, login Claude.ai por assinatura (proibido pelos termos da Anthropic; só via Claude Code oficial no PC, fase F7).
+Meeting Decoder (F9: resumos organizados de conversas e PDFs, imagens relacionadas, tarefas/follow-ups em Todo e agenda, exportação em PDF/DOCX e outros formatos), voz full duplex, NotebookLM, grafo temporal (Graphiti), ponte Claude Code/Codex CLI, memória longitudinal avançada, login Claude.ai por assinatura (proibido pelos termos da Anthropic; só via Claude Code oficial no PC, fase F7). F9 é planejamento futuro bloqueado; não altera o MVP fechado.
 
 ## Restrições
 - Base: `main` auditada do Memex; upstream `memex-lab/memex`; app com nome e `applicationId` próprios (Segunda Mente, ex.: `app.segundamente`), sem colidir com o original.

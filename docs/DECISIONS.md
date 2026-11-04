@@ -28,6 +28,12 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-022 | 2026-11-03 | Iniciar a fase F5V agora, em paralelo ao fechamento da F5 | ACCEPTED |
 | D-023 | 2026-11-04 | Sem espelho chinês no download do modelo de voz | ACCEPTED |
 | D-024 | 2026-11-04 | Remover tudo que é da China: provedores, sabores `cn*`, geocoding Amap e transcrição local SenseVoice | ACCEPTED |
+| D-025 | 2026-11-04 | Revisar as pranchas 17, 19, 20 e 22 sem inventar capacidades | ACCEPTED |
+| D-026 | 2026-11-04 | Implementar parcialmente as pranchas 17, 19, 20 e 22 na F5V | ACCEPTED |
+| D-027 | 2026-11-04 | Ajustes encontrados na revisão das pranchas e decisão sobre bloqueio por PIN | ACCEPTED |
+| D-028 | 2026-11-04 | Microfone explícito na conversa, transcrevendo para revisão | ACCEPTED |
+| D-029 | 2026-11-04 | Planejar F9 — Meeting Decoder, sem abrir o MVP nem autorizar código | ACCEPTED |
+| D-030 | 2026-11-04 | Ampliar F9 com PDFs, Todo, destinos de tarefas e relatórios PDF/DOCX | ACCEPTED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -161,3 +167,13 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 ## D-028 — Microfone explícito na conversa (2026-11-04)
 - Contexto: a gravação rápida só existia como toque longo no botão "+" da timeline; o dono não achou como mandar áudio.
 - Decisão: o microfone da conversa grava e transcreve, devolvendo o texto ao campo para revisão (escolha do dono entre gravar-e-transcrever, gravar-e-enviar-arquivo e só expor o "Áudio" do menu). Não envia o arquivo de áudio ao modelo. Sem limite de duração: o transcritor na nuvem rejeita áudio longo (`shortcut:` no código).
+
+## D-029 — Planejar F9 — Meeting Decoder (2026-11-04)
+- Contexto: o dono pediu transformar a ideia Meeting Decoder numa fase estruturada, com subetapas, evidência, checklist e referências visuais quando necessárias.
+- Decisão: incluir F9 como fase futura `BLOCKED`, fora do MVP. Ela reaproveita F3/F4/F6, começa por texto próprio ou transcrição já importada, exige evidência e confirmação individual, e planeja resumo, ideias, oportunidades, decisões, dúvidas, follow-ups, tarefas, imagens relacionadas e exportações JSON/ICS. IA fica opcional: sem ela, o app não inventa síntese semântica.
+- Limites: o plano não autoriza implementação nem altera F5V/F6. Não acrescenta gravação de terceiros, transcrição de áudio na nuvem, inferência de responsável/prazo ou mensagens automáticas. Busca/geração de imagens e o sistema operacional desktop são decisões pendentes de F9-01; referência visual existente é reaproveitada quando suficiente.
+
+## D-030 — Ampliar F9 — Meeting Decoder (2026-11-04)
+- Contexto: o dono acrescentou resumos de conversas e PDFs, envio de tarefas/follow-ups para agenda/Todo, uma lista Todo própria e relatórios organizados em PDF/DOCX.
+- Decisão: atualizar o plano F9 com PDF como entrada inicial, evidências por página, uma página Todo pessoal no menu existente, encaminhamento confirmado para Todo/calendário/lembretes e exportação PDF/DOCX reutilizando F4. Definir formatos adicionais, PDF escaneado/OCR, regras de destino e sistema desktop em F9-01.
+- Limites: F9 continua `BLOCKED` e fora do MVP; esta decisão autoriza o planejamento, não código. A lista Todo do usuário fica separada da fila interna dos agentes. Criar tarefa/evento exige confirmação individual e as permissões necessárias.

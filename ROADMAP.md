@@ -1,255 +1,324 @@
 # ROADMAP — Segunda Mente
 
-**Visão e escopo:** [PROJECT.md](PROJECT.md) · **Design aprovado:** [DESIGN.md](DESIGN.md) · **Índice e pranchas:** [docs/INDEX.md](docs/INDEX.md) · **Onde paramos:** [STATE.md](STATE.md) · **Decisões:** [docs/DECISIONS.md](docs/DECISIONS.md) · **Regras de execução:** [docs/WATCHDOG.md](docs/WATCHDOG.md) · **Auditoria:** [docs/AUDIT.md](docs/AUDIT.md)
+**Visão e escopo:** [PROJECT.md](PROJECT.md) · **Design aprovado:** [DESIGN.md](DESIGN.md) · **Índice e pranchas:** [docs/INDEX.md](docs/INDEX.md) · **Estado e próxima ação:** [STATE.md](STATE.md) · **Decisões:** [docs/DECISIONS.md](docs/DECISIONS.md) · **Regras de execução:** [docs/WATCHDOG.md](docs/WATCHDOG.md) · **Auditoria:** [docs/AUDIT.md](docs/AUDIT.md)
 
-## Como uma IA usa este arquivo
-1. Leia `STATE.md` para a próxima ação e o roadmap abaixo para o contexto.
-2. Trabalhe só em subfases `READY` da fase ativa, na ordem das dependências. Não pule o portão da fase.
-3. Subfase só vira `DONE` com a evidência exigida colada em `STATE.md` (comando e saída, ou demonstração no aparelho). Não executado é `NOT_RUN`, nunca `PASS`.
-4. Ideia nova vai para "Ideias futuras", não para código. Mudança de escopo exige decisão em `docs/DECISIONS.md`.
-5. Antes de mudança média ou grande: leia `docs/WATCHDOG.md`. Antes de fechar uma fase: aplique `docs/AUDIT.md`.
-6. Regras de código, camadas e testes do Memex: `AGENTS.md` (ele vence em conflito).
+**Atualização deste mapa:** 2026-11-04. Para evidência posterior, use a entrada datada mais recente de STATE.md e o estado atual do repositório. Se o resumo inicial de STATE.md divergir de uma evidência posterior, prevalece a evidência datada mais recente; atualize o resumo quando STATE.md for revisado.
 
-## Próxima prioridade
-F5V — Redesign visual da versão nova é a fase atual (D-022). F5V-01 (tema AMOLED e navegação no topo) está em `REVIEW`; F5V-02, F5V-03 e F5V-04 seguem em andamento, e F5V-05 está `NOT_RUN` até a validação de acessibilidade e no S25. A F5 continua aberta em paralelo: o que falta nela depende do S25. A direção está aprovada em D-017 e documentada em [`DESIGN.md`](DESIGN.md), com 23 pranchas no [índice](docs/INDEX.md#design-móvel). F5V não fecha os portões F0–F5.
+## Como ler e executar este roadmap
 
-Estados: `BACKLOG` · `READY` · `IN_PROGRESS` · `BLOCKED` · `REVIEW` · `DONE`. Prioridade: P0 bloqueia o fluxo principal · P1 sustenta o MVP · P2 melhoria · P3 futuro.
+1. Leia STATE.md antes de trabalhar. Ele registra o estado observado, a evidência disponível, os bloqueios e a próxima ação.
+2. Use este arquivo para entender o escopo, as fases, as dependências e os critérios de aceite. Não trate uma linha planejada como funcionalidade já implementada.
+3. Faça apenas subfases READY da fase ativa. Fases BLOCKED só podem ser abertas quando todas as condições de desbloqueio forem atendidas e a decisão correspondente estiver registrada em docs/DECISIONS.md.
+4. Uma subfase só fica DONE depois que a evidência indicada é registrada em STATE.md. Implementação sem validação não fecha a subfase. Verificação não executada é NOT_RUN, nunca PASS.
+5. Estado da fase descreve o trabalho agregado; estado do portão descreve se os critérios de aceite foram provados. Uma fase pode ter tarefas opcionais abertas depois de seu portão ter sido cumprido.
+6. Dependências indicam os dados, decisões ou resultados necessários para começar ou aceitar a tarefa. Exceções de execução paralela têm de ser explícitas e não fecham os portões anteriores.
+7. Siga PROJECT.md, AGENTS.md, docs/WATCHDOG.md e docs/AUDIT.md. Toda mudança de comportamento precisa dos testes exigidos em AGENTS.md.
 
-## Fases
-| Fase | Resultado verificável | Estado | Portão de saída |
-|---|---|---|---|
-| F0 — Fundação | Fork roda no emulador e no Galaxy S25 Ultra (Android 17), licenças e módulos auditados, identidade própria | DONE | Build `globalDev` + instalação no S25 Ultra (SM-S938B) + auditoria registrada |
-| F1 — Registro de modelos | Escolher e testar modelos sem lista estática | IN_PROGRESS | Critérios 4 e (parte do) 6 abaixo |
-| F2 — Chat, voz e importação | Conversar por texto/voz; importar TXT Samsung e fotos | IN_PROGRESS | Critérios 1, 2 e 3 abaixo |
-| F3 — Extração e relatório | Relatório por sessão com evidências e confirmação | IN_PROGRESS | Critério 6 abaixo |
-| F4 — Exportação | Mesmo relatório em PDF, DOCX e MD | IN_PROGRESS | Critério 5 abaixo |
-| F5 — Fechamento do MVP | Testes no S25, privacidade, desempenho, visual | IN_PROGRESS | Critério 7 abaixo + `docs/AUDIT.md` |
-| F5V — Redesign visual da versão nova | Aplicar em todas as telas a direção AMOLED v3 aprovada | IN_PROGRESS | Testes de widget, acessibilidade e validação no S25 quando disponível (D-022) |
-| F6 — Memória longitudinal | Busca semântica, tópicos, "o que mudou?" | IN_PROGRESS | MVP concluído |
-| F7 — Voz contínua e ponte CLI | Full duplex; Claude Code/Codex CLI no PC | BLOCKED | MVP concluído + termos verificados |
-| F8 — NotebookLM | Via Drive/Docs, depois conectores | BLOCKED | MVP e exportação estáveis; consentimento por envio |
+### Estados
 
-## F0 — Fundação (ativa)
-| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
-|---|---|---|---|---|---|
-| F0-01 | Configurar `upstream=memex-lab/memex`; branch de trabalho; registrar commit base do Memex | P0 | — | DONE | `git remote -v` e hash base em STATE.md |
-| F0-02 | Build limpo e execução `flutter run` / `adb install` no emulador e no S25 Ultra | P0 | F0-01 | DONE | App abre no emulador e no Galaxy S25 Ultra (SM-S938B, Android 17); `flutter test` rodados |
-| F0-03 | Identidade própria: nome "Segunda Mente", `applicationId`, assinatura/keystore (fora do repo), ícone provisório | P0 | F0-02 | DONE | APK `app.segundamente.dev` instala ao lado de `com.memexlab.memex.dev` |
-| F0-04 | Auditoria de licença: GPL-3.0, dependências, atribuições obrigatórias | P1 | F0-01 | DONE | Tabela de dependências + licenças em `docs/F0-04-licencas.md` |
-| F0-05 | Auditoria de módulos reutilizáveis: provedores/LLM, OAuth, voz (STT/TTS), anexos, banco (Drift), exportação | P1 | F0-02 | DONE | Nota em `docs/F0-05-modulos.md`; voz decidida em D-007 |
-| F0-06 | Rotina de atualização do upstream (merge/rebase seguro) | P2 | F0-01 | DONE | Procedimento em `docs/F0-06-upstream.md`, merge real executado |
+| Estado | Significado |
+|---|---|
+| BACKLOG | Ideia aprovada para planejamento futuro, ainda sem início previsto |
+| BLOCKED | Não pode começar até cumprir a dependência ou obter decisão indicada |
+| READY | Pré-requisitos necessários estão disponíveis e a tarefa pode começar |
+| IN_PROGRESS | Implementação ou validação já começou |
+| REVIEW | Aguarda revisão ou validação de aceite |
+| DONE | Entrega e evidência de aceite registradas em STATE.md |
+| NOT_RUN | Estado explícito de uma checagem ou tarefa ainda não executada; não é aprovação |
 
-**Portão F0:** F0-01 a F0-06 `DONE`. Execução no Samsung Galaxy S25 Ultra (SM-S938B, RQCY10934YV, Android 17) confirmada em 2026-11-03 com o pacote `app.segundamente.dev` (screenshot em `docs/s25_screenshot.png`). Portão da F0 FECHADO.
+### Prioridades
+
+| Prioridade | Significado |
+|---|---|
+| P0 | Bloqueia o fluxo principal ou o portão de aceite |
+| P1 | Necessária para completar a fase ou sustentar o uso esperado |
+| P2 | Melhoria útil, sem bloquear o portão principal |
+| P3 | Ideia futura sem compromisso de execução |
+
+## Mapa das fases
+
+| Fase | Resultado esperado | Dependência e exceção | Estado atual | Portão |
+|---|---|---|---|---|
+| F0 — Fundação | Fork, identidade, licença e ambiente verificados | Nenhuma | DONE | Fechado |
+| F1 — Registro de modelos | Catálogo, seleção, provedores e troca de modelo confiáveis | F0; o catálogo e os provedores foram validados antes dos demais portões | IN_PROGRESS; critério MVP cumprido | Critério 4 do MVP cumprido pelo catálogo e por múltiplos provedores; há tarefas adicionais abertas |
+| F2 — Chat, voz e importação | Conversa persistente, entrada de voz e arquivos autorizados | F1; aberta antecipadamente por decisão do dono | IN_PROGRESS | Critérios 1, 2, 3 e consentimento de envio comprovados |
+| F3 — Extração e relatório | Relatório editável, fiel às fontes e com itens não confirmados por padrão | F2; aberta antecipadamente por decisão do dono | IN_PROGRESS | Critério 6, extração real do modelo e amostra longa comprovados |
+| F4 — Exportação | O mesmo relatório em Markdown, PDF e DOCX | F3 | DONE | Critério 5 e compartilhamento verificados no fixture e no S25 |
+| F5 — Fechamento do MVP | Aceite integral, privacidade, desempenho e auditoria | F0–F4 | IN_PROGRESS | Sete critérios no S25 e auditoria sem bloqueios |
+| F5V — Redesign visual | Aplicação da direção AMOLED aprovada nas telas existentes | D-022 permite execução em paralelo à F5 | IN_PROGRESS; fase ativa | Interações, acessibilidade e validação visual comprovadas |
+| F6 — Memória longitudinal | Busca, encaminhamentos, histórico de mudanças, tópicos e agenda | D-010 permite avançar antes do fechamento do MVP | IN_PROGRESS | Busca semântica, tópicos, justificativas e encaminhamentos verificados |
+| F7 — Voz contínua e ponte CLI | Voz full duplex opcional, modelo local e integração controlada com CLIs oficiais | MVP fechado e decisões de plataforma, termos e segurança aprovadas | BLOCKED | Portão F7 |
+| F8 — NotebookLM | Exportação opt-in e integração somente se suportada e aprovada | MVP e exportação estáveis; termos e destino aprovados | BLOCKED | Portão F8 |
+| F9 — Meeting Decoder | Conversas e PDFs viram relatórios revisáveis, Todo e encaminhamentos | MVP fechado; decisões da F9-01 aprovadas | BLOCKED | Portão F9 |
+
+**Exceções vigentes:** D-010 permite avançar F6 enquanto o MVP está aberto. D-022 permite executar F5V em paralelo à F5. Nenhuma delas declara pronto o MVP nem libera F7, F8 ou F9.
+
+## Ordem de trabalho vigente
+
+1. **F5V:** concluir o detalhe de cartão e a comparação visual da F5V-02; depois, terminar os itens pendentes de conversa/personagem e F5V-04. F5V-05 continua NOT_RUN até completar a revisão de acessibilidade e a validação indicada em STATE.md.
+2. **Em paralelo, quando o S25 estiver disponível:** seguir F5-01/02/03 e provar as pendências de F2-03, F2-09, F2-10 e F1-07. Não substituir amostras reais por fixtures sintéticas.
+3. **Depois da F5V:** retomar os itens READY de F6 e a ordem das tarefas adicionais descrita ao fim das fases F2, F3 e F6.
+4. F7, F8 e F9 continuam bloqueadas até seus critérios de abertura. A ordem entre elas deve ser revista depois do MVP.
+
+## F0 — Fundação
+
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F0-01 | Configurar upstream memex-lab/memex, branch de trabalho e commit base | P0 | — | DONE | Remotes e hash base registrados em STATE.md |
+| F0-02 | Build limpo e execução no emulador e no Galaxy S25 Ultra | P0 | F0-01 | DONE | App aberto nos dois ambientes; build, instalação e testes registrados |
+| F0-03 | Identidade Segunda Mente, applicationId próprio, ícone provisório e assinatura fora do repositório | P0 | F0-02 | DONE | APK app.segundamente.dev instalado ao lado do original |
+| F0-04 | Revisar licença GPL-3.0, dependências e atribuições | P1 | F0-01 | DONE | Tabela de licenças em docs/F0-04-licencas.md |
+| F0-05 | Mapear componentes reutilizáveis: provedores, OAuth, voz, anexos, Drift e exportação | P1 | F0-02 | DONE | Nota em docs/F0-05-modulos.md e decisão D-007 |
+| F0-06 | Documentar e executar atualização segura do upstream | P2 | F0-01 | DONE | Procedimento em docs/F0-06-upstream.md e merge registrado |
+
+**Portão F0:** F0-01 a F0-06 estão DONE. Execução no Galaxy S25 Ultra (SM-S938B, Android 17) confirmada em 2026-11-03; captura em docs/s25_screenshot.png. Portão fechado.
 
 ## F1 — Registro de modelos
-| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
-|---|---|---|---|---|---|
-| F1-01 | Model Registry: catálogo por provedor, cache/versionamento, status (suportado / acessível pela conta / não testado) | P0 | F0 | DONE | Testes unitários + tela de seleção |
-| F1-02 | Model ID personalizado e base URL customizável | P0 | F1-01 | IN_PROGRESS | Modelo fora da lista padrão selecionado por ID manual e respondendo |
-| F1-03 | Teste de conexão e matriz de capacidades por adaptador (texto, streaming, JSON, visão, áudio) | P0 | F1-01 | DONE | Resposta real de OpenAI (chat), Gemini (872ms texto / 910ms stream no S25) e Claude Sonnet 5.5 High (1484ms no S25) |
-| F1-04 | Verificar OAuth OpenAI/Gemini (client_id dos CLIs oficiais) e registrar risco de termos | P1 | F0-05 | DONE | Login OAuth de OpenAI e Gemini funcionando no S25 (endpoint daily-cloudcode-pa via SSE stream) |
-| F1-05 | Claude por chave de API (opcional) e endpoint compatível/local | P2 | F1-02 | NOT_RUN | Uma chamada real de cada, ou `NOT_RUN` justificado |
-| F1-06 | Troca de provedor sem perder histórico | P0 | F1-01 | DONE | Conversa mantida após trocar de modelo |
-| F1-07 | Modelos `gpt-6-luna`, `gpt-6.1-sol`, `gpt-6.1-terra` sempre na lista do OAuth da OpenAI | P1 | F1-03 | IN_PROGRESS | Resposta real de cada ID no S25; se o ID não existir, o erro aparece claro e o ID manual (F1-02) resolve |
-| F1-08 | Login OAuth do Claude e suporte a Claude Sonnet/Opus/Haiku 5.5 | P1 | F1-04 | DONE | Login OAuth do Claude com PKCE local em 1455 e deep link memex://; acesso a Claude Sonnet e Opus 5.5 desbloqueado via Google OAuth sem rate limit (D-020) |
-| F1-09 | Mostrar nas configurações qual provedor faz a transcrição e qual faz o resumo e o chat, e para onde cada um envia dados | P1 | F1-03, F2-09 | READY | Teste de widget com OAuth do ChatGPT, chave de API e modelo local; no S25, a tela mostra o endpoint `transcribe` ao usar o ChatGPT |
-| F1-10 | Fallback resiliente entre provedores (FallbackLLMClient) com failover automático e reordenação de prioridade na UI | P1 | F1-03, F1-04 | DONE | Testes unitários (5/5 passaram) + toggle e prioridade drag-and-drop em ModelConfigListPage + D-020 |
 
-**Portão F1:** F1-01, F1-02, F1-03, F1-06 `DONE`; dois provedores respondendo.
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F1-01 | Catálogo de modelos por provedor, com versão/cache e estado recomendado, acessível ou não testado | P0 | F0 | DONE | Testes unitários e tela de seleção; status não afirma disponibilidade sem prova |
+| F1-02 | Permitir ID de modelo e base URL personalizados | P1 | F1-01 | IN_PROGRESS | ID fora da lista selecionado e respondendo em chamada real |
+| F1-03 | Teste de conexão e matriz de texto, streaming, JSON, visão e áudio | P0 | F1-01 | DONE | Respostas reais de OpenAI, Gemini e Claude registradas no S25; capacidades descritas sem extrapolar os testes |
+| F1-04 | Validar OAuth OpenAI/Gemini e documentar riscos de termos | P1 | F0-05 | DONE | Login de ambos no S25; endpoint e ressalvas registrados |
+| F1-05 | Validar Claude por chave de API e endpoint compatível/local, se disponíveis | P2 | F1-02 | NOT_RUN | Uma resposta real por configuração; indisponibilidade deve ser registrada como NOT_RUN |
+| F1-06 | Trocar provedor/modelo sem perder o histórico | P0 | F1-01 | DONE | Conteúdo da conversa permanece após troca |
+| F1-07 | Manter os IDs gpt-6-luna, gpt-6.1-sol e gpt-6.1-terra selecionáveis no OAuth OpenAI | P1 | F1-03 | IN_PROGRESS | Chamada real de cada ID; erro claro para ID indisponível e opção manual por F1-02 |
+| F1-08 | OAuth Claude e modelos Claude previstos em D-015 | P1 | F1-04 | DONE | Login PKCE e respostas reais registradas em STATE.md |
+| F1-09 | Mostrar, nas configurações, qual provedor/modelo transcreve e qual resume/conversa, além dos dados enviados | P1 | F1-03, F2-09 | READY | Widget test e validação S25 para OAuth, chave de API e modelo local; endpoint de transcrição claramente identificado |
+| F1-10 | Failover configurável entre provedores, com ordem visível e reordenável | P1 | F1-03, F1-04 | DONE | Testes do FallbackLLMClient e prioridade drag-and-drop registrados |
+
+**Portão F1:** cumprido segundo STATE.md. O critério 4 do MVP aceita seleção por catálogo atualizado ou por ID; F1-01 e respostas de múltiplos provedores provam a opção por catálogo. F1-02, F1-05 e F1-07 permanecem tarefas adicionais e não invalidam esse portão.
 
 ## F2 — Chat, voz e importação
-| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
-|---|---|---|---|---|---|
-| F2-01 | Chat de texto com histórico persistente | P0 | F1 | DONE | Conversa sobrevive a reiniciar o app |
-| F2-02 | Voz em turnos: microfone → transcrição → resposta → áudio opcional (pt-BR) | P0 | F0-05, F2-01 | IN_PROGRESS | Fala pt-BR transcrita no S25 (feito, via D-011); falta a resposta em áudio (TTS do Android) e a nota de qualidade |
-| F2-03 | Importar TXT do Samsung via Compartilhar (ACTION_SEND) e seleção de arquivo, com pré-visualização | P0 | F2-01 | IN_PROGRESS | TXT real de ~50 min aberto sem copiar/colar; timestamps preservados. O escopo atual aceita TXT; DOCX fica adiado até decisão de fase |
-| F2-04 | Normalização reversível do texto (original imutável, versão normalizada separada) | P1 | F2-03 | DONE | Teste: original idêntico bit a bit após normalizar |
-| F2-05 | Anexar fotos/imagens (JPG/PNG; HEIC avaliado) e analisar em provedor com visão | P0 | F1-03, F2-01 | NOT_RUN | Foto analisada em um provedor; aviso nos sem visão |
-| F2-06 | Texto digitado/colado como sessão; PDF de entrada se couber | P2 | F2-01 | DONE | Colar texto cria sessão; PDF `NOT_RUN` aceito se cortado |
-| F2-07 | Tela de envio: mostrar o conteúdo que sai do aparelho e pedir confirmação | P0 | F2-03 | DONE | Nada é enviado sem passar por ela |
-| F2-08 | Menu único "+" no chat: câmera, galeria, TXT, PDF e áudio; sem faixa de fotos recentes | P1 | F2-01 | DONE | Menu no S25; PDF anexado foi lido pelo ChatGPT; TXT importado chegou ao agente |
-| F2-09 | Áudio anexado ou compartilhado vira texto pt-BR (D-011) e só o texto vai ao modelo | P0 | F2-08 | IN_PROGRESS | `.m4a` real de 1 a 2 min transcrito no S25; depois ~50 min. Anotar limite de tamanho e duração |
-| F2-10 | Compartilhar TXT, PDF e áudio com o app abre o chat com o anexo | P1 | F2-08 | IN_PROGRESS | TXT validado no S25; PDF e áudio compartilhados `NOT_RUN` |
-| F2-11 | Transcrição local com Whisper multilíngue (`pt`) pelo `sherpa_onnx` que o app já tem, como caminho offline e reserva do D-011 | P1 | F2-09 | READY | Mesmo áudio transcrito pelo endpoint e pelo Whisper local; tempo e pico de memória de 50 min no S25; escolha entre `base` e `small` registrada com a taxa de erro anotada |
-| F2-12 | Importar legenda `.srt` e `.vtt` como TXT com relógio | P2 | F2-03 | READY | Testes do parser com os dois formatos; no S25, um `.srt` abre a prévia com os relógios |
-| F2-13 | Dicionário de termos do usuário (nomes, siglas, produtos) usado nos prompts | P1 | F3-08 | READY | Teste de que a lista entra no prompt e é limitada; no S25, um nome próprio sai certo no resumo |
 
-**Portão F2:** critérios 1, 2 e 3 verificados no S25 Ultra. A escolha de um `.txt` está no commit `db7bc1d`, em `origin/main`, e não fecha a F2-03: falta o TXT real de ~50 min. A importação visual desta fase segue TXT; DOCX está adiado, pois a F2-03 não o permite.
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F2-01 | Chat de texto com histórico persistente | P0 | F1 | DONE | Sessão relida após reinicialização do armazenamento |
+| F2-02 | Conversa em turnos: fala pt-BR, transcrição e resposta; áudio de resposta é opcional no MVP | P0 | F0-05, F2-01 | IN_PROGRESS | Microfone transcreveu fala real para o campo no S25; falta concluir um turno após revisão/envio e registrar qualidade; TTS não bloqueia o MVP |
+| F2-03 | Importar TXT real do Gravador Samsung por Compartilhar ou seletor, sem copiar/colar | P0 | F2-01 | IN_PROGRESS | TXT real de aproximadamente 50 min aberto no S25, relógios preservados e fluxo até o relatório conferido |
+| F2-04 | Manter original imutável e guardar separadamente o texto normalizado | P1 | F2-03 | DONE | Teste confirma bytes originais inalterados |
+| F2-05 | Anexar JPG/PNG e analisar com provedor com visão; avisar quando o modelo não tem visão | P0 | F1-03, F2-01 | NOT_RUN | Foto real analisada em um provedor e aviso observado em provedor sem visão |
+| F2-06 | Criar sessão por texto digitado ou colado | P1 | F2-01 | DONE | Texto colado persiste como sessão; leitura de PDF para gerar relatório pertence à F9; o anexo de chat existente permanece em F2-08 |
+| F2-07 | Antes de qualquer envio remoto, mostrar o conteúdo e destino e pedir confirmação explícita | P0 | F2-03, F2-08 | IN_PROGRESS | Prévia e confirmação cobrindo texto, TXT, áudio/transcrição, imagem e outros anexos enviados; cancelar não envia |
+| F2-08 | Menu único de anexos no chat: câmera, galeria, TXT, PDF e áudio, sem faixa de fotos recentes | P1 | F2-01 | DONE | Menu validado no S25; TXT chega ao agente; limites de PDF são descritos separadamente |
+| F2-09 | Transcrever áudio anexado/compartilhado em pt-BR; enviar ao modelo somente o texto após ação do usuário (D-011) | P0 | F2-08 | IN_PROGRESS | Áudios sintéticos de 8 s, 100 s e aproximadamente 50 min processados no S25; falta validar amostra real e limites/qualidade do serviço |
+| F2-10 | Abrir chat com o anexo ao compartilhar TXT, PDF ou áudio com o app | P1 | F2-08 | IN_PROGRESS | TXT validado no S25; PDF e áudio compartilhados ainda precisam de prova |
+| F2-11 | Transcrição local multilíngue, em português, com sherpa_onnx e Whisper como alternativa offline ao caminho D-011 | P1 | F2-09 | READY | Comparar o mesmo áudio nos dois caminhos; medir tempo, memória e qualidade em áudio de aproximadamente 50 min no S25; registrar modelo escolhido |
+| F2-12 | Importar legendas SRT/VTT preservando relógios e texto | P2 | F2-03 | READY | Testes de parser para cabeçalho, numeração, intervalos e etiquetas de locutor; prévia validada no S25 |
+| F2-13 | Dicionário local editável de nomes, siglas e produtos para prompts | P1 | F3-08 | BLOCKED | Limite documentado e testado; termos aparecem na prévia de envio; nome próprio corrigido em resumo real |
+
+**Definição do F2-11:** usar modelo Whisper multilíngue com idioma pt e tarefa de transcrição. Processar o áudio em blocos para limitar memória e preservar o tempo aproximado de cada bloco. Não inclui tradução, diarização nem timestamps por palavra. A transcrição local deve entrar na mesma prévia e confirmação do caminho remoto.
+
+**Definição do F2-12:** aceitar SRT e VTT no seletor e no Compartilhar; remover numeração, cabeçalho WEBVTT e marcação de locutor sem apagar timestamps. Não gerar nem separar falantes.
+
+**Portão F2:** comprovar os critérios MVP 1–3 e o consentimento para envio. O caminho de TXT e a prévia de um TXT sintético foram observados; falta o TXT real de aproximadamente 50 min, a análise real de foto, as verificações restantes de voz e os formatos de compartilhamento ainda marcados NOT_RUN. Não tratar o PDF lido pelo ChatGPT como aceite do relatório PDF da F9.
 
 ## F3 — Extração e relatório
-| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
-|---|---|---|---|---|---|
-| F3-01 | Esquema versionado (Session, Segment, Insight, Task, Topic) independente de provedor | P0 | F2 | DONE | Esquema + migração testada |
-| F3-02 | Extrator estruturado (JSON validado): resumo, ideias, oportunidades, decisões, tarefas, follow-ups, dúvidas | P0 | F3-01 | IN_PROGRESS | Saída validada contra o esquema em sessão real |
-| F3-03 | Tipos de relatório (livre, reunião, brainstorm, diário, estudo) e relatório customizado | P1 | F3-02 | DONE | Cada tipo gera relatório distinto |
-| F3-04 | Rastreabilidade: cada item aponta para trecho e timestamp; abrir o trecho-fonte | P0 | F3-02 | DONE | Clicar numa decisão abre o trecho original |
-| F3-05 | Confirmação humana: itens `não confirmado` até aprovar; "não identificado/não informado" para responsável e prazo ausentes | P0 | F3-02 | DONE | Teste: nada vira tarefa definitiva sem confirmação |
-| F3-06 | Editar/aprovar/descartar itens sem perder o texto original; busca simples e exclusão com derivados | P1 | F3-05 | DONE | Edição preserva original; excluir sessão remove derivados |
-| F3-07 | Extrator de tarefas robusto: exemplos negativos no prompt, deduplicação contra o histórico, saída inválida sem nota em branco | P1 | F3-02 | READY | Testes por caso (ver F3-07 abaixo); em sessão real, nenhuma tarefa repetida nem narração virou tarefa |
-| F3-08 | Regras de prompt do resumo (sem abertura genérica, notas do usuário, próximos passos com dono e prazo explícitos), regenerar e título vazio | P1 | F3-02 | READY | Testes por regra; no S25, regenerar muda o formato sem perder o original |
-| F3-09 | Correção conservadora da transcrição: o modelo só troca o texto de palavras já existentes, em arquivo separado do original | P2 | F2-04, F3-08 | BACKLOG | Testes do aplicador de correção; uma troca fora das regras é recusada e o original continua igual bit a bit |
 
-**Portão F3:** critério 6 + a amostra de 53 min não perde pontos centrais nem timestamps. O esquema e a tela entram no commit do botão de TXT e da F3. A amostra de 53 min e uma resposta real de modelo continuam `NOT_RUN`, então o portão não fecha. A F3 foi aberta com os portões da F0, da F1 e da F2 ainda abertos.
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F3-01 | Esquema versionado de sessão, segmentos, itens e fontes, independente do provedor | P0 | F2 | DONE | Migração e testes; o esquema atual não possui entidade Topic |
+| F3-02 | Extrair JSON validado com resumo, ideias, oportunidades, decisões, tarefas, follow-ups e dúvidas | P0 | F3-01 | IN_PROGRESS | S25 validou saída de modelo em reunião sintética; falta amostra real de 53 min e avaliação da cobertura/comportamento em sessão longa |
+| F3-03 | Tipos de relatório: livre, reunião, brainstorm, diário, estudo e título personalizado | P1 | F3-02 | DONE | Testes demonstram seções e título por tipo |
+| F3-04 | Vincular cada item ao segmento/relógio de origem e permitir abrir a fonte | P0 | F3-02 | DONE | Fixture de teste abre o segmento e relógio corretos; original permanece acessível |
+| F3-05 | Deixar sugestões não confirmadas até decisão humana; não inventar responsável ou prazo | P0 | F3-02 | DONE | Fixture prova estado inicial pendente e valores “não identificado”/“não informado” |
+| F3-06 | Editar, confirmar, descartar, buscar e excluir relatório e derivados sem alterar o original | P1 | F3-05 | DONE | Fixtures provam edição, estados, busca e exclusão com original preservado |
+| F3-07 | Reduzir falsos positivos e duplicatas na extração de tarefas | P1 | F3-02 | READY | Casos positivos/negativos pt-BR; narração, opinião e fato passado não viram tarefa; duplicata não entra duas vezes |
+| F3-08 | Regras de resumo em português, preservação das notas do usuário e regeneração sem apagar a versão anterior | P1 | F3-02 | READY | Teste por regra e validação no S25; título vazio não vira relatório em branco |
+| F3-09 | Correção conservadora da transcrição em arquivo separado, sem reescrever nem traduzir o original | P2 | F2-04, F3-08 | BACKLOG | Só substituições autorizadas de palavras/trechos existentes; teste recusa índices/operações inválidos e compara original byte a byte |
+
+**Estado específico de F3-02:** em 2026-11-04, a tela do relatório enviou a reunião sintética ao modelo após confirmação explícita e recebeu resumo, decisão, tarefa e ideia como itens não confirmados. A validação recusou evidência inventada; responsável, prazo e status enviados pelo modelo não foram aceitos. Testes de serviço, parsing, prompt e diálogo foram registrados. A amostra real de 53 min continua NOT_RUN. O limite atual é 60000 caracteres em uma chamada; acima dele o fluxo usa o rascunho local, sem divisão por tempo.
+
+**Regras da extração de tarefas (F3-07):** extrair somente compromissos claros; ignorar narração, opinião, fatos passados e comentários sobre o app. Limitar a quantidade/tamanho segundo a implementação validada. Deduplicar sem confundir ações diferentes, como “ligar para o pai” e “ligar para a mãe e o pai”. Resposta inválida nunca gera nota vazia. Nenhum item vira tarefa definitiva sem confirmação.
+
+**Regras do resumo (F3-08):** preservar detalhes concretos e marcas do usuário; não iniciar com texto genérico; separar conteúdo anterior e conteúdo da sessão quando aplicável; próximos passos só incluem responsável e prazo ditos explicitamente; devolver conteúdo no formato pedido sem comentário extra. Regenerar conserva o relatório anterior até o usuário aceitar o novo.
+
+**Portão F3:** os critérios do relatório do MVP e a extração com modelo foram demonstrados em reunião sintética no S25. Falta processar uma amostra real de aproximadamente 53 min e comprovar que pontos relevantes e relógios não se perdem. O portão permanece aberto.
 
 ## F4 — Exportação
-| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
-|---|---|---|---|---|---|
-| F4-01 | Exportar Markdown (título, data, seções, fontes) | P0 | F3 | DONE | Arquivo gerado e conferido |
-| F4-02 | Exportar PDF com acentuação pt-BR | P0 | F4-01 | IN_PROGRESS | PDF aberto no aparelho, acentos corretos |
-| F4-03 | Exportar DOCX | P0 | F4-01 | IN_PROGRESS | Aberto no Word/Docs, conteúdo igual |
-| F4-04 | Exportar relatório completo ou partes selecionadas; compartilhar/salvar pelo Android; sem serviço externo sem consentimento | P1 | F4-01 | IN_PROGRESS | Compartilhamento testado |
 
-**Portão F4:** o mesmo relatório sai em PDF, DOCX e MD com conteúdo conferido (critério 5). O Markdown foi conferido num fixture. O PDF e o DOCX levam o mesmo texto, mas não foram abertos no aparelho nem no Word. A F4 foi aberta com os portões da F0, da F1, da F2 e da F3 ainda abertos.
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F4-01 | Exportar Markdown com título, data, seções, itens e fontes | P0 | F3 | DONE | Fixture gerado e conferido |
+| F4-02 | Exportar PDF legível com acentos pt-BR e hierarquia de títulos | P0 | F4-01 | DONE | PDF aberto no Adobe Acrobat do S25; acentos e hierarquia conferidos; exportação mantém fontes e relógios do relatório |
+| F4-03 | Exportar DOCX legível e editável | P0 | F4-01 | DONE | DOCX aberto no Word do S25; acentos, títulos e conteúdo exportado conferidos |
+| F4-04 | Compartilhar ou salvar relatório inteiro/selecionado sem enviar a serviço remoto sem consentimento | P1 | F4-01 | DONE | Teste comprova exportação de seleção; folha nativa Android abriu para PDF e DOCX no S25 sem envio automático |
+
+**Portão F4:** cumprido em 2026-11-04. Markdown foi conferido no fixture; o PDF foi aberto no Acrobat e o DOCX no Word do S25, ambos com acentos e títulos corretos. O teste de exportação também cobre relatório completo e seleção de itens. A integração externa escolhida pelo usuário continua sujeita ao consentimento normal do sistema.
 
 ## F5 — Fechamento do MVP
-| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
-|---|---|---|---|---|---|
-| F5-01 | Teste ponta a ponta dos 7 critérios no S25 Ultra | P0 | F4 | IN_PROGRESS | Checklist preenchido com evidência |
-| F5-02 | Revisão de privacidade: chaves e tokens protegidos, sem segredo em log, política de envio compreensível | P0 | F4 | IN_PROGRESS | Revisão registrada; cofre do Android em `b513d72`, falta ver a migração no S25 |
-| F5-03 | Desempenho (sessão longa, lista de histórico) e correções | P1 | F4 | IN_PROGRESS | Medições registradas |
-| F5-04 | Definir e documentar a direção visual móvel AMOLED | P2 | D-017 | DONE | `DESIGN.md`, D-017 e dez pranchas aprovadas listadas em `docs/INDEX.md` |
-| F5-05 | Auditoria final (`docs/AUDIT.md`) e atribuições GPL | P0 | F5-01 | IN_PROGRESS | Relatório de auditoria sem item crítico aberto |
 
-**Portão F5 = MVP pronto.** Aberto em 2026-11-02 com os portões da F0, da F1, da F2, da F3 e da F4 ainda abertos. `docs/reviews/F5.md` registra `AUDIT RESULT: FAIL`. O MVP não está pronto.
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F5-01 | Executar e registrar os sete critérios de aceite em fluxo ponta a ponta no S25 Ultra | P0 | F1–F4 | IN_PROGRESS | Checklist completo em docs/F5-01-checklist.md, com resultado e evidência de cada critério |
+| F5-02 | Revisar consentimento, dados enviados, armazenamento de chaves/tokens e logs | P0 | F1–F4 | IN_PROGRESS | Migração do cofre no S25 ainda NOT_RUN; revisar também exceções OAuth ainda registradas; relatório em docs/F5-02-privacidade.md |
+| F5-03 | Medir sessão longa, geração/exportação e lista de histórico; corrigir regressões relevantes | P1 | F2–F4 | IN_PROGRESS | Medições reproduzíveis no dispositivo com entrada, tempo e memória; números de fixture não substituem medida real; registrar em docs/F5-03-medicoes.md |
+| F5-04 | Definir e documentar direção visual móvel AMOLED | P2 | D-017 | DONE | DESIGN.md, D-017 e dez pranchas aprovadas em docs/INDEX.md |
+| F5-05 | Fazer auditoria final e conferir atribuições GPL | P0 | F5-01, F5-02, F5-03 | IN_PROGRESS | docs/reviews/F5.md sem CRITICAL/HIGH aberto e resultado da auditoria registrado |
 
-### F5-04 — direção documentada
-- Direção e dez pranchas aprovadas: [`DESIGN.md`](DESIGN.md) e [`docs/INDEX.md`](docs/INDEX.md#design-móvel).
-- F5-04 cobre a decisão e os artefatos de design, concluídos. A implementação está na F5V, iniciada agora (D-022).
+**Portão F5 = MVP pronto.** Os sete critérios abaixo precisam de prova, assim como privacidade, desempenho e auditoria. docs/reviews/F5.md registra AUDIT RESULT: FAIL; o MVP não está pronto. F5V e F6 não substituem este portão.
 
-## F5V — Redesign visual da versão nova
-| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
-|---|---|---|---|---|---|
-| F5V-01 | Atualizar tokens/tema AMOLED e navegação superior; remover a barra inferior persistente | P1 | D-017, D-022 | REVIEW | Rotas mapeadas; widget tests; captura da navegação |
-| F5V-02 | Aplicar a direção às telas de timeline, conhecimento, insights e memórias | P1 | F5V-01 | IN_PROGRESS | Estados principais cobertos por widget tests e capturas comparadas às referências |
-| F5V-03 | Atualizar entrada, conversa, importação de TXT e acesso explícito “Conversar” | P1 | F5V-01 | IN_PROGRESS | Teste de navegação/ação do chat, estados de envio/importação e captura |
-| F5V-04 | Atualizar calendário, detalhes, compartilhamento, relatórios, configurações, modelos, agentes e backup | P1 | F5V-01 | IN_PROGRESS | Widget tests dos comportamentos e capturas de cada família |
-| F5V-05 | Revisar estados vazios/erro, escala de texto, contraste, leitor de tela e validar no aparelho | P1 | F5V-02, F5V-03, F5V-04 | NOT_RUN | Verificações de acessibilidade; capturas finais; validação no S25 quando disponível |
+### Sete critérios de aceite do MVP
 
-**Direção e escopo:** seguir [`DESIGN.md`](DESIGN.md), D-017 e as 23 pranchas em [`docs/INDEX.md`](docs/INDEX.md#design-móvel). Usar os temas/componentes existentes em `lib/ui/core/themes/` e mapear as rotas antes de alterar navegação. Toda interação nova precisa de widget test conforme `AGENTS.md`. F5V não altera nem fecha automaticamente os portões F0–F5.
+1. Conversar por texto e falar com o app em turnos; resposta em áudio é opcional.
+2. Compartilhar um TXT real do Samsung e produzir relatório rastreável a trechos e relógios.
+3. Analisar uma foto em ao menos um provedor com visão e avisar quando o provedor escolhido não oferece essa capacidade.
+4. Selecionar modelo por ID ou por catálogo atualizado sem instalar outro APK.
+5. Exportar o mesmo relatório em PDF, DOCX e Markdown com acentuação correta.
+6. Editar e confirmar decisões, ideias, tarefas e follow-ups, sem alterar a fonte original; manter histórico ao trocar o modelo.
+7. Mostrar o que será enviado, pedir escolha explícita antes do envio remoto e exigir confirmação humana antes de tornar decisão ou tarefa definitiva.
 
-**Mapa das pranchas desta rodada:** 12/13 (tipos de cartão), 17 (variações de insight), 20 (tour e GUIAS) e a central de ações da 14 pertencem à F5V-02; 22 (importação TXT) pertence à F5V-03; 19 (prévia e compartilhamento) pertence à F5V-04. A prancha 17 usa as fábricas de insight existentes; o mapa geográfico exige coordenadas reais e não há suporte a grafo de conexões. A 20 reaproveita o tour e lê o guia sem editar `Memex Guide.md`. A 19 usa a folha nativa de compartilhamento e os recursos atuais do pôster. A 22 lista, pré-visualiza e importa TXT com estados de progresso/erro; DOCX segue adiado pela F2-03. Sem validação no S25, F5V-05 permanece `NOT_RUN`.
+## F5V — Redesign visual
 
-## Critérios de aceite do MVP (no Galaxy S25 Ultra, sem NotebookLM, PC ligado, Hermes ou serviço pago próprio)
-1. Conversar por texto e falar com o app com resposta opcional em áudio.
-2. Compartilhar um TXT real do Samsung e obter relatório rastreável a trechos/timestamps.
-3. Analisar fotos em ao menos um provedor com visão, com aviso nos demais.
-4. Selecionar modelo por ID ou catálogo atualizado, sem novo APK.
-5. Gerar o MESMO relatório em PDF, DOCX e MD, com acentuação correta.
-6. Editar/confirmar decisões, ideias, tarefas e follow-ups sem perder o original; histórico persiste ao trocar de modelo.
-7. Nada é enviado sem escolha explícita; nada vira tarefa/decisão sem confirmação.
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F5V-01 | Aplicar tokens AMOLED e navegação superior sem barra inferior persistente | P1 | D-017, D-022 | DONE | Testes de widget e capturas no AVD; navegação superior e ausência da barra inferior conferidas; validação global no S25 fica em F5V-05 |
+| F5V-02 | Aplicar direção visual à timeline, cartões, conhecimento, insights e memórias | P1 | F5V-01 | IN_PROGRESS | Estados principais e famílias de cartão cobertos por testes; comparação com pranchas; discrepâncias registradas |
+| F5V-03 | Atualizar entrada, conversa, anexos, importação TXT e acesso explícito a Conversar | P1 | F5V-01 | IN_PROGRESS | Fluxos de abrir, revisar, cancelar, importar e erro cobertos por teste e evidência visual |
+| F5V-04 | Atualizar calendário, detalhes, compartilhar, relatórios, configurações, modelos, agentes e backup | P1 | F5V-01 | IN_PROGRESS | Testes de interação e capturas das famílias de tela; sem remoção de funções suportadas |
+| F5V-05 | Revisar estados vazios/erro, escala, contraste, leitor de tela e aparelho | P1 | F5V-02, F5V-03, F5V-04 | NOT_RUN | Checklist de acessibilidade, capturas comparadas e validação final no S25 registradas |
+
+**Direção aprovada:** DESIGN.md e as pranchas em docs/INDEX.md. Usar temas/componentes existentes e mapear rotas antes de alterar navegação. Mudança de interação precisa de teste de widget conforme AGENTS.md. F5V não fecha F0–F5.
+
+**Distribuição das pranchas:** 12/13, 14 e 17 em F5V-02; 20 também em F5V-02; 22 em F5V-03; 19 em F5V-04. A 17 usa fábricas de insight existentes; mapas só mostram coordenadas disponíveis, sem inventar grafo. A 20 reaproveita o tour e não edita Memex Guide.md. A 19 usa ShareService e folha nativa. A 22 mantém a importação em TXT; DOCX fica fora por F2-03. O bloqueio por PIN da prancha 15 permanece desativado conforme D-027.
 
 ## F6 — Memória longitudinal
-| ID | Tarefa | Prio | Depende de | Estado | Evidência exigida |
-|---|---|---|---|---|---|
-| F6-01 | Busca entre sessões | P0 | F5 | IN_PROGRESS | Busca semântica com evidência; texto local não substitui |
-| F6-02 | Painel de encaminhamentos aprovados | P0 | F3 | IN_PROGRESS | Lista conferida no aparelho |
-| F6-03 | O que mudou e por quê, com histórico de versões | P0 | F3 | IN_PROGRESS | Diferença e motivo registrados |
-| F6-04 | Tópicos e projetos | P1 | F6-01 | NOT_RUN | Entidade própria, ligada às sessões |
-| F6-05 | Tags hierárquicas (`#area/projeto`) com árvore e contagem | P1 | F5 | READY | Testes do cálculo da árvore e da lista; no S25, `#trabalho/reuniao` aparece sob `trabalho` com contagem somada |
-| F6-06 | Filtros por propriedade e visões salvas | P1 | F6-01 | READY | Testes do extrator e do filtro; no S25, uma visão salva "tarefas abertas" reaplica e lista só os itens certos |
-| F6-07 | Prévia de links (título, descrição, imagem), desligada por padrão | P2 | F5-02 | BACKLOG | Testes do parser e do bloqueio de endereços privados; no S25, com a opção ligada, uma URL colada mostra a prévia |
-| F6-08 | Mapa de atividade no calendário (intensidade por dia) | P2 | F5 | READY | Teste dos níveis; captura do S25 com dias de intensidades diferentes |
-| F6-09 | Recuperação para perguntas sobre sessões: sementes por busca de texto, mais sessões irmãs por tópico, com orçamento de caracteres e piso de relevância | P1 | F6-01, F6-05 | BACKLOG | Testes da expansão; no S25, uma pergunta fora do assunto não traz nenhuma sessão |
-| F6-10 | Embeddings no aparelho para busca por significado em português | P2 | F6-09 | BACKLOG | Modelo multilíngue medido em pt-BR contra a busca de texto; tamanho, tempo e memória no S25. Sem medida, continua `BACKLOG` |
-| F6-11 | "Adicionar à agenda" nos encaminhamentos com data | P2 | F6-02 | READY | Intent `ACTION_INSERT` do calendário, sem permissão nova; no S25, o evento chega pré-preenchido |
 
-**Portão F6:** busca semântica entre sessões, tópicos, "o que mudou e por quê?", painel de encaminhamentos e histórico de versões. Aberto em 2026-11-02 (D-010) com os portões da F0 à F5 ainda abertos. A busca feita é texto local. Semântica, tópicos e o "por quê" continuam `NOT_RUN`. O MVP não está pronto.
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F6-01 | Buscar sessões e itens entre registros, começando por texto e avançando para semântica | P0 | D-010, F3 | IN_PROGRESS | Busca semântica em pt-BR avaliada contra busca textual, com evidência dos resultados e teste de consulta fora do tema |
+| F6-02 | Listar encaminhamentos aprovados sem incluir sugestões pendentes ou tarefas internas dos agentes | P0 | F3-05 | IN_PROGRESS | Painel no S25 exibe apenas item confirmado; validar estado vazio, busca e acesso pelo fluxo normal |
+| F6-03 | Mostrar o que mudou e preservar histórico de versões e motivo | P0 | F3-06 | IN_PROGRESS | Alteração cria revisão; exclusão remove derivados e preserva original; “por quê” tem origem explícita ou aparece como não informado |
+| F6-04 | Criar tópicos/projetos como entidade própria e relacioná-los a sessões | P1 | F6-01 | NOT_RUN | Modelo, migração e UI ligados a sessões; não confundir seção de relatório com tópico |
+| F6-05 | Organizar tags hierárquicas como area/projeto, com árvore e contagens | P1 | D-014 | READY | Pai soma filhos; tag simples fica na raiz; tocar filtra; testes e prova visual no S25 |
+| F6-06 | Combinar filtros de propriedade e salvar visões locais | P1 | F6-01 | READY | Filtros combinam por E; visão persiste entre reinícios e pode ser renomeada/apagada |
+| F6-07 | Mostrar prévia opcional de URL, desligada por padrão | P2 | F5-02 | BACKLOG | Somente HTTP/HTTPS; recusar localhost, IP privado e redirecionamento para privado; sem cookies; aviso de que abrir URL contata o site |
+| F6-08 | Mostrar intensidade de atividade por dia no calendário mensal | P2 | D-014 | READY | Cinco níveis: 0, 1, 2, 3–4, 5+; contraste e leitura de hoje/seleção permanecem corretos |
+| F6-09 | Recuperar sessões relacionadas a perguntas com sementes, tópico e limite de relevância | P1 | F6-01, F6-04 | BACKLOG | Sementes de texto permanecem; irmãs por tópico respeitam relevância/orçamento; pergunta fora de tema não recebe sessão alheia |
+| F6-10 | Medir embeddings locais multilíngues para busca em português antes de decidir implementação | P2 | F6-09 | BACKLOG | Comparação com busca textual em pt-BR, tamanho do modelo, tempo e memória no S25; sem benefício medido, não implementar |
+| F6-11 | Oferecer “Adicionar à agenda” em encaminhamento aprovado com data explícita | P2 | F6-02 | READY | ACTION_INSERT abre calendário com título e descrição; não pede permissão de leitura nem grava evento sem confirmação |
 
-### Definição das tarefas F6-05 a F6-08 (D-014)
-Regras comuns: cada uma entra com testes (`AGENTS.md`), em commit próprio; texto em `en` e `pt`; nada muda dados já gravados sem migração testada. Ordem sugerida: F6-08, F6-05, F6-06, F6-07.
+**Definições de F6-05 a F6-08:**
 
-**F6-05 — Tags hierárquicas**
-- Faz: o separador `/` define níveis (`trabalho/reuniao`). A árvore mostra cada nó com a contagem dos cartões do nó mais a dos filhos. Tocar num nó filtra a lista. Tags sem `/` continuam raízes, sem migração.
-- Não faz: renomear ou mover tags em lote, nem ligar a árvore ao P.A.R.A. (isso é da F6-04).
-- Pronto quando: pai soma filhos; tag sem `/` fica na raiz; nó sem cartões some; a árvore abre e fecha na tela.
+- **F6-05:** a barra / define níveis, por exemplo trabalho/reuniao. A contagem do nó inclui os cartões de seus descendentes. Não renomear/mover tags em lote nem adicionar integração P.A.R.A. sem decisão.
+- **F6-06:** propriedades derivadas incluem presença de link, tarefa, tarefa aberta e código. Filtro pode combinar texto, tag e data. Visão salva contém nome e filtro em arquivo local; sem linguagem de consulta aberta e sem sincronização.
+- **F6-07:** busca de metadados com cache, limite de tamanho/tempo e sem cabeçalhos/cookies do usuário. A proteção contra requisição a endereços privados é obrigatória antes de ligar a função.
+- **F6-08:** usar a contagem existente de cartões por dia. Não acrescentar visão anual nem sequência/streak nesta tarefa.
 
-**F6-06 — Filtros por propriedade e visões salvas**
-- Faz: propriedades derivadas do texto do cartão ou relatório: tem link, tem tarefa, tem tarefa aberta (`- [ ]`), tem código. Filtro combinável com texto, tag e data. Visão salva = nome + filtro, guardada em arquivo JSON local no workspace, com renomear e apagar.
-- Não faz: linguagem de consulta aberta (como o CEL do Memos) e sincronização entre aparelhos.
-- Pronto quando: o extrator acerta nos casos de borda (link dentro de código, tarefa marcada vs aberta); o filtro combina as condições com E; a visão persiste ao reiniciar o app.
+**Definições adicionais:**
 
-**F6-07 — Prévia de links**
-- Faz: ao ligar a opção (padrão desligada, critério 7), busca `title`, `og:description` e `og:image` da URL, com cache local e limite de tempo e tamanho.
-- Segurança: só `http` e `https`; recusar `localhost`, endereços privados e redirecionamentos para eles; sem cookies nem cabeçalhos do usuário. A busca revela ao site que o aparelho abriu a URL, e isso precisa estar escrito na opção.
-- Não faz: busca automática de todas as URLs antigas, nem imagem de prévia salva sem pedido.
+- **F6-09:** a busca textual escolhe as sessões-semente; sessões com tópicos em comum vêm depois por relevância e data, dentro de orçamento de caracteres. Nenhuma semente acima do piso significa nenhuma sessão retornada.
+- **F6-10:** só avançar após medida que demonstre vantagem sobre busca textual. O modelo precisa cobrir português; tamanho, memória e tempo no S25 são critérios de produto.
+- **F6-11:** abrir o aplicativo de calendário Android com os campos preenchidos via ACTION_INSERT. Não ler a agenda, não sincronizar e não salvar automaticamente.
 
-**F6-08 — Mapa de atividade**
-- Faz: no calendário mensal, o fundo de cada dia usa 5 níveis pela contagem de cartões (0, 1, 2, 3 a 4, 5 ou mais). A contagem já existe (`CalendarDay.total`).
-- Não faz: visão anual nem sequência de dias (streak), que ficam para depois.
-- Pronto quando: a função de nível tem teste por faixa; o dia selecionado e o de hoje continuam legíveis; o texto do dia tem contraste nos níveis altos.
+**Portão F6:** busca semântica, tópico/projeto como entidade própria, histórico com motivo, painel de encaminhamentos e integração de agenda conforme escopo. F6 foi aberta sob D-010 enquanto F0–F5 estavam abertas. Hoje a busca provada é textual; não há entidade de tópico/projeto; o motivo da alteração e a busca semântica continuam NOT_RUN. O MVP continua aberto.
 
-### Definição das tarefas vindas do Daedalus Echo (D-016)
-Mesmas regras comuns de cima. Ordem sugerida: F3-07, F2-11, F6-11, F6-09. A F6-10 só depois de medir.
+### Ordem das tarefas adicionais F1/F2/F3/F6
 
-**F2-11 — Whisper multilíngue local**
-- Faz: troca ou soma ao `WhisperService` um modelo Whisper multilíngue em int8 (`language = "pt"`, `task = "transcribe"`), com download explícito e tamanho mostrado. Áudio longo vai em janelas de 30 s, decodificado em pedaços para não carregar 50 min de PCM de uma vez (~190 MB em float a 16 kHz). Cada janela guarda o tempo de início, para os timestamps da F3-04 (aproximados, de 30 s).
-- Não faz: tradução, separação de falantes (diarização) e timestamps por palavra.
-- Pronto quando: o pt-BR sai com acentos; o áudio de 50 min não estoura a memória; o resultado entra no mesmo caminho do TXT importado (prévia e confirmação antes de enviar ao modelo).
+1. Provar pendências no S25: F2-09, F2-10, F2-03 e F1-07, em paralelo à F5 quando o aparelho estiver disponível.
+2. Implementar F1-09, F3-08 e F3-07 em sequência conforme dependências e prioridade do uso diário.
+3. Depois: F2-13, F2-11 e F2-12, respeitando os respectivos estados e dependências.
+4. F6: F6-11, F6-08, F6-05, F6-09 e F6-06; F6-04 precisa existir antes da expansão por tópico em F6-09.
+5. F3-09, F6-10 e F6-07 só avançam após cumprir seus critérios de medição, segurança ou dependência. F1-05 também depende de chave/endpoint disponível.
 
-**F3-07 — Extrator de tarefas robusto**
-- Faz: o prompt (em pt) pede só compromissos de quem fala, com exemplos do que NÃO é tarefa (narração do que está fazendo, comentário sobre o app, fato passado, opinião). Limite de 10 por sessão, 15 palavras cada, "nenhuma" quando não houver. Remove cercas ```json da resposta. Deduplicação contra o histórico: texto normalizado igual; um contido no outro só se o menor tiver 8 ou mais caracteres; mesmas palavras úteis após tirar palavras vazias do português. "ligar para o pai" não é duplicata de "ligar para a mãe e o pai".
-- Saída que não dá para interpretar nunca vira nota em branco: o título e a prévia vêm da primeira linha com texto do próprio conteúdo.
-- Pronto quando: há um teste por regra acima, mais os casos pt-BR; nada vira tarefa definitiva sem confirmação (F3-05 continua valendo).
+## F7 — Voz contínua e ponte para CLIs oficiais
 
-**F6-09 — Recuperação por tópicos**
-- Faz: a busca de texto dá as sementes; sessões que compartilham tópico ou tag com elas entram em seguida, ordenadas por tópicos em comum e depois pela data, até o orçamento de caracteres. As sementes nunca saem. Pergunta sem nenhuma semente acima do piso não traz sessão nenhuma, para uma conversa sobre outro assunto não receber nota alheia.
-- Não faz: embeddings (F6-10) nem grafo visual.
+**Objetivo:** avaliar voz mãos-livres com interrupção natural, inferência local opcional e encaminhamento explícito para Claude Code/Codex CLI oficiais no desktop. Esta fase não autoriza captura contínua silenciosa nem uso de credenciais fora dos fluxos oficiais.
 
-**F6-11 — Adicionar à agenda**
-- Faz: botão no encaminhamento aprovado que abre o app de calendário do Android com título e descrição preenchidos e 1 hora de duração, pelo intent `ACTION_INSERT`. Não pede permissão de agenda e não grava nada sozinho.
-- Não faz: ler a agenda nem sincronizar.
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F7-01 | Comparar viabilidade, sistemas desktop, licenças, termos, autenticação e limites de dados; decidir escopo antes de código | P0 | F5 fechado | BLOCKED | Matriz de opções, riscos e decisão aceita em docs/DECISIONS.md |
+| F7-02 | Medir Ollama/modelos locais para qualidade em pt-BR, requisitos de hardware e privacidade | P1 | F7-01 | BLOCKED | Tabela de qualidade, latência, RAM/VRAM, tamanho e plataforma; modelo escolhido ou caminho descartado com motivo |
+| F7-03 | Implementar voz full duplex opcional com controle explícito, interrupção, pausa, cancelar e estado de microfone visível | P0 | F7-01, F7-02 | BLOCKED | Testes de início, interrupção, cancelamento, erro, permissão e liberação do microfone; nenhuma gravação sem ação visível |
+| F7-04 | Criar ponte desktop opcional para Claude Code e Codex CLI oficiais, com escopo e prévia de cada solicitação | P0 | F7-01 | BLOCKED | Teste com cada CLI instalada; destino/comando visíveis, confirmação antes de enviar ou executar, cancelamento sem efeito e falha sem perda de contexto |
+| F7-05 | Decidir se uma interface MCP é necessária e, se aprovada, restringir ferramentas e permissões | P2 | F7-01, F7-04 | BLOCKED | Decisão explícita; se implementada, teste de acesso somente aos recursos autorizados e ausência de escrita em Quick Query |
+| F7-06 | Validar privacidade, acessibilidade, segurança, termos e funcionamento nos sistemas escolhidos | P0 | F7-02 a F7-05 | BLOCKED | Auditoria sem bloqueios, resultados de testes e execução real registrados em STATE.md |
 
-### Definição das tarefas vindas do anarlog (D-018)
-Mesmas regras comuns de cima. Ordem sugerida: F1-09, F3-08, F2-13, F2-12; a F3-09 só depois de F3-08 provada no S25.
+**Portão F7:** requisitos de plataforma e termos decididos; voz e ponte funcionam nos sistemas aprovados; toda captura e todo encaminhamento são iniciados pelo usuário; testes e auditoria sem bloqueios. A ponte não pode contornar autenticação nem termos do fornecedor.
 
-**F1-09 — Provedor de cada etapa**
-- Faz: duas linhas nas configurações, "Transcrição" e "Resumo e conversa", com o provedor e o modelo ativos e uma frase do que sai do aparelho. Hoje o áudio vai ao endpoint `transcribe` do ChatGPT (D-011) enquanto o chat usa o modelo escolhido, e isso não aparece em lugar nenhum.
-- Não faz: trocar de provedor por etapa; é só mostrar.
+## F8 — NotebookLM
 
-**F2-12 — Legenda `.srt` e `.vtt`**
-- Faz: aceita as duas extensões no seletor e no Compartilhar. O parser de TXT já lê o intervalo `00:00:10,000 --> 00:00:14,120`; falta tirar a linha de número do `.srt`, o cabeçalho `WEBVTT` e as marcas `<v Nome>` do `.vtt`. Passa pela mesma prévia e confirmação (F2-07).
-- Não faz: criar áudio nem separar falantes.
+**Objetivo:** permitir levar material selecionado ao NotebookLM por um fluxo opt-in, começando por uma exportação controlada para Google Docs. Não presumir que API, importação direta ou integração comunitária sejam suportadas.
 
-**F2-13 — Dicionário de termos**
-- Faz: lista editável (máx. 100 termos) guardada no aparelho e enviada nos prompts de resumo e de correção como "grafias corretas". Aparece na prévia de envio (F2-07), porque é conteúdo que sai do aparelho.
-- Não faz: garantir que o endpoint de transcrição use a lista; ele não tem esse parâmetro conhecido (não testado).
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F8-01 | Verificar capacidades atuais, requisitos, termos, autenticação e fluxo suportado pelo NotebookLM | P0 | F5 fechado, F4 estável | BLOCKED | Pesquisa em fontes oficiais e decisão de escopo registrada, incluindo dados que deixam o aparelho |
+| F8-02 | Exportar apenas conteúdo selecionado para Google Docs, com destino e conteúdo visíveis antes de autorizar | P0 | F8-01 | BLOCKED | Documento criado na conta escolhida; cancelar não cria/exporta; origem e conteúdo conferidos |
+| F8-03 | Avaliar conector comunitário opt-in, licença, segurança, manutenção e compatibilidade | P1 | F8-01, F8-02 | BLOCKED | Avaliação registrada; integrar somente após aprovação e sem tornar caminho comunitário requisito do MVP |
+| F8-04 | Avaliar eventual API empresarial apenas se existir caso de uso e benefício comprovados | P2 | F8-01 | BLOCKED | API, custo, termos e necessidade verificados em fonte oficial; decisão aceita antes de qualquer integração |
+| F8-05 | Validar consentimento, revogação, segurança, exportação e comportamento quando o serviço está indisponível | P0 | F8-02; F8-03/F8-04 se aprovados | BLOCKED | Testes e revisão demonstram operação opt-in, cancelamento e ausência de upload/sincronização automática |
 
-**F3-08 — Regras de prompt do resumo**
-- Faz: o prompt (em pt, escrito por nós a partir do `enhance` do anarlog) manda: não abrir com "Visão geral" ou "Participantes"; guardar detalhes concretos; respeitar negrito e `###` do usuário como importantes; separar notas de antes e de durante a sessão; "Próximos passos" no fim só com dono e prazo explícitos (F3-05 continua mandando); responder só o markdown, sem comentário; termos técnicos ficam em inglês. O título sai só em texto simples, e conteúdo vazio devolve o marcador `<EMPTY>`, que vira "Sem título" em vez de nota em branco.
-- Regenerar: botão que refaz o resumo com outro tipo ou modelo; o anterior fica guardado até o novo ser aceito. "Mais curto" e "Mais longo" pelo chat.
-- Pronto quando: há um teste por regra e um caso pt-BR com texto de STT ruim.
+**Ordem prevista:** Via A, Google Docs; Via B, conector comunitário somente se aprovado; Via C, API empresarial somente se existir e justificar. Cada via depende da conclusão da anterior ou de uma decisão documentada para descartá-la.
 
-**F3-09 — Correção conservadora da transcrição**
-- Faz: o modelo recebe `{"words":[{id,text}]}` e devolve só `replace` em `/words/N/text`; o aplicador recusa qualquer outra operação, índice fora da lista ou mudança de `id`. Em dúvida, não troca. O resultado é uma terceira versão ao lado do original e do normalizado (F2-04). A transcrição do Samsung não tem palavras separadas, então a unidade seria o trecho; isso precisa ser medido antes.
-- Não faz: reescrever, resumir nem traduzir.
+**Portão F8:** apenas capacidades confirmadas e autorizadas foram integradas; o usuário escolhe conteúdo, conta e destino; nenhuma sincronização bidirecional ou envio automático ocorre.
 
-### Ordem geral das tarefas novas
-Primeiro fechar o que está `IN_PROGRESS` com prova no S25 (F2-09, F2-10, F2-03, F1-07). Depois, nesta ordem: F1-09, F3-08, F3-07, F2-13, F2-11, F2-12, F6-11, F6-08, F6-05, F6-09, F6-06. Ficam para depois de medir ou decidir: F3-09, F6-10, F6-07 e F1-08 (decisão do dono, D-015). Motivo: F1-09 e F3-08 mexem no que o dono já usa todo dia (transcrição e resumo); as de F6 dependem de tags e busca.
+## F9 — Meeting Decoder
 
-## Fases futuras (bloqueadas até o MVP)
-- **F7:** voz contínua full duplex; ponte opcional com Claude Code/Codex CLI oficiais no PC (única via aceita para assinatura Claude); modelos locais (Ollama).
-- **F8:** NotebookLM — Via A (exportar para Google Docs), depois B (conector comunitário, opt-in), C (API empresarial só se justificar).
+**Estado:** BLOCKED e fora do MVP. D-029/D-030 autorizam detalhar esta fase, não iniciar implementação.
 
-## Ideias futuras (não autorizadas)
-| Ideia | Quando reavaliar |
+**Objetivo:** transformar uma conversa, nota própria, transcrição importada ou PDF suportado em um relatório visualmente organizado com resumo, decisões, ideias possíveis, oportunidades, dúvidas, tarefas e follow-ups. Cada sugestão deve apontar para um trecho, relógio ou página. O usuário revisa, edita, confirma ou descarta cada item. A fase inclui Todo pessoal e encaminhamento escolhido para agenda/lembretes.
+
+**Reuso obrigatório:** aproveitar os relatórios, evidências e confirmação da F3; Markdown/PDF/DOCX da F4; busca e encaminhamentos da F6; ações nativas existentes em SystemActionService quando compatíveis. TaskCard não é uma Todo agregada. AsyncTaskListPage é fila interna de agentes e não pode ser reaproveitada como lista pessoal.
+
+**Limites:** PDF com texto selecionável é a entrada inicial prevista. F9-01 decide OCR, outros formatos e suporte “etc.”. Não gravar terceiros silenciosamente, não transcrever conversa corporativa na nuvem sem escolha, não inferir responsável/data, não enviar mensagens e não encaminhar item sem confirmação individual. IA é opcional; sem IA não inventar síntese semântica. Imagens externas exigem origem, licença, proveniência e consentimento. A prioridade de F9 em relação a F7/F8 será decidida após o MVP.
+
+| ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
+|---|---|---:|---|---|---|
+| F9-01 | Mapear F3/F4/F6, SystemActionService, TaskCard e destinos; decidir PDF/OCR/outros formatos, Todo/agenda/lembretes, imagens, IA e sistema desktop | P0 | F5 fechado; F3-02/04/05, F4-01/02/03, F6-02/11 | BLOCKED | Matriz requisito → recurso existente/lacuna, fluxo de dados e decisões aceitas antes do código; fila de agentes separada da Todo |
+| F9-02 | Criar corpus de 40 exemplos fictícios e fixtures de PDF com saída esperada e fontes | P0 | F9-01 | BLOCKED | Casos positivos/negativos cobrem tarefa clara, hipótese, fato passado, duplicata, dono ausente, data ambígua, PDF selecionável e evidência por página; sem dados pessoais reais |
+| F9-03 | Gerar relatório editorial organizado e incluir imagens relacionadas quando houver fonte aprovada, reutilizando categorias existentes e provedor autorizado | P0 | F3-01 a F3-05, F9-02 | BLOCKED | Itens apontam para timestamp ou página; confiança avaliada no corpus; imagens têm proveniência e são ilustrativas, nunca evidência; sem IA não há síntese inventada; hipótese fica separada de decisão |
+| F9-04 | Revisar cada sugestão individualmente: editar, confirmar, descartar e resolver ambiguidade/duplicata | P0 | F9-03 | BLOCKED | Evidência e confiança visíveis; data ambígua exige confirmação; descarte não chega aos destinos; duplicata é sinalizada, nunca removida em silêncio |
+| F9-05 | Definir origem das imagens e produzir prancha de referência para relatório e Todo antes da UI | P1 | F9-01 | BLOCKED | Prancha alinhada a DESIGN.md e listada em docs/INDEX.md; cada imagem tem origem/licença; imagem existente 04-report-followups.png é reutilizada como referência quando suficiente |
+| F9-06 | Criar página Todo pessoal no menu existente, com itens aprovados, estado, prazo, busca e vínculo à fonte; encaminhar sob escolha para calendário/lembrete | P0 | F9-04, F6-02, F6-11 | BLOCKED | Criar/editar/concluir/reabrir/buscar; manter ligação ao relatório; encaminhamento individual confirmado; permissões solicitadas no momento adequado; sem tarefas internas de agentes ou barra inferior persistente |
+| F9-07 | Exportar relatório organizado em Markdown/PDF/DOCX e acrescentar JSON/ICS apenas se F9-01 confirmar a necessidade | P1 | F9-03 a F9-06, F4-01 a F4-04 | BLOCKED | Hierarquia, acentos, fontes e imagens preservadas; JSON conserva proveniência; ICS válido usa America/Sao_Paulo e inclui apenas ações confirmadas |
+| F9-08 | Entregar os fluxos local-first no Android e no sistema desktop escolhido | P1 | F9-01, F9-05 a F9-07 | BLOCKED | Build e fluxos de captura, revisão, Todo, exclusão e exportação validados nas duas plataformas; sem sincronização externa implícita |
+| F9-09 | Fechar qualidade, privacidade, acessibilidade e auditoria da fase | P0 | F9-02 a F9-08 | BLOCKED | Checklist abaixo concluído; provas em STATE.md; auditoria em docs/AUDIT.md sem bloqueios |
+
+### Checklist de aceite da F9
+
+- [ ] Cada tipo de entrada aprovado em F9-01 gera relatório organizado com resumo, decisões, ideias, oportunidades, dúvidas, follow-ups e tarefas aplicáveis.
+- [ ] Cada item indica trecho e relógio ou número da página correspondente.
+- [ ] IA desligada não produz síntese semântica inventada; IA ligada usa modelo configurado e consentimento de envio.
+- [ ] Hipótese não se transforma em decisão/tarefa; pessoa e prazo ausentes ficam como não informados.
+- [ ] Confiança é explicada em linguagem compreensível e aparece junto da evidência.
+- [ ] Relatórios incluem imagens relacionadas quando houver origem segura e autorizada; cada imagem mostra sua proveniência e não é apresentada como fato da conversa.
+- [ ] Prazo como “quinta” sem semana definida fica pendente até confirmação explícita.
+- [ ] Cada sugestão pode ser editada, confirmada ou descartada sem alterar o texto original.
+- [ ] Ação descartada não chega a Todo, agenda ou lembrete; cada encaminhamento exige confirmação individual.
+- [ ] Todo mostra itens abertos/concluídos, permite busca/conclusão/reabertura e mantém vínculo à fonte.
+- [ ] A lista Todo não mostra filas nem tarefas internas dos agentes.
+- [ ] Possíveis duplicatas são sinalizadas; nada é removido automaticamente.
+- [ ] Exclusão permanente remove relatório e derivados associados, sem deixar cópia inesperada.
+- [ ] Markdown, PDF e DOCX preservam estrutura, acentos, fontes e imagens; JSON mantém proveniência; ICS respeita America/Sao_Paulo.
+- [ ] Imagens externas só entram após escolha/consentimento e têm origem e licença registradas; sem fonte aprovada, o relatório informa que não há imagem relacionada disponível.
+- [ ] Android e sistema desktop escolhido passam pelo fluxo completo local-first e pela revisão de acessibilidade.
+- [ ] Os 40 exemplos e PDFs sintéticos cobrem positivos, falsos positivos, ambiguidades e evidência; testes unitários, de widget e integração cobrem extração, revisão, destinos, armazenamento, exclusão e exportação.
+
+**Portão F9:** MVP fechado; decisões F9-01 aceitas; todos os itens confirmados seguem pelo fluxo revisável; exclusão, exportação e acessibilidade comprovadas; auditoria sem bloqueios. O que não foi executado continua NOT_RUN em STATE.md.
+
+## Ideias futuras — sem autorização de implementação
+
+| Ideia | Condição para reavaliar |
 |---|---|
-| Referências de UX/relatórios: AnythingLLM Mobile, Meet2Notes, Open Notebook, Memos (revisado em D-014), Khoj, Daedalus Echo (revisado em D-016) | Ao iniciar F2/F3, copiando só padrões ou módulos de licença compatível |
-| Graphiti/Omi (memória temporal) | Só se F6 provar necessidade |
-| Mapa global de tópicos (grafo visual das sessões), do Daedalus Echo | Depois da F6-05 e da F6-09, se tópicos ficarem difíceis de navegar em lista |
-| Gemma 3 1B local (MediaPipe) e conversa por voz mãos-livres com resposta falada | F7, junto de Ollama; medir antes a qualidade em pt-BR |
-| Backup versionado automático que inclui as configurações padrão | Ao revisar o backup do app; o Echo corrigiu esse furo na v1.2.2 |
-| Separar falantes (diarização e voiceprint, como o anarlog) | Se o Gravador da Samsung deixar de entregar o nome do locutor; medir o modelo no S25 antes |
-| CLI e servidor MCP para outros agentes lerem as sessões | F7, junto da ponte com Claude Code e Codex |
-| Idioma do resumo escolhido pela fala mais usada | Se voltarmos a ter mais de dois idiomas (D-012) |
-| Biblioteca de anexos (tela com todas as fotos, PDFs e áudios importados), do Memos | Depois da F2-09 e da F6-05, se achar arquivos ficar difícil |
-| Chave de API do Gemini (AI Studio) como reserva da transcrição de áudio | Se o endpoint do ChatGPT (D-011) cair ou limitar o tamanho |
+| Grafo temporal Graphiti ou mapa visual global de tópicos | Depois de F6-04/F6-09 demonstrarem que listas não bastam |
+| Gemma local e voz mãos-livres | Dentro de F7, após medir qualidade pt-BR, hardware e privacidade |
+| Backup automático versionado que inclua configurações padrão | Revisão futura do backup; definir retenção e restauração antes |
+| Separação de falantes/voiceprint | Se as transcrições reais não preservarem identificação suficiente; medir no S25 |
+| Interface MCP para agentes externos | Decisão da F7-05 e limites de permissão aprovados |
+| Escolher idioma do resumo pelo idioma predominante | Só se o produto voltar a suportar mais de en e pt |
+| Biblioteca agregada de fotos, PDFs e áudios | Depois de F2/F6, se a busca atual não bastar |
+| Chave Gemini como reserva de transcrição | Se o caminho D-011 falhar ou se os limites medidos forem insuficientes |
 
-## Mudanças de escopo
-- 2026-11-02 — escopo do MVP, fases e Claude por chave de API: ver [docs/DECISIONS.md](docs/DECISIONS.md).
-- 2026-11-02 — a F6 começa com o MVP aberto: D-010. A F7 e a F8 continuam bloqueadas.
-- 2026-11-03 — D-011 (áudio pelo endpoint de transcrição), D-012 (só en e pt), D-013 (Gemini OAuth bloqueado), D-014 (ideias do Memos na F6) e D-015 (login Claude pendente).
-- 2026-11-03 — D-016 (ideias do Daedalus Echo: F2-11, F3-07, F6-09 a F6-11).
-- 2026-11-03 — D-018 (ideias do anarlog: F1-09, F2-12, F2-13, F3-08, F3-09).
-- 2026-11-03 — D-017: direção visual móvel AMOLED aprovada. D-021 agendou a F5V para depois da F5; D-022 a inicia agora, em paralelo; portões mantidos.
-- 2026-11-04 — D-023: sem espelho chinês no download do modelo de voz.
-- 2026-11-03 — D-020: fallback resiliente entre modelos e provedores (FallbackLLMClient) com reordenação por drag-and-drop na UI; Gemini OAuth e Claude Sonnet 5.5 High validados com resposta real no S25 Ultra.
+Ideias já avaliadas e distribuídas em tarefas ficam nas decisões D-014, D-016 e D-018; não reabrir essas pesquisas sem uma lacuna concreta.
+
+## Histórico de mudanças de escopo
+
+- 2026-11-02 — escopo do MVP e fases: docs/DECISIONS.md.
+- 2026-11-02 — D-010 permite F6 em paralelo ao MVP; F7/F8 continuam bloqueadas.
+- 2026-11-03 — D-011 transcrição de áudio, D-012 idiomas en/pt, D-013 Gemini OAuth, D-014 ideias do Memos e D-015 Claude OAuth.
+- 2026-11-03 — D-016 ideias do Daedalus Echo; D-017 design móvel AMOLED; D-018 ideias do anarlog.
+- 2026-11-03/04 — D-020 fallback de modelos; D-021 substituída por D-022, que inicia F5V em paralelo à F5.
+- 2026-11-04 — D-023 retirada do espelho chinês e D-024 remoção dos componentes chineses do produto.
+- 2026-11-04 — D-025 a D-028: pranchas visuais, microfone explícito e limites de execução; ver docs/DECISIONS.md.
+- 2026-11-04 — D-029/D-030: planejar Meeting Decoder na F9 com PDFs, Todo pessoal, encaminhamentos e relatórios PDF/DOCX. F9 permanece bloqueada.
