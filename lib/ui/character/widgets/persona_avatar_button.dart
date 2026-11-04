@@ -5,6 +5,7 @@ import 'package:memex/domain/models/character_model.dart';
 import 'package:memex/ui/character/view_models/persona_avatar_viewmodel.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/core/widgets/character_avatar.dart';
+import 'package:memex/utils/user_storage.dart';
 
 /// Small avatar button in the timeline header.
 /// Shows the user's primary companion character with an unread badge.
@@ -51,20 +52,31 @@ class _PersonaAvatarButtonState extends State<PersonaAvatarButton> {
           return const SizedBox(width: 36, height: 36);
         }
 
-        return GestureDetector(
-          onTap: () => widget.onTap(character),
-          child: SizedBox(
-            width: 36,
-            height: 36,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Center(
-                  child: _CompanionAvatarFrame(character: character),
+        return Semantics(
+          button: true,
+          label: UserStorage.l10n.navChat,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => widget.onTap(character),
+            child: SizedBox(
+              width: 48,
+              height: 48,
+              child: Center(
+                child: SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Center(
+                        child: _CompanionAvatarFrame(character: character),
+                      ),
+                      if (widget.viewModel.unreadCount > 0)
+                        _UnreadBadge(count: widget.viewModel.unreadCount),
+                    ],
+                  ),
                 ),
-                if (widget.viewModel.unreadCount > 0)
-                  _UnreadBadge(count: widget.viewModel.unreadCount),
-              ],
+              ),
             ),
           ),
         );

@@ -7,9 +7,16 @@ import 'package:memex/ui/character/view_models/persona_avatar_viewmodel.dart';
 import 'package:memex/ui/character/widgets/persona_avatar_button.dart';
 import 'package:memex/ui/core/widgets/character_avatar.dart';
 import 'package:memex/utils/result.dart';
+import 'package:memex/utils/user_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({'language': 'en'});
+    await UserStorage.initL10n();
+  });
 
   testWidgets('loads the companion after the first frame', (tester) async {
     final character = CharacterModel(
@@ -85,6 +92,7 @@ void main() {
     );
     await viewModel.refresh();
     CharacterModel? tapped;
+    final handle = tester.ensureSemantics();
 
     await tester.pumpWidget(
       MaterialApp(
@@ -101,6 +109,10 @@ void main() {
     expect(find.text('3'), findsOneWidget);
     await tester.tap(find.byType(PersonaAvatarButton));
     expect(tapped?.id, 'friend');
+    expect(find.bySemanticsLabel(RegExp('^Chat')), findsOneWidget);
+    expect(tester.getSize(find.byType(PersonaAvatarButton)),
+        const Size.square(48));
+    handle.dispose();
   });
 }
 

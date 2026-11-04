@@ -293,46 +293,51 @@ class TimelineScreenState extends State<TimelineScreen> {
                     builder: (context, _) {
                       final pendingCount =
                           widget.viewModel.pendingAttachmentCount;
-                      return GestureDetector(
-                        onTap: () {
-                          if (pendingCount > 0) {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => const ActionCenterSheet(),
-                            );
-                          } else {
-                            ToastHelper.showSuccess(context,
-                                UserStorage.l10n.noPendingActionsToast);
-                          }
-                        },
-                        child: SizedBox(
-                          width: 36,
-                          height: 36,
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: SvgPicture.asset(
-                                  'assets/icons/notification_bell.svg',
-                                  width: 19,
-                                  height: 20,
-                                ),
-                              ),
-                              if (pendingCount > 0)
-                                PositionedDirectional(
-                                  top: 6,
-                                  end: 6,
-                                  child: Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: const BoxDecoration(
-                                      color: AppColors.primary,
-                                      shape: BoxShape.circle,
-                                    ),
+                      return Semantics(
+                        button: true,
+                        label: UserStorage.l10n.actionCenterTitle,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            if (pendingCount > 0) {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) => const ActionCenterSheet(),
+                              );
+                            } else {
+                              ToastHelper.showSuccess(context,
+                                  UserStorage.l10n.noPendingActionsToast);
+                            }
+                          },
+                          child: SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: Stack(
+                              children: [
+                                Center(
+                                  child: SvgPicture.asset(
+                                    'assets/icons/notification_bell.svg',
+                                    width: 19,
+                                    height: 20,
                                   ),
                                 ),
-                            ],
+                                if (pendingCount > 0)
+                                  PositionedDirectional(
+                                    top: 12,
+                                    end: 12,
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: AppColors.primary,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -348,35 +353,47 @@ class TimelineScreenState extends State<TimelineScreen> {
                 ),
                 const SizedBox(width: 6),
                 // Avatar button
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => const PersonalCenterScreen(),
-                    ).then((_) {
-                      _checkPermissionBadge();
-                      _checkFitnessBanner();
-                      _loadUserAvatar();
-                    });
-                  },
-                  child: Badge(
-                    isLabelVisible: _showPermissionBadge,
-                    smallSize: 10,
-                    backgroundColor: Colors.red,
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.iconBgLight,
-                      ),
-                      child: CharacterAvatar(
-                        avatar: _userAvatar ?? UserStorage.defaultAvatarSeed,
-                        name: '',
-                        size: 32,
-                        backgroundColor: AppColors.textPrimary,
+                Semantics(
+                  button: true,
+                  label: UserStorage.l10n.navProfile,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => const PersonalCenterScreen(),
+                      ).then((_) {
+                        _checkPermissionBadge();
+                        _checkFitnessBanner();
+                        _loadUserAvatar();
+                      });
+                    },
+                    child: SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: Center(
+                        child: Badge(
+                          isLabelVisible: _showPermissionBadge,
+                          smallSize: 10,
+                          backgroundColor: Colors.red,
+                          child: Container(
+                            width: 32,
+                            height: 32,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.iconBgLight,
+                            ),
+                            child: CharacterAvatar(
+                              avatar:
+                                  _userAvatar ?? UserStorage.defaultAvatarSeed,
+                              name: '',
+                              size: 32,
+                              backgroundColor: AppColors.textPrimary,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -1263,9 +1280,10 @@ class _TimelineEntryItemState extends State<TimelineEntryItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              // Grows with the system text scale so "Ontem 14:38" wraps at a
-              // space instead of mid-word; capped to keep room for content.
-              width: MediaQuery.textScalerOf(context).scale(60).clamp(60, 96),
+              // Scales with the 13sp label (Android's text scaling is nonlinear)
+              // so "Ontem 14:38" wraps at the space; capped to keep room.
+              width: (60 * MediaQuery.textScalerOf(context).scale(13) / 13)
+                  .clamp(60, 96),
               child: Padding(
                 padding: const EdgeInsets.only(top: 2, right: 8),
                 child: Text(

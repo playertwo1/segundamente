@@ -2384,6 +2384,7 @@ class _AgentChatDialogState extends State<AgentChatDialog>
                             _buildInputIconButton(
                               key: const ValueKey('super_agent_attach_button'),
                               icon: Icons.add,
+                              label: UserStorage.l10n.addAttachment,
                               onTap: _showAttachMenu,
                             ),
                             _buildMicButton(),
@@ -2786,19 +2787,26 @@ class _AgentChatDialogState extends State<AgentChatDialog>
   Widget _buildInputIconButton({
     required Key key,
     required IconData icon,
+    required String label,
     required VoidCallback? onTap,
   }) {
-    return GestureDetector(
-      key: key,
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
       onTap: onTap,
-      child: Container(
-        width: 42,
-        height: 42,
-        decoration: BoxDecoration(
-          color: AppColors.background,
-          borderRadius: BorderRadius.circular(21),
+      child: GestureDetector(
+        key: key,
+        onTap: onTap,
+        child: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Icon(icon, size: 20, color: AppColors.textSecondary),
         ),
-        child: Icon(icon, size: 20, color: AppColors.textSecondary),
       ),
     );
   }
@@ -3537,15 +3545,15 @@ class _AgentChatDialogState extends State<AgentChatDialog>
   Color _artifactAccentColor(ChatArtifact artifact) {
     switch (artifact.kind) {
       case ChatArtifact.kindKnowledgeInsight:
-        return const Color(0xFF7C3AED);
+        return const Color(0xFFA78BFA);
       case ChatArtifact.kindKnowledgeFile:
       case ChatArtifact.kindWorkspaceFile:
       case ChatArtifact.kindUiTemplate:
-        return const Color(0xFF0F766E);
+        return const Color(0xFF2DD4BF);
       case ChatArtifact.kindSchedule:
         return const Color(0xFFEA580C);
       case ChatArtifact.kindSystemAction:
-        return const Color(0xFF2563EB);
+        return const Color(0xFF60A5FA);
       case ChatArtifact.kindTimelineCard:
         return AppColors.primary;
       default:

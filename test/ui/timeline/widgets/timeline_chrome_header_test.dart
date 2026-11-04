@@ -90,4 +90,49 @@ void main() {
     expect(menuTaps, 1);
     expect(chatTaps, 1);
   });
+
+  testWidgets('profile avatar is a labelled button with a 48dp touch target',
+      (tester) async {
+    final timeline = TimelineViewModel.forTest(autoLoad: false);
+    final insight = InsightViewModel(router: MemexRouter());
+    final persona = PersonaAvatarViewModel(router: MemexRouter());
+    addTearDown(timeline.dispose);
+    addTearDown(insight.dispose);
+    addTearDown(persona.dispose);
+    final handle = tester.ensureSemantics();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: TimelineScreen(
+            viewModel: timeline,
+            insightViewModel: insight,
+            personaAvatarViewModel: persona,
+            onInputTap: () {},
+          ),
+        ),
+      ),
+    );
+
+    final label = find.bySemanticsLabel(UserStorage.l10n.navProfile);
+    expect(label, findsOneWidget);
+    expect(
+      tester.getSemantics(label),
+      isSemantics(isButton: true, hasTapAction: true),
+    );
+    final target = find.ancestor(
+      of: find.byWidgetPredicate(
+        (widget) => widget is CharacterAvatar && widget.size == 32,
+      ),
+      matching: find.byType(SizedBox),
+    );
+    expect(
+      target.evaluate().any((e) {
+        final size = tester.getSize(find.byWidget(e.widget));
+        return size.width >= 48 && size.height >= 48;
+      }),
+      isTrue,
+    );
+    handle.dispose();
+  });
 }
