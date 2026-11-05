@@ -23,6 +23,10 @@ void main() {
     await add('["outra/area"]');
     await add('["ideia"]');
     await add('not json');
+    await add('["obra_1"]');
+    await add('["obra21"]');
+    await add('["100%"]');
+    await add('["1000"]');
   });
 
   tearDown(() => db.close());
@@ -47,6 +51,11 @@ void main() {
     expect(result, isNot(contains('f3'))); // outra/area
   });
 
+  test('underscore and percent in a tag are literal, not wildcards', () async {
+    expect(await ids(['obra_1']), {'f6'});
+    expect(await ids(['100%']), {'f8'});
+  });
+
   test('several tags need every one of them, parents included', () async {
     expect(await ids(['area', 'ideia']), {'f1'});
     expect(await ids(['area/alfa', 'ideia']), {'f1'});
@@ -56,7 +65,7 @@ void main() {
   test('every card gives its tag list and a malformed row counts as untagged',
       () async {
     final lists = await db.cardDao.getAllTagLists();
-    expect(lists, hasLength(6));
+    expect(lists, hasLength(10));
     expect(
         lists,
         containsAll([
@@ -66,6 +75,10 @@ void main() {
           ['outra/area'],
           ['ideia'],
           <String>[],
+          ['obra_1'],
+          ['obra21'],
+          ['100%'],
+          ['1000'],
         ]));
   });
 

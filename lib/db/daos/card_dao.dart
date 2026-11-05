@@ -80,7 +80,10 @@ class CardDao extends DatabaseAccessor<AppDatabase> with _$CardDaoMixin {
         final prop = propOfTag(t);
         final one = prop != null
             ? cardCache.props.like('%|$prop|%')
-            : cardCache.tags.like('%"$t"%') | cardCache.tags.like('%"$t/%');
+            : cardCache.tags.like('%"${_likeLiteral(t)}"%',
+                    escapeChar: _likeEscape) |
+                cardCache.tags.like('%"${_likeLiteral(t)}/%',
+                    escapeChar: _likeEscape);
         query.where((tbl) => one);
       }
     }
@@ -109,3 +112,11 @@ List<String> _decodeTags(String? raw) {
   }
   return const [];
 }
+
+/// [text] with the LIKE wildcards escaped, so `obra_1` does not match `obra21`.
+String _likeLiteral(String text) => text
+    .replaceAll(_likeEscape, '$_likeEscape$_likeEscape')
+    .replaceAll('%', '$_likeEscape%')
+    .replaceAll('_', '${_likeEscape}_');
+
+const _likeEscape = '\\';
