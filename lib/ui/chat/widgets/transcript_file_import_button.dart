@@ -18,11 +18,16 @@ final _logger = getLogger('TranscriptFileImportButton');
 Future<List<({String name, List<int> bytes})>?> pickTranscriptTxtFiles() async {
   final result = await FilePicker.platform.pickFiles(
     allowMultiple: true,
-    type: FileType.custom,
-    allowedExtensions: const ['txt', 'srt', 'vtt'],
+    // Not FileType.custom: Android greys out files whose MIME it does not know
+    // (a .vtt often shows as BIN), so the extension is checked after picking.
+    type: FileType.any,
     withData: true,
   );
   if (result == null || result.files.isEmpty) return null;
+  const allowed = {'txt', 'srt', 'vtt'};
+  if (result.files.any((f) => !allowed.contains(f.extension?.toLowerCase()))) {
+    return null;
+  }
   final files = <({String name, List<int> bytes})>[];
   for (final file in result.files) {
     final bytes = file.bytes;
