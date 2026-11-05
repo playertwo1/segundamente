@@ -41,7 +41,7 @@ List<int> textRank(String query, List<Note> notes) {
 List<Note> notesFromBackup(String zipPath) {
   final input = InputFileStream(zipPath);
   final zip = ZipDecoder().decodeStream(input);
-  final cardRe = RegExp(r'^workspace/[^/]+/Cards/.*\.ya?ml$');
+  final cardRe = RegExp(r'^workspace/(?:[^/]+/)?Cards/.*\.ya?ml$');
   final notes = <Note>[];
   for (final f in zip) {
     if (!f.isFile || !cardRe.hasMatch(f.name)) continue;
