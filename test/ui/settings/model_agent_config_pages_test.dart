@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/domain/models/agent_definitions.dart';
 import 'package:memex/domain/models/llm_config.dart';
 import 'package:memex/data/services/local_asset_server.dart';
+import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/settings/widgets/agent_config_list_page.dart';
 import 'package:memex/ui/settings/widgets/model_config_edit_page.dart';
 import 'package:memex/ui/settings/widgets/model_config_list_page.dart';
@@ -104,6 +105,23 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(ModelConfigEditPage), findsOneWidget);
+    await stopLocalAssetServer(tester);
+  });
+
+  testWidgets('model badges and status use the app palette only', (
+    tester,
+  ) async {
+    await pumpSettingsPage(tester, const ModelConfigListPage());
+
+    final badge = tester.widget<Text>(find.text(UserStorage.l10n.defaultLabel));
+    expect(badge.style?.color, AppColors.primary);
+
+    final offPalette = <Color>{Colors.blue, Colors.green, Colors.orange};
+    final colors = [
+      ...tester.widgetList<Text>(find.byType(Text)).map((t) => t.style?.color),
+      ...tester.widgetList<Icon>(find.byType(Icon)).map((i) => i.color),
+    ];
+    expect(colors.where(offPalette.contains), isEmpty);
     await stopLocalAssetServer(tester);
   });
 

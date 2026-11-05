@@ -586,17 +586,19 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue.withValues(alpha: 0.1),
+                                    color: AppColors.primary
+                                        .withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(4),
                                     border: Border.all(
-                                      color: Colors.blue.withValues(alpha: 0.5),
+                                      color: AppColors.primary
+                                          .withValues(alpha: 0.6),
                                     ),
                                   ),
                                   child: Text(
                                     UserStorage.l10n.defaultLabel,
                                     style: const TextStyle(
                                       fontSize: 10,
-                                      color: Colors.blue,
+                                      color: AppColors.primary,
                                     ),
                                   ),
                                 ),
@@ -608,11 +610,12 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.green.withValues(alpha: 0.1),
+                                    color: AppColors.textSecondary
+                                        .withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(4),
                                     border: Border.all(
-                                      color: Colors.green.withValues(
-                                        alpha: 0.5,
+                                      color: AppColors.textSecondary.withValues(
+                                        alpha: 0.6,
                                       ),
                                     ),
                                   ),
@@ -620,7 +623,7 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
                                     _visionBadgeText,
                                     style: const TextStyle(
                                       fontSize: 10,
-                                      color: Colors.green,
+                                      color: AppColors.textSecondary,
                                     ),
                                   ),
                                 ),
@@ -646,8 +649,8 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
                                         : Icons.warning_amber_rounded,
                                     size: 14,
                                     color: config.isValid
-                                        ? Colors.green
-                                        : Colors.orange,
+                                        ? AppColors.textSecondary
+                                        : AppColors.primary,
                                   ),
                                   const SizedBox(width: 4),
                                   Flexible(
@@ -659,8 +662,8 @@ class _ModelConfigListPageState extends State<ModelConfigListPage> {
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: config.isValid
-                                            ? Colors.green
-                                            : Colors.orange,
+                                            ? AppColors.textSecondary
+                                            : AppColors.primary,
                                       ),
                                     ),
                                   ),
