@@ -302,6 +302,28 @@ void main() {
           everyElement(ReportItemKind.summary));
     });
 
+    test('past tense in the plural and third person is not a task', () {
+      final report = extract(ReportKind.reuniao, [
+        ('task', 'Fizemos a migração do banco na sexta.'),
+        ('task', 'Enviamos a proposta ao cliente.'),
+        ('task', 'O João entregou o relatório.'),
+        ('task', 'Concluímos a revisão.'),
+      ]);
+      expect(report.items.map((i) => i.kind),
+          everyElement(ReportItemKind.summary));
+    });
+
+    test('an opinion about a verb is not a task, a bare verb still is', () {
+      final report = extract(ReportKind.reuniao, [
+        ('task', 'Não gosto de ligar para o cliente.'),
+        ('task', 'Eu achei que ele ia mandar o arquivo.'),
+        ('task', 'Ligar para o fornecedor.'),
+        ('task', 'Enviar o relatório.'),
+      ]);
+      expect(report.items.map((i) => i.text),
+          ['Ligar para o fornecedor.', 'Enviar o relatório.']);
+    });
+
     test('an opinion is an idea where the report has ideas, else dropped', () {
       final free = extract(ReportKind.livre, [
         ('task', 'Acho que seria melhor mudar o layout.'),

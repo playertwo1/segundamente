@@ -301,12 +301,14 @@ final _pastFact = RegExp(
   '$_letterBefore(?:ontem|anteontem|semana passada|mês passado|'
   'já (?:fiz|fez|enviei|mandei|resolvi|terminei|concluí|foi|foram)|'
   'foi (?:enviad|feit|conclu|resolvid|entregue)\\p{L}*|'
-  'fiz|enviei|mandei|terminei|resolvi|combinamos|fomos)$_letterAfter',
+  'fiz|enviei|mandei|terminei|resolvi|combinamos|fomos|fizemos|enviamos|'
+  'mandamos|resolvemos|terminamos|concluímos|entregamos|finalizamos|fez|'
+  'enviou|mandou|terminou|resolveu|concluiu|entregou|finalizou)$_letterAfter',
   caseSensitive: false,
   unicode: true,
 );
 final _opinion = RegExp(
-  '$_letterBefore(?:acho que|eu acho|na minha opinião|talvez|quem sabe|'
+  '$_letterBefore(?:acho que|achei que|achava que|eu acho|na minha opinião|talvez|quem sabe|'
   'seria (?:bom|legal|interessante|melhor)|parece que|gosto d[eoa]|'
   'não gosto)$_letterAfter',
   caseSensitive: false,
@@ -315,7 +317,7 @@ final _opinion = RegExp(
 final _obligation = RegExp(
   '$_letterBefore(?:preciso|precisa|precisamos|dev[eoi]|devemos|vai|vamos|'
   'tem que|temos que|fica responsável|lembrar de|não esquecer|até|amanhã|'
-  'próxim[oa]|enviar|mandar|ligar|marcar|agendar)$_letterAfter',
+  'próxim[oa])$_letterAfter',
   caseSensitive: false,
   unicode: true,
 );
