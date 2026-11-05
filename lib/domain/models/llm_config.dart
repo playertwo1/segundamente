@@ -349,8 +349,7 @@ class LLMConfig {
             id.contains('gpt-5') ||
             id.contains('o3');
       case typeOllama:
-        return id.startsWith('gemma4') ||
-            id.startsWith('llama4');
+        return id.startsWith('gemma4') || id.startsWith('llama4');
       case typeOpenRouter:
       case typeMemex:
         return id.contains('gemini') ||

@@ -290,10 +290,9 @@ class ModelCapabilityJudge {
     ];
     if (transport.any(normalized.contains)) return CapabilityVerdict.unknown;
     final namesCapability = switch (capability) {
-      ModelCapability.vision =>
-        normalized.contains('image') ||
-            normalized.contains('vision') ||
-            normalized.contains('multimodal'),
+      ModelCapability.vision => normalized.contains('image') ||
+          normalized.contains('vision') ||
+          normalized.contains('multimodal'),
       ModelCapability.audio => normalized.contains('audio'),
       ModelCapability.json => normalized.contains('json'),
       ModelCapability.streaming => normalized.contains('stream'),

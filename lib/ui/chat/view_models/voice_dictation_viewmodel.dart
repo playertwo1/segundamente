@@ -21,8 +21,8 @@ class VoiceDictationViewModel extends ChangeNotifier {
     Future<String?> Function(Float32List samples)? transcribe,
   })  : _requestPermission = requestPermission ?? _defaultPermission,
         _transcribe = transcribe ??
-            ((samples) =>
-                SpeechTranscriptionService.instance.transcribeSamples(samples)) {
+            ((samples) => SpeechTranscriptionService.instance
+                .transcribeSamples(samples)) {
     if (startStream != null && stopStream != null) {
       _startStream = startStream;
       _stopStream = stopStream;
