@@ -34,6 +34,8 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-028 | 2026-11-04 | Microfone explícito na conversa, transcrevendo para revisão | ACCEPTED |
 | D-029 | 2026-11-04 | Planejar F9 — Meeting Decoder, sem abrir o MVP nem autorizar código | ACCEPTED |
 | D-030 | 2026-11-04 | Ampliar F9 com PDFs, Todo, destinos de tarefas e relatórios PDF/DOCX | ACCEPTED |
+| D-031 | 2026-11-05 | Abrir só a pesquisa F7-01 (sem código) antes do portão F5 | ACCEPTED |
+| D-032 | 2026-11-05 | Escopo da F7: ponte por texto pronto primeiro; voz e Ollama a medir | PROPOSED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -177,3 +179,13 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Contexto: o dono acrescentou resumos de conversas e PDFs, envio de tarefas/follow-ups para agenda/Todo, uma lista Todo própria e relatórios organizados em PDF/DOCX.
 - Decisão: atualizar o plano F9 com PDF como entrada inicial, evidências por página, uma página Todo pessoal no menu existente, encaminhamento confirmado para Todo/calendário/lembretes e exportação PDF/DOCX reutilizando F4. Definir formatos adicionais, PDF escaneado/OCR, regras de destino e sistema desktop em F9-01.
 - Limites: F9 continua `BLOCKED` e fora do MVP; esta decisão autoriza o planejamento, não código. A lista Todo do usuário fica separada da fila interna dos agentes. Criar tarefa/evento exige confirmação individual e as permissões necessárias.
+
+## D-031 — Abrir a pesquisa F7-01 (2026-11-05)
+- Contexto: o dono pediu avançar para a F7, que está `BLOCKED` até o fechamento da F5 (D-003). Mesmo precedente da D-010 para a F6.
+- Decisão: abrir somente F7-01 (pesquisa e decisão de escopo). F7-02 a F7-06 seguem `BLOCKED`; nenhum código, provedor, serviço de PC ou permissão de microfone é autorizado. A F5 continua aberta e o MVP não muda.
+- Evidência: `docs/F7-01-viabilidade.md` (termos da Anthropic e da OpenAI, licenças, autenticação, sistemas e limites de dados, com nível de evidência por linha).
+
+## D-032 — Escopo proposto para a F7 (2026-11-05) — aguarda o dono
+- Proposta: (1) ponte opção A, texto pronto com prévia, sem credenciais no app, como primeira entrega de F7-04; (2) opção B (serviço no PC que roda `codex exec`/`claude -p` após confirmação) só com decisão própria; (3) SSH descartado; (4) MCP (F7-05) adiado; (5) Ollama e voz full duplex só depois de medir pt-BR, eco e bateria; (6) desktop alvo: o Windows 11 do dono.
+- Limite fixo vindo dos termos: o app nunca oferece login Claude.ai, nunca coleta ou repassa credenciais dos CLIs e nunca roteia pedidos pela assinatura do usuário (D-005). Quem fala com o fornecedor é o binário oficial, sem modificação, na conta do dono.
+- Estado: PROPOSED. Passa a ACCEPTED quando o dono responder; só então F7-01 vira DONE.
