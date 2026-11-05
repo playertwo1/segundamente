@@ -30,6 +30,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   String _currentLocaleTag = 'en';
   CommentSettings _commentSettings = const CommentSettings();
+  bool _linkPreview = false;
 
   @override
   void initState() {
@@ -40,8 +41,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _loadSettings() async {
     final locale = await UserStorage.getLocale();
     final commentSettings = await MemexRouter().getCommentSettings();
+    final linkPreview = await UserStorage.isLinkPreviewEnabled();
     if (mounted) {
       setState(() {
+        _linkPreview = linkPreview;
         _currentLocaleTag = UserStorage.localeTag(
           UserStorage.resolveToSupportedLocale(locale),
         );
@@ -72,6 +75,11 @@ class _SettingsPageState extends State<SettingsPage> {
     if (localeTag != null) {
       await _changeLanguage(localeTag);
     }
+  }
+
+  Future<void> _updateLinkPreview(bool value) async {
+    await UserStorage.setLinkPreviewEnabled(value);
+    if (mounted) setState(() => _linkPreview = value);
   }
 
   Future<void> _updateShowInsightText(bool value) async {
@@ -195,6 +203,44 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               value: _commentSettings.showInsightText,
               onChanged: _updateShowInsightText,
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Link previews contact the linked site, so they start off.
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(color: AppColors.divider)),
+            ),
+            child: SwitchListTile(
+              key: const ValueKey('link-preview-switch'),
+              contentPadding: EdgeInsets.zero,
+              secondary: const Icon(
+                Icons.link,
+                color: AppColors.primary,
+                size: 22,
+              ),
+              title: Text(
+                UserStorage.l10n.linkPreviewTitle,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  UserStorage.l10n.linkPreviewDesc,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+              value: _linkPreview,
+              onChanged: _updateLinkPreview,
             ),
           ),
           const SizedBox(height: 16),

@@ -33,4 +33,20 @@ void main() {
       isNotEmpty,
     );
   });
+
+  testWidgets('link previews start off and the switch is remembered',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: SettingsPage()));
+    await tester.pump();
+    final tile = find.byKey(const ValueKey('link-preview-switch'));
+    await tester.ensureVisible(tile);
+    expect(tester.widget<SwitchListTile>(tile).value, isFalse);
+    expect(await UserStorage.isLinkPreviewEnabled(), isFalse);
+
+    await tester.tap(tile);
+    await tester.pump();
+    expect(tester.widget<SwitchListTile>(tile).value, isTrue);
+    expect(await UserStorage.isLinkPreviewEnabled(), isTrue);
+    expect(find.text(UserStorage.l10n.linkPreviewDesc), findsOneWidget);
+  });
 }

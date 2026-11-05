@@ -3988,4 +3988,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get correctionsOpen => 'Review corrections';
+
+  @override
+  String get linkPreviewTitle => 'Link previews';
+
+  @override
+  String get linkPreviewDesc =>
+      'Off by default. When on, the app opens the link address from this device to read the page title, so the site sees your network address. Local and private addresses are always refused.';
 }

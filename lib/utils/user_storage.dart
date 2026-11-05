@@ -355,9 +355,8 @@ class UserStorage {
       if (jsonString != null) {
         final List<dynamic> jsonList = jsonDecode(jsonString);
         final all = jsonList.map((j) => LLMConfig.fromJson(j)).toList();
-        configs = all
-            .where((c) => !LLMConfig.removedTypes.contains(c.type))
-            .toList();
+        configs =
+            all.where((c) => !LLMConfig.removedTypes.contains(c.type)).toList();
         // Saving below rewrites the keystore map without the dropped keys.
         if (configs.length != all.length) changed = true;
         configs = configs.map((config) {
@@ -915,6 +914,23 @@ class UserStorage {
 
   static const String _keyFallbackEnabled = 'llm_fallback_enabled';
   static const String _keyFallbackOrder = 'llm_fallback_order';
+
+  static const String _keyLinkPreview = 'link_preview_enabled';
+
+  /// Whether link previews (which contact the linked site) are on. Off by default.
+  static Future<bool> isLinkPreviewEnabled() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(_keyLinkPreview) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<void> setLinkPreviewEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyLinkPreview, enabled);
+  }
 
   /// Whether automatic model fallback is enabled.
   static Future<bool> isFallbackEnabled() async {

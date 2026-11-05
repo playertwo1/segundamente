@@ -4023,4 +4023,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get correctionsOpen => 'Revisar correções';
+
+  @override
+  String get linkPreviewTitle => 'Prévia de links';
+
+  @override
+  String get linkPreviewDesc =>
+      'Desligada por padrão. Ligada, o app abre o endereço do link a partir deste aparelho para ler o título da página, então o site vê o seu endereço de rede. Endereços locais e privados são sempre recusados.';
 }

@@ -1762,5 +1762,7 @@
   "correctionsSave": "Save corrections",
   "correctionsSaved": "Corrections saved.",
   "correctionsRefused": "A correction no longer fits the text and was not saved.",
-  "correctionsOpen": "Review corrections"
+  "correctionsOpen": "Review corrections",
+  "linkPreviewTitle": "Link previews",
+  "linkPreviewDesc": "Off by default. When on, the app opens the link address from this device to read the page title, so the site sees your network address. Local and private addresses are always refused."
 }

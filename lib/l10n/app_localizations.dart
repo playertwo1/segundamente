@@ -7082,6 +7082,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Review corrections'**
   String get correctionsOpen;
+
+  /// No description provided for @linkPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Link previews'**
+  String get linkPreviewTitle;
+
+  /// No description provided for @linkPreviewDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Off by default. When on, the app opens the link address from this device to read the page title, so the site sees your network address. Local and private addresses are always refused.'**
+  String get linkPreviewDesc;
 }
 
 class _AppLocalizationsDelegate
