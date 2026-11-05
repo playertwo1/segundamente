@@ -3799,7 +3799,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get insightEmptyBody =>
-      'Insights will appear here when they are generated from your records.';
+      'Insights appear here on their own as you save records and the app finds patterns across them.';
 
   @override
   String get insightMapNoData => 'This insight has no locations to show yet.';

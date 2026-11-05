@@ -75,6 +75,9 @@ void main() {
 
     expect(find.text(UserStorage.l10n.insightEmptyTitle), findsOneWidget);
     expect(find.text(UserStorage.l10n.insightEmptyBody), findsOneWidget);
+    // Insights are generated automatically; there is nothing to request.
+    expect(find.byType(ElevatedButton), findsNothing);
+    expect(find.byType(OutlinedButton), findsNothing);
   });
 
   testWidgets('insight actions use labeled open buttons and can be dismissed',

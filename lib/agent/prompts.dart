@@ -691,4 +691,26 @@ Please use the `get_available_insight_card_templates` tool to check for all avai
 
   static String get metadataNote =>
       '(For reference only, do not repeat this information in your output)';
+
+  /// Brief for the automatic insight analysis that runs after records are
+  /// saved. The worker has no chat: it reads, decides, and either saves or
+  /// reports `no_op`.
+  static String knowledgeInsightAutoTaskBrief(List<String> factIds) => '''
+New records were just saved and the user did not ask for anything. Decide
+whether they, together with the user's earlier records and existing insights,
+support a Knowledge Insight.
+
+New record ids (fact_id): ${factIds.join(', ')}
+
+Procedure:
+1. Call `get_exists_knowledge_insight_cards` to see what already exists.
+2. Read the new records and look for earlier records that relate to them.
+3. Create or update an insight ONLY when at least two records back the same
+   pattern, trend or comparison. Prefer updating an existing insight over
+   creating a near-duplicate. Put every supporting fact_id in `related_facts`.
+4. Do not invent a pattern, a number or a correlation. One record alone, or
+   unrelated records, is not evidence.
+5. If nothing is justified, save nothing and reply with the single word
+   `no_op` and one short sentence saying why.
+''';
 }

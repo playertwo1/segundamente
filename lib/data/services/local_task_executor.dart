@@ -352,6 +352,26 @@ class LocalTaskExecutor {
     return false;
   }
 
+  /// True when a task of [taskType], in any state (waiting, running, done or
+  /// failed), carries [factId] in the `fact_ids` of its payload.
+  Future<bool> hasTaskForFact({
+    required String taskType,
+    required String factId,
+  }) async {
+    final tasks = await (_db.select(_db.tasks)
+          ..where((t) => t.type.equals(taskType)))
+        .get();
+    for (final task in tasks) {
+      try {
+        final ids = _decodePayload(task)['fact_ids'];
+        if (ids is List && ids.contains(factId)) return true;
+      } catch (_) {
+        // A malformed payload is the executor's to fail; it holds no fact here.
+      }
+    }
+    return false;
+  }
+
   Future<bool> hasActiveTask({
     required String taskType,
     required String bizId,
@@ -892,9 +912,13 @@ class LocalTaskExecutor {
     int priority = 0,
     int? scheduledAt,
     int maxRetries = 5,
+
+    /// Builds the payload to store from the waiting task's payload (null when
+    /// there is none), inside the same transaction, so concurrent callers do
+    /// not overwrite each other. Defaults to replacing it with [payload].
+    Map<String, dynamic> Function(Map<String, dynamic>? waiting)? mergePayload,
   }) async {
     final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    final payloadJson = jsonEncode(payload);
     final result = await _db.transaction(() async {
       final existing = await (_db.select(_db.tasks)
             ..where((t) =>
@@ -906,6 +930,11 @@ class LocalTaskExecutor {
             ])
             ..limit(1))
           .getSingleOrNull();
+      final payloadJson = jsonEncode(
+        mergePayload == null
+            ? payload
+            : mergePayload(existing == null ? null : _decodePayload(existing)),
+      );
       if (existing != null) {
         await (_db.update(_db.tasks)..where((t) => t.id.equals(existing.id)))
             .write(

@@ -1700,7 +1700,7 @@
   "plainTextFile": "Arquivo de texto · TXT",
   "reorderInsights": "Reordenar",
   "insightEmptyTitle": "Ainda não há insights",
-  "insightEmptyBody": "Insights aparecerão aqui quando forem gerados a partir dos seus registros.",
+  "insightEmptyBody": "Os insights surgem aqui sozinhos, conforme você salva registros e o app encontra padrões entre eles.",
   "insightMapNoData": "Este insight ainda não tem locais para mostrar.",
   "viewActivity": "Ver atividade",
   "importingTranscript": "Importando transcrição…",

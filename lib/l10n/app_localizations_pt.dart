@@ -3833,7 +3833,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get insightEmptyBody =>
-      'Insights aparecerão aqui quando forem gerados a partir dos seus registros.';
+      'Os insights surgem aqui sozinhos, conforme você salva registros e o app encontra padrões entre eles.';
 
   @override
   String get insightMapNoData =>

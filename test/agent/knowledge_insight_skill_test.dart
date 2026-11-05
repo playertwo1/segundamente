@@ -100,6 +100,77 @@ void main() {
       expect(summaryCard, isNotNull);
       expect(summaryCard?.uiConfigs.single.templateId, 'insight_summary');
     });
+
+    test('an update that changes nothing writes nothing and adds no summary',
+        () async {
+      final messages = <EventBusMessage>[];
+      EventBusService.instance.addHandler(
+        EventBusMessageType.cardAdded,
+        messages.add,
+      );
+      final changes = <EventBusMessage>[];
+      EventBusService.instance.addHandler(
+        EventBusMessageType.newInsight,
+        changes.add,
+      );
+      final tool = KnowledgeInsightSkill(forceActivate: true)
+          .tools!
+          .singleWhere((tool) => tool.name == 'save_knowledge_insight_cards');
+      Map<String, dynamic> card(String type, {String title = 'Weekly focus'}) =>
+          {
+            'id': 'weekly_focus',
+            'template_id': 'summary_card_v1',
+            'title': title,
+            'insight': 'The week centered on project work.',
+            'type': type,
+            'data': {'insight_title': title},
+            'related_facts': ['2026/06/20.md#ts_1', '2026/06/21.md#ts_1'],
+            'tags': ['weekly'],
+          };
+
+      await _runToolCall(
+        tool: tool,
+        arguments: {
+          'cards': [card('add')]
+        },
+        metadata: {'userId': userId},
+      );
+      await Future<void>.delayed(Duration.zero);
+      final stored = await FileSystemService.instance
+          .readKnowledgeInsightCard(userId, 'weekly_focus');
+      messages.clear();
+      changes.clear();
+
+      await _runToolCall(
+        tool: tool,
+        arguments: {
+          'cards': [card('update')]
+        },
+        metadata: {'userId': userId},
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      final same = await FileSystemService.instance
+          .readKnowledgeInsightCard(userId, 'weekly_focus');
+      expect(same?['updated_at'], stored?['updated_at']);
+      expect(messages, isEmpty);
+      expect(changes, isEmpty);
+
+      await _runToolCall(
+        tool: tool,
+        arguments: {
+          'cards': [card('update', title: 'Weekly focus, revised')]
+        },
+        metadata: {'userId': userId},
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      final revised = await FileSystemService.instance
+          .readKnowledgeInsightCard(userId, 'weekly_focus');
+      expect(revised?['title'], 'Weekly focus, revised');
+      expect(messages, hasLength(1));
+      expect(changes, hasLength(1));
+    });
   });
 }
 

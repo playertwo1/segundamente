@@ -294,6 +294,9 @@ Tool buildSaveKnowledgeInsightCardsTool() {
 
       final updatedIds = <String>[];
       final createdIds = <String>[];
+      // Updates that would not change the stored insight: no write, no screen
+      // refresh and no timeline summary.
+      final unchangedIds = <String>{};
 
       try {
         for (final chart in chartObjects) {
@@ -374,6 +377,11 @@ Tool buildSaveKnowledgeInsightCardsTool() {
           }
 
           finalData['id'] = cardId; // Ensure ID is saved
+          if (!isNew && _sameInsight(existingData, finalData)) {
+            updatedIds.remove(cardId);
+            unchangedIds.add(cardId);
+            continue;
+          }
           finalData['updated_at'] = DateTime.now().toIso8601String();
 
           await fileSystem.writeKnowledgeInsightCard(userId, cardId, finalData);
@@ -412,17 +420,16 @@ Tool buildSaveKnowledgeInsightCardsTool() {
           await fileSystem.saveInsightTags(userId, allTags.toList());
         }
 
-        _emitKnowledgeInsightChanged(
-          createdIds.isNotEmpty
-              ? createdIds.first
-              : updatedIds.isNotEmpty
-                  ? updatedIds.first
-                  : '',
-        );
+        if (createdIds.isNotEmpty || updatedIds.isNotEmpty) {
+          _emitKnowledgeInsightChanged(
+            createdIds.isNotEmpty ? createdIds.first : updatedIds.first,
+          );
+        }
 
         final addedSummaryCards = <Map<String, dynamic>>[];
         final updatedSummaryCards = <Map<String, dynamic>>[];
         for (final chart in chartObjects) {
+          if (unchangedIds.contains(chart.id)) continue;
           final info = <String, dynamic>{
             'id': chart.id ?? '',
             'title': chart.title ?? '',
@@ -493,6 +500,15 @@ Tool buildSaveKnowledgeInsightCardsTool() {
       }
     },
   );
+}
+
+/// True when [merged] equals [stored] apart from the update timestamp and the
+/// add/update marker, which is operation bookkeeping, not content.
+bool _sameInsight(Map<String, dynamic> stored, Map<String, dynamic> merged) {
+  String key(Map<String, dynamic> m) => jsonEncode(Map<String, dynamic>.from(m)
+    ..remove('updated_at')
+    ..remove('type'));
+  return key(stored) == key(merged);
 }
 
 void _emitKnowledgeInsightChanged(String insightId) {

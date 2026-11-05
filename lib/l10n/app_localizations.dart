@@ -6786,7 +6786,7 @@ abstract class AppLocalizations {
   /// No description provided for @insightEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Insights will appear here when they are generated from your records.'**
+  /// **'Insights appear here on their own as you save records and the app finds patterns across them.'**
   String get insightEmptyBody;
 
   /// No description provided for @insightMapNoData.

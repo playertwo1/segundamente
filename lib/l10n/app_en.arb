@@ -1707,7 +1707,7 @@
   "plainTextFile": "Text file · TXT",
   "reorderInsights": "Reorder",
   "insightEmptyTitle": "No insights yet",
-  "insightEmptyBody": "Insights will appear here when they are generated from your records.",
+  "insightEmptyBody": "Insights appear here on their own as you save records and the app finds patterns across them.",
   "insightMapNoData": "This insight has no locations to show yet.",
   "viewActivity": "View activity",
   "importingTranscript": "Importing transcript…",
