@@ -3884,4 +3884,57 @@ class AppLocalizationsPt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get topicsTitle => 'Tópicos e projetos';
+
+  @override
+  String get topicsEmpty =>
+      'Nenhum tópico ainda. Crie um para juntar as sessões que andam juntas.';
+
+  @override
+  String get topicNew => 'Novo tópico';
+
+  @override
+  String get topicNameLabel => 'Nome';
+
+  @override
+  String get topicIsProject => 'É um projeto';
+
+  @override
+  String get topicKindProject => 'Projeto';
+
+  @override
+  String get topicKindTopic => 'Tópico';
+
+  @override
+  String get topicRename => 'Renomear';
+
+  @override
+  String get topicDeleteBody =>
+      'O tópico é excluído. As sessões continuam como estão.';
+
+  @override
+  String get topicNameInvalid =>
+      'Use um nome que não esteja vazio nem já usado.';
+
+  @override
+  String get topicSessionsEmpty =>
+      'Nenhuma sessão ainda. Importe uma transcrição ou comece uma conversa antes.';
+
+  @override
+  String get topicSessionsHint =>
+      'Marque as sessões que pertencem a este tópico.';
+
+  @override
+  String topicSessionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessões',
+      one: '$count sessão',
+      zero: 'nenhuma sessão',
+    );
+    return '$_temp0';
+  }
 }

@@ -63,6 +63,7 @@ void main() {
           onOpenChatHistory: () {},
           onOpenCalendar: () {},
           onOpenTags: () {},
+          onOpenTopics: () {},
           onOpenMemory: () {},
           onOpenActivity: () {},
           onOpenProfile: () {},

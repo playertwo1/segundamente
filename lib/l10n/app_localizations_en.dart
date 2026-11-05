@@ -3849,4 +3849,57 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get topicsTitle => 'Topics and projects';
+
+  @override
+  String get topicsEmpty =>
+      'No topic yet. Create one to group sessions that belong together.';
+
+  @override
+  String get topicNew => 'New topic';
+
+  @override
+  String get topicNameLabel => 'Name';
+
+  @override
+  String get topicIsProject => 'This is a project';
+
+  @override
+  String get topicKindProject => 'Project';
+
+  @override
+  String get topicKindTopic => 'Topic';
+
+  @override
+  String get topicRename => 'Rename';
+
+  @override
+  String get topicDeleteBody =>
+      'The topic is deleted. The sessions stay as they are.';
+
+  @override
+  String get topicNameInvalid =>
+      'Use a name that is not empty or already taken.';
+
+  @override
+  String get topicSessionsEmpty =>
+      'No session yet. Import a transcript or start a chat first.';
+
+  @override
+  String get topicSessionsHint =>
+      'Mark the sessions that belong to this topic.';
+
+  @override
+  String topicSessionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessions',
+      one: '$count session',
+      zero: 'no sessions',
+    );
+    return '$_temp0';
+  }
 }

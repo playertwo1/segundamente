@@ -44,7 +44,10 @@ import 'package:memex/data/services/chat_service.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
+import 'package:memex/data/services/topic_service.dart';
+import 'package:memex/domain/models/related_sessions.dart';
 import 'package:memex/domain/models/report_memory.dart';
+import 'package:memex/domain/models/topic.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/data/services/file_system_service.dart';
@@ -1318,6 +1321,43 @@ class MemexRouter {
     return runResult(() async {
       final userId = await _reportUserId();
       return SessionReportService().search(userId: userId, query: query);
+    });
+  }
+
+  Future<Result<List<Topic>>> loadTopics() {
+    return runResult(() async {
+      return TopicService().load(await _reportUserId());
+    });
+  }
+
+  /// Applies [change] to the stored topics (see `topic.dart`) and saves.
+  Future<Result<List<Topic>>> updateTopics(
+    List<Topic> Function(List<Topic>) change,
+  ) {
+    return runResult(() async {
+      return TopicService().update(await _reportUserId(), change);
+    });
+  }
+
+  /// Sessions to read for [question]: the text hits plus topic siblings.
+  Future<Result<List<RelatedSession>>> findRelatedSessions(String question) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      final reports = SessionReportService();
+      final hits = await reports.search(userId: userId, query: question);
+      if (hits.isEmpty) return const <RelatedSession>[];
+      final times = <String, DateTime>{};
+      for (final meta in await ChatSessionStorage.instance
+          .listSessionMetadata(userId)) {
+        final at = DateTime.tryParse('${meta['updated_at'] ?? ''}');
+        if (at != null) times['${meta['session_id']}'] = at;
+      }
+      return relatedSessions(
+        seedHits: hits,
+        topics: await TopicService().load(userId),
+        reports: await reports.loadAll(userId),
+        sessionTimes: times,
+      );
     });
   }
 

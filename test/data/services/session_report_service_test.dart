@@ -9,9 +9,11 @@ import 'package:memex/data/services/local_asset_server.dart';
 import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/domain/models/session_report_export.dart';
+import 'package:memex/data/services/topic_service.dart';
 import 'package:memex/data/services/transcript_import_service.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/topic.dart';
 import 'package:memex/domain/models/transcript_import.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:path/path.dart' as p;
@@ -178,6 +180,28 @@ void main() {
     expect(loaded.kind, ReportKind.estudo);
     final stored = jsonDecode(await file.readAsString()) as Map;
     expect(stored['schema_version'], sessionReportSchemaVersion);
+  });
+
+  test('topics persist and deleting a session unlinks it from every topic',
+      () async {
+    await storeTranscript();
+    final topics = TopicService();
+    await topics.update(userId, (t) {
+      t = addTopic(t, id: 't1', name: 'Obra', isProject: true);
+      t = addTopic(t, id: 't2', name: 'Casa');
+      t = linkSession(t, 't1', sessionId);
+      t = linkSession(t, 't1', 'outra');
+      return linkSession(t, 't2', sessionId);
+    });
+    final saved = await TopicService().load(userId);
+    expect(saved.first.isProject, isTrue);
+    expect(saved.first.sessionIds, [sessionId, 'outra']);
+
+    expect(await deleteChatSessionEndpoint(sessionId), isTrue);
+    final after = await topics.load(userId);
+    expect(after.map((t) => t.name), ['Obra', 'Casa']);
+    expect(after.first.sessionIds, ['outra']);
+    expect(after.last.sessionIds, isEmpty);
   });
 
   test('deleting the session removes the report and keeps the original',

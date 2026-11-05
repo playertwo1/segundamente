@@ -1722,5 +1722,19 @@
   "voiceNothingHeard": "No speech was recognised. Try again.",
   "youLabel": "You",
   "routineStreakDays": "{count, plural, one{{count} day streak} other{{count} days streak}}",
-  "@routineStreakDays": {"placeholders": {"count": {"type": "int"}}}
+  "@routineStreakDays": {"placeholders": {"count": {"type": "int"}}},
+  "topicsTitle": "Topics and projects",
+  "topicsEmpty": "No topic yet. Create one to group sessions that belong together.",
+  "topicNew": "New topic",
+  "topicNameLabel": "Name",
+  "topicIsProject": "This is a project",
+  "topicKindProject": "Project",
+  "topicKindTopic": "Topic",
+  "topicRename": "Rename",
+  "topicDeleteBody": "The topic is deleted. The sessions stay as they are.",
+  "topicNameInvalid": "Use a name that is not empty or already taken.",
+  "topicSessionsEmpty": "No session yet. Import a transcript or start a chat first.",
+  "topicSessionsHint": "Mark the sessions that belong to this topic.",
+  "topicSessionCount": "{count, plural, =0{no sessions} one{{count} session} other{{count} sessions}}",
+  "@topicSessionCount": {"placeholders": {"count": {"type": "int"}}}
 }

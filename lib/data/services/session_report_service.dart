@@ -173,19 +173,19 @@ class SessionReportService {
     required String userId,
     required String query,
   }) async {
-    return searchReports(await _loadAll(userId), query);
+    return searchReports(await loadAll(userId), query);
   }
 
   Future<List<ReportHit>> approvedFollowUps({
     required String userId,
   }) async {
-    return approvedFollowUpHits(await _loadAll(userId));
+    return approvedFollowUpHits(await loadAll(userId));
   }
 
   Future<Map<String, ReportRevision>> latestTextChanges({
     required String userId,
   }) async {
-    final reports = await _loadAll(userId);
+    final reports = await loadAll(userId);
     final changes = <String, ReportRevision>{};
     for (final report in reports) {
       final history = await _readRevisions(
@@ -284,7 +284,7 @@ class SessionReportService {
     return revisionsFromJson(raw.cast<String, dynamic>());
   }
 
-  Future<List<SessionReport>> _loadAll(String userId) async {
+  Future<List<SessionReport>> loadAll(String userId) async {
     final root = Directory(_files.getSessionReportsPath(userId));
     if (!await root.exists()) return const [];
     final dirs = <Directory>[];

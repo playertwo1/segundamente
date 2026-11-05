@@ -6860,6 +6860,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, one{{count} day streak} other{{count} days streak}}'**
   String routineStreakDays(int count);
+
+  /// No description provided for @topicsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics and projects'**
+  String get topicsTitle;
+
+  /// No description provided for @topicsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No topic yet. Create one to group sessions that belong together.'**
+  String get topicsEmpty;
+
+  /// No description provided for @topicNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New topic'**
+  String get topicNew;
+
+  /// No description provided for @topicNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get topicNameLabel;
+
+  /// No description provided for @topicIsProject.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a project'**
+  String get topicIsProject;
+
+  /// No description provided for @topicKindProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get topicKindProject;
+
+  /// No description provided for @topicKindTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic'**
+  String get topicKindTopic;
+
+  /// No description provided for @topicRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get topicRename;
+
+  /// No description provided for @topicDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The topic is deleted. The sessions stay as they are.'**
+  String get topicDeleteBody;
+
+  /// No description provided for @topicNameInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a name that is not empty or already taken.'**
+  String get topicNameInvalid;
+
+  /// No description provided for @topicSessionsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No session yet. Import a transcript or start a chat first.'**
+  String get topicSessionsEmpty;
+
+  /// No description provided for @topicSessionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark the sessions that belong to this topic.'**
+  String get topicSessionsHint;
+
+  /// No description provided for @topicSessionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{no sessions} one{{count} session} other{{count} sessions}}'**
+  String topicSessionCount(int count);
 }
 
 class _AppLocalizationsDelegate

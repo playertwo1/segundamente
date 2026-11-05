@@ -14,6 +14,10 @@ void main() {
   });
 
   Future<List<String>> openAndTap(WidgetTester tester, String label) async {
+    // Tall enough that the whole list is built; the menu scrolls on a phone.
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     final calls = <String>[];
     final key = GlobalKey<ScaffoldState>();
     await tester.pumpWidget(MaterialApp(
@@ -26,6 +30,7 @@ void main() {
           onOpenChatHistory: () => calls.add('history'),
           onOpenCalendar: () => calls.add('calendar'),
           onOpenTags: () => calls.add('tags'),
+          onOpenTopics: () => calls.add('topics'),
           onOpenMemory: () => calls.add('memory'),
           onOpenActivity: () => calls.add('activity'),
           onOpenProfile: () => calls.add('profile'),
@@ -46,6 +51,7 @@ void main() {
     expect(await openAndTap(tester, 'Conhecimento'), ['tab1']);
     expect(await openAndTap(tester, 'Calendário'), ['calendar']);
     expect(await openAndTap(tester, 'Tags'), ['tags']);
+    expect(await openAndTap(tester, 'Tópicos e projetos'), ['topics']);
     expect(await openAndTap(tester, 'Memória'), ['memory']);
     expect(await openAndTap(tester, 'Atividade'), ['activity']);
     expect(await openAndTap(tester, 'Conversar'), ['chat']);
@@ -64,6 +70,7 @@ void main() {
           onOpenChatHistory: () {},
           onOpenCalendar: () {},
           onOpenTags: () {},
+          onOpenTopics: () {},
           onOpenMemory: () {},
           onOpenActivity: () {},
           onOpenProfile: () {},

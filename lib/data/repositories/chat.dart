@@ -2,6 +2,8 @@ import 'package:memex/utils/logger.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/session_report_service.dart';
+import 'package:memex/data/services/topic_service.dart';
+import 'package:memex/domain/models/topic.dart';
 import 'package:memex/data/services/api_exception.dart';
 import 'package:memex/utils/time_context.dart';
 
@@ -196,6 +198,7 @@ Future<bool> deleteChatSessionEndpoint(String sessionId) async {
       userId: userId,
       sessionId: sessionId,
     );
+    await TopicService().update(userId, (t) => forgetSession(t, sessionId));
     _logger.info('Session physically deleted: $sessionId');
     return true;
   } catch (e) {
