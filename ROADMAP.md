@@ -106,7 +106,7 @@
 | F2-10 | Abrir chat com o anexo ao compartilhar TXT, PDF ou áudio com o app | P1 | F2-08 | IN_PROGRESS | TXT validado no S25; PDF e áudio compartilhados ainda precisam de prova |
 | F2-11 | Transcrição local multilíngue, em português, com sherpa_onnx e Whisper como alternativa offline ao caminho D-011 | P1 | F2-09 | READY | Comparar o mesmo áudio nos dois caminhos; medir tempo, memória e qualidade em áudio de aproximadamente 50 min no S25; registrar modelo escolhido |
 | F2-12 | Importar legendas SRT/VTT preservando relógios e texto | P2 | F2-03 | IN_PROGRESS | Testes de parser para cabeçalho, numeração, intervalos e etiquetas de locutor; prévia validada no S25; parser, seletor e compartilhamento feitos, falta a prévia no aparelho |
-| F2-13 | Dicionário local editável de nomes, siglas e produtos para prompts | P1 | F3-08 | IN_PROGRESS | Limite documentado e testado; termos aparecem na prévia de envio; nome próprio corrigido em resumo real |
+| F2-13 | Dicionário local editável de nomes, siglas e produtos para prompts | P1 | F3-08 | DONE | Limite documentado e testado; termos aparecem na prévia de envio; nome próprio corrigido em resumo real |
 
 **Definição do F2-11:** usar modelo Whisper multilíngue com idioma pt e tarefa de transcrição. Processar o áudio em blocos para limitar memória e preservar o tempo aproximado de cada bloco. Não inclui tradução, diarização nem timestamps por palavra. A transcrição local deve entrar na mesma prévia e confirmação do caminho remoto.
 
@@ -126,7 +126,7 @@
 | F3-06 | Editar, confirmar, descartar, buscar e excluir relatório e derivados sem alterar o original | P1 | F3-05 | DONE | Fixtures provam edição, estados, busca e exclusão com original preservado |
 | F3-07 | Reduzir falsos positivos e duplicatas na extração de tarefas | P1 | F3-02 | IN_PROGRESS | Casos positivos/negativos pt-BR; narração, opinião e fato passado não viram tarefa; duplicata não entra duas vezes |
 | F3-08 | Regras de resumo em português, preservação das notas do usuário e regeneração sem apagar a versão anterior | P1 | F3-02 | IN_PROGRESS | Teste por regra e validação no S25; título vazio não vira relatório em branco |
-| F3-09 | Correção conservadora da transcrição em arquivo separado, sem reescrever nem traduzir o original | P2 | F2-04, F3-08 | IN_PROGRESS | Só substituições autorizadas de palavras/trechos existentes; teste recusa índices/operações inválidos e compara original byte a byte |
+| F3-09 | Correção conservadora da transcrição em arquivo separado, sem reescrever nem traduzir o original | P2 | F2-04, F3-08 | DONE | Só substituições autorizadas de palavras/trechos existentes; teste recusa índices/operações inválidos e compara original byte a byte |
 
 **Estado específico de F3-02:** em 2026-11-04, a tela do relatório enviou a reunião sintética ao modelo após confirmação explícita e recebeu resumo, decisão, tarefa e ideia como itens não confirmados. A validação recusou evidência inventada; responsável, prazo e status enviados pelo modelo não foram aceitos. Testes de serviço, parsing, prompt e diálogo foram registrados. A amostra real de 53 min continua NOT_RUN. O limite atual é 60000 caracteres em uma chamada; acima dele o fluxo usa o rascunho local, sem divisão por tempo.
 
