@@ -46,3 +46,19 @@ Sonda separada, fora do app: `tools/f610_probe` (Flutter, `flutter_onnxruntime` 
 - O e5 int8 usa ~240 MB de RAM acima da linha de base e 118 MB de disco. O MiniLM fp32 é 4 vezes maior em disco e pico de ~1,1 GB (o pico do MiniLM inclui o e5 carregado antes no mesmo processo, então está superestimado). A versão int8 do MiniLM (118 MB) não foi testada e é o candidato óbvio.
 - O APK da sonda ficou com 125,8 MB, a maior parte do ONNX Runtime para todas as arquiteturas; no app principal isso aumentaria o APK e precisa de filtro de arquitetura (`arm64-v8a`).
 - Não medido: bateria e calor em uso real, nota longa (limite de 128 tokens), tokenizador SentencePiece em Dart (maior trabalho restante), notas reais do dono.
+
+### MiniLM-L12 int8 (arm64), medido em seguida no S25 e no PC
+O arquivo `model_qint8_arm64.onnx` (118 MB) foi enviado no lugar do fp32, então o log o chama de `minilm_fp32` (o campo `modelo_mb` = 118 mostra que é o int8). Nova rodada: o e5 int8 repetiu os resultados da primeira.
+
+| MiniLM-L12 int8 | Valor |
+|---|---|
+| Arquivo / carregar | 118 MB / 0,23 s |
+| Por nota (média / p95) / por consulta | 6,8 ms / 12 ms / 6,8 ms |
+| RAM do processo | 278 → 413 MB, pico 485 MB (o pico inclui o e5 rodado antes no mesmo processo) |
+| Cosseno mínimo vs fp32 do PC | 0,981 |
+| Acerto@3 reformuladas / mesmas palavras | 20/22 (0,91) / 12/12 |
+| PC: acerto@1 reformuladas / MRR | 0,77 / 0,86 |
+| PC: fora do tema, acertos acima da maior nota fora do tema (0,48) | 56% |
+
+- A quantização custou pouco: 21/22 → 20/22 e cosseno mínimo 0,98. O S25 e o PC concordam (20/22).
+- Comparado ao e5 int8 (mesmo tamanho): o MiniLM int8 acerta mais nas reformulações (0,91 contra 0,77), mas separa pior o que está fora do tema (56% contra 88%). Como o app teria texto primeiro e corte de nota, o corte é o ponto fraco do MiniLM; o e5 tem o corte melhor e o acerto menor. Escolher entre os dois exige as notas reais do dono; com este corpus pequeno, a diferença de 2 a 3 acertos não é conclusiva.
