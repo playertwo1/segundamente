@@ -1,0 +1,656 @@
+{
+ "versao": 1,
+ "aviso": "Casos fictícios; nenhum dado pessoal real. Dono e prazo ausentes ficam como 'não informado'. Nenhum item é confirmado: todos nascem 'sugerido'.",
+ "casos": [
+  {
+   "id": "c01",
+   "categoria": "tarefa_clara",
+   "origem": "conversa",
+   "texto": "[00:01:10] Carlos: Eu envio a proposta revisada para a Marina até sexta-feira, dia 21.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Enviar a proposta revisada à Marina",
+     "responsavel": "Carlos",
+     "prazo": "2026-11-21",
+     "evidencia": "00:01:10",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "responsável e data ditos de forma explícita; sexta dia 21 coincide"
+  },
+  {
+   "id": "c02",
+   "categoria": "tarefa_clara",
+   "origem": "conversa",
+   "texto": "[00:03:02] Marina: Fica combinado: eu agendo a reunião com o fornecedor amanhã às 10h.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Agendar a reunião com o fornecedor",
+     "responsavel": "Marina",
+     "prazo": "amanhã 10h",
+     "evidencia": "00:03:02",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "'amanhã' depende da data da sessão; registrar a data da sessão no corpo do teste"
+  },
+  {
+   "id": "c03",
+   "categoria": "tarefa_clara",
+   "origem": "nota",
+   "texto": "Preciso renovar o seguro do carro antes do dia 30.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Renovar o seguro do carro",
+     "responsavel": "o próprio autor",
+     "prazo": "antes do dia 30",
+     "evidencia": "nota",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "nota própria: o autor é o responsável"
+  },
+  {
+   "id": "c04",
+   "categoria": "tarefa_clara",
+   "origem": "conversa",
+   "texto": "[00:12:40] Paulo: Vou ligar para o contador na segunda e perguntar sobre o imposto.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Ligar para o contador sobre o imposto",
+     "responsavel": "Paulo",
+     "prazo": "segunda (data a confirmar)",
+     "evidencia": "00:12:40",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "'segunda' sem semana definida fica pendente"
+  },
+  {
+   "id": "c05",
+   "categoria": "tarefa_clara",
+   "origem": "conversa",
+   "texto": "[00:20:15] Ana: Tem que atualizar o manual até o fim do mês, e o Rui revisa.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Atualizar o manual",
+     "responsavel": "não informado",
+     "prazo": "fim do mês",
+     "evidencia": "00:20:15",
+     "estado": "sugerido"
+    },
+    {
+     "tipo": "tarefa",
+     "texto": "Revisar o manual",
+     "responsavel": "Rui",
+     "prazo": "não informado",
+     "evidencia": "00:20:15",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "dois itens; dono da primeira não foi dito"
+  },
+  {
+   "id": "c06",
+   "categoria": "tarefa_clara",
+   "origem": "nota",
+   "texto": "Lembrar de pagar a taxa do condomínio dia 5.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Pagar a taxa do condomínio",
+     "responsavel": "o próprio autor",
+     "prazo": "dia 5",
+     "evidencia": "nota",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c07",
+   "categoria": "hipotese_opiniao",
+   "origem": "conversa",
+   "texto": "[00:05:00] Rui: Acho que talvez a gente devesse trocar de fornecedor.",
+   "esperado": [],
+   "nota": "hipótese: não vira tarefa nem decisão; pode virar ideia"
+  },
+  {
+   "id": "c08",
+   "categoria": "hipotese_opiniao",
+   "origem": "conversa",
+   "texto": "[00:06:12] Ana: Seria legal ter um painel com as métricas.",
+   "esperado": [
+    {
+     "tipo": "ideia",
+     "texto": "Painel com as métricas",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:06:12",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "ideia, não tarefa"
+  },
+  {
+   "id": "c09",
+   "categoria": "hipotese_opiniao",
+   "origem": "nota",
+   "texto": "Quem sabe eu começo a correr de manhã.",
+   "esperado": [],
+   "nota": "intenção vaga sem compromisso"
+  },
+  {
+   "id": "c10",
+   "categoria": "hipotese_opiniao",
+   "origem": "conversa",
+   "texto": "[00:30:00] Paulo: Não gosto de ligar para clientes sem aviso.",
+   "esperado": [],
+   "nota": "opinião; verbo solto não vira tarefa"
+  },
+  {
+   "id": "c11",
+   "categoria": "hipotese_opiniao",
+   "origem": "conversa",
+   "texto": "[00:31:10] Carlos: Eu achei que o Rui ia mandar o arquivo.",
+   "esperado": [],
+   "nota": "suposição passada; não é compromisso"
+  },
+  {
+   "id": "c12",
+   "categoria": "fato_passado",
+   "origem": "conversa",
+   "texto": "[00:02:00] Marina: Ontem o time enviou o relatório ao cliente.",
+   "esperado": [
+    {
+     "tipo": "resumo",
+     "texto": "O time enviou o relatório ao cliente ontem",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:02:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "fato; vira resumo"
+  },
+  {
+   "id": "c13",
+   "categoria": "fato_passado",
+   "origem": "conversa",
+   "texto": "[00:08:20] Carlos: Já resolvi o problema do login.",
+   "esperado": [
+    {
+     "tipo": "resumo",
+     "texto": "Carlos resolveu o problema do login",
+     "responsavel": "Carlos",
+     "prazo": "não informado",
+     "evidencia": "00:08:20",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c14",
+   "categoria": "fato_passado",
+   "origem": "nota",
+   "texto": "Fizemos a migração do banco na sexta passada.",
+   "esperado": [
+    {
+     "tipo": "resumo",
+     "texto": "Migração do banco feita na sexta passada",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "nota",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c15",
+   "categoria": "fato_passado",
+   "origem": "conversa",
+   "texto": "[00:15:30] Ana: O contrato foi assinado semana passada.",
+   "esperado": [
+    {
+     "tipo": "resumo",
+     "texto": "Contrato assinado na semana passada",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:15:30",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c16",
+   "categoria": "fato_passado",
+   "origem": "conversa",
+   "texto": "[00:16:00] Rui: Concluímos a revisão do código.",
+   "esperado": [
+    {
+     "tipo": "resumo",
+     "texto": "Revisão do código concluída",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:16:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c17",
+   "categoria": "duplicata",
+   "origem": "conversa",
+   "texto": "[00:04:00] Carlos: Eu envio o resumo. [00:09:00] Carlos: Então, o resumo eu mando hoje.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Enviar o resumo",
+     "responsavel": "Carlos",
+     "prazo": "hoje",
+     "evidencia": "00:04:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "mesma tarefa em dois trechos: um item, com os dois trechos como evidência; duplicata é sinalizada, não removida em silêncio"
+  },
+  {
+   "id": "c18",
+   "categoria": "duplicata",
+   "origem": "nota",
+   "texto": "Ligar para o dentista. Marcar a consulta no dentista.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Marcar consulta no dentista",
+     "responsavel": "o próprio autor",
+     "prazo": "não informado",
+     "evidencia": "nota",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "possível duplicata sinalizada"
+  },
+  {
+   "id": "c19",
+   "categoria": "duplicata",
+   "origem": "conversa",
+   "texto": "[00:10:00] Ana: Revisar o manual. [00:40:00] Rui: Revisar o manual de usuário. ",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Revisar o manual",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:10:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "dono ausente e quase duplicata: sinalizar, deixar o usuário decidir"
+  },
+  {
+   "id": "c20",
+   "categoria": "dono_ausente",
+   "origem": "conversa",
+   "texto": "[00:07:00] Marina: Alguém precisa atualizar a planilha de custos.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Atualizar a planilha de custos",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:07:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "não inferir responsável"
+  },
+  {
+   "id": "c21",
+   "categoria": "dono_ausente",
+   "origem": "conversa",
+   "texto": "[00:11:00] Paulo: Temos que enviar o orçamento ao cliente.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Enviar o orçamento ao cliente",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:11:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "'temos' não nomeia ninguém"
+  },
+  {
+   "id": "c22",
+   "categoria": "dono_ausente",
+   "origem": "nota",
+   "texto": "Falta marcar a reunião de equipe.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Marcar a reunião de equipe",
+     "responsavel": "o próprio autor",
+     "prazo": "não informado",
+     "evidencia": "nota",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "em nota própria o autor é presumido como dono"
+  },
+  {
+   "id": "c23",
+   "categoria": "dono_ausente",
+   "origem": "conversa",
+   "texto": "[00:21:00] Ana: Vamos revisar os contratos antigos.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Revisar os contratos antigos",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:21:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "'vamos' é do grupo; dono não informado"
+  },
+  {
+   "id": "c24",
+   "categoria": "data_ambigua",
+   "origem": "conversa",
+   "texto": "[00:13:00] Rui: Eu entrego na quinta.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Entregar",
+     "responsavel": "Rui",
+     "prazo": "quinta (semana a confirmar)",
+     "evidencia": "00:13:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "sem semana definida; exige confirmação"
+  },
+  {
+   "id": "c25",
+   "categoria": "data_ambigua",
+   "origem": "nota",
+   "texto": "Pagar a fatura no dia 3.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Pagar a fatura",
+     "responsavel": "o próprio autor",
+     "prazo": "dia 3 (mês a confirmar)",
+     "evidencia": "nota",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "mês ausente"
+  },
+  {
+   "id": "c26",
+   "categoria": "data_ambigua",
+   "origem": "conversa",
+   "texto": "[00:14:00] Carlos: A gente se fala semana que vem e fecha isso.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Fechar o assunto",
+     "responsavel": "não informado",
+     "prazo": "semana que vem (dia a confirmar)",
+     "evidencia": "00:14:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "intervalo vago"
+  },
+  {
+   "id": "c27",
+   "categoria": "data_ambigua",
+   "origem": "conversa",
+   "texto": "[00:17:00] Marina: Pode ficar para o começo do mês.",
+   "esperado": [],
+   "nota": "sem tarefa explícita; só uma preferência de prazo"
+  },
+  {
+   "id": "c28",
+   "categoria": "decisao",
+   "origem": "conversa",
+   "texto": "[00:18:00] Ana: Decidido: vamos adiar o lançamento para dezembro.",
+   "esperado": [
+    {
+     "tipo": "decisao",
+     "texto": "Adiar o lançamento para dezembro",
+     "responsavel": "não informado",
+     "prazo": "dezembro",
+     "evidencia": "00:18:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "decisão explícita"
+  },
+  {
+   "id": "c29",
+   "categoria": "decisao",
+   "origem": "conversa",
+   "texto": "[00:19:00] Rui: Podemos adiar o lançamento ou lançar só a versão básica; vamos pensar.",
+   "esperado": [
+    {
+     "tipo": "ideia",
+     "texto": "Adiar o lançamento ou lançar só a versão básica",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:19:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "alternativas em aberto: não é decisão"
+  },
+  {
+   "id": "c30",
+   "categoria": "decisao",
+   "origem": "conversa",
+   "texto": "[00:22:00] Carlos: Ficou combinado que a reunião de segunda passa para terça.",
+   "esperado": [
+    {
+     "tipo": "decisao",
+     "texto": "Reunião de segunda passa para terça",
+     "responsavel": "não informado",
+     "prazo": "terça (semana a confirmar)",
+     "evidencia": "00:22:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c31",
+   "categoria": "duvida",
+   "origem": "conversa",
+   "texto": "[00:23:00] Marina: Quem fica com o suporte no feriado?",
+   "esperado": [
+    {
+     "tipo": "duvida",
+     "texto": "Quem fica com o suporte no feriado",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:23:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "pergunta sem resposta vira dúvida"
+  },
+  {
+   "id": "c32",
+   "categoria": "duvida",
+   "origem": "nota",
+   "texto": "Será que o contrato permite renovação automática?",
+   "esperado": [
+    {
+     "tipo": "duvida",
+     "texto": "O contrato permite renovação automática?",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "nota",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c33",
+   "categoria": "duvida",
+   "origem": "conversa",
+   "texto": "[00:24:00] Paulo: Qual é o limite de gasto? [00:24:20] Ana: Dez mil.",
+   "esperado": [
+    {
+     "tipo": "resumo",
+     "texto": "O limite de gasto é dez mil",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "00:24:20",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "pergunta respondida no mesmo trecho não fica como dúvida"
+  },
+  {
+   "id": "c34",
+   "categoria": "followup",
+   "origem": "conversa",
+   "texto": "[00:25:00] Carlos: Depois eu volto com o preço do frete e a gente confirma.",
+   "esperado": [
+    {
+     "tipo": "followup",
+     "texto": "Voltar com o preço do frete e confirmar",
+     "responsavel": "Carlos",
+     "prazo": "não informado",
+     "evidencia": "00:25:00",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c35",
+   "categoria": "followup",
+   "origem": "nota",
+   "texto": "Perguntar ao Rui se o prazo mudou.",
+   "esperado": [
+    {
+     "tipo": "followup",
+     "texto": "Perguntar ao Rui se o prazo mudou",
+     "responsavel": "o próprio autor",
+     "prazo": "não informado",
+     "evidencia": "nota",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": ""
+  },
+  {
+   "id": "c36",
+   "categoria": "pdf_pagina",
+   "origem": "pdf",
+   "texto": "[p.1] Ata da reunião de 12/09. Presentes: Ana, Rui, Paulo. [p.2] Ficou decidido que o orçamento será revisado. Paulo envia a versão final até 20/09.",
+   "esperado": [
+    {
+     "tipo": "decisao",
+     "texto": "Revisar o orçamento",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "p.2",
+     "estado": "sugerido"
+    },
+    {
+     "tipo": "tarefa",
+     "texto": "Enviar a versão final do orçamento",
+     "responsavel": "Paulo",
+     "prazo": "2026-09-20",
+     "evidencia": "p.2",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "evidência por página; resumo deve citar p.1 para a lista de presentes"
+  },
+  {
+   "id": "c37",
+   "categoria": "pdf_pagina",
+   "origem": "pdf",
+   "texto": "[p.1] Contrato de prestação de serviços. [p.3] A contratada deve entregar o relatório mensal até o dia 10 de cada mês.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Entregar o relatório mensal até o dia 10 de cada mês",
+     "responsavel": "a contratada",
+     "prazo": "dia 10 de cada mês",
+     "evidencia": "p.3",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "obrigação contratual; recorrente, não data única"
+  },
+  {
+   "id": "c38",
+   "categoria": "pdf_pagina",
+   "origem": "pdf",
+   "texto": "[p.1] Relatório trimestral. [p.2] No trimestre anterior, foram vendidas 120 unidades. [p.4] Recomenda-se avaliar um novo canal de vendas.",
+   "esperado": [
+    {
+     "tipo": "resumo",
+     "texto": "No trimestre anterior foram vendidas 120 unidades",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "p.2",
+     "estado": "sugerido"
+    },
+    {
+     "tipo": "ideia",
+     "texto": "Avaliar um novo canal de vendas",
+     "responsavel": "não informado",
+     "prazo": "não informado",
+     "evidencia": "p.4",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "fato passado e recomendação (ideia), cada um com a sua página"
+  },
+  {
+   "id": "c39",
+   "categoria": "pdf_pagina",
+   "origem": "pdf",
+   "texto": "[p.1] Página sem texto selecionável (imagem escaneada).",
+   "esperado": [],
+   "nota": "PDF escaneado: F9-01 decide OCR; sem OCR o relatório avisa que não há texto, em vez de inventar"
+  },
+  {
+   "id": "c40",
+   "categoria": "pdf_pagina",
+   "origem": "pdf",
+   "texto": "[p.2] Prazo: 15/10. [p.5] Prazo: 15/10.",
+   "esperado": [
+    {
+     "tipo": "tarefa",
+     "texto": "Cumprir o prazo de 15/10",
+     "responsavel": "não informado",
+     "prazo": "2026-10-15",
+     "evidencia": "p.2",
+     "estado": "sugerido"
+    }
+   ],
+   "nota": "mesma data em duas páginas: um item, com as duas páginas de evidência"
+  }
+ ]
+}

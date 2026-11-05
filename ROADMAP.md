@@ -244,7 +244,7 @@
 
 | ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
 |---|---|---:|---|---|---|
-| F8-01 | Verificar capacidades atuais, requisitos, termos, autenticação e fluxo suportado pelo NotebookLM | P0 | F5 fechado, F4 estável | BLOCKED | Pesquisa em fontes oficiais e decisão de escopo registrada, incluindo dados que deixam o aparelho |
+| F8-01 | Verificar capacidades atuais, requisitos, termos, autenticação e fluxo suportado pelo NotebookLM | P0 | F5 fechado, F4 estável | IN_PROGRESS | Pesquisa em fontes oficiais e decisão de escopo registrada, incluindo dados que deixam o aparelho |
 | F8-02 | Exportar apenas conteúdo selecionado para Google Docs, com destino e conteúdo visíveis antes de autorizar | P0 | F8-01 | BLOCKED | Documento criado na conta escolhida; cancelar não cria/exporta; origem e conteúdo conferidos |
 | F8-03 | Avaliar conector comunitário opt-in, licença, segurança, manutenção e compatibilidade | P1 | F8-01, F8-02 | BLOCKED | Avaliação registrada; integrar somente após aprovação e sem tornar caminho comunitário requisito do MVP |
 | F8-04 | Avaliar eventual API empresarial apenas se existir caso de uso e benefício comprovados | P2 | F8-01 | BLOCKED | API, custo, termos e necessidade verificados em fonte oficial; decisão aceita antes de qualquer integração |
@@ -266,8 +266,8 @@
 
 | ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
 |---|---|---:|---|---|---|
-| F9-01 | Mapear F3/F4/F6, SystemActionService, TaskCard e destinos; decidir PDF/OCR/outros formatos, Todo/agenda/lembretes, imagens, IA e sistema desktop | P0 | F5 fechado; F3-02/04/05, F4-01/02/03, F6-02/11 | BLOCKED | Matriz requisito → recurso existente/lacuna, fluxo de dados e decisões aceitas antes do código; fila de agentes separada da Todo |
-| F9-02 | Criar corpus de 40 exemplos fictícios e fixtures de PDF com saída esperada e fontes | P0 | F9-01 | BLOCKED | Casos positivos/negativos cobrem tarefa clara, hipótese, fato passado, duplicata, dono ausente, data ambígua, PDF selecionável e evidência por página; sem dados pessoais reais |
+| F9-01 | Mapear F3/F4/F6, SystemActionService, TaskCard e destinos; decidir PDF/OCR/outros formatos, Todo/agenda/lembretes, imagens, IA e sistema desktop | P0 | F5 fechado; F3-02/04/05, F4-01/02/03, F6-02/11 | IN_PROGRESS | Matriz requisito → recurso existente/lacuna, fluxo de dados e decisões aceitas antes do código; fila de agentes separada da Todo |
+| F9-02 | Criar corpus de 40 exemplos fictícios e fixtures de PDF com saída esperada e fontes | P0 | F9-01 | IN_PROGRESS | Casos positivos/negativos cobrem tarefa clara, hipótese, fato passado, duplicata, dono ausente, data ambígua, PDF selecionável e evidência por página; sem dados pessoais reais |
 | F9-03 | Gerar relatório editorial organizado e incluir imagens relacionadas quando houver fonte aprovada, reutilizando categorias existentes e provedor autorizado | P0 | F3-01 a F3-05, F9-02 | BLOCKED | Itens apontam para timestamp ou página; confiança avaliada no corpus; imagens têm proveniência e são ilustrativas, nunca evidência; sem IA não há síntese inventada; hipótese fica separada de decisão |
 | F9-04 | Revisar cada sugestão individualmente: editar, confirmar, descartar e resolver ambiguidade/duplicata | P0 | F9-03 | BLOCKED | Evidência e confiança visíveis; data ambígua exige confirmação; descarte não chega aos destinos; duplicata é sinalizada, nunca removida em silêncio |
 | F9-05 | Definir origem das imagens e produzir prancha de referência para relatório e Todo antes da UI | P1 | F9-01 | BLOCKED | Prancha alinhada a DESIGN.md e listada em docs/INDEX.md; cada imagem tem origem/licença; imagem existente 04-report-followups.png é reutilizada como referência quando suficiente |
