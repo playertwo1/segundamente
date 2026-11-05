@@ -53,6 +53,14 @@ void main() {
     expect(searchReports([report('a', [])], '   '), isEmpty);
   });
 
+  test('text search ignores accents and case in both directions', () {
+    final reports = [report('a', [item(id: '1', text: 'Reunião com o João')])];
+    expect(searchReports(reports, 'reuniao'), hasLength(1));
+    expect(searchReports(reports, 'JOAO'), hasLength(1));
+    expect(searchReports(reports, 'reunião'), hasLength(1));
+    expect(searchReports(reports, 'futebol'), isEmpty);
+  });
+
   test('only an approved follow-up enters the panel', () {
     final hits = approvedFollowUpHits([
       report('a', [

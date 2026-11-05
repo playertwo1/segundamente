@@ -1,4 +1,5 @@
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/topic.dart';
 
 const reportRevisionSchemaVersion = 1;
 
@@ -35,14 +36,14 @@ String reportHitKey(String sessionId, String itemId) {
 }
 
 List<ReportHit> searchReports(List<SessionReport> reports, String query) {
-  final needle = query.trim().toLowerCase();
+  final needle = nameKey(query);
   if (needle.isEmpty) return const [];
   final hits = <ReportHit>[];
   for (final report in reports) {
     for (final item in report.items) {
       if (item.status == ReportItemStatus.discarded) continue;
-      final text = item.text.toLowerCase();
-      final excerpt = item.source.excerpt.toLowerCase();
+      final text = nameKey(item.text);
+      final excerpt = nameKey(item.source.excerpt);
       if (text.contains(needle) || excerpt.contains(needle)) {
         hits.add(ReportHit(sessionId: report.sessionId, item: item));
       }
