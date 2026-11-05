@@ -1764,5 +1764,10 @@
   "correctionsRefused": "A correction no longer fits the text and was not saved.",
   "correctionsOpen": "Review corrections",
   "linkPreviewTitle": "Link previews",
-  "linkPreviewDesc": "Off by default. When on, the app opens the link address from this device to read the page title, so the site sees your network address. Local and private addresses are always refused."
+  "linkPreviewDesc": "Off by default. When on, the app opens the link address from this device to read the page title, so the site sees your network address. Local and private addresses are always refused.",
+  "propLink": "Has a link",
+  "propTask": "Is a task",
+  "propOpenTask": "Open task",
+  "propCode": "Has code",
+  "savedViewPickProps": "Or mark what the card must be:"
 }

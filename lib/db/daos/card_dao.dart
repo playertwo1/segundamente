@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import '../app_database.dart';
 import '../tables.dart';
+import 'package:memex/domain/models/card_props.dart';
 
 part 'card_dao.g.dart';
 
@@ -72,11 +73,14 @@ class CardDao extends DatabaseAccessor<AppDatabase> with _$CardDaoMixin {
 
     // Tag filters (JSON list string, LIKE). Several tags combine with AND:
     // the card needs every one. A parent tag also matches the tags under it:
-    // area -> area/projeto.
+    // area -> area/projeto. A tag with the property prefix asks for a derived
+    // property (see card_props.dart) instead of a tag.
     if (tags != null) {
       for (final t in tags) {
-        final one =
-            cardCache.tags.like('%"$t"%') | cardCache.tags.like('%"$t/%');
+        final prop = propOfTag(t);
+        final one = prop != null
+            ? cardCache.props.like('%|$prop|%')
+            : cardCache.tags.like('%"$t"%') | cardCache.tags.like('%"$t/%');
         query.where((tbl) => one);
       }
     }

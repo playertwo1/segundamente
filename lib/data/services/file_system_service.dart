@@ -15,6 +15,7 @@ import 'local_asset_server.dart';
 import 'event_log_service.dart';
 import 'package:memex/db/app_database.dart';
 import 'package:memex/domain/models/card_model.dart';
+import 'package:memex/domain/models/card_props.dart';
 import 'package:memex/domain/models/system_event.dart';
 import 'package:memex/data/services/global_event_bus.dart';
 import 'package:drift/drift.dart' as drift;
@@ -571,6 +572,7 @@ class FileSystemService {
         cardPath: drift.Value(relativePath),
         timestamp: drift.Value(timestamp),
         tags: drift.Value(tagsJson),
+        props: drift.Value(encodeCardProps(deriveCardProps(cardData))),
       );
 
       await AppDatabase.instance.cardDao.upsertCard(entry);

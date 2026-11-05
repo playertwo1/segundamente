@@ -68,4 +68,36 @@ void main() {
           <String>[],
         ]));
   });
+
+  test('a property tag filters on the derived properties, AND with tags',
+      () async {
+    final two = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(two.close);
+    var i = 0;
+    Future<void> add(String tags, String props) => two.cardDao.upsertCard(
+          CardCacheCompanion.insert(
+            factId: 'p${i++}',
+            cardPath: 'p',
+            timestamp: 2000 + i,
+            tags: tags,
+            props: Value(props),
+          ),
+        );
+    await add('["obra"]', '|open_task|task|');
+    await add('["obra"]', '|task|');
+    await add('["casa"]', '|link|open_task|task|');
+    await add('["obra"]', '');
+
+    Future<Set<String>> ask(List<String> tags) async =>
+        (await two.cardDao.getCards(tags: tags, limit: 50))
+            .map((c) => c.factId)
+            .toSet();
+
+    expect(await ask(['@prop:open_task']), {'p0', 'p2'});
+    expect(await ask(['@prop:task']), {'p0', 'p1', 'p2'});
+    expect(await ask(['obra', '@prop:open_task']), {'p0'});
+    expect(await ask(['@prop:code']), isEmpty);
+    // "task" must not match inside "open_task" only.
+    expect(await ask(['@prop:link', '@prop:task']), {'p2'});
+  });
 }

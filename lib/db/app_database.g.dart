@@ -1591,8 +1591,16 @@ class $CardCacheTable extends CardCache
   late final GeneratedColumn<String> tags = GeneratedColumn<String>(
       'tags', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _propsMeta = const VerificationMeta('props');
   @override
-  List<GeneratedColumn> get $columns => [factId, cardPath, timestamp, tags];
+  late final GeneratedColumn<String> props = GeneratedColumn<String>(
+      'props', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [factId, cardPath, timestamp, tags, props];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1627,6 +1635,10 @@ class $CardCacheTable extends CardCache
     } else if (isInserting) {
       context.missing(_tagsMeta);
     }
+    if (data.containsKey('props')) {
+      context.handle(
+          _propsMeta, props.isAcceptableOrUnknown(data['props']!, _propsMeta));
+    }
     return context;
   }
 
@@ -1644,6 +1656,8 @@ class $CardCacheTable extends CardCache
           .read(DriftSqlType.int, data['${effectivePrefix}timestamp'])!,
       tags: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}tags'])!,
+      props: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}props'])!,
     );
   }
 
@@ -1658,11 +1672,13 @@ class CardCacheData extends DataClass implements Insertable<CardCacheData> {
   final String cardPath;
   final int timestamp;
   final String tags;
+  final String props;
   const CardCacheData(
       {required this.factId,
       required this.cardPath,
       required this.timestamp,
-      required this.tags});
+      required this.tags,
+      required this.props});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1670,6 +1686,7 @@ class CardCacheData extends DataClass implements Insertable<CardCacheData> {
     map['card_path'] = Variable<String>(cardPath);
     map['timestamp'] = Variable<int>(timestamp);
     map['tags'] = Variable<String>(tags);
+    map['props'] = Variable<String>(props);
     return map;
   }
 
@@ -1679,6 +1696,7 @@ class CardCacheData extends DataClass implements Insertable<CardCacheData> {
       cardPath: Value(cardPath),
       timestamp: Value(timestamp),
       tags: Value(tags),
+      props: Value(props),
     );
   }
 
@@ -1690,6 +1708,7 @@ class CardCacheData extends DataClass implements Insertable<CardCacheData> {
       cardPath: serializer.fromJson<String>(json['cardPath']),
       timestamp: serializer.fromJson<int>(json['timestamp']),
       tags: serializer.fromJson<String>(json['tags']),
+      props: serializer.fromJson<String>(json['props']),
     );
   }
   @override
@@ -1700,16 +1719,22 @@ class CardCacheData extends DataClass implements Insertable<CardCacheData> {
       'cardPath': serializer.toJson<String>(cardPath),
       'timestamp': serializer.toJson<int>(timestamp),
       'tags': serializer.toJson<String>(tags),
+      'props': serializer.toJson<String>(props),
     };
   }
 
   CardCacheData copyWith(
-          {String? factId, String? cardPath, int? timestamp, String? tags}) =>
+          {String? factId,
+          String? cardPath,
+          int? timestamp,
+          String? tags,
+          String? props}) =>
       CardCacheData(
         factId: factId ?? this.factId,
         cardPath: cardPath ?? this.cardPath,
         timestamp: timestamp ?? this.timestamp,
         tags: tags ?? this.tags,
+        props: props ?? this.props,
       );
   CardCacheData copyWithCompanion(CardCacheCompanion data) {
     return CardCacheData(
@@ -1717,6 +1742,7 @@ class CardCacheData extends DataClass implements Insertable<CardCacheData> {
       cardPath: data.cardPath.present ? data.cardPath.value : this.cardPath,
       timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
       tags: data.tags.present ? data.tags.value : this.tags,
+      props: data.props.present ? data.props.value : this.props,
     );
   }
 
@@ -1726,13 +1752,14 @@ class CardCacheData extends DataClass implements Insertable<CardCacheData> {
           ..write('factId: $factId, ')
           ..write('cardPath: $cardPath, ')
           ..write('timestamp: $timestamp, ')
-          ..write('tags: $tags')
+          ..write('tags: $tags, ')
+          ..write('props: $props')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(factId, cardPath, timestamp, tags);
+  int get hashCode => Object.hash(factId, cardPath, timestamp, tags, props);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1740,7 +1767,8 @@ class CardCacheData extends DataClass implements Insertable<CardCacheData> {
           other.factId == this.factId &&
           other.cardPath == this.cardPath &&
           other.timestamp == this.timestamp &&
-          other.tags == this.tags);
+          other.tags == this.tags &&
+          other.props == this.props);
 }
 
 class CardCacheCompanion extends UpdateCompanion<CardCacheData> {
@@ -1748,12 +1776,14 @@ class CardCacheCompanion extends UpdateCompanion<CardCacheData> {
   final Value<String> cardPath;
   final Value<int> timestamp;
   final Value<String> tags;
+  final Value<String> props;
   final Value<int> rowid;
   const CardCacheCompanion({
     this.factId = const Value.absent(),
     this.cardPath = const Value.absent(),
     this.timestamp = const Value.absent(),
     this.tags = const Value.absent(),
+    this.props = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CardCacheCompanion.insert({
@@ -1761,6 +1791,7 @@ class CardCacheCompanion extends UpdateCompanion<CardCacheData> {
     required String cardPath,
     required int timestamp,
     required String tags,
+    this.props = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : factId = Value(factId),
         cardPath = Value(cardPath),
@@ -1771,6 +1802,7 @@ class CardCacheCompanion extends UpdateCompanion<CardCacheData> {
     Expression<String>? cardPath,
     Expression<int>? timestamp,
     Expression<String>? tags,
+    Expression<String>? props,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1778,6 +1810,7 @@ class CardCacheCompanion extends UpdateCompanion<CardCacheData> {
       if (cardPath != null) 'card_path': cardPath,
       if (timestamp != null) 'timestamp': timestamp,
       if (tags != null) 'tags': tags,
+      if (props != null) 'props': props,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1787,12 +1820,14 @@ class CardCacheCompanion extends UpdateCompanion<CardCacheData> {
       Value<String>? cardPath,
       Value<int>? timestamp,
       Value<String>? tags,
+      Value<String>? props,
       Value<int>? rowid}) {
     return CardCacheCompanion(
       factId: factId ?? this.factId,
       cardPath: cardPath ?? this.cardPath,
       timestamp: timestamp ?? this.timestamp,
       tags: tags ?? this.tags,
+      props: props ?? this.props,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1812,6 +1847,9 @@ class CardCacheCompanion extends UpdateCompanion<CardCacheData> {
     if (tags.present) {
       map['tags'] = Variable<String>(tags.value);
     }
+    if (props.present) {
+      map['props'] = Variable<String>(props.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1825,6 +1863,7 @@ class CardCacheCompanion extends UpdateCompanion<CardCacheData> {
           ..write('cardPath: $cardPath, ')
           ..write('timestamp: $timestamp, ')
           ..write('tags: $tags, ')
+          ..write('props: $props, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -5220,6 +5259,7 @@ typedef $$CardCacheTableCreateCompanionBuilder = CardCacheCompanion Function({
   required String cardPath,
   required int timestamp,
   required String tags,
+  Value<String> props,
   Value<int> rowid,
 });
 typedef $$CardCacheTableUpdateCompanionBuilder = CardCacheCompanion Function({
@@ -5227,6 +5267,7 @@ typedef $$CardCacheTableUpdateCompanionBuilder = CardCacheCompanion Function({
   Value<String> cardPath,
   Value<int> timestamp,
   Value<String> tags,
+  Value<String> props,
   Value<int> rowid,
 });
 
@@ -5250,6 +5291,9 @@ class $$CardCacheTableFilterComposer
 
   ColumnFilters<String> get tags => $composableBuilder(
       column: $table.tags, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get props => $composableBuilder(
+      column: $table.props, builder: (column) => ColumnFilters(column));
 }
 
 class $$CardCacheTableOrderingComposer
@@ -5272,6 +5316,9 @@ class $$CardCacheTableOrderingComposer
 
   ColumnOrderings<String> get tags => $composableBuilder(
       column: $table.tags, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get props => $composableBuilder(
+      column: $table.props, builder: (column) => ColumnOrderings(column));
 }
 
 class $$CardCacheTableAnnotationComposer
@@ -5294,6 +5341,9 @@ class $$CardCacheTableAnnotationComposer
 
   GeneratedColumn<String> get tags =>
       $composableBuilder(column: $table.tags, builder: (column) => column);
+
+  GeneratedColumn<String> get props =>
+      $composableBuilder(column: $table.props, builder: (column) => column);
 }
 
 class $$CardCacheTableTableManager extends RootTableManager<
@@ -5326,6 +5376,7 @@ class $$CardCacheTableTableManager extends RootTableManager<
             Value<String> cardPath = const Value.absent(),
             Value<int> timestamp = const Value.absent(),
             Value<String> tags = const Value.absent(),
+            Value<String> props = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               CardCacheCompanion(
@@ -5333,6 +5384,7 @@ class $$CardCacheTableTableManager extends RootTableManager<
             cardPath: cardPath,
             timestamp: timestamp,
             tags: tags,
+            props: props,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -5340,6 +5392,7 @@ class $$CardCacheTableTableManager extends RootTableManager<
             required String cardPath,
             required int timestamp,
             required String tags,
+            Value<String> props = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               CardCacheCompanion.insert(
@@ -5347,6 +5400,7 @@ class $$CardCacheTableTableManager extends RootTableManager<
             cardPath: cardPath,
             timestamp: timestamp,
             tags: tags,
+            props: props,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

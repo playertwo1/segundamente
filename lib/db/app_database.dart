@@ -117,7 +117,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 19;
+  int get schemaVersion => 20;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -257,6 +257,20 @@ class AppDatabase extends _$AppDatabase {
           }
           if (from < 19) {
             await _addPersonaChatReplyCursors(m, from: from);
+          }
+          if (from < 20) {
+            // card_cache.props is new: add it and empty the cache so the next
+            // read rebuilds it from the card files with the properties filled.
+            try {
+              await m.addColumn(cardCache, cardCache.props);
+            } catch (e) {
+              _logger.info('card_cache.props may already exist: $e');
+            }
+            try {
+              await customStatement('DELETE FROM card_cache');
+            } catch (e) {
+              _logger.info('card_cache not emptied: $e');
+            }
           }
         },
       );

@@ -1757,5 +1757,10 @@
   "correctionsRefused": "Uma correção não cabe mais no texto e não foi salva.",
   "correctionsOpen": "Revisar correções",
   "linkPreviewTitle": "Prévia de links",
-  "linkPreviewDesc": "Desligada por padrão. Ligada, o app abre o endereço do link a partir deste aparelho para ler o título da página, então o site vê o seu endereço de rede. Endereços locais e privados são sempre recusados."
+  "linkPreviewDesc": "Desligada por padrão. Ligada, o app abre o endereço do link a partir deste aparelho para ler o título da página, então o site vê o seu endereço de rede. Endereços locais e privados são sempre recusados.",
+  "propLink": "Tem link",
+  "propTask": "É tarefa",
+  "propOpenTask": "Tarefa aberta",
+  "propCode": "Tem código",
+  "savedViewPickProps": "Ou marque o que o cartão precisa ser:"
 }

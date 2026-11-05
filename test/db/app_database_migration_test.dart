@@ -8,7 +8,7 @@ import 'package:sqlite3/sqlite3.dart' as sqlite;
 
 void main() {
   group('AppDatabase migrations', () {
-    test('upgrades schema 14 to 19 with a reply cursor baseline', () async {
+    test('upgrades schema 14 to 20 with a reply cursor baseline', () async {
       final tempDir = await Directory.systemTemp.createTemp(
         'memex_app_database_migration_',
       );
@@ -18,7 +18,7 @@ void main() {
       final db = AppDatabase.forTesting(NativeDatabase(dbFile));
       try {
         final schemaVersion = await _userVersion(db);
-        expect(schemaVersion, 19);
+        expect(schemaVersion, 20);
 
         final taskColumns = await _columnNames(db, 'tasks');
         expect(taskColumns, contains('run_id'));
@@ -54,6 +54,37 @@ void main() {
       }
     });
 
+    test('upgrades schema 19: card cache gets props and is emptied', () async {
+      final tempDir = await Directory.systemTemp.createTemp(
+        'memex_app_database_v19_migration_',
+      );
+      final dbFile = File('${tempDir.path}/memex.sqlite');
+      final raw = sqlite.sqlite3.open(dbFile.path);
+      raw.execute('''
+CREATE TABLE card_cache (
+  fact_id TEXT NOT NULL PRIMARY KEY,
+  card_path TEXT NOT NULL,
+  timestamp INTEGER NOT NULL,
+  tags TEXT NOT NULL
+)''');
+      raw.execute(
+        "INSERT INTO card_cache VALUES ('2026/11/05.md#ts_1', 'p', 1, '[]')",
+      );
+      raw.execute('PRAGMA user_version = 19');
+      raw.dispose();
+
+      final db = AppDatabase.forTesting(NativeDatabase(dbFile));
+      try {
+        expect(await _userVersion(db), 20);
+        expect(await _columnNames(db, 'card_cache'), contains('props'));
+        // Emptied, so the next read rebuilds it with the properties filled.
+        expect(await db.cardDao.isCacheEmpty(), isTrue);
+      } finally {
+        await db.close();
+        await tempDir.delete(recursive: true);
+      }
+    });
+
     test('upgrades schema 18 without consuming its pending user message',
         () async {
       final tempDir = await Directory.systemTemp.createTemp(
@@ -64,7 +95,7 @@ void main() {
 
       final db = AppDatabase.forTesting(NativeDatabase(dbFile));
       try {
-        expect(await _userVersion(db), 19);
+        expect(await _userVersion(db), 20);
         final cursor = await db.select(db.personaChatReplyCursors).getSingle();
         expect(cursor.consumedThroughMessageId, 2);
 

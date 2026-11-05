@@ -7094,6 +7094,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Off by default. When on, the app opens the link address from this device to read the page title, so the site sees your network address. Local and private addresses are always refused.'**
   String get linkPreviewDesc;
+
+  /// No description provided for @propLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Has a link'**
+  String get propLink;
+
+  /// No description provided for @propTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Is a task'**
+  String get propTask;
+
+  /// No description provided for @propOpenTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Open task'**
+  String get propOpenTask;
+
+  /// No description provided for @propCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Has code'**
+  String get propCode;
+
+  /// No description provided for @savedViewPickProps.
+  ///
+  /// In en, this message translates to:
+  /// **'Or mark what the card must be:'**
+  String get savedViewPickProps;
 }
 
 class _AppLocalizationsDelegate

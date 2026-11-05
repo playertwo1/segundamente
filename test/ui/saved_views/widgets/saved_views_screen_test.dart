@@ -115,6 +115,29 @@ void main() {
     await tester.pumpAndSettle();
     expect(router.views, isEmpty);
   });
+
+  testWidgets('a view can ask for a property, shown with its own words',
+      (tester) async {
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final router = _FakeRouter();
+    await pump(tester, router);
+    await tester.tap(find.byKey(const ValueKey('view_new')));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+        find.byKey(const ValueKey('view_name_field')), 'Pendências');
+    await tester.tap(find.byKey(const ValueKey('view_tag_obra')));
+    await tester
+        .ensureVisible(find.byKey(const ValueKey('view_prop_open_task')));
+    await tester.tap(find.byKey(const ValueKey('view_prop_open_task')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('view_save')));
+    await tester.pumpAndSettle();
+
+    expect(router.views.single.tags, ['obra', '@prop:open_task']);
+    expect(find.text('obra + Tarefa aberta'), findsOneWidget);
+  });
 }
 
 class _FakeRouter implements MemexRouter {

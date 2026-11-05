@@ -4030,4 +4030,19 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get linkPreviewDesc =>
       'Desligada por padrão. Ligada, o app abre o endereço do link a partir deste aparelho para ler o título da página, então o site vê o seu endereço de rede. Endereços locais e privados são sempre recusados.';
+
+  @override
+  String get propLink => 'Tem link';
+
+  @override
+  String get propTask => 'É tarefa';
+
+  @override
+  String get propOpenTask => 'Tarefa aberta';
+
+  @override
+  String get propCode => 'Tem código';
+
+  @override
+  String get savedViewPickProps => 'Ou marque o que o cartão precisa ser:';
 }

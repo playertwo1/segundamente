@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memex/domain/models/card_props.dart';
 import 'package:memex/domain/models/saved_view.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/core/widgets/agent_logo_loading.dart';
@@ -113,7 +114,7 @@ class _SavedViewsScreenState extends State<SavedViewsScreen> {
             child: Semantics(
               button: true,
               excludeSemantics: true,
-              label: '${view.name}, ${view.tags.join(', ')}',
+              label: '${view.name}, ${view.tags.map(_tagLabel).join(', ')}',
               onTap: () => Navigator.of(context).pop(view.tags),
               child: InkWell(
                 key: ValueKey('view_row_${view.id}'),
@@ -135,7 +136,7 @@ class _SavedViewsScreenState extends State<SavedViewsScreen> {
                           ),
                         ),
                         Text(
-                          view.tags.join(' + '),
+                          view.tags.map(_tagLabel).join(' + '),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -172,6 +173,18 @@ class _SavedViewsScreenState extends State<SavedViewsScreen> {
       ),
     );
   }
+}
+
+/// A tag as the user sees it: derived properties get their own words.
+String _tagLabel(String tag) {
+  final l10n = UserStorage.l10n;
+  return switch (propOfTag(tag)) {
+    propLink => l10n.propLink,
+    propTask => l10n.propTask,
+    propOpenTask => l10n.propOpenTask,
+    propCode => l10n.propCode,
+    _ => tag,
+  };
 }
 
 const _rowBorder = BoxDecoration(
@@ -266,6 +279,30 @@ Future<({String name, List<String> tags})?> _askNewView(
                         onChanged: (v) => setState(
                           () =>
                               v == true ? marked.add(tag) : marked.remove(tag),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12, bottom: 4),
+                      child: Text(
+                        l10n.savedViewPickProps,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                    for (final prop in cardPropNames)
+                      CheckboxListTile(
+                        key: ValueKey('view_prop_$prop'),
+                        contentPadding: EdgeInsets.zero,
+                        value: marked.contains(propTag(prop)),
+                        activeColor: AppColors.primary,
+                        checkColor: Colors.black,
+                        title: Text(_tagLabel(propTag(prop))),
+                        onChanged: (v) => setState(
+                          () => v == true
+                              ? marked.add(propTag(prop))
+                              : marked.remove(propTag(prop)),
                         ),
                       ),
                   ],

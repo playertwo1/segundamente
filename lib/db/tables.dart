@@ -66,6 +66,8 @@ class CardCache extends Table {
   TextColumn get cardPath => text()(); // Relative path or absolute path
   IntColumn get timestamp => integer()(); // Seconds since epoch
   TextColumn get tags => text()(); // JSON list of string tags
+  // Derived properties as `|link|task|` (see card_props.dart); '' for none.
+  TextColumn get props => text().withDefault(const Constant(''))();
 
   @override
   Set<Column> get primaryKey => {factId};

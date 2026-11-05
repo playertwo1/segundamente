@@ -3995,4 +3995,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get linkPreviewDesc =>
       'Off by default. When on, the app opens the link address from this device to read the page title, so the site sees your network address. Local and private addresses are always refused.';
+
+  @override
+  String get propLink => 'Has a link';
+
+  @override
+  String get propTask => 'Is a task';
+
+  @override
+  String get propOpenTask => 'Open task';
+
+  @override
+  String get propCode => 'Has code';
+
+  @override
+  String get savedViewPickProps => 'Or mark what the card must be:';
 }
