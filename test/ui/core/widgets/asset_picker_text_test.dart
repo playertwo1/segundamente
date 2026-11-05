@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/ui/core/widgets/asset_picker_text.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:memex/ui/core/widgets/reliable_asset_picker.dart';
 
 void main() {
@@ -23,5 +24,14 @@ void main() {
       locale: const Locale('pt'),
     );
     expect(config.textDelegate?.confirm, 'Confirmar');
+  });
+
+  test('the system "Recent" album is named in Portuguese only for pt', () {
+    final all = AssetPathEntity(id: 'a', name: 'Recent', isAll: true);
+    final other = AssetPathEntity(id: 'b', name: 'WhatsApp');
+    final pt = assetPathNameFor(const Locale('pt'))!;
+    expect(pt(all), 'Recentes');
+    expect(pt(other), 'WhatsApp');
+    expect(assetPathNameFor(const Locale('en')), isNull);
   });
 }

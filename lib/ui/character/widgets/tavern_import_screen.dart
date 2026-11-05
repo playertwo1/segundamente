@@ -45,6 +45,8 @@ class _TavernImportScreenState extends State<TavernImportScreen> {
         maxAssets: 1,
         requestType: RequestType.image,
         textDelegate: assetPickerTextFor(Localizations.maybeLocaleOf(context)),
+        pathNameBuilder:
+            assetPathNameFor(Localizations.maybeLocaleOf(context)),
       ),
     );
     if (result == null || result.isEmpty) return;

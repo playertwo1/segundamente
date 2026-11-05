@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 /// Portuguese strings for the photo picker; the package has none and falls
@@ -111,4 +112,10 @@ AssetPickerTextDelegate assetPickerTextFor(Locale? locale) {
     locale,
     fallback: const EnglishAssetPickerTextDelegate(),
   );
+}
+
+/// Album name shown in the picker: the system's "Recent" album in Portuguese.
+String Function(AssetPathEntity)? assetPathNameFor(Locale? locale) {
+  if (locale?.languageCode != 'pt') return null;
+  return (path) => path.isAll ? 'Recentes' : path.name;
 }

@@ -42,6 +42,7 @@ AssetPickerConfig buildPlatformDefaultImagePickerConfig({
   return AssetPickerConfig(
     maxAssets: maxAssets,
     textDelegate: assetPickerTextFor(locale),
+    pathNameBuilder: assetPathNameFor(locale),
     requestType: RequestType.image,
     filterOptions: _imagePickerFilterOptions(),
   );
@@ -187,6 +188,7 @@ class ReliableAssetPickerBuilderDelegate
         super(
           locale: locale,
           textDelegate: assetPickerTextFor(locale),
+          pathNameBuilder: assetPathNameFor(locale),
           gridThumbnailSize: const ThumbnailSize.square(200),
         ) {
     provider.addListener(_preheatLoadedAssets);
