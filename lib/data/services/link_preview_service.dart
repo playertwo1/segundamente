@@ -120,9 +120,11 @@ Future<RawResponse> pinnedGet(Uri uri, InternetAddress pinned) async {
   final client = HttpClient()
     ..connectionTimeout = linkPreviewTimeout
     ..userAgent = 'Mozilla/5.0 (compatible; SegundaMente link preview)'
-    ..autoUncompress = true
-    ..connectionFactory = (target, proxyHost, proxyPort) =>
+    ..autoUncompress = true;
+  if (uri.scheme != 'https') {
+    client.connectionFactory = (target, proxyHost, proxyPort) =>
         Socket.startConnect(pinned, target.port);
+  }
   // A server that drips bytes would hold the socket past the caller's
   // timeout; closing the client forces the pending read to fail.
   final watchdog = Timer(linkPreviewTimeout, () => client.close(force: true));
