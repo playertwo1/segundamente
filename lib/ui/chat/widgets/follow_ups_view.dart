@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memex/domain/models/explicit_due.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/utils/user_storage.dart';
 
@@ -8,11 +9,15 @@ class FollowUpsView extends StatelessWidget {
     required this.hits,
     required this.textChanges,
     required this.onSearch,
+    this.onAddToCalendar,
   });
 
   final List<ReportHit> hits;
   final Map<String, ReportRevision> textChanges;
   final ValueChanged<String> onSearch;
+
+  /// Offered only for items whose date was written in full.
+  final ValueChanged<ReportHit>? onAddToCalendar;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +52,24 @@ class FollowUpsView extends StatelessWidget {
                         ),
                         title: Text(hit.item.text),
                         subtitle: _change(hit),
+                        trailing: _calendarAction(hit, l10n.addToCalendar),
                       ),
                   ],
                 ),
         ),
       ],
+    );
+  }
+
+  Widget? _calendarAction(ReportHit hit, String label) {
+    if (onAddToCalendar == null || parseExplicitDue(hit.item.due) == null) {
+      return null;
+    }
+    return IconButton(
+      key: ValueKey('follow_up_calendar_${hit.sessionId}_${hit.item.id}'),
+      tooltip: label,
+      icon: const Icon(Icons.event_outlined),
+      onPressed: () => onAddToCalendar!(hit),
     );
   }
 

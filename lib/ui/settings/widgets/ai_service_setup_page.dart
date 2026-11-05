@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:memex/config/app_config.dart';
 import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/domain/models/llm_config.dart';
+import 'package:memex/domain/models/data_route.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/settings/view_models/ai_service_setup_viewmodel.dart';
 import 'package:memex/ui/settings/widgets/memex_auth_section.dart';
@@ -132,6 +133,8 @@ class _AiServiceSetupPageState extends State<AiServiceSetupPage> {
             const SizedBox(height: 18),
             _buildStatusCard(),
             const SizedBox(height: 18),
+            _buildDataRoute(),
+            const SizedBox(height: 18),
             _AiServiceSectionHeader(
               title: l10n.aiSetupChooseConnectionTitle,
               description: l10n.aiSetupChooseConnectionDescription,
@@ -186,6 +189,88 @@ class _AiServiceSetupPageState extends State<AiServiceSetupPage> {
                 color: AppColors.textSecondary,
               ),
             ),
+    );
+  }
+
+  /// Who transcribes, who summarizes and chats, and where each goes (F1-09).
+  Widget _buildDataRoute() {
+    final l10n = UserStorage.l10n;
+    final routes = describeDataRoutes(_viewModel.textConfig);
+    return Column(
+      key: const ValueKey('ai-data-route'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.dataRouteTitle,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        if (routes == null)
+          Text(
+            l10n.dataRouteNone,
+            style: const TextStyle(
+              fontSize: 13,
+              height: 1.45,
+              color: AppColors.textSecondary,
+            ),
+          )
+        else ...[
+          _dataRouteRow(
+            l10n.dataRouteTranscription,
+            routes.transcription,
+            l10n.dataRouteAudioSentTo(routes.transcription.host),
+          ),
+          _dataRouteRow(
+            l10n.dataRouteChat,
+            routes.chat,
+            l10n.dataRouteTextSentTo(routes.chat.host),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _dataRouteRow(String label, DataRoute route, String sentTo) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 13,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            route.model.isEmpty
+                ? route.provider
+                : UserStorage.l10n.dataRouteModel(route.provider, route.model),
+            style: const TextStyle(
+              fontSize: 16,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            sentTo,
+            style: const TextStyle(
+              fontSize: 13,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

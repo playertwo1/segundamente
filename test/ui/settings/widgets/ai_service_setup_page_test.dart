@@ -78,7 +78,30 @@ void main() {
     await _pumpPage(tester, const AiServiceSetupPage());
 
     expect(find.text(activeConfig.key), findsOneWidget);
-    expect(find.textContaining(activeConfig.modelId), findsNothing);
+    // The status card still shows only the config name; the model is named
+    // in the data-route section below it (F1-09).
+    final statusCard = find
+        .ancestor(
+          of: find.text(UserStorage.l10n.aiSetupCurrentStatusTitle),
+          matching: find.byType(Container),
+        )
+        .first;
+    expect(
+      find.descendant(
+        of: statusCard,
+        matching: find.textContaining(activeConfig.modelId),
+      ),
+      findsNothing,
+    );
+    // Audio travels inside the request to the same provider, so the model
+    // is named for both transcription and chat.
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('ai-data-route')),
+        matching: find.textContaining(activeConfig.modelId),
+      ),
+      findsNWidgets(2),
+    );
     expect(
       find.text(UserStorage.l10n.aiSetupStatusCustomTitle),
       findsNothing,
@@ -87,6 +110,47 @@ void main() {
       find.text(UserStorage.l10n.aiSetupStatusCustomDescription),
       findsNothing,
     );
+  });
+
+  testWidgets('data route says nothing is sent when no model is set up', (
+    tester,
+  ) async {
+    await _pumpPage(tester, const AiServiceSetupPage());
+
+    expect(find.text(UserStorage.l10n.dataRouteTitle), findsOneWidget);
+    expect(find.text(UserStorage.l10n.dataRouteNone), findsOneWidget);
+    expect(find.text(UserStorage.l10n.dataRouteTranscription), findsNothing);
+  });
+
+  testWidgets('data route names who transcribes and who chats with ChatGPT', (
+    tester,
+  ) async {
+    const oauth = LLMConfig(
+      key: 'chatgpt',
+      type: LLMConfig.typeOpenAiOauth,
+      modelId: 'gpt-6-luna',
+      apiKey: '',
+      baseUrl: '',
+    );
+    await UserStorage.saveLLMConfigs([oauth]);
+    await UserStorage.setDefaultLLMConfigKey(oauth.key);
+
+    await _pumpPage(tester, const AiServiceSetupPage());
+
+    final l10n = UserStorage.l10n;
+    expect(find.text(l10n.dataRouteNone), findsNothing);
+    expect(find.text(l10n.dataRouteTranscription), findsOneWidget);
+    expect(find.text(l10n.dataRouteChat), findsOneWidget);
+    expect(
+      find.text(l10n.dataRouteModel('ChatGPT (OAuth)', 'chatgpt-transcribe')),
+      findsOneWidget,
+    );
+    expect(
+      find.text(l10n.dataRouteModel('ChatGPT (OAuth)', 'gpt-6-luna')),
+      findsOneWidget,
+    );
+    expect(find.text(l10n.dataRouteAudioSentTo('chatgpt.com')), findsOneWidget);
+    expect(find.text(l10n.dataRouteTextSentTo('chatgpt.com')), findsOneWidget);
   });
 
   testWidgets('current setup names the Memex official connection', (
@@ -113,6 +177,18 @@ void main() {
     expect(
       find.text(UserStorage.l10n.aiSetupStatusMemexDescription),
       findsNothing,
+    );
+    // The data route names the provider and the address, never the model.
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('ai-data-route')),
+        matching: find.text('Memex AI'),
+      ),
+      findsNWidgets(2),
+    );
+    expect(
+      find.text(UserStorage.l10n.dataRouteAudioSentTo('memex.example')),
+      findsOneWidget,
     );
   });
 

@@ -1647,6 +1647,48 @@ abstract class AppLocalizations {
   /// **'Current setup'**
   String get aiSetupCurrentStatusTitle;
 
+  /// No description provided for @dataRouteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where your data goes'**
+  String get dataRouteTitle;
+
+  /// No description provided for @dataRouteTranscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio transcription'**
+  String get dataRouteTranscription;
+
+  /// No description provided for @dataRouteChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary and chat'**
+  String get dataRouteChat;
+
+  /// No description provided for @dataRouteAudioSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio is sent to {host}.'**
+  String dataRouteAudioSentTo(String host);
+
+  /// No description provided for @dataRouteTextSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Text is sent to {host}.'**
+  String dataRouteTextSentTo(String host);
+
+  /// No description provided for @dataRouteModel.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} · {model}'**
+  String dataRouteModel(String provider, String model);
+
+  /// No description provided for @dataRouteNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No model is set up, so nothing is sent.'**
+  String get dataRouteNone;
+
   /// No description provided for @aiSetupStatusNotConfiguredTitle.
   ///
   /// In en, this message translates to:
@@ -6206,6 +6248,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No approved follow-ups'**
   String get followUpsEmpty;
+
+  /// No description provided for @addToCalendarFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'No calendar app could open the new event.'**
+  String get addToCalendarFailed;
 
   /// No description provided for @followUpsSearchHint.
   ///

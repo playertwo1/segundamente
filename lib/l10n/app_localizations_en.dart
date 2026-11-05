@@ -884,6 +884,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiSetupCurrentStatusTitle => 'Current setup';
 
   @override
+  String get dataRouteTitle => 'Where your data goes';
+
+  @override
+  String get dataRouteTranscription => 'Audio transcription';
+
+  @override
+  String get dataRouteChat => 'Summary and chat';
+
+  @override
+  String dataRouteAudioSentTo(String host) {
+    return 'Audio is sent to $host.';
+  }
+
+  @override
+  String dataRouteTextSentTo(String host) {
+    return 'Text is sent to $host.';
+  }
+
+  @override
+  String dataRouteModel(String provider, String model) {
+    return '$provider · $model';
+  }
+
+  @override
+  String get dataRouteNone => 'No model is set up, so nothing is sent.';
+
+  @override
   String get aiSetupStatusNotConfiguredTitle => 'AI service is not configured';
 
   @override
@@ -3460,6 +3487,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get followUpsEmpty => 'No approved follow-ups';
+
+  @override
+  String get addToCalendarFailed => 'No calendar app could open the new event.';
 
   @override
   String get followUpsSearchHint => 'Search reports';

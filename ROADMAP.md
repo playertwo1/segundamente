@@ -85,7 +85,7 @@
 | F1-06 | Trocar provedor/modelo sem perder o histórico | P0 | F1-01 | DONE | Conteúdo da conversa permanece após troca |
 | F1-07 | Manter os IDs gpt-6-luna, gpt-6.1-sol e gpt-6.1-terra selecionáveis no OAuth OpenAI | P1 | F1-03 | IN_PROGRESS | Chamada real de cada ID; erro claro para ID indisponível e opção manual por F1-02 |
 | F1-08 | OAuth Claude e modelos Claude previstos em D-015 | P1 | F1-04 | DONE | Login PKCE e respostas reais registradas em STATE.md |
-| F1-09 | Mostrar, nas configurações, qual provedor/modelo transcreve e qual resume/conversa, além dos dados enviados | P1 | F1-03, F2-09 | READY | Widget test e validação S25 para OAuth, chave de API e modelo local; endpoint de transcrição claramente identificado |
+| F1-09 | Mostrar, nas configurações, qual provedor/modelo transcreve e qual resume/conversa, além dos dados enviados | P1 | F1-03, F2-09 | IN_PROGRESS | Widget test e validação S25 para OAuth, chave de API e modelo local; endpoint de transcrição claramente identificado |
 | F1-10 | Failover configurável entre provedores, com ordem visível e reordenável | P1 | F1-03, F1-04 | DONE | Testes do FallbackLLMClient e prioridade drag-and-drop registrados |
 
 **Portão F1:** cumprido segundo STATE.md. O critério 4 do MVP aceita seleção por catálogo atualizado ou por ID; F1-01 e respostas de múltiplos provedores provam a opção por catálogo. F1-02, F1-05 e F1-07 permanecem tarefas adicionais e não invalidam esse portão.
@@ -197,7 +197,7 @@
 | F6-08 | Mostrar intensidade de atividade por dia no calendário mensal | P2 | D-014 | IN_PROGRESS | Cinco níveis: 0, 1, 2, 3–4, 5+; contraste e leitura de hoje/seleção permanecem corretos |
 | F6-09 | Recuperar sessões relacionadas a perguntas com sementes, tópico e limite de relevância | P1 | F6-01, F6-04 | BACKLOG | Sementes de texto permanecem; irmãs por tópico respeitam relevância/orçamento; pergunta fora de tema não recebe sessão alheia |
 | F6-10 | Medir embeddings locais multilíngues para busca em português antes de decidir implementação | P2 | F6-09 | BACKLOG | Comparação com busca textual em pt-BR, tamanho do modelo, tempo e memória no S25; sem benefício medido, não implementar |
-| F6-11 | Oferecer “Adicionar à agenda” em encaminhamento aprovado com data explícita | P2 | F6-02 | READY | ACTION_INSERT abre calendário com título e descrição; não pede permissão de leitura nem grava evento sem confirmação |
+| F6-11 | Oferecer “Adicionar à agenda” em encaminhamento aprovado com data explícita | P2 | F6-02 | IN_PROGRESS | ACTION_INSERT abre calendário com título e descrição; não pede permissão de leitura nem grava evento sem confirmação |
 
 **Definições de F6-05 a F6-08:**
 

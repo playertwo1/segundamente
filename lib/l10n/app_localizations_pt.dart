@@ -894,6 +894,34 @@ class AppLocalizationsPt extends AppLocalizations {
   String get aiSetupCurrentStatusTitle => 'Configuração atual';
 
   @override
+  String get dataRouteTitle => 'Para onde vão seus dados';
+
+  @override
+  String get dataRouteTranscription => 'Transcrição de áudio';
+
+  @override
+  String get dataRouteChat => 'Resumo e conversa';
+
+  @override
+  String dataRouteAudioSentTo(String host) {
+    return 'O áudio é enviado para $host.';
+  }
+
+  @override
+  String dataRouteTextSentTo(String host) {
+    return 'O texto é enviado para $host.';
+  }
+
+  @override
+  String dataRouteModel(String provider, String model) {
+    return '$provider · $model';
+  }
+
+  @override
+  String get dataRouteNone =>
+      'Nenhum modelo configurado, então nada é enviado.';
+
+  @override
   String get aiSetupStatusNotConfiguredTitle => 'Serviço AI não configurado';
 
   @override
@@ -1105,7 +1133,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get discoveredReminder => 'Lembrete encontrado';
 
   @override
-  String get addToCalendar => 'Adicionar ao calendário';
+  String get addToCalendar => 'Adicionar à agenda';
 
   @override
   String get addToReminders => 'Adicionar aos lembretes';
@@ -3491,6 +3519,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get followUpsEmpty => 'Nenhum encaminhamento aprovado';
+
+  @override
+  String get addToCalendarFailed =>
+      'Nenhum app de agenda conseguiu abrir o novo evento.';
 
   @override
   String get followUpsSearchHint => 'Buscar nos relatórios';

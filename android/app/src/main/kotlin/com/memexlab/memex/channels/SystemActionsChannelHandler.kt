@@ -1,7 +1,9 @@
 package com.memexlab.memex.channels
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.ContentValues
+import android.content.Intent
 import android.provider.CalendarContract
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -9,7 +11,7 @@ import java.util.TimeZone
 
 /**
  * Handles `com.memexlab.memex/system_actions` MethodChannel.
- * Supports: addCalendarEvent, addReminder.
+ * Supports: addCalendarEvent, addReminder, openCalendarInsert.
  *
  * Android has no common standalone reminders store. Reminders are represented
  * as short calendar events with an alarm at the requested time.
@@ -26,6 +28,7 @@ class SystemActionsChannelHandler(private val activity: Activity) {
                     when (call.method) {
                         "addCalendarEvent" -> handler.addCalendarEvent(call.arguments, result)
                         "addReminder" -> handler.addReminder(call.arguments, result)
+                        "openCalendarInsert" -> handler.openCalendarInsert(call.arguments, result)
                         else -> result.notImplemented()
                     }
                 }
@@ -78,6 +81,40 @@ class SystemActionsChannelHandler(private val activity: Activity) {
             result.error("PERMISSION_DENIED", "Calendar permission denied", null)
         } catch (e: Exception) {
             result.error("SAVE_ERROR", e.message, null)
+        }
+    }
+
+    /**
+     * Opens the calendar app's own "new event" screen with the fields filled in.
+     * Needs no calendar permission and writes nothing until the user saves it
+     * there.
+     */
+    private fun openCalendarInsert(arguments: Any?, result: MethodChannel.Result) {
+        val args = arguments as? Map<*, *>
+        val title = args?.get("title") as? String
+        val startMs = (args?.get("startTime") as? Number)?.toLong()
+        val endMs = (args?.get("endTime") as? Number)?.toLong()
+
+        if (title == null || startMs == null || endMs == null) {
+            result.error("INVALID_ARGUMENTS", "Invalid arguments for openCalendarInsert", null)
+            return
+        }
+
+        val intent = Intent(Intent.ACTION_INSERT).apply {
+            data = CalendarContract.Events.CONTENT_URI
+            putExtra(CalendarContract.Events.TITLE, title)
+            (args["description"] as? String)?.let {
+                putExtra(CalendarContract.Events.DESCRIPTION, it)
+            }
+            putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMs)
+            putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMs)
+            putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, args["allDay"] == true)
+        }
+        try {
+            activity.startActivity(intent)
+            result.success(true)
+        } catch (e: ActivityNotFoundException) {
+            result.error("NO_CALENDAR_APP", "No calendar app can create events", null)
         }
     }
 

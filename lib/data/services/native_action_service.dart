@@ -34,6 +34,30 @@ class NativeActionService {
     }
   }
 
+  /// Opens the calendar app's new-event screen, prefilled. Nothing is saved
+  /// until the user confirms there, and no calendar permission is needed.
+  static Future<bool> openCalendarInsert({
+    required String title,
+    required DateTime start,
+    required DateTime end,
+    String? description,
+    bool allDay = false,
+  }) async {
+    try {
+      final result = await _channel.invokeMethod('openCalendarInsert', {
+        'title': title,
+        'startTime': start.millisecondsSinceEpoch,
+        'endTime': end.millisecondsSinceEpoch,
+        'description': description,
+        'allDay': allDay,
+      });
+      return result == true;
+    } catch (error, stackTrace) {
+      _logger.severe('Failed to open calendar insert', error, stackTrace);
+      return false;
+    }
+  }
+
   static Future<bool> addReminder({
     required String title,
     required DateTime dueDate,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/chat/view_models/follow_ups_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/follow_ups_view.dart';
+import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/utils/user_storage.dart';
 
 class FollowUpsScreen extends StatefulWidget {
@@ -42,6 +43,15 @@ class _FollowUpsScreenState extends State<FollowUpsScreen> {
             hits: viewModel.hits,
             textChanges: viewModel.textChanges,
             onSearch: viewModel.search,
+            onAddToCalendar: (hit) async {
+              final opened = await viewModel.addToCalendar(hit);
+              if (!opened && context.mounted) {
+                ToastHelper.showError(
+                  context,
+                  UserStorage.l10n.addToCalendarFailed,
+                );
+              }
+            },
           );
         },
       ),
