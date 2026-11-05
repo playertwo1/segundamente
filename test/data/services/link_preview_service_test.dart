@@ -195,4 +195,27 @@ void main() {
       expect(big.body.length, lessThanOrEqualTo(linkPreviewMaxBytes));
     });
   });
+
+  test('pinnedGet gives up on a server that stalls after the headers',
+      () async {
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    addTearDown(() => server.close(force: true));
+    server.listen((request) async {
+      request.response.headers.contentType = ContentType.html;
+      request.response.write('<title>x</title>');
+      await request.response.flush(); // then never closes
+    });
+    final started = DateTime.now();
+    await expectLater(
+      pinnedGet(
+        Uri.parse('http://localhost:${server.port}/'),
+        InternetAddress.loopbackIPv4,
+      ),
+      throwsA(anything),
+    );
+    expect(
+      DateTime.now().difference(started),
+      lessThan(linkPreviewTimeout + const Duration(seconds: 3)),
+    );
+  }, timeout: const Timeout(Duration(seconds: 20)));
 }

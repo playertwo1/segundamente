@@ -123,6 +123,9 @@ Future<RawResponse> pinnedGet(Uri uri, InternetAddress pinned) async {
     ..autoUncompress = true
     ..connectionFactory = (target, proxyHost, proxyPort) =>
         Socket.startConnect(pinned, target.port);
+  // A server that drips bytes would hold the socket past the caller's
+  // timeout; closing the client forces the pending read to fail.
+  final watchdog = Timer(linkPreviewTimeout, () => client.close(force: true));
   try {
     final request = await client.getUrl(uri);
     request.followRedirects = false;
@@ -142,6 +145,7 @@ Future<RawResponse> pinnedGet(Uri uri, InternetAddress pinned) async {
       location: response.headers.value(HttpHeaders.locationHeader),
     );
   } finally {
+    watchdog.cancel();
     client.close(force: true);
   }
 }
