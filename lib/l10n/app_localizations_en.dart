@@ -3493,6 +3493,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navKnowledge => 'Knowledge';
 
   @override
+  String get tagTreeTitle => 'Tags';
+
+  @override
+  String get tagTreeEmpty =>
+      'No tags yet. Tag a record with area/project to see the tree.';
+
+  @override
   String get navChat => 'Chat';
 
   @override

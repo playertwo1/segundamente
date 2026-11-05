@@ -1818,6 +1818,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           ),
           onOpenCalendar: () =>
               context.push(AppRoutes.calendar, extra: DateTime.now()),
+          onOpenTags: _openTagTree,
           onOpenMemory: () => context.push(AppRoutes.memory),
           onOpenActivity: () => context.push(AppRoutes.activity),
           onOpenProfile: () => showModalBottomSheet(
@@ -1951,6 +1952,17 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       return;
     }
     _scaffoldKey.currentState?.openDrawer();
+  }
+
+  /// Opens the tag tree and, when a tag is chosen, shows it on the timeline.
+  Future<void> _openTagTree() async {
+    final tag = await context.push<String>(AppRoutes.tags);
+    if (tag == null || !mounted) return;
+    setState(() => _currentTab = 0);
+    final timeline = context.read<TimelineViewModel>();
+    timeline.setViewMode(TimelineViewMode.timeline);
+    timeline.setActiveFilter(tag);
+    timeline.loadCards(refresh: true);
   }
 
   void _handleTimelineTabTap() {

@@ -3524,6 +3524,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navKnowledge => 'Conhecimento';
 
   @override
+  String get tagTreeTitle => 'Tags';
+
+  @override
+  String get tagTreeEmpty =>
+      'Nenhuma tag ainda. Marque um registro com area/projeto para ver a árvore.';
+
+  @override
   String get navChat => 'Conversar';
 
   @override

@@ -1610,6 +1610,8 @@
   "navMenu": "Menu",
   "navTimeline": "Timeline",
   "navKnowledge": "Knowledge",
+  "tagTreeTitle": "Tags",
+  "tagTreeEmpty": "No tags yet. Tag a record with area/project to see the tree.",
   "navChat": "Chat",
   "navProfile": "Profile and settings",
   "chatWithSegundaMente": "Chat with Segunda Mente",

@@ -1603,6 +1603,8 @@
   "navMenu": "Menu",
   "navTimeline": "Linha do tempo",
   "navKnowledge": "Conhecimento",
+  "tagTreeTitle": "Tags",
+  "tagTreeEmpty": "Nenhuma tag ainda. Marque um registro com area/projeto para ver a árvore.",
   "navChat": "Conversar",
   "navProfile": "Perfil e configurações",
   "chatWithSegundaMente": "Conversar com a Segunda Mente",

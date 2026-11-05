@@ -6267,6 +6267,18 @@ abstract class AppLocalizations {
   /// **'Knowledge'**
   String get navKnowledge;
 
+  /// No description provided for @tagTreeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get tagTreeTitle;
+
+  /// No description provided for @tagTreeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags yet. Tag a record with area/project to see the tree.'**
+  String get tagTreeEmpty;
+
   /// No description provided for @navChat.
   ///
   /// In en, this message translates to:

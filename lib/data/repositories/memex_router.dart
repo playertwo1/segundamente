@@ -233,7 +233,7 @@ class MemexRouter {
   }
 
   String?
-  _targetUserIdForInit; // Track the user ID we are currently initializing for
+      _targetUserIdForInit; // Track the user ID we are currently initializing for
 
   void _registerEventSubscriptions() {
     final eventBus = GlobalEventBus.instance;
@@ -541,6 +541,20 @@ class MemexRouter {
     if (userId == null) return;
 
     await fileSystemService.recordProcessedHashes(userId, hashes);
+  }
+
+  /// Tag list of every card, for the tag tree and its counts.
+  Future<Result<List<List<String>>>> fetchCardTagLists() async {
+    return runResult(() async {
+      await _ensureInitialized();
+      final userId = await UserStorage.getUserId();
+      if (userId == null) return const <List<String>>[];
+      final db = AppDatabase.instance;
+      if (await db.cardDao.isCacheEmpty()) {
+        await FileSystemService.instance.rebuildCardCache(userId);
+      }
+      return db.cardDao.getAllTagLists();
+    });
   }
 
   Future<Result<List<TagModel>>> fetchTags() async {
@@ -1001,8 +1015,8 @@ class MemexRouter {
             id,
           );
           if (cardData != null) {
-            final currentSortOrder = (cardData['sort_order'] as num? ?? 0)
-                .toInt();
+            final currentSortOrder =
+                (cardData['sort_order'] as num? ?? 0).toInt();
             if (currentSortOrder != i) {
               cardData['sort_order'] = i;
               await fileSystemService.writeKnowledgeInsightCard(
