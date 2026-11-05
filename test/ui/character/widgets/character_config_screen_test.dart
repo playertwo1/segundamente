@@ -56,6 +56,30 @@ void main() {
     return router;
   }
 
+  testWidgets('loads a replacement ViewModel, as after the route rebuilds',
+      (tester) async {
+    final router = _FakeRouter([curador, tradutor]);
+    Widget app(CharacterViewModel vm) => MaterialApp(
+          locale: const Locale('pt'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            ...GlobalMaterialLocalizations.delegates,
+          ],
+          home: CharacterConfigScreen(viewModel: vm),
+        );
+
+    await tester.pumpWidget(app(CharacterViewModel(router: router)));
+    await tester.pump();
+    expect(find.text('Curador'), findsOneWidget);
+
+    await tester.pumpWidget(app(CharacterViewModel(router: router)));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Curador'), findsOneWidget);
+    expect(find.text(UserStorage.l10n.noCharacters), findsNothing);
+  });
+
   testWidgets('lists characters as open rows with a labelled back arrow',
       (tester) async {
     final handle = tester.ensureSemantics();

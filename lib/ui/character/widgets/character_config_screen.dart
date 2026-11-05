@@ -39,6 +39,18 @@ class _CharacterConfigScreenState extends State<CharacterConfigScreen> {
   @override
   void initState() {
     super.initState();
+    _scheduleLoad();
+  }
+
+  // The route builder creates a fresh ViewModel whenever it rebuilds (e.g.
+  // after returning from the editor); it starts empty, so load it too.
+  @override
+  void didUpdateWidget(CharacterConfigScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.viewModel != widget.viewModel) _scheduleLoad();
+  }
+
+  void _scheduleLoad() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
       final succeeded = await widget.viewModel.loadCharacters();
