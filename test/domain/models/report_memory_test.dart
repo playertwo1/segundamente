@@ -54,11 +54,35 @@ void main() {
   });
 
   test('text search ignores accents and case in both directions', () {
-    final reports = [report('a', [item(id: '1', text: 'Reunião com o João')])];
+    final reports = [
+      report('a', [item(id: '1', text: 'Reunião com o João')])
+    ];
     expect(searchReports(reports, 'reuniao'), hasLength(1));
     expect(searchReports(reports, 'JOAO'), hasLength(1));
     expect(searchReports(reports, 'reunião'), hasLength(1));
     expect(searchReports(reports, 'futebol'), isEmpty);
+  });
+
+  test('a match on the session title returns its items, discarded ones aside',
+      () {
+    final obra = SessionReport(
+      schemaVersion: sessionReportSchemaVersion,
+      sessionId: 'obra',
+      kind: ReportKind.custom,
+      title: 'Obra da Casa Nova',
+      customTitle: 'Obra da Casa Nova',
+      sections: sectionsFor(ReportKind.custom),
+      items: [
+        item(id: '1', text: 'comprar cimento'),
+        item(id: '2', text: 'item fora', status: ReportItemStatus.discarded),
+      ],
+    );
+    final other = report('b', [item(id: '3', text: 'dentista')]);
+
+    final hits = searchReports([obra, other], 'casa nova');
+
+    expect(hits.map((h) => h.item.id), ['1']);
+    expect(searchReports([obra, other], 'CASA'), hasLength(1));
   });
 
   test('only an approved follow-up enters the panel', () {
@@ -130,7 +154,8 @@ void main() {
       ),
       isEmpty,
     );
-    expect(latestTextChange([...rows, ...approved], '1')!.after, 'fechar depois');
+    expect(
+        latestTextChange([...rows, ...approved], '1')!.after, 'fechar depois');
 
     final stored = revisionsFromJson(revisionsToJson(withReason));
     expect(stored.single.before, 'fechar o escopo');
