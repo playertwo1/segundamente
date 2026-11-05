@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/file_system_service.dart';
 import 'package:memex/data/services/glossary_service.dart';
+import 'package:memex/data/services/transcript_correction_service.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/transcript_import.dart';
@@ -327,7 +328,11 @@ class SessionReportService {
   Future<List<ReportSegment>> _segments(String userId, String sessionId) async {
     checkSessionId(sessionId);
     final imported = await importedSegments(userId, sessionId);
-    if (imported.isNotEmpty) return imported;
+    if (imported.isNotEmpty) {
+      // Reports read the corrected text; the original file is never changed.
+      return TranscriptCorrectionService(reports: this)
+          .correctedSegments(userId, sessionId);
+    }
     final text = await _chatText(userId, sessionId);
     if (text.trim().isEmpty) throw StateError('nothing to report');
     return [

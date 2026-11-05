@@ -251,6 +251,27 @@ void main() {
     );
   });
 
+  test('a report made after a correction reads the corrected text', () async {
+    final original = await storeTranscript();
+    final bytes = await original.readAsBytes();
+    await GlossaryService()
+        .update(userId, (t) => addGlossaryTerm(t, 'Escopos'));
+    final corrections = TranscriptCorrectionService();
+    final proposed = await corrections.suggest(userId, sessionId);
+    expect(proposed.single.from, 'escopo');
+    await corrections.save(userId, sessionId, proposed);
+
+    final report = await service.draft(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+    );
+    expect(
+        report.items.any((i) => i.source.excerpt.contains('Escopos')), isTrue);
+    expect(await original.readAsBytes(), bytes);
+  });
+
   test('saved views persist between loads', () async {
     expect(await SavedViewService().load(userId), isEmpty);
     await SavedViewService().update(

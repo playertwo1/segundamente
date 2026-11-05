@@ -3964,4 +3964,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String glossaryRemove(String term) {
     return 'Remove $term';
   }
+
+  @override
+  String get correctionsTitle => 'Review corrections';
+
+  @override
+  String get correctionsEmpty =>
+      'No correction to propose. Add names to the term dictionary and they are matched against this transcript.';
+
+  @override
+  String get correctionsHint =>
+      'Mark the swaps you want. The original file never changes; new reports read the corrected text.';
+
+  @override
+  String get correctionsSave => 'Save corrections';
+
+  @override
+  String get correctionsSaved => 'Corrections saved.';
+
+  @override
+  String get correctionsRefused =>
+      'A correction no longer fits the text and was not saved.';
+
+  @override
+  String get correctionsOpen => 'Review corrections';
 }

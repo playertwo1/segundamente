@@ -1755,5 +1755,12 @@
   "glossaryPreviewTitle": "What the model receives",
   "glossaryPreviewNone": "Nothing is added to the request.",
   "glossaryRemove": "Remove {term}",
-  "@glossaryRemove": {"placeholders": {"term": {"type": "String"}}}
+  "@glossaryRemove": {"placeholders": {"term": {"type": "String"}}},
+  "correctionsTitle": "Review corrections",
+  "correctionsEmpty": "No correction to propose. Add names to the term dictionary and they are matched against this transcript.",
+  "correctionsHint": "Mark the swaps you want. The original file never changes; new reports read the corrected text.",
+  "correctionsSave": "Save corrections",
+  "correctionsSaved": "Corrections saved.",
+  "correctionsRefused": "A correction no longer fits the text and was not saved.",
+  "correctionsOpen": "Review corrections"
 }

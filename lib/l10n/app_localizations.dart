@@ -7040,6 +7040,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove {term}'**
   String glossaryRemove(String term);
+
+  /// No description provided for @correctionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review corrections'**
+  String get correctionsTitle;
+
+  /// No description provided for @correctionsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No correction to propose. Add names to the term dictionary and they are matched against this transcript.'**
+  String get correctionsEmpty;
+
+  /// No description provided for @correctionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark the swaps you want. The original file never changes; new reports read the corrected text.'**
+  String get correctionsHint;
+
+  /// No description provided for @correctionsSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save corrections'**
+  String get correctionsSave;
+
+  /// No description provided for @correctionsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Corrections saved.'**
+  String get correctionsSaved;
+
+  /// No description provided for @correctionsRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'A correction no longer fits the text and was not saved.'**
+  String get correctionsRefused;
+
+  /// No description provided for @correctionsOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Review corrections'**
+  String get correctionsOpen;
 }
 
 class _AppLocalizationsDelegate

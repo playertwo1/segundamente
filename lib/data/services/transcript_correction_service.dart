@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:memex/data/services/file_system_service.dart';
+import 'package:memex/data/services/glossary_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/transcript_correction.dart';
@@ -46,6 +47,15 @@ class TranscriptCorrectionService {
       flush: true,
     );
     return corrected;
+  }
+
+  /// Fixes that spell the transcript like the user's glossary terms.
+  Future<List<TextFix>> suggest(String userId, String sessionId) async {
+    checkSessionId(sessionId);
+    return suggestFixes(
+      await _reports.importedSegments(userId, sessionId),
+      await GlossaryService().load(userId),
+    );
   }
 
   /// The segments with the stored fixes applied; the original when none.

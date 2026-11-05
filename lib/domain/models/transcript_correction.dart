@@ -1,4 +1,5 @@
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/topic.dart' show nameKey;
 
 const transcriptCorrectionSchemaVersion = 1;
 const correctionMaxFixes = 200;
@@ -94,4 +95,61 @@ List<TextFix> correctionsFromJson(Map<String, dynamic> json) {
       else
         throw const FormatException('correction row'),
   ];
+}
+
+final _word = RegExp(r'[\p{L}\p{N}]+', unicode: true);
+
+/// Fixes that bring words in [segments] to the spelling of a glossary term.
+/// A piece with as many words as the term is proposed when it is not
+/// spelled like the term but is the same ignoring case and accents, or one
+/// letter away from it (terms of 5 letters or more). Short terms only match
+/// ignoring case and accents, so a common word is never rewritten. A piece
+/// that is itself a glossary term, or that would not apply, is skipped.
+List<TextFix> suggestFixes(List<ReportSegment> segments, List<String> terms) {
+  final keys = {for (final t in terms) nameKey(t)};
+  final found = <TextFix>[];
+  final seen = <String>{};
+  for (final segment in segments) {
+    final words = _word.allMatches(segment.text).toList();
+    for (final term in terms) {
+      final size = _word.allMatches(term).length;
+      if (size == 0) continue;
+      final termKey = nameKey(term);
+      final allowed = termKey.length >= 5 ? 1 : 0;
+      for (var i = 0; i + size <= words.length; i++) {
+        final from = segment.text.substring(
+          words[i].start,
+          words[i + size - 1].end,
+        );
+        if (from == term ||
+            keys.contains(nameKey(from)) && nameKey(from) != termKey) {
+          continue;
+        }
+        if (_distance(nameKey(from), termKey) > allowed) continue;
+        final fix = TextFix(segmentId: segment.id, from: from, to: term);
+        if (!seen.add('${segment.id}\u0000$from\u0000$term')) continue;
+        try {
+          applyFixes([segment], [fix]);
+        } on CorrectionRefused {
+          continue;
+        }
+        found.add(fix);
+      }
+    }
+  }
+  return found;
+}
+
+int _distance(String a, String b) {
+  var previous = List<int>.generate(b.length + 1, (i) => i);
+  for (var i = 1; i <= a.length; i++) {
+    final row = List<int>.filled(b.length + 1, 0)..[0] = i;
+    for (var j = 1; j <= b.length; j++) {
+      final cost = a.codeUnitAt(i - 1) == b.codeUnitAt(j - 1) ? 0 : 1;
+      row[j] = [previous[j] + 1, row[j - 1] + 1, previous[j - 1] + cost]
+          .reduce((x, y) => x < y ? x : y);
+    }
+    previous = row;
+  }
+  return previous[b.length];
 }

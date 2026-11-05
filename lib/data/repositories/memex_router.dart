@@ -48,10 +48,12 @@ import 'package:memex/data/services/glossary_service.dart';
 import 'package:memex/data/services/related_sessions_service.dart';
 import 'package:memex/data/services/saved_view_service.dart';
 import 'package:memex/data/services/topic_service.dart';
+import 'package:memex/data/services/transcript_correction_service.dart';
 import 'package:memex/domain/models/related_sessions.dart';
 import 'package:memex/domain/models/saved_view.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/topic.dart';
+import 'package:memex/domain/models/transcript_correction.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/data/services/file_system_service.dart';
@@ -1325,6 +1327,33 @@ class MemexRouter {
     return runResult(() async {
       final userId = await _reportUserId();
       return SessionReportService().search(userId: userId, query: query);
+    });
+  }
+
+  /// Proposed fixes (not yet stored) and the stored ones for a session.
+  Future<Result<({List<TextFix> proposed, List<TextFix> stored})>>
+      loadTranscriptFixes(String sessionId) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      final service = TranscriptCorrectionService();
+      return (
+        proposed: await service.suggest(userId, sessionId),
+        stored: await service.load(userId, sessionId),
+      );
+    });
+  }
+
+  /// Stores [fixes] for a session; an error when one no longer applies.
+  Future<Result<void>> saveTranscriptFixes(
+    String sessionId,
+    List<TextFix> fixes,
+  ) {
+    return runResult(() async {
+      await TranscriptCorrectionService().save(
+        await _reportUserId(),
+        sessionId,
+        fixes,
+      );
     });
   }
 

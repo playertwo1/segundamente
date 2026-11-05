@@ -3999,4 +3999,28 @@ class AppLocalizationsPt extends AppLocalizations {
   String glossaryRemove(String term) {
     return 'Remover $term';
   }
+
+  @override
+  String get correctionsTitle => 'Revisar correções';
+
+  @override
+  String get correctionsEmpty =>
+      'Nenhuma correção a propor. Cadastre nomes no dicionário de termos e eles são comparados com esta transcrição.';
+
+  @override
+  String get correctionsHint =>
+      'Marque as trocas que quer. O arquivo original nunca muda; os relatórios novos leem o texto corrigido.';
+
+  @override
+  String get correctionsSave => 'Salvar correções';
+
+  @override
+  String get correctionsSaved => 'Correções salvas.';
+
+  @override
+  String get correctionsRefused =>
+      'Uma correção não cabe mais no texto e não foi salva.';
+
+  @override
+  String get correctionsOpen => 'Revisar correções';
 }

@@ -3,6 +3,7 @@ import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/transcript_correction.dart';
 
 void main() {
+  suggestTests();
   const segments = [
     ReportSegment(
         id: 'seg_0',
@@ -75,5 +76,45 @@ void main() {
       () => correctionsFromJson({'schema_version': 9, 'fixes': []}),
       throwsFormatException,
     );
+  });
+}
+
+void suggestTests() {
+  List<TextFix> suggest(String text, List<String> terms) => suggestFixes(
+        [ReportSegment(id: 's', text: text)],
+        terms,
+      );
+  String show(List<TextFix> f) => f.map((x) => '${x.from}>${x.to}').join('|');
+
+  group('suggestFixes', () {
+    test('case and accent only, or one letter away for longer terms', () {
+      expect(show(suggest('falou com a Marilia ontem', ['Marília'])),
+          'Marilia>Marília');
+      expect(show(suggest('abrir o Memix agora', ['Memex'])), 'Memix>Memex');
+    });
+
+    test('a short term only matches ignoring case and accents', () {
+      expect(suggest('a ata de hoje', ['ota']), isEmpty);
+      expect(show(suggest('a ota de hoje', ['OTA'])), 'ota>OTA');
+    });
+
+    test('multi-word terms match a window with the same word count', () {
+      expect(show(suggest('com Sra Alvarenga hoje', ['Sra. Alvarenga'])),
+          'Sra Alvarenga>Sra. Alvarenga');
+      expect(show(suggest('com dona alvarenga hoje', ['Dona Alvarenga'])),
+          'dona alvarenga>Dona Alvarenga');
+    });
+
+    test('already right, ambiguous or another term are left alone', () {
+      expect(suggest('o Memex abriu', ['Memex']), isEmpty);
+      expect(suggest('Memix e Memix de novo', ['Memex']), isEmpty);
+      expect(suggest('Memex e Memix', ['Memex', 'Memix']), isEmpty);
+    });
+
+    test('every proposal applies cleanly', () {
+      final seg = [const ReportSegment(id: 's', text: 'a marilia viu o Memix')];
+      final fixes = suggestFixes(seg, ['Marília', 'Memex']);
+      expect(applyFixes(seg, fixes).single.text, 'a Marília viu o Memex');
+    });
   });
 }

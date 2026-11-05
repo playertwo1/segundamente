@@ -1748,5 +1748,12 @@
   "glossaryPreviewTitle": "O que o modelo recebe",
   "glossaryPreviewNone": "Nada é acrescentado ao pedido.",
   "glossaryRemove": "Remover {term}",
-  "@glossaryRemove": {"placeholders": {"term": {"type": "String"}}}
+  "@glossaryRemove": {"placeholders": {"term": {"type": "String"}}},
+  "correctionsTitle": "Revisar correções",
+  "correctionsEmpty": "Nenhuma correção a propor. Cadastre nomes no dicionário de termos e eles são comparados com esta transcrição.",
+  "correctionsHint": "Marque as trocas que quer. O arquivo original nunca muda; os relatórios novos leem o texto corrigido.",
+  "correctionsSave": "Salvar correções",
+  "correctionsSaved": "Correções salvas.",
+  "correctionsRefused": "Uma correção não cabe mais no texto e não foi salva.",
+  "correctionsOpen": "Revisar correções"
 }

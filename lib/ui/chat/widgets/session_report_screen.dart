@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/domain/models/session_report_export.dart';
+import 'package:memex/ui/corrections/view_models/corrections_viewmodel.dart';
+import 'package:memex/ui/corrections/widgets/corrections_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:memex/ui/chat/view_models/session_report_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/session_report_view.dart';
 import 'package:memex/utils/result.dart';
@@ -35,6 +39,23 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
         backgroundColor: AppColors.cardBackground,
         surfaceTintColor: AppColors.cardBackground,
         elevation: 0,
+        actions: [
+          IconButton(
+            key: const ValueKey('report_corrections'),
+            tooltip: UserStorage.l10n.correctionsOpen,
+            icon: const Icon(Icons.spellcheck, color: AppColors.textSecondary),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => CorrectionsScreen(
+                  viewModel: CorrectionsViewModel(
+                    router: context.read<MemexRouter>(),
+                    sessionId: widget.viewModel.sessionId,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: ListenableBuilder(
         listenable: widget.viewModel,
