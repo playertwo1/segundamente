@@ -1645,6 +1645,20 @@ Future<String> _sha256FilePath(String filePath) async {
   return digest.toString();
 }
 
+/// Windows keeps a just-closed database file locked for a moment (errno 32),
+/// so the delete is retried; any other failure, or the last attempt, throws.
+Future<void> _deleteWithRetry(File file) async {
+  for (var attempt = 0;; attempt++) {
+    try {
+      await file.delete();
+      return;
+    } on PathAccessException {
+      if (attempt >= 4) rethrow;
+      await Future<void>.delayed(Duration(milliseconds: 100 * (attempt + 1)));
+    }
+  }
+}
+
 Future<void> _moveFileReplacing(File source, String targetPath) async {
   final targetDir = Directory(path.dirname(targetPath));
   if (!await targetDir.exists()) {
@@ -1653,7 +1667,7 @@ Future<void> _moveFileReplacing(File source, String targetPath) async {
 
   final targetFile = File(targetPath);
   if (await targetFile.exists()) {
-    await targetFile.delete();
+    await _deleteWithRetry(targetFile);
   }
 
   try {

@@ -64,6 +64,7 @@
 - [Mapeamento F9-01](F9-01-mapeamento.md)
 - [Corpus F9-02](F9-02-corpus.md)
 - [Plano de medição F7-02](F7-02-plano-de-medicao.md)
+- [Plano de medição F2-11](F2-11-plano-de-medicao.md)
 - [Medições F5-03](F5-03-medicoes.md)
 - [Revisão F5](reviews/F5.md)
 - [Captura do S25 Ultra](s25_screenshot.png)
