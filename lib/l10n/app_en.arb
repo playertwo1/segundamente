@@ -1744,5 +1744,16 @@
   "savedViewPickTags": "Mark the tags. A card needs all of them to appear.",
   "savedViewInvalid": "Use a name that is not empty or already taken, and mark at least one tag.",
   "savedViewNoTags": "No tags yet. Tags appear after your records get them.",
-  "savedViewDeleteBody": "The view is deleted. Your records are not touched."
+  "savedViewDeleteBody": "The view is deleted. Your records are not touched.",
+  "glossaryTitle": "Term dictionary",
+  "glossaryEmpty": "No term yet. Add names, acronyms and products so reports spell them right.",
+  "glossaryAddLabel": "New term",
+  "glossaryAdd": "Add",
+  "glossaryCount": "{count} of {max} terms",
+  "@glossaryCount": {"placeholders": {"count": {"type": "int"}, "max": {"type": "int"}}},
+  "glossaryRejected": "Not added: empty, repeated, more than one line, longer than 60 characters, or the list is full (50).",
+  "glossaryPreviewTitle": "What the model receives",
+  "glossaryPreviewNone": "Nothing is added to the request.",
+  "glossaryRemove": "Remove {term}",
+  "@glossaryRemove": {"placeholders": {"term": {"type": "String"}}}
 }

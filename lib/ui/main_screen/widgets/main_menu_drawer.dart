@@ -16,6 +16,7 @@ class MainMenuDrawer extends StatelessWidget {
     required this.onOpenTags,
     required this.onOpenTopics,
     required this.onOpenSavedViews,
+    required this.onOpenGlossary,
     required this.onOpenMemory,
     required this.onOpenActivity,
     required this.onOpenProfile,
@@ -29,6 +30,7 @@ class MainMenuDrawer extends StatelessWidget {
   final VoidCallback onOpenTags;
   final VoidCallback onOpenTopics;
   final VoidCallback onOpenSavedViews;
+  final VoidCallback onOpenGlossary;
   final VoidCallback onOpenMemory;
   final VoidCallback onOpenActivity;
   final VoidCallback onOpenProfile;
@@ -88,6 +90,11 @@ class MainMenuDrawer extends StatelessWidget {
               icon: Icons.filter_list,
               label: l10n.savedViewsTitle,
               onTap: close(onOpenSavedViews),
+            ),
+            _MenuItem(
+              icon: Icons.spellcheck,
+              label: l10n.glossaryTitle,
+              onTap: close(onOpenGlossary),
             ),
             _MenuItem(
               icon: Icons.bookmark_border,

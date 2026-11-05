@@ -1737,5 +1737,16 @@
   "savedViewPickTags": "Marque as tags. O cartão precisa ter todas para aparecer.",
   "savedViewInvalid": "Use um nome que não esteja vazio nem já usado e marque ao menos uma tag.",
   "savedViewNoTags": "Nenhuma tag ainda. As tags aparecem depois que seus registros as recebem.",
-  "savedViewDeleteBody": "A visão é excluída. Seus registros não são tocados."
+  "savedViewDeleteBody": "A visão é excluída. Seus registros não são tocados.",
+  "glossaryTitle": "Dicionário de termos",
+  "glossaryEmpty": "Nenhum termo ainda. Cadastre nomes, siglas e produtos para os relatórios os escreverem certo.",
+  "glossaryAddLabel": "Novo termo",
+  "glossaryAdd": "Adicionar",
+  "glossaryCount": "{count} de {max} termos",
+  "@glossaryCount": {"placeholders": {"count": {"type": "int"}, "max": {"type": "int"}}},
+  "glossaryRejected": "Não adicionado: vazio, repetido, com mais de uma linha, maior que 60 caracteres ou lista cheia (50).",
+  "glossaryPreviewTitle": "O que o modelo recebe",
+  "glossaryPreviewNone": "Nada é acrescentado ao pedido.",
+  "glossaryRemove": "Remover {term}",
+  "@glossaryRemove": {"placeholders": {"term": {"type": "String"}}}
 }

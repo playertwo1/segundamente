@@ -6986,6 +6986,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The view is deleted. Your records are not touched.'**
   String get savedViewDeleteBody;
+
+  /// No description provided for @glossaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Term dictionary'**
+  String get glossaryTitle;
+
+  /// No description provided for @glossaryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No term yet. Add names, acronyms and products so reports spell them right.'**
+  String get glossaryEmpty;
+
+  /// No description provided for @glossaryAddLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New term'**
+  String get glossaryAddLabel;
+
+  /// No description provided for @glossaryAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get glossaryAdd;
+
+  /// No description provided for @glossaryCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {max} terms'**
+  String glossaryCount(int count, int max);
+
+  /// No description provided for @glossaryRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not added: empty, repeated, more than one line, longer than 60 characters, or the list is full (50).'**
+  String get glossaryRejected;
+
+  /// No description provided for @glossaryPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What the model receives'**
+  String get glossaryPreviewTitle;
+
+  /// No description provided for @glossaryPreviewNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is added to the request.'**
+  String get glossaryPreviewNone;
+
+  /// No description provided for @glossaryRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {term}'**
+  String glossaryRemove(String term);
 }
 
 class _AppLocalizationsDelegate

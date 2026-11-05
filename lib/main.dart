@@ -1821,6 +1821,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           onOpenTags: _openTagTree,
           onOpenTopics: () => context.push(AppRoutes.topics),
           onOpenSavedViews: _openSavedViews,
+          onOpenGlossary: () => context.push(AppRoutes.glossary),
           onOpenMemory: () => context.push(AppRoutes.memory),
           onOpenActivity: () => context.push(AppRoutes.activity),
           onOpenProfile: () => showModalBottomSheet(

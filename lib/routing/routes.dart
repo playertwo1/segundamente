@@ -29,6 +29,7 @@ abstract final class AppRoutes {
   static const String tags = '/tags';
   static const String topics = '/topics';
   static const String savedViews = '/views';
+  static const String glossary = '/glossary';
 
   /// Global search (reference 16).
   static const String search = '/search';

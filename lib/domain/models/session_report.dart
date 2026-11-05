@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:memex/domain/models/glossary.dart';
+
 const sessionReportSchemaVersion = 1;
 
 const reportAssigneeUnknown = 'não identificado';
@@ -345,7 +347,10 @@ String _normalizedKey(String value) {
 // when a real 50 min transcript exceeds the model context.
 const reportModelInputLimit = 60000;
 
-String reportExtractionSystemPrompt(ReportKind kind) {
+String reportExtractionSystemPrompt(
+  ReportKind kind, {
+  List<String> glossary = const [],
+}) {
   final kinds = sectionsFor(kind).map((k) => k.name).join(', ');
   return 'You organize a transcript into report items. Reply with ONLY a '
       'JSON object {"items":[{"kind","text","segment_id","excerpt"}]}. '
@@ -364,7 +369,7 @@ String reportExtractionSystemPrompt(ReportKind kind) {
       'amounts and dates exactly as spoken, never translate or correct the '
       'speaker, and keep each summary to at most two sentences. Notes the '
       'user typed are source text: quote them in excerpt, never rewrite '
-      'them. Skip anything unclear.';
+      'them. Skip anything unclear.${glossary.isEmpty ? '' : ' ${glossaryPromptBlock(glossary)}'}';
 }
 
 String reportExtractionUserPrompt(List<ReportSegment> segments) {

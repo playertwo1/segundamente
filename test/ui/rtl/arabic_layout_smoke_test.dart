@@ -65,6 +65,7 @@ void main() {
           onOpenTags: () {},
           onOpenTopics: () {},
           onOpenSavedViews: () {},
+          onOpenGlossary: () {},
           onOpenMemory: () {},
           onOpenActivity: () {},
           onOpenProfile: () {},

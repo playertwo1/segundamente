@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/file_system_service.dart';
+import 'package:memex/data/services/glossary_service.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/transcript_import.dart';
@@ -18,6 +19,7 @@ class SessionReportService {
 
   final FileSystemService _files;
   final ChatSessionStorage _sessions;
+  final _glossary = GlossaryService();
   final _logger = getLogger('SessionReportService');
 
   Future<SessionReport?> load({
@@ -69,7 +71,10 @@ class SessionReportService {
   }) async {
     try {
       final reply = await ask(
-        reportExtractionSystemPrompt(kind),
+        reportExtractionSystemPrompt(
+          kind,
+          glossary: await _glossary.load(userId),
+        ),
         reportExtractionUserPrompt(await _segments(userId, sessionId)),
       );
       final report = await applyModelJson(

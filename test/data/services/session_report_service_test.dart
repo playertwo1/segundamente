@@ -10,12 +10,14 @@ import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/agent/built_in_tools/related_sessions_tool.dart';
+import 'package:memex/data/services/glossary_service.dart';
 import 'package:memex/data/services/related_sessions_service.dart';
 import 'package:memex/data/services/saved_view_service.dart';
 import 'package:memex/data/services/topic_service.dart';
 import 'package:memex/data/services/transcript_import_service.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/glossary.dart';
 import 'package:memex/domain/models/saved_view.dart';
 import 'package:memex/domain/models/topic.dart';
 import 'package:memex/domain/models/transcript_import.dart';
@@ -184,6 +186,27 @@ void main() {
     expect(loaded.kind, ReportKind.estudo);
     final stored = jsonDecode(await file.readAsString()) as Map;
     expect(stored['schema_version'], sessionReportSchemaVersion);
+  });
+
+  test('glossary terms persist and reach the model request', () async {
+    await storeTranscript();
+    await GlossaryService().update(
+      userId,
+      (t) => addGlossaryTerm(t, 'Alvarenga'),
+    );
+    String? system;
+    await service.draftWithModel(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+      ask: (s, u) async {
+        system = s;
+        return '{"items":[]}';
+      },
+    );
+    expect(system, contains('Alvarenga'));
+    expect(await GlossaryService().load(userId), ['Alvarenga']);
   });
 
   test('saved views persist between loads', () async {

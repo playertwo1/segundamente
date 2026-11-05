@@ -3931,4 +3931,37 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get savedViewDeleteBody =>
       'The view is deleted. Your records are not touched.';
+
+  @override
+  String get glossaryTitle => 'Term dictionary';
+
+  @override
+  String get glossaryEmpty =>
+      'No term yet. Add names, acronyms and products so reports spell them right.';
+
+  @override
+  String get glossaryAddLabel => 'New term';
+
+  @override
+  String get glossaryAdd => 'Add';
+
+  @override
+  String glossaryCount(int count, int max) {
+    return '$count of $max terms';
+  }
+
+  @override
+  String get glossaryRejected =>
+      'Not added: empty, repeated, more than one line, longer than 60 characters, or the list is full (50).';
+
+  @override
+  String get glossaryPreviewTitle => 'What the model receives';
+
+  @override
+  String get glossaryPreviewNone => 'Nothing is added to the request.';
+
+  @override
+  String glossaryRemove(String term) {
+    return 'Remove $term';
+  }
 }

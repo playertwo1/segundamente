@@ -3966,4 +3966,37 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get savedViewDeleteBody =>
       'A visão é excluída. Seus registros não são tocados.';
+
+  @override
+  String get glossaryTitle => 'Dicionário de termos';
+
+  @override
+  String get glossaryEmpty =>
+      'Nenhum termo ainda. Cadastre nomes, siglas e produtos para os relatórios os escreverem certo.';
+
+  @override
+  String get glossaryAddLabel => 'Novo termo';
+
+  @override
+  String get glossaryAdd => 'Adicionar';
+
+  @override
+  String glossaryCount(int count, int max) {
+    return '$count de $max termos';
+  }
+
+  @override
+  String get glossaryRejected =>
+      'Não adicionado: vazio, repetido, com mais de uma linha, maior que 60 caracteres ou lista cheia (50).';
+
+  @override
+  String get glossaryPreviewTitle => 'O que o modelo recebe';
+
+  @override
+  String get glossaryPreviewNone => 'Nada é acrescentado ao pedido.';
+
+  @override
+  String glossaryRemove(String term) {
+    return 'Remover $term';
+  }
 }

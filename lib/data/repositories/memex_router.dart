@@ -44,6 +44,7 @@ import 'package:memex/data/services/chat_service.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
+import 'package:memex/data/services/glossary_service.dart';
 import 'package:memex/data/services/related_sessions_service.dart';
 import 'package:memex/data/services/saved_view_service.dart';
 import 'package:memex/data/services/topic_service.dart';
@@ -1324,6 +1325,21 @@ class MemexRouter {
     return runResult(() async {
       final userId = await _reportUserId();
       return SessionReportService().search(userId: userId, query: query);
+    });
+  }
+
+  Future<Result<List<String>>> loadGlossary() {
+    return runResult(() async {
+      return GlossaryService().load(await _reportUserId());
+    });
+  }
+
+  /// Applies [change] to the term dictionary (see `glossary.dart`).
+  Future<Result<List<String>>> updateGlossary(
+    List<String> Function(List<String>) change,
+  ) {
+    return runResult(() async {
+      return GlossaryService().update(await _reportUserId(), change);
     });
   }
 
