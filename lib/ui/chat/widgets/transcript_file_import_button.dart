@@ -13,13 +13,13 @@ import 'package:memex/utils/user_storage.dart';
 
 final _logger = getLogger('TranscriptFileImportButton');
 
-/// Opens the system file picker for `.txt` files. Returns null when dismissed
+/// Opens the system file picker for `.txt`, `.srt` and `.vtt` files. Returns null when dismissed
 /// or if a chosen file has no readable bytes.
 Future<List<({String name, List<int> bytes})>?> pickTranscriptTxtFiles() async {
   final result = await FilePicker.platform.pickFiles(
     allowMultiple: true,
     type: FileType.custom,
-    allowedExtensions: const ['txt'],
+    allowedExtensions: const ['txt', 'srt', 'vtt'],
     withData: true,
   );
   if (result == null || result.files.isEmpty) return null;
@@ -50,7 +50,7 @@ Future<bool> storeConfirmedTranscripts(List<TranscriptImport> sources) async {
   );
 }
 
-/// Picks `.txt` files, asks for confirmation, stores the originals and reports
+/// Picks transcript files, asks for confirmation, stores the originals and reports
 /// the confirmed text through [onConfirmed].
 Future<void> importTranscriptFiles(
   BuildContext context, {

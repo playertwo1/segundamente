@@ -104,12 +104,14 @@ ConfirmedSend? confirmSend({
   return ConfirmedSend._(outgoingText);
 }
 
+const _transcriptExtensions = ['.txt', '.srt', '.vtt'];
+
 bool sharedPathsArePlainText(List<String> paths) {
   if (paths.isEmpty) return false;
   for (final path in paths) {
     final name =
         path.replaceAll('\\', '/').split('/').last.trim().toLowerCase();
-    if (!name.endsWith('.txt')) return false;
+    if (!_transcriptExtensions.any(name.endsWith)) return false;
   }
   return true;
 }
@@ -260,7 +262,111 @@ class _SegmentBuilder {
   }
 }
 
+// SRT/VTT timing lines always carry milliseconds, which plain Samsung ranges
+// do not.
+final _subtitleRange = RegExp(
+  r'^\s*(?:\d{1,2}:)?\d{1,2}:\d{2}[.,]\d{3}\s*-->\s*(?:\d{1,2}:)?\d{1,2}:\d{2}[.,]\d{3}',
+);
+final _subtitleStart = RegExp(r'^\s*((?:\d{1,2}:)?\d{1,2}:\d{2})[.,]\d{3}');
+final _voiceTag = RegExp(r'^<v(?:\.[^\s>]+)*\s+([^>]+)>');
+final _anyTag = RegExp(r'</?[^>\n]+>');
+final _labelPrefix =
+    RegExp(r"^(\p{Lu}[\p{L}.' -]{0,28}):\s+(.+)$", unicode: true);
+
+// A subtitle file opens like one: a WEBVTT header, a timing line, or a cue
+// number followed by a timing line. A millisecond range further down a Samsung
+// TXT does not turn the whole file into SRT.
+bool _isSubtitle(String decoded) {
+  final lines = decoded
+      .replaceFirst('\uFEFF', '')
+      .split('\n')
+      .map((l) => l.trim())
+      .where((l) => l.isNotEmpty)
+      .take(2)
+      .toList();
+  if (lines.isEmpty) return false;
+  if (lines.first.startsWith('WEBVTT')) return true;
+  if (_subtitleRange.hasMatch(lines.first)) return true;
+  return RegExp(r'^\d+$').hasMatch(lines.first) &&
+      lines.length > 1 &&
+      _subtitleRange.hasMatch(lines[1]);
+}
+
+TranscriptImport _fromSubtitle(List<int> original, String decoded) {
+  final cues = <({String? clock, String? voice, String text})>[];
+  final blocks = decoded
+      .replaceFirst('\uFEFF', '')
+      .replaceAll('\r', '')
+      .split(RegExp(r'\n[ \t]*\n'));
+  for (final block in blocks) {
+    final lines = block.split('\n').map((l) => l.trimRight()).toList();
+    final at = lines.indexWhere(_subtitleRange.hasMatch);
+    // Header, NOTE, STYLE and REGION blocks have no timing line.
+    if (at < 0) continue;
+    final start = _subtitleStart.firstMatch(lines[at])!.group(1)!;
+    String? voice;
+    final text = <String>[];
+    for (var line in lines.skip(at + 1)) {
+      final tag = _voiceTag.firstMatch(line.trimLeft());
+      if (tag != null) voice ??= tag.group(1)!.trim();
+      line = line.replaceAll(_anyTag, '').trim();
+      if (line.isNotEmpty) text.add(line);
+    }
+    if (text.isEmpty) continue;
+    cues.add(
+        (clock: _canonicalClock(start), voice: voice, text: text.join('\n')));
+  }
+
+  // shortcut: a "Nome: fala" label counts as a speaker only when the same
+  // label opens two or more cues, so "Atenção: ..." stays plain text.
+  final labelCounts = <String, int>{};
+  for (final cue in cues) {
+    final m = _labelPrefix.firstMatch(cue.text.split('\n').first);
+    if (m != null) {
+      labelCounts.update(m.group(1)!, (n) => n + 1, ifAbsent: () => 1);
+    }
+  }
+
+  final segments = <TranscriptSegment>[];
+  for (final cue in cues) {
+    var speaker = cue.voice;
+    var text = cue.text;
+    final m = _labelPrefix.firstMatch(text.split('\n').first);
+    if (speaker == null && m != null && labelCounts[m.group(1)]! >= 2) {
+      speaker = m.group(1);
+      text = text.replaceFirst('${m.group(1)}:', '').trimLeft();
+    }
+    segments
+        .add(TranscriptSegment(clock: cue.clock, speaker: speaker, text: text));
+  }
+
+  if (segments.isEmpty) {
+    return _fromPlainText(original, decoded);
+  }
+  return TranscriptImport._(
+    kind: TranscriptKind.text,
+    originalBytes: original,
+    segments: segments,
+    normalizedText: _normalized(null, segments),
+    timestampsFound: true,
+    title: null,
+  );
+}
+
+TranscriptImport _fromPlainText(List<int> original, String decoded) {
+  final text = decoded.replaceAll('\r', '').trim();
+  return TranscriptImport._(
+    kind: TranscriptKind.text,
+    originalBytes: original,
+    segments: [TranscriptSegment(text: text)],
+    normalizedText: text,
+    timestampsFound: false,
+    title: null,
+  );
+}
+
 TranscriptImport _fromDecoded(List<int> original, String decoded) {
+  if (_isSubtitle(decoded)) return _fromSubtitle(original, decoded);
   final header = <String>[];
   final builders = <_SegmentBuilder>[];
   _SegmentBuilder? current;
@@ -281,17 +387,7 @@ TranscriptImport _fromDecoded(List<int> original, String decoded) {
     }
   }
 
-  if (builders.isEmpty) {
-    final text = decoded.replaceAll('\r', '').trim();
-    return TranscriptImport._(
-      kind: TranscriptKind.text,
-      originalBytes: original,
-      segments: [TranscriptSegment(text: text)],
-      normalizedText: text,
-      timestampsFound: false,
-      title: null,
-    );
-  }
+  if (builders.isEmpty) return _fromPlainText(original, decoded);
 
   final segments = builders.map((builder) => builder.build()).toList();
   final title = header.isEmpty ? null : header.join('\n');

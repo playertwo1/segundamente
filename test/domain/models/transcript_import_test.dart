@@ -9,7 +9,11 @@ void main() {
       ['/x/Voz 260914_170715.m4a', '/docs/a.PDF'],
     );
     expect(files, [
-      {'path': '/x/Voz 260914_170715.m4a', 'name': 'Voz 260914_170715.m4a', 'mime': 'audio/mp4'},
+      {
+        'path': '/x/Voz 260914_170715.m4a',
+        'name': 'Voz 260914_170715.m4a',
+        'mime': 'audio/mp4'
+      },
       {'path': '/docs/a.PDF', 'name': 'a.PDF', 'mime': 'application/pdf'},
     ]);
     expect(chatAttachmentsFromPaths(['/x/backup.zip']), isNull);
@@ -18,8 +22,16 @@ void main() {
 
   test('decodes UTF-16 with BOM and keeps the original bytes', () {
     const raw = 'Conteúdo\n00:01 olá';
-    final be = <int>[0xFE, 0xFF, for (final u in raw.codeUnits) ...[u >> 8, u & 255]];
-    final le = <int>[0xFF, 0xFE, for (final u in raw.codeUnits) ...[u & 255, u >> 8]];
+    final be = <int>[
+      0xFE,
+      0xFF,
+      for (final u in raw.codeUnits) ...[u >> 8, u & 255]
+    ];
+    final le = <int>[
+      0xFF,
+      0xFE,
+      for (final u in raw.codeUnits) ...[u & 255, u >> 8]
+    ];
     for (final bytes in [be, le]) {
       final parsed = TranscriptImport.parse(bytes);
       expect(parsed.kind, TranscriptKind.text);
@@ -125,5 +137,99 @@ void main() {
     expect(sharedPathsArePlainText(['a.txt', 'b.docx']), isFalse);
     expect(sharedPathsArePlainText(['notas.pdf']), isFalse);
     expect(sharedPathsArePlainText(const []), isFalse);
+  });
+
+  test('SRT keeps clocks and text, drops numbering and markup', () {
+    final raw = [
+      '1',
+      '00:00:01,000 --> 00:00:03,500',
+      '<i>Bom dia</i> a todos.',
+      '',
+      '2',
+      '00:01:05,250 --> 00:01:08,000',
+      'Primeira linha',
+      'segunda linha',
+      '',
+    ].join('\n');
+    final parsed = TranscriptImport.fromText(raw);
+
+    expect(parsed.timestampsFound, isTrue);
+    expect(parsed.title, isNull);
+    expect(parsed.segments.map((s) => s.clock), ['00:00:01', '00:01:05']);
+    expect(parsed.segments[0].text, 'Bom dia a todos.');
+    expect(parsed.segments[1].text, 'Primeira linha\nsegunda linha');
+    expect(parsed.normalizedText, isNot(contains('<i>')));
+    expect(
+        parsed.normalizedText, isNot(matches(RegExp(r'^2$', multiLine: true))));
+    expect(parsed.originalBytes, utf8.encode(raw));
+  });
+
+  test('VTT skips header, NOTE and cue ids, reads voice tags and settings', () {
+    final raw = [
+      'WEBVTT - reuniao',
+      '',
+      'NOTE comentario do editor',
+      '',
+      'intro',
+      '00:00:02.000 --> 00:00:04.000 align:start position:0%',
+      '<v Marina>Vamos começar.</v>',
+      '',
+      '01:02:03.400 --> 01:02:05.000',
+      '<v.loud Carlos>Concordo.</v>',
+      '',
+    ].join('\n');
+    final parsed = TranscriptImport.fromText(raw);
+
+    expect(parsed.title, isNull);
+    expect(parsed.segments.map((s) => s.clock), ['00:00:02', '01:02:03']);
+    expect(parsed.segments.map((s) => s.speaker), ['Marina', 'Carlos']);
+    expect(parsed.segments.map((s) => s.text), ['Vamos começar.', 'Concordo.']);
+    expect(parsed.normalizedText, isNot(contains('WEBVTT')));
+    expect(parsed.normalizedText, isNot(contains('NOTE')));
+    expect(
+        parsed.normalizedText, contains('[00:00:02] Marina\nVamos começar.'));
+  });
+
+  test('a Nome: label is a speaker only when it repeats', () {
+    final raw = [
+      '1',
+      '00:00:01,000 --> 00:00:02,000',
+      'Ana: oi',
+      '',
+      '2',
+      '00:00:03,000 --> 00:00:04,000',
+      'Ana: tudo bem?',
+      '',
+      '3',
+      '00:00:05,000 --> 00:00:06,000',
+      'Atenção: prazo na sexta',
+      '',
+    ].join('\n');
+    final parsed = TranscriptImport.fromText(raw);
+
+    expect(parsed.segments.map((s) => s.speaker), ['Ana', 'Ana', null]);
+    expect(parsed.segments.map((s) => s.text),
+        ['oi', 'tudo bem?', 'Atenção: prazo na sexta']);
+  });
+
+  test('a subtitle file with no readable cue stays plain text', () {
+    final parsed = TranscriptImport.fromText('WEBVTT\n\nNOTE nada aqui');
+    expect(parsed.kind, TranscriptKind.text);
+    expect(parsed.timestampsFound, isFalse);
+    expect(parsed.normalizedText, contains('NOTE nada aqui'));
+  });
+
+  test('TXT ranges without milliseconds keep the old behaviour', () {
+    final parsed = TranscriptImport.fromText(
+      'Reuniao\n00:00:01 --> 00:00:03\nfala um\n00:00:04 --> 00:00:06\nfala dois',
+    );
+    expect(parsed.title, 'Reuniao');
+    expect(parsed.segments.map((s) => s.text), ['fala um', 'fala dois']);
+  });
+
+  test('shared SRT and VTT files use the transcript preview', () {
+    expect(sharedPathsArePlainText(['/x/legenda.SRT']), isTrue);
+    expect(sharedPathsArePlainText(['/x/a.vtt', '/x/b.txt']), isTrue);
+    expect(sharedPathsArePlainText(['/x/a.vtt', '/x/b.docx']), isFalse);
   });
 }

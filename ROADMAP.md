@@ -105,7 +105,7 @@
 | F2-09 | Transcrever áudio anexado/compartilhado em pt-BR; enviar ao modelo somente o texto após ação do usuário (D-011) | P0 | F2-08 | IN_PROGRESS | Áudios sintéticos de 8 s, 100 s e aproximadamente 50 min processados no S25; falta validar amostra real e limites/qualidade do serviço |
 | F2-10 | Abrir chat com o anexo ao compartilhar TXT, PDF ou áudio com o app | P1 | F2-08 | IN_PROGRESS | TXT validado no S25; PDF e áudio compartilhados ainda precisam de prova |
 | F2-11 | Transcrição local multilíngue, em português, com sherpa_onnx e Whisper como alternativa offline ao caminho D-011 | P1 | F2-09 | READY | Comparar o mesmo áudio nos dois caminhos; medir tempo, memória e qualidade em áudio de aproximadamente 50 min no S25; registrar modelo escolhido |
-| F2-12 | Importar legendas SRT/VTT preservando relógios e texto | P2 | F2-03 | READY | Testes de parser para cabeçalho, numeração, intervalos e etiquetas de locutor; prévia validada no S25 |
+| F2-12 | Importar legendas SRT/VTT preservando relógios e texto | P2 | F2-03 | IN_PROGRESS | Testes de parser para cabeçalho, numeração, intervalos e etiquetas de locutor; prévia validada no S25; parser, seletor e compartilhamento feitos, falta a prévia no aparelho |
 | F2-13 | Dicionário local editável de nomes, siglas e produtos para prompts | P1 | F3-08 | BLOCKED | Limite documentado e testado; termos aparecem na prévia de envio; nome próprio corrigido em resumo real |
 
 **Definição do F2-11:** usar modelo Whisper multilíngue com idioma pt e tarefa de transcrição. Processar o áudio em blocos para limitar memória e preservar o tempo aproximado de cada bloco. Não inclui tradução, diarização nem timestamps por palavra. A transcrição local deve entrar na mesma prévia e confirmação do caminho remoto.
