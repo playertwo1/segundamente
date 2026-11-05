@@ -195,6 +195,17 @@ typedef TaskFailureHandler = Future<void> Function(
   StackTrace? stackTrace,
 );
 
+int _lastTaskIdMicros = 0;
+
+/// A task id from the clock in microseconds. Two tasks created in the same
+/// microsecond (or with a coarse clock) get consecutive ids instead of
+/// colliding on the primary key.
+String nextTaskId() {
+  final now = DateTime.now().microsecondsSinceEpoch;
+  _lastTaskIdMicros = now > _lastTaskIdMicros ? now : _lastTaskIdMicros + 1;
+  return _lastTaskIdMicros.toString();
+}
+
 class LocalTaskExecutor {
   static LocalTaskExecutor? _instance;
   static LocalTaskExecutor get instance {
@@ -833,8 +844,7 @@ class LocalTaskExecutor {
     // We use a manual UUID or let Drift handle it?
     // Our schema defined ID as Text. Drift doesn't auto-generate Text IDs usually.
     // So we generate one.
-    final taskId =
-        DateTime.now().microsecondsSinceEpoch.toString(); // Simple ID for now
+    final taskId = nextTaskId();
 
     await _db.into(_db.tasks).insert(
           TasksCompanion.insert(
@@ -913,7 +923,7 @@ class LocalTaskExecutor {
         return (id: existing.id, rescheduled: true);
       }
 
-      final taskId = DateTime.now().microsecondsSinceEpoch.toString();
+      final taskId = nextTaskId();
       await _db.into(_db.tasks).insert(
             TasksCompanion.insert(
               id: taskId,
@@ -1847,7 +1857,7 @@ class LocalTaskExecutor {
     required Map<String, dynamic> result,
   }) async {
     final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    final taskId = DateTime.now().microsecondsSinceEpoch.toString();
+    final taskId = nextTaskId();
     final resultStr = jsonEncode(result);
 
     await _db.into(_db.tasks).insert(
