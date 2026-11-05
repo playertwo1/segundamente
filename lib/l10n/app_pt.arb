@@ -1729,5 +1729,13 @@
   "topicSessionsEmpty": "Nenhuma sessão ainda. Importe uma transcrição ou comece uma conversa antes.",
   "topicSessionsHint": "Marque as sessões que pertencem a este tópico.",
   "topicSessionCount": "{count, plural, =0{nenhuma sessão} one{{count} sessão} other{{count} sessões}}",
-  "@topicSessionCount": {"placeholders": {"count": {"type": "int"}}}
+  "@topicSessionCount": {"placeholders": {"count": {"type": "int"}}},
+  "savedViewsTitle": "Visões salvas",
+  "savedViewsEmpty": "Nenhuma visão salva. Crie uma com as tags que o cartão precisa ter todas ao mesmo tempo.",
+  "savedViewNew": "Nova visão",
+  "savedViewNameLabel": "Nome da visão",
+  "savedViewPickTags": "Marque as tags. O cartão precisa ter todas para aparecer.",
+  "savedViewInvalid": "Use um nome que não esteja vazio nem já usado e marque ao menos uma tag.",
+  "savedViewNoTags": "Nenhuma tag ainda. As tags aparecem depois que seus registros as recebem.",
+  "savedViewDeleteBody": "A visão é excluída. Seus registros não são tocados."
 }

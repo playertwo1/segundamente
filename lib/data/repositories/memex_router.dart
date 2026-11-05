@@ -45,8 +45,10 @@ import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/data/services/related_sessions_service.dart';
+import 'package:memex/data/services/saved_view_service.dart';
 import 'package:memex/data/services/topic_service.dart';
 import 'package:memex/domain/models/related_sessions.dart';
+import 'package:memex/domain/models/saved_view.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/topic.dart';
 import 'package:memex/domain/models/session_report.dart';
@@ -1322,6 +1324,21 @@ class MemexRouter {
     return runResult(() async {
       final userId = await _reportUserId();
       return SessionReportService().search(userId: userId, query: query);
+    });
+  }
+
+  Future<Result<List<SavedView>>> loadSavedViews() {
+    return runResult(() async {
+      return SavedViewService().load(await _reportUserId());
+    });
+  }
+
+  /// Applies [change] to the saved timeline views (see `saved_view.dart`).
+  Future<Result<List<SavedView>>> updateSavedViews(
+    List<SavedView> Function(List<SavedView>) change,
+  ) {
+    return runResult(() async {
+      return SavedViewService().update(await _reportUserId(), change);
     });
   }
 

@@ -3937,4 +3937,33 @@ class AppLocalizationsPt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get savedViewsTitle => 'Visões salvas';
+
+  @override
+  String get savedViewsEmpty =>
+      'Nenhuma visão salva. Crie uma com as tags que o cartão precisa ter todas ao mesmo tempo.';
+
+  @override
+  String get savedViewNew => 'Nova visão';
+
+  @override
+  String get savedViewNameLabel => 'Nome da visão';
+
+  @override
+  String get savedViewPickTags =>
+      'Marque as tags. O cartão precisa ter todas para aparecer.';
+
+  @override
+  String get savedViewInvalid =>
+      'Use um nome que não esteja vazio nem já usado e marque ao menos uma tag.';
+
+  @override
+  String get savedViewNoTags =>
+      'Nenhuma tag ainda. As tags aparecem depois que seus registros as recebem.';
+
+  @override
+  String get savedViewDeleteBody =>
+      'A visão é excluída. Seus registros não são tocados.';
 }

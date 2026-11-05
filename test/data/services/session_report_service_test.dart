@@ -11,10 +11,12 @@ import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/agent/built_in_tools/related_sessions_tool.dart';
 import 'package:memex/data/services/related_sessions_service.dart';
+import 'package:memex/data/services/saved_view_service.dart';
 import 'package:memex/data/services/topic_service.dart';
 import 'package:memex/data/services/transcript_import_service.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/session_report.dart';
+import 'package:memex/domain/models/saved_view.dart';
 import 'package:memex/domain/models/topic.dart';
 import 'package:memex/domain/models/transcript_import.dart';
 import 'package:memex/utils/user_storage.dart';
@@ -182,6 +184,17 @@ void main() {
     expect(loaded.kind, ReportKind.estudo);
     final stored = jsonDecode(await file.readAsString()) as Map;
     expect(stored['schema_version'], sessionReportSchemaVersion);
+  });
+
+  test('saved views persist between loads', () async {
+    expect(await SavedViewService().load(userId), isEmpty);
+    await SavedViewService().update(
+      userId,
+      (v) => addSavedView(v, id: 'v1', name: 'Obra', tags: ['obra', 'tarefa']),
+    );
+    final back = await SavedViewService().load(userId);
+    expect(back.single.name, 'Obra');
+    expect(back.single.tags, ['obra', 'tarefa']);
   });
 
   test('related sessions: text seed, topic sibling, nothing for off-topic',

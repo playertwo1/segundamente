@@ -1820,6 +1820,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
               context.push(AppRoutes.calendar, extra: DateTime.now()),
           onOpenTags: _openTagTree,
           onOpenTopics: () => context.push(AppRoutes.topics),
+          onOpenSavedViews: _openSavedViews,
           onOpenMemory: () => context.push(AppRoutes.memory),
           onOpenActivity: () => context.push(AppRoutes.activity),
           onOpenProfile: () => showModalBottomSheet(
@@ -1963,6 +1964,17 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     final timeline = context.read<TimelineViewModel>();
     timeline.setViewMode(TimelineViewMode.timeline);
     timeline.setActiveFilter(tag);
+    timeline.loadCards(refresh: true);
+  }
+
+  /// Opens the saved views and shows the chosen one on the timeline.
+  Future<void> _openSavedViews() async {
+    final tags = await context.push<List<String>>(AppRoutes.savedViews);
+    if (tags == null || !mounted) return;
+    setState(() => _currentTab = 0);
+    final timeline = context.read<TimelineViewModel>();
+    timeline.setViewMode(TimelineViewMode.timeline);
+    timeline.setTagFilters(tags);
     timeline.loadCards(refresh: true);
   }
 

@@ -64,6 +64,7 @@ void main() {
           onOpenCalendar: () {},
           onOpenTags: () {},
           onOpenTopics: () {},
+          onOpenSavedViews: () {},
           onOpenMemory: () {},
           onOpenActivity: () {},
           onOpenProfile: () {},

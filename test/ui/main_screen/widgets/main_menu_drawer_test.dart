@@ -31,6 +31,7 @@ void main() {
           onOpenCalendar: () => calls.add('calendar'),
           onOpenTags: () => calls.add('tags'),
           onOpenTopics: () => calls.add('topics'),
+          onOpenSavedViews: () => calls.add('views'),
           onOpenMemory: () => calls.add('memory'),
           onOpenActivity: () => calls.add('activity'),
           onOpenProfile: () => calls.add('profile'),
@@ -52,6 +53,7 @@ void main() {
     expect(await openAndTap(tester, 'Calendário'), ['calendar']);
     expect(await openAndTap(tester, 'Tags'), ['tags']);
     expect(await openAndTap(tester, 'Tópicos e projetos'), ['topics']);
+    expect(await openAndTap(tester, 'Visões salvas'), ['views']);
     expect(await openAndTap(tester, 'Memória'), ['memory']);
     expect(await openAndTap(tester, 'Atividade'), ['activity']);
     expect(await openAndTap(tester, 'Conversar'), ['chat']);
@@ -71,6 +73,7 @@ void main() {
           onOpenCalendar: () {},
           onOpenTags: () {},
           onOpenTopics: () {},
+          onOpenSavedViews: () {},
           onOpenMemory: () {},
           onOpenActivity: () {},
           onOpenProfile: () {},

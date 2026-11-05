@@ -83,8 +83,8 @@ List<Topic> forgetSession(List<Topic> topics, String sessionId) => [
     ];
 
 bool _nameTaken(List<Topic> topics, String name, {required String exceptId}) {
-  final key = _key(name);
-  return topics.any((t) => t.id != exceptId && _key(t.name) == key);
+  final key = nameKey(name);
+  return topics.any((t) => t.id != exceptId && nameKey(t.name) == key);
 }
 
 const _accents = {
@@ -102,7 +102,8 @@ const _accents = {
   'ç': 'c',
 };
 
-String _key(String text) {
+/// Name compared ignoring case, accents and edge spaces.
+String nameKey(String text) {
   final lower = text.trim().toLowerCase();
   return [
     for (final r in lower.runes)

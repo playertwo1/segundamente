@@ -6938,6 +6938,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{no sessions} one{{count} session} other{{count} sessions}}'**
   String topicSessionCount(int count);
+
+  /// No description provided for @savedViewsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved views'**
+  String get savedViewsTitle;
+
+  /// No description provided for @savedViewsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved view yet. Create one with the tags a card must have all at once.'**
+  String get savedViewsEmpty;
+
+  /// No description provided for @savedViewNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New view'**
+  String get savedViewNew;
+
+  /// No description provided for @savedViewNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'View name'**
+  String get savedViewNameLabel;
+
+  /// No description provided for @savedViewPickTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark the tags. A card needs all of them to appear.'**
+  String get savedViewPickTags;
+
+  /// No description provided for @savedViewInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a name that is not empty or already taken, and mark at least one tag.'**
+  String get savedViewInvalid;
+
+  /// No description provided for @savedViewNoTags.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags yet. Tags appear after your records get them.'**
+  String get savedViewNoTags;
+
+  /// No description provided for @savedViewDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The view is deleted. Your records are not touched.'**
+  String get savedViewDeleteBody;
 }
 
 class _AppLocalizationsDelegate

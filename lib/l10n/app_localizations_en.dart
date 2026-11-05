@@ -3902,4 +3902,33 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get savedViewsTitle => 'Saved views';
+
+  @override
+  String get savedViewsEmpty =>
+      'No saved view yet. Create one with the tags a card must have all at once.';
+
+  @override
+  String get savedViewNew => 'New view';
+
+  @override
+  String get savedViewNameLabel => 'View name';
+
+  @override
+  String get savedViewPickTags =>
+      'Mark the tags. A card needs all of them to appear.';
+
+  @override
+  String get savedViewInvalid =>
+      'Use a name that is not empty or already taken, and mark at least one tag.';
+
+  @override
+  String get savedViewNoTags =>
+      'No tags yet. Tags appear after your records get them.';
+
+  @override
+  String get savedViewDeleteBody =>
+      'The view is deleted. Your records are not touched.';
 }

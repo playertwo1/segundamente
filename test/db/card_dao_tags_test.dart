@@ -47,6 +47,12 @@ void main() {
     expect(result, isNot(contains('f3'))); // outra/area
   });
 
+  test('several tags need every one of them, parents included', () async {
+    expect(await ids(['area', 'ideia']), {'f1'});
+    expect(await ids(['area/alfa', 'ideia']), {'f1'});
+    expect(await ids(['area', 'areas']), isEmpty);
+  });
+
   test('every card gives its tag list and a malformed row counts as untagged',
       () async {
     final lists = await db.cardDao.getAllTagLists();

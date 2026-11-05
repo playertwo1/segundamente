@@ -70,18 +70,15 @@ class CardDao extends DatabaseAccessor<AppDatabase> with _$CardDaoMixin {
       query.where((tbl) => tbl.timestamp.isSmallerOrEqualValue(toTs));
     }
 
-    // Tag Filters (JSON list string 'contains' logic via LIKE)
-    if (tags != null && tags.isNotEmpty) {
-      // A parent tag also matches the tags under it: area -> area/projeto.
-      final tagConditions = tags.expand((t) => [
-            cardCache.tags.like('%"$t"%'),
-            cardCache.tags.like('%"$t/%'),
-          ]);
-      var combinedCondition = tagConditions.first;
-      for (var i = 1; i < tagConditions.length; i++) {
-        combinedCondition = combinedCondition | tagConditions.elementAt(i);
+    // Tag filters (JSON list string, LIKE). Several tags combine with AND:
+    // the card needs every one. A parent tag also matches the tags under it:
+    // area -> area/projeto.
+    if (tags != null) {
+      for (final t in tags) {
+        final one =
+            cardCache.tags.like('%"$t"%') | cardCache.tags.like('%"$t/%');
+        query.where((tbl) => one);
       }
-      query.where((tbl) => combinedCondition);
     }
 
     // Sorting: Timestamp DESC, then FactId DESC

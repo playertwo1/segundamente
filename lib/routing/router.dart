@@ -23,6 +23,8 @@ import 'package:memex/ui/calendar/view_models/calendar_viewmodel.dart';
 import 'package:memex/ui/calendar/widgets/calendar_screen.dart';
 import 'package:memex/ui/tags/view_models/tag_tree_viewmodel.dart';
 import 'package:memex/ui/tags/widgets/tag_tree_screen.dart';
+import 'package:memex/ui/saved_views/view_models/saved_views_viewmodel.dart';
+import 'package:memex/ui/saved_views/widgets/saved_views_screen.dart';
 import 'package:memex/ui/topics/view_models/topics_viewmodel.dart';
 import 'package:memex/ui/topics/widgets/topics_screen.dart';
 import 'package:memex/ui/chat/view_models/chat_viewmodel.dart';
@@ -118,6 +120,12 @@ GoRouter createAppRouter(
         path: AppRoutes.tags,
         builder: (context, state) => TagTreeScreen(
           viewModel: TagTreeViewModel(router: context.read<MemexRouter>()),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.savedViews,
+        builder: (context, state) => SavedViewsScreen(
+          viewModel: SavedViewsViewModel(router: context.read<MemexRouter>()),
         ),
       ),
       GoRoute(

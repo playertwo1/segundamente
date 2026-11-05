@@ -229,6 +229,12 @@ class TimelineViewModel extends ChangeNotifier {
   TimelineViewMode viewMode = TimelineViewMode.timeline;
   String activeFilter = 'all';
 
+  /// Tags a saved view adds to [activeFilter]; a card must carry all of them.
+  List<String> extraTags = const [];
+
+  List<String>? _tagsFor(String filter) =>
+      filter == 'all' ? null : [filter, ...extraTags];
+
   Timer? _pollingTimer;
   bool _eventBusSetup = false;
 
@@ -243,7 +249,7 @@ class TimelineViewModel extends ChangeNotifier {
     final cardsResult = await _fetchTimelineCards(
       page: 1,
       limit: pageLimit,
-      tags: filter == 'all' ? null : [filter],
+      tags: _tagsFor(filter),
     );
     return cardsResult.when(
       onOk: (list) async {
@@ -533,8 +539,15 @@ class TimelineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setActiveFilter(String tag) {
-    if (activeFilter == tag) return;
+  /// Shows the cards that carry every tag in [tags] (a saved view).
+  void setTagFilters(List<String> tags) {
+    if (tags.isEmpty) return setActiveFilter('all');
+    setActiveFilter(tags.first, extra: tags.skip(1).toList());
+  }
+
+  void setActiveFilter(String tag, {List<String> extra = const []}) {
+    if (activeFilter == tag && listEquals(extraTags, extra)) return;
+    extraTags = extra;
     _loadGeneration++;
     _visibleLoadGeneration = null;
     activeFilter = tag;
@@ -564,7 +577,7 @@ class TimelineViewModel extends ChangeNotifier {
     final result = await _fetchTimelineCards(
       page: _currentPage,
       limit: pageLimit,
-      tags: filter == 'all' ? null : [filter],
+      tags: _tagsFor(filter),
     );
     switch (result) {
       case Ok(:final value):
@@ -606,7 +619,7 @@ class TimelineViewModel extends ChangeNotifier {
     final result = await _fetchTimelineCards(
       page: _currentPage + 1,
       limit: pageLimit,
-      tags: filter == 'all' ? null : [filter],
+      tags: _tagsFor(filter),
     );
     switch (result) {
       case Ok(:final value):
