@@ -1,6 +1,6 @@
 # F6-10 — Medição de embeddings locais para busca em português
 
-Data: 2026-11-05. Estado: **etapa 1 (qualidade, no PC) feita; etapa 2 (S25: tamanho, tempo, memória) NOT_RUN**. Nada foi implementado no app.
+Data: 2026-11-05. Estado: **etapa 1 (PC) e etapa 2 (S25: tempo e memória) feitas; falta tokenizador em Dart, bateria em uso longo e teste com notas reais**. Nada foi implementado no app.
 
 ## Como foi medido
 - Script e dados: `docs/medicoes/f6-10/bench.py` e `corpus.json` (reproduzível: `pip install onnxruntime tokenizers numpy huggingface_hub`, baixar os modelos citados e rodar).
@@ -32,3 +32,17 @@ Fora do tema (6 consultas): o texto "qualquer palavra" devolveu resultado nas 6 
 - Não testei EmbeddingGemma (exige aceite dos termos Gemma) nem o Universal Sentence Encoder do `daedalus-echo`.
 - Etapa 2, `NOT_RUN`: rodar o modelo no S25 (tamanho no aparelho, tempo por nota, pico de RAM, bateria ao indexar). Falta decidir como executar ONNX no Flutter; o app já usa `sherpa_onnx`, que não faz embeddings de texto. Nenhuma dependência foi escolhida.
 - Critério do ROADMAP: "sem benefício medido, não implementar". Há benefício medido no PC em consultas reformuladas; a decisão de implementar depende da etapa 2 e do dono.
+
+## Etapa 2 — S25 Ultra (2026-11-05)
+Sonda separada, fora do app: `tools/f610_probe` (Flutter, `flutter_onnxruntime` 1.9.0, build release, CPU). Os textos já chegam tokenizados do PC (o tokenizador em Dart **não** foi medido). Resultado bruto: `docs/medicoes/f6-10/resultado-s25.json`. Bateria 70%, 38,9 °C; a medição durou poucos segundos.
+
+| Modelo | Arquivo | Carregar | Por nota (média / p95) | Por consulta | RAM do processo (antes → depois / pico) | Cosseno mínimo vs PC | Acerto@3 "par" | Acerto@3 "lex" |
+|---|---|---|---|---|---|---|---|---|
+| e5-small int8 | 118 MB | 0,35 s | 9,8 ms / 23 ms | 4 ms | 167 → 410 / 472 MB | 0,997 | 17/22 | 12/12 |
+| MiniLM-L12 fp32 | 470 MB | 0,91 s | 10,4 ms / 14 ms | 6 ms | 291 → 693 / 1134 MB | 1,000 | 21/22 | 12/12 |
+
+- Os acertos no aparelho batem com o PC (0,77 e 0,95), então o modelo roda certo no Android.
+- Indexar 1.000 notas curtas levaria ~10 s com qualquer um dos dois (estimativa linear a partir de 48 notas; notas longas custam mais).
+- O e5 int8 usa ~240 MB de RAM acima da linha de base e 118 MB de disco. O MiniLM fp32 é 4 vezes maior em disco e pico de ~1,1 GB (o pico do MiniLM inclui o e5 carregado antes no mesmo processo, então está superestimado). A versão int8 do MiniLM (118 MB) não foi testada e é o candidato óbvio.
+- O APK da sonda ficou com 125,8 MB, a maior parte do ONNX Runtime para todas as arquiteturas; no app principal isso aumentaria o APK e precisa de filtro de arquitetura (`arm64-v8a`).
+- Não medido: bateria e calor em uso real, nota longa (limite de 128 tokens), tokenizador SentencePiece em Dart (maior trabalho restante), notas reais do dono.
