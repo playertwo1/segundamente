@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 import '../app_database.dart';
 import '../tables.dart';
@@ -33,6 +35,15 @@ class CardDao extends DatabaseAccessor<AppDatabase> with _$CardDaoMixin {
     await (delete(cardCache)..where((tbl) => tbl.factId.equals(factId))).go();
   }
 
+  /// Tag list of every cached card, one entry per card.
+  Future<List<List<String>>> getAllTagLists() async {
+    final query = selectOnly(cardCache)..addColumns([cardCache.tags]);
+    final rows = await query.get();
+    return [
+      for (final row in rows) _decodeTags(row.read(cardCache.tags)),
+    ];
+  }
+
   /// Query cards with filters and pagination
   Future<List<CardCacheData>> getCards({
     int page = 1,
@@ -61,7 +72,11 @@ class CardDao extends DatabaseAccessor<AppDatabase> with _$CardDaoMixin {
 
     // Tag Filters (JSON list string 'contains' logic via LIKE)
     if (tags != null && tags.isNotEmpty) {
-      final tagConditions = tags.map((t) => cardCache.tags.like('%"$t"%'));
+      // A parent tag also matches the tags under it: area -> area/projeto.
+      final tagConditions = tags.expand((t) => [
+            cardCache.tags.like('%"$t"%'),
+            cardCache.tags.like('%"$t/%'),
+          ]);
       var combinedCondition = tagConditions.first;
       for (var i = 1; i < tagConditions.length; i++) {
         combinedCondition = combinedCondition | tagConditions.elementAt(i);
@@ -81,4 +96,15 @@ class CardDao extends DatabaseAccessor<AppDatabase> with _$CardDaoMixin {
 
     return await query.get();
   }
+}
+
+List<String> _decodeTags(String? raw) {
+  if (raw == null || raw.isEmpty) return const [];
+  try {
+    final decoded = jsonDecode(raw);
+    if (decoded is List) return decoded.map((e) => e.toString()).toList();
+  } on FormatException {
+    // A malformed row counts as untagged instead of breaking the whole list.
+  }
+  return const [];
 }
