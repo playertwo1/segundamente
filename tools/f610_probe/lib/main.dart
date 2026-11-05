@@ -9,6 +9,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'real_test.dart';
+
 void main() => runApp(const MaterialApp(home: Probe()));
 
 class Probe extends StatefulWidget {
@@ -19,12 +21,6 @@ class Probe extends StatefulWidget {
 
 class _ProbeState extends State<Probe> {
   final _log = StringBuffer();
-
-  @override
-  void initState() {
-    super.initState();
-    _run();
-  }
 
   void _say(String s) {
     debugPrint('F610 $s');
@@ -163,6 +159,16 @@ class _ProbeState extends State<Probe> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('F6-10 sonda')),
-        body: SingleChildScrollView(padding: const EdgeInsets.all(12), child: SelectableText(_log.toString())),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(12),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            FilledButton(onPressed: _run, child: const Text('Medição com o corpus de teste')),
+            FilledButton(
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RealTestPage())),
+              child: const Text('Teste com notas reais'),
+            ),
+            SelectableText(_log.toString()),
+          ]),
+        ),
       );
 }
