@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:memex/ui/core/widgets/asset_picker_text.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:memex/data/services/tavern_character_import_service.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
@@ -40,9 +41,10 @@ class _TavernImportScreenState extends State<TavernImportScreen> {
     if (!mounted) return;
     final List<AssetEntity>? result = await AssetPicker.pickAssets(
       context,
-      pickerConfig: const AssetPickerConfig(
+      pickerConfig: AssetPickerConfig(
         maxAssets: 1,
         requestType: RequestType.image,
+        textDelegate: assetPickerTextFor(Localizations.maybeLocaleOf(context)),
       ),
     );
     if (result == null || result.isEmpty) return;

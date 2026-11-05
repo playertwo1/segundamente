@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:memex/data/services/photo_thumbnail_service.dart';
+import 'package:memex/ui/core/widgets/asset_picker_text.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 const Key reliableThumbnailLoadingKey = Key('reliable-thumbnail-loading');
@@ -36,9 +37,11 @@ FilterOptionGroup _imagePickerFilterOptions() => FilterOptionGroup(
 @visibleForTesting
 AssetPickerConfig buildPlatformDefaultImagePickerConfig({
   required int maxAssets,
+  Locale? locale,
 }) {
   return AssetPickerConfig(
     maxAssets: maxAssets,
+    textDelegate: assetPickerTextFor(locale),
     requestType: RequestType.image,
     filterOptions: _imagePickerFilterOptions(),
   );
@@ -174,13 +177,16 @@ class _ReliableAssetThumbnailState extends State<ReliableAssetThumbnail> {
 
 class ReliableAssetPickerBuilderDelegate
     extends DefaultAssetPickerBuilderDelegate<DefaultAssetPickerProvider> {
+    // ignore: use_super_parameters
   ReliableAssetPickerBuilderDelegate({
     required super.provider,
     required super.initialPermission,
-    required super.locale,
+    required Locale? locale,
     PhotoThumbnailPreheater? preheater,
   })  : _preheater = preheater ?? PhotoThumbnailPreheater(),
         super(
+          locale: locale,
+          textDelegate: assetPickerTextFor(locale),
           gridThumbnailSize: const ThumbnailSize.square(200),
         ) {
     provider.addListener(_preheatLoadedAssets);
@@ -278,6 +284,7 @@ Future<List<AssetEntity>?> pickPlatformImageAssets(
         context,
         pickerConfig: buildPlatformDefaultImagePickerConfig(
           maxAssets: maxAssets,
+          locale: Localizations.maybeLocaleOf(context),
         ),
       ),
     PhotoPickerBackend.reliableApple => pickReliableImageAssets(
