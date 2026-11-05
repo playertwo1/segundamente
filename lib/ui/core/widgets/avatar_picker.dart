@@ -1,74 +1,27 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
 import 'package:memex/ui/core/widgets/character_avatar.dart';
-import 'package:memex/ui/core/widgets/dicebear_avatar.dart';
 import 'package:memex/utils/user_storage.dart';
 
-/// Default seed words used to generate random DiceBear avatars.
-const _seedPool = [
-  'Felix',
-  'Luna',
-  'Milo',
-  'Aria',
-  'Leo',
-  'Nova',
-  'Kai',
-  'Zoe',
-  'Finn',
-  'Iris',
-  'Sage',
-  'Ember',
-  'Atlas',
-  'Cleo',
-  'Orion',
-  'Jade',
-  'River',
-  'Skye',
-  'Wren',
-  'Aspen',
-  'Cedar',
-  'Maple',
-  'Storm',
-  'Blaze',
-  'Coral',
-  'Dusk',
-  'Echo',
-  'Frost',
-  'Glow',
-  'Haze',
-  'Ivy',
-  'Jazz',
-  'Kite',
-  'Lark',
-  'Moss',
-  'Neon',
-  'Opal',
-  'Peak',
-  'Quill',
-  'Reed',
-  'Star',
-  'Tide',
-  'Vale',
-  'Wave',
-  'Zen',
-  'Bolt',
-  'Dune',
-  'Fern',
-  'Hawk',
-  'Lynx',
+const _avatarOptions = [
+  'asset://characters/advogado_diabo.png',
+  'asset://characters/amigo_bar.png',
+  'asset://characters/calmo_crise.png',
+  'asset://characters/cobrador_prazo.png',
+  'asset://characters/curador.png',
+  'asset://characters/diario_bordo.png',
+  'asset://characters/financas_burocracia.png',
+  'asset://characters/gerente_escopo.png',
+  'asset://characters/guardiao_energia.png',
+  'asset://characters/memoria_projeto.png',
+  'asset://characters/parceiro_foco.png',
+  'asset://characters/provocador_criativo.png',
+  'asset://characters/revisor_chato.png',
+  'asset://characters/socio_tecnico.png',
+  'asset://characters/tradutor.png',
 ];
-
-/// Picks [count] random seeds from the pool, optionally excluding [current].
-List<String> _randomSeeds(int count, {String? current}) {
-  final rng = Random();
-  final pool = List<String>.from(_seedPool);
-  if (current != null) pool.remove(current);
-  pool.shuffle(rng);
-  return pool.take(count).toList();
-}
 
 Future<String?> pickAvatarImageFromGallery() async {
   final picker = ImagePicker();
@@ -81,8 +34,8 @@ Future<String?> pickAvatarImageFromGallery() async {
   return picked?.path;
 }
 
-/// Shows a bottom sheet with 5 DiceBear avatar options and a gallery option.
-/// Returns the selected seed string or saved local image path, or null if dismissed.
+/// Shows the bundled portraits and a gallery option.
+/// Returns the selected bundled asset URI or saved local image path, or null.
 Future<String?> showAvatarPicker(
   BuildContext context,
   String currentAvatar, {
@@ -95,50 +48,27 @@ Future<String?> showAvatarPicker(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (context) => _AvatarPickerSheet(
-      currentSeed: currentAvatar,
+      currentAvatar: currentAvatar,
       onPickGallery: onPickGallery,
     ),
   );
 }
 
-class _AvatarPickerSheet extends StatefulWidget {
+class _AvatarPickerSheet extends StatelessWidget {
   const _AvatarPickerSheet({
-    required this.currentSeed,
+    required this.currentAvatar,
     this.onPickGallery,
   });
-  final String currentSeed;
+
+  final String currentAvatar;
   final Future<String?> Function()? onPickGallery;
 
-  @override
-  State<_AvatarPickerSheet> createState() => _AvatarPickerSheetState();
-}
-
-class _AvatarPickerSheetState extends State<_AvatarPickerSheet> {
-  late List<String> _seeds;
-  String? _selected;
-
-  @override
-  void initState() {
-    super.initState();
-    _seeds = _randomSeeds(5, current: widget.currentSeed);
-  }
-
-  void _refresh() {
-    setState(() {
-      _seeds = _randomSeeds(5, current: widget.currentSeed);
-      _selected = null;
-    });
-  }
-
-  Future<void> _pickImageFromGallery() async {
-    final onPickGallery = widget.onPickGallery;
-    if (onPickGallery == null) return;
-
+  Future<void> _pickImageFromGallery(BuildContext context) async {
     try {
-      final avatar = await onPickGallery();
-      if (avatar != null && mounted) Navigator.pop(context, avatar);
+      final avatar = await onPickGallery?.call();
+      if (avatar != null && context.mounted) Navigator.pop(context, avatar);
     } catch (_) {
-      if (mounted) Navigator.pop(context);
+      if (context.mounted) Navigator.pop(context);
     }
   }
 
@@ -150,7 +80,6 @@ class _AvatarPickerSheetState extends State<_AvatarPickerSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Handle bar
             Container(
               width: 36,
               height: 4,
@@ -160,8 +89,6 @@ class _AvatarPickerSheetState extends State<_AvatarPickerSheet> {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Title
             Text(
               UserStorage.l10n.chooseAvatar,
               style: GoogleFonts.inter(
@@ -171,12 +98,10 @@ class _AvatarPickerSheetState extends State<_AvatarPickerSheet> {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Current avatar
-            if (widget.currentSeed.isNotEmpty) ...[
+            if (currentAvatar.isNotEmpty) ...[
               CharacterAvatar(
-                avatar: widget.currentSeed,
-                name: widget.currentSeed,
+                avatar: currentAvatar,
+                name: currentAvatar,
                 size: 64,
               ),
               const SizedBox(height: 4),
@@ -189,81 +114,48 @@ class _AvatarPickerSheetState extends State<_AvatarPickerSheet> {
               ),
               const SizedBox(height: 16),
             ],
-
-            // Avatar row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _seeds.map((seed) {
-                final isSelected = _selected == seed;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() => _selected = seed);
-                    Navigator.pop(context, seed);
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    padding: const EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: isSelected
-                          ? Border.all(color: AppColors.primary, width: 2.5)
-                          : Border.all(color: Colors.transparent, width: 2.5),
-                    ),
-                    child: DiceBearAvatar(
-                      seed: seed,
-                      size: 56,
-                      backgroundColor: AppColors.surface,
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 12,
+              runSpacing: 12,
+              children: _avatarOptions
+                  .where((avatar) => avatar != currentAvatar)
+                  .map((avatar) {
+                final name = avatar
+                    .split('/')
+                    .last
+                    .replaceAll('.png', '')
+                    .replaceAll('_', ' ');
+                return Semantics(
+                  button: true,
+                  label: name,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context, avatar),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: CharacterAvatar(
+                        avatar: avatar,
+                        name: name,
+                        size: 56,
+                        backgroundColor: AppColors.surface,
+                      ),
                     ),
                   ),
                 );
               }).toList(),
             ),
-            const SizedBox(height: 16),
-
-            if (widget.onPickGallery != null) ...[
+            if (onPickGallery != null) ...[
+              const SizedBox(height: 16),
               ListTile(
                 leading:
                     const Icon(Icons.photo_library, color: AppColors.primary),
                 title: Text(UserStorage.l10n.selectFromAlbum),
-                onTap: _pickImageFromGallery,
+                onTap: () => _pickImageFromGallery(context),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const SizedBox(height: 16),
             ],
-
-            // Refresh button — directly below avatars so the association is clear
-            GestureDetector(
-              onTap: _refresh,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.refresh,
-                      size: 16,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      UserStorage.l10n.avatarPicker.shuffle,
-                      style: GoogleFonts.inter(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),

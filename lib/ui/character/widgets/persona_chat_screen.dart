@@ -1,9 +1,9 @@
-import 'package:memex/ui/core/themes/app_colors.dart';
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 import 'package:memex/domain/models/character_model.dart';
 import 'package:memex/domain/models/character_message.dart';
 import 'package:memex/domain/models/character_emoji.dart';
@@ -12,19 +12,43 @@ import 'package:memex/ui/character/view_models/persona_chat_viewmodel.dart';
 import 'package:memex/ui/core/widgets/character_avatar.dart';
 import 'package:memex/ui/core/widgets/local_image.dart';
 import 'package:memex/utils/user_storage.dart';
-import 'package:intl/intl.dart';
 
-const _personaStageInk = AppColors.textPrimary;
-const _personaPanel = Color(0xFF101217);
-const _personaPanelSoft = Color(0xFF1B1D24);
-const _personaText = Color(0xFFF2ECE0);
-const _personaTextMuted = Color(0xFF9E9A94);
-const _personaAccent = Color(0xFFE4D6BD);
-const _personaAccentCool = Color(0xFF6F7E91);
-const _personaLine = Color(0xFF343A45);
-const _personaCharacterBubble = Color(0xD9101115);
-const _personaUserBubble = Color(0xFFE8DEC8);
-const _personaUserBorder = Color(0xFFEFE4CD);
+const _personaBackground = Color(0xFF000000);
+const _personaPanel = Color(0xFF111113);
+const _personaPanelRaised = Color(0xFF1C1C1E);
+const _personaPanelSoft = Color(0xFF171719);
+const _personaText = Color(0xFFF5F1EA);
+const _personaTextSecondary = Color(0xFFA09D98);
+const _personaTextQuiet = Color(0xFF797671);
+const _personaLine = Color(0xFF29292C);
+const _personaLineStrong = Color(0xFF3A3A3F);
+const _personaAccent = Color(0xFFFF8A3D);
+const _personaAccentSoft = Color(0xFF27170D);
+const _personaOnAccent = Color(0xFF1B1008);
+
+final _cachedMarkdownStyle = MarkdownStyleSheet(
+  p: const TextStyle(
+    fontSize: 14,
+    height: 1.5,
+    color: _personaText,
+  ),
+  strong: const TextStyle(
+    fontWeight: FontWeight.w700,
+    color: _personaText,
+  ),
+  em: const TextStyle(fontStyle: FontStyle.italic),
+  listBullet: const TextStyle(color: _personaAccent),
+  code: const TextStyle(
+    fontSize: 13,
+    color: _personaText,
+    backgroundColor: _personaPanelSoft,
+    fontFamily: 'monospace',
+  ),
+  codeblockDecoration: BoxDecoration(
+    color: _personaPanelSoft,
+    borderRadius: BorderRadius.circular(8),
+  ),
+);
 
 /// 1-on-1 chat screen with an AI companion character.
 class PersonaChatScreen extends StatefulWidget {
@@ -46,38 +70,11 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
   PersonaChatViewModel get _viewModel => widget.viewModel;
   String get _currentCharacterId => _viewModel.currentCharacterId;
   CharacterModel? get _character => _viewModel.character;
-  String? get _userId => _viewModel.userId;
-  String? get _userAvatar => _viewModel.userAvatar;
   List<PersonaChatMessageModel> get _messages => _viewModel.messages;
   bool get _isLoading => _viewModel.isLoading;
   bool get _isReplying => _viewModel.isReplying;
   bool get _hasMoreHistory => _viewModel.hasMoreHistory;
   bool get _isLoadingMore => _viewModel.isLoadingMore;
-
-  // Cached MarkdownStyleSheet — avoid recreating on every build
-  static final _cachedMarkdownStyle = MarkdownStyleSheet(
-    p: const TextStyle(
-      fontSize: 15,
-      height: 1.68,
-      color: _personaText,
-    ),
-    strong: const TextStyle(
-      fontWeight: FontWeight.w700,
-      color: _personaText,
-    ),
-    em: const TextStyle(fontStyle: FontStyle.italic),
-    listBullet: const TextStyle(color: _personaAccent),
-    code: const TextStyle(
-      fontSize: 13,
-      color: _personaText,
-      backgroundColor: Color(0xFF241615),
-      fontFamily: 'monospace',
-    ),
-    codeblockDecoration: BoxDecoration(
-      color: const Color(0xFF241615),
-      borderRadius: BorderRadius.circular(8),
-    ),
-  );
 
   @override
   void initState() {
@@ -202,15 +199,16 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
         listenable: _viewModel,
         builder: (context, _) {
           return Scaffold(
-            backgroundColor: _personaStageInk,
+            backgroundColor: _personaBackground,
             body: _isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(color: _personaAccent),
+                  )
                 : Stack(
                     children: [
                       Positioned.fill(
                         child: RepaintBoundary(
-                          child:
-                              _ChatAtmosphereBackground(character: _character),
+                          child: _ChatBackground(character: _character),
                         ),
                       ),
                       Column(
@@ -236,75 +234,89 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
 
   Widget _buildHeader() {
     final character = _character;
-
-    final content = Container(
-      padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+    final l10n = UserStorage.l10n;
+    return Container(
+      height: 72,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: const BoxDecoration(
+        color: _personaBackground,
+        border: Border(bottom: BorderSide(color: _personaLine)),
+      ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: _closeChat,
-            child: const _FrostedCircleButton(
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: _personaText,
-                size: 17,
-              ),
+          IconButton(
+            tooltip: l10n.sendBack,
+            onPressed: _closeChat,
+            constraints: const BoxConstraints.tightFor(width: 44, height: 44),
+            padding: EdgeInsets.zero,
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: _personaText,
+              size: 17,
             ),
           ),
           if (character != null) ...[
             const SizedBox(width: 10),
             Expanded(
-              child: GestureDetector(
-                onTap: _switchCharacter,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      padding: const EdgeInsets.all(1.5),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: _personaAccent.withValues(alpha: 0.72),
-                          width: 1.2,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.42),
-                            blurRadius: 22,
-                            offset: const Offset(0, 8),
+              child: Tooltip(
+                message: l10n.switchCompanion,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: _switchCharacter,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          CharacterAvatar(
+                            avatar: character.avatar,
+                            name: character.name,
+                            size: 42,
+                            backgroundColor: _personaPanelSoft,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  character.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    height: 20 / 17,
+                                    fontWeight: FontWeight.w600,
+                                    color: _personaText,
+                                    letterSpacing: -0.2,
+                                  ),
+                                ),
+                                if (character.tags.isNotEmpty)
+                                  Text(
+                                    character.tags.take(3).join(' · '),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      height: 17 / 13,
+                                      color: _personaTextSecondary,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            size: 19,
+                            color: _personaTextSecondary,
                           ),
                         ],
                       ),
-                      child: CharacterAvatar(
-                        avatar: character.avatar,
-                        name: character.name,
-                        size: 41,
-                        backgroundColor: _personaPanelSoft,
-                      ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        character.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          height: 1.1,
-                          fontWeight: FontWeight.w600,
-                          color: _personaText,
-                          letterSpacing: 0,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      size: 19,
-                      color: _personaAccent,
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -312,8 +324,6 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
         ],
       ),
     );
-
-    return content;
   }
 
   Widget _buildMessageList() {
@@ -329,7 +339,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
       controller: _scrollController,
       reverse: true,
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      padding: const EdgeInsets.fromLTRB(10, 8, 12, 10),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
       itemCount: itemCount,
       itemBuilder: (context, index) {
         // Typing indicator at the bottom (index 0 in reversed list).
@@ -351,6 +361,11 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
           messageIndex,
           _messages,
         );
+        final olderMessage = messageIndex + 1 < _messages.length
+            ? _messages[messageIndex + 1]
+            : null;
+        final showCharacterAvatar =
+            msg.isFromCharacter && olderMessage?.isFromCharacter != true;
 
         return Column(
           children: [
@@ -366,6 +381,9 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
               _buildBubble(
                 text: msg.content,
                 isCharacter: msg.isFromCharacter,
+                time: DateFormat('HH:mm', UserStorage.l10n.localeName)
+                    .format(msg.timestamp),
+                showCharacterAvatar: showCharacterAvatar,
               ),
           ],
         );
@@ -397,58 +415,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
   }
 
   Widget _buildEmptyState() {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(32, 52, 32, 24),
-      children: [
-        Center(
-          child: Column(
-            children: [
-              Container(
-                width: 96,
-                height: 96,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      _personaPanelSoft.withValues(alpha: 0.94),
-                      _personaAccent.withValues(alpha: 0.2),
-                    ],
-                  ),
-                  border: Border.all(
-                    color: _personaAccent.withValues(alpha: 0.3),
-                    width: 2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _personaAccent.withValues(alpha: 0.18),
-                      blurRadius: 32,
-                      offset: const Offset(0, 16),
-                    ),
-                  ],
-                ),
-                child: CharacterAvatar(
-                  avatar: _character?.avatar,
-                  name: _character?.name ?? '',
-                  size: 96,
-                  backgroundColor: Colors.transparent,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                _character?.name ?? '',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: _personaText,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    return PersonaChatEmptyState(character: _character);
   }
 
   Widget _buildDateDivider(DateTime date) {
@@ -459,13 +426,16 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: _personaPanel.withValues(alpha: 0.5),
+            color: _personaPanelSoft,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            border: Border.all(color: _personaLine),
           ),
           child: Text(
             label,
-            style: const TextStyle(fontSize: 11, color: _personaTextMuted),
+            style: const TextStyle(
+              fontSize: 10,
+              color: _personaTextSecondary,
+            ),
           ),
         ),
       ),
@@ -517,7 +487,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
             height: 20,
             child: CircularProgressIndicator(
               strokeWidth: 1.5,
-              color: _personaAccentCool,
+              color: _personaAccent,
             ),
           ),
         ),
@@ -538,7 +508,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
           Expanded(
             child: Container(
               height: 0.5,
-              color: _personaLine.withValues(alpha: 0.4),
+              color: _personaLine,
             ),
           ),
           const SizedBox(width: 12),
@@ -546,7 +516,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
             flex: 0,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.68,
+                maxWidth: MediaQuery.of(context).size.width * 0.76,
               ),
               child: Text(
                 text,
@@ -555,7 +525,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
                   fontSize: 13.5,
                   height: 1.6,
                   fontStyle: FontStyle.italic,
-                  color: _personaTextMuted,
+                  color: _personaTextSecondary,
                   letterSpacing: 0.1,
                 ),
               ),
@@ -565,7 +535,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
           Expanded(
             child: Container(
               height: 0.5,
-              color: _personaLine.withValues(alpha: 0.4),
+              color: _personaLine,
             ),
           ),
         ],
@@ -578,49 +548,22 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
     required bool isCharacter,
   }) {
     final glyph = PersonaChatEmojiGlyph(emoji: emoji);
-    if (isCharacter) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 18),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 46,
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: _FramedCharacterAvatar(
-                  avatar: _character?.avatar,
-                  name: _character?.name ?? '',
-                  size: 40,
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Flexible(child: glyph),
-            const Spacer(),
-          ],
-        ),
-      );
-    }
     return Padding(
-      padding: const EdgeInsets.only(bottom: 18),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Spacer(),
-          Flexible(child: glyph),
-          const SizedBox(width: 8),
-          SizedBox(
-            width: 46,
-            child: Align(
-              alignment: Alignment.topRight,
-              child: _UserAvatar(
-                avatar: _userAvatar,
-                name: _userId ?? '',
-                size: 34,
-              ),
+          if (isCharacter) ...[
+            _FramedCharacterAvatar(
+              avatar: _character?.avatar,
+              name: _character?.name ?? '',
+              size: 27,
             ),
-          ),
+            const SizedBox(width: 8),
+          ] else
+            const Spacer(),
+          Flexible(child: glyph),
+          if (isCharacter) const Spacer(),
         ],
       ),
     );
@@ -629,159 +572,62 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
   Widget _buildBubble({
     required String text,
     required bool isCharacter,
+    required String time,
+    required bool showCharacterAvatar,
   }) {
-    if (isCharacter) {
-      return _buildCharacterBubble(text: text);
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 18),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(width: 54),
-          Flexible(
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.68,
-                ),
-                padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
-                decoration: BoxDecoration(
-                  color: _personaUserBubble.withValues(alpha: 0.9),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(18),
-                    topRight: Radius.circular(6),
-                    bottomLeft: Radius.circular(18),
-                    bottomRight: Radius.circular(18),
-                  ),
-                  border: Border.all(
-                    color: _personaUserBorder.withValues(alpha: 0.82),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _personaUserBorder.withValues(alpha: 0.12),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    height: 1.55,
-                    color: Color(0xFF2D2923),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 46,
-            child: Align(
-              alignment: Alignment.topRight,
-              child: _UserAvatar(
-                avatar: _userAvatar,
-                name: _userId ?? '',
-                size: 34,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCharacterBubble({
-    required String text,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 22),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 46,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: _FramedCharacterAvatar(
-                avatar: _character?.avatar,
-                name: _character?.name ?? '',
-                size: 40,
-              ),
-            ),
-          ),
-          Flexible(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: _CharacterMessageFrame(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: MarkdownBody(
-                        data: text,
-                        softLineBreak: true,
-                        styleSheet: _cachedMarkdownStyle,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 54),
-        ],
-      ),
+    return PersonaChatMessageBubble(
+      text: text,
+      isCharacter: isCharacter,
+      time: time,
+      characterAvatar: _character?.avatar,
+      characterName: _character?.name ?? '',
+      showCharacterAvatar: showCharacterAvatar,
     );
   }
 
   Widget _buildTypingIndicator() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 46,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: _FramedCharacterAvatar(
-                avatar: _character?.avatar,
-                name: _character?.name ?? '',
-                size: 40,
-              ),
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Semantics(
+        liveRegion: true,
+        label: UserStorage.l10n.personaChatThinking,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _FramedCharacterAvatar(
+              avatar: _character?.avatar,
+              name: _character?.name ?? '',
+              size: 27,
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
-            decoration: BoxDecoration(
-              color: _personaCharacterBubble,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(6),
-                topRight: Radius.circular(12),
-                bottomLeft: Radius.circular(12),
-                bottomRight: Radius.circular(12),
-              ),
-              border: Border.all(
-                color: _personaLine.withValues(alpha: 0.7),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: _personaLine.withValues(alpha: 0.18),
-                  blurRadius: 18,
-                  offset: const Offset(0, 8),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: const BoxDecoration(
+                color: _personaPanelRaised,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(18),
+                  bottomLeft: Radius.circular(18),
+                  bottomRight: Radius.circular(18),
                 ),
-              ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const ExcludeSemantics(child: _TypingDots()),
+                  const SizedBox(width: 10),
+                  Text(
+                    UserStorage.l10n.personaChatThinking,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: _personaTextSecondary,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: const _TypingDots(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -797,6 +643,225 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
 
   bool _isSameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
+}
+
+@visibleForTesting
+class PersonaChatEmptyState extends StatelessWidget {
+  const PersonaChatEmptyState({super.key, required this.character});
+
+  final CharacterModel? character;
+
+  @override
+  Widget build(BuildContext context) {
+    final greeting = character?.firstMessage?.trim();
+    final tags = character?.tags
+        .where((tag) => tag.trim().isNotEmpty)
+        .take(3)
+        .join(' · ');
+
+    return ColoredBox(
+      color: _personaBackground,
+      child: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (character != null)
+                    CharacterAvatar(
+                      avatar: character!.avatar,
+                      name: character!.name,
+                      size: 120,
+                      backgroundColor: _personaPanel,
+                    ),
+                  if (tags?.isNotEmpty ?? false) ...[
+                    const SizedBox(height: 24),
+                    Text(
+                      tags!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        height: 15 / 11,
+                        color: _personaTextSecondary,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 12),
+                  Text(
+                    UserStorage.l10n.personaChatWelcomeTitle,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 27,
+                      height: 32 / 27,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.5,
+                      color: _personaText,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: _personaAccentSoft,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: _personaLineStrong),
+                      ),
+                      child: Text(
+                        greeting?.isNotEmpty == true
+                            ? greeting!
+                            : UserStorage.l10n.personaChatWelcomeHint,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          height: 1.5,
+                          color: _personaTextSecondary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+@visibleForTesting
+class PersonaChatMessageBubble extends StatelessWidget {
+  const PersonaChatMessageBubble({
+    super.key,
+    required this.text,
+    required this.isCharacter,
+    required this.time,
+    required this.characterAvatar,
+    required this.characterName,
+    required this.showCharacterAvatar,
+  });
+
+  final String text;
+  final bool isCharacter;
+  final String time;
+  final String? characterAvatar;
+  final String characterName;
+  final bool showCharacterAvatar;
+
+  @override
+  Widget build(BuildContext context) {
+    final maxWidth = MediaQuery.sizeOf(context).width * 0.76;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: isCharacter
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (showCharacterAvatar)
+                  _FramedCharacterAvatar(
+                    avatar: characterAvatar,
+                    name: characterName,
+                    size: 27,
+                  )
+                else
+                  const SizedBox(width: 27, height: 27),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: _CharacterMessageFrame(
+                          child: MarkdownBody(
+                            data: text,
+                            selectable: true,
+                            softLineBreak: true,
+                            styleSheet: _cachedMarkdownStyle,
+                          ),
+                        ),
+                      ),
+                      _MessageTime(time: time, alignment: Alignment.centerLeft),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(maxWidth: maxWidth),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: _personaAccent,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(18),
+                              topRight: Radius.circular(5),
+                              bottomLeft: Radius.circular(18),
+                              bottomRight: Radius.circular(18),
+                            ),
+                          ),
+                          child: SelectableText(
+                            text,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              height: 1.5,
+                              color: _personaOnAccent,
+                            ),
+                          ),
+                        ),
+                        _MessageTime(
+                          time: time,
+                          alignment: Alignment.centerRight,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+}
+
+class _MessageTime extends StatelessWidget {
+  const _MessageTime({required this.time, required this.alignment});
+
+  final String time;
+  final Alignment alignment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
+      child: Align(
+        alignment: alignment,
+        child: Text(
+          time,
+          style: const TextStyle(
+            fontSize: 9,
+            height: 13 / 9,
+            color: _personaTextQuiet,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 @visibleForTesting
@@ -884,8 +949,8 @@ Future<void> markPersonaChatReadAfterOpen({
   await markRead();
 }
 
-class _ChatAtmosphereBackground extends StatelessWidget {
-  const _ChatAtmosphereBackground({required this.character});
+class _ChatBackground extends StatelessWidget {
+  const _ChatBackground({required this.character});
 
   final CharacterModel? character;
 
@@ -894,178 +959,15 @@ class _ChatAtmosphereBackground extends StatelessWidget {
     final bgPath = character?.chatBackground;
     final hasCustomBg =
         bgPath != null && bgPath.isNotEmpty && File(bgPath).existsSync();
+    if (!hasCustomBg) return const ColoredBox(color: _personaBackground);
 
     return Stack(
       children: [
-        if (hasCustomBg)
-          Positioned.fill(
-            child: LocalImage(
-              url: bgPath,
-              fit: BoxFit.cover,
-            ),
-          )
-        else
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF070A11),
-                  Color(0xFF131923),
-                  Color(0xFF060607),
-                ],
-                stops: [0, 0.54, 1],
-              ),
-            ),
-          ),
-        if (!hasCustomBg && character != null)
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.22,
-              child: Transform.scale(
-                scale: 1.5,
-                alignment: Alignment.centerRight,
-                child: Align(
-                  alignment: const Alignment(0.92, -0.16),
-                  child: CharacterAvatar(
-                    avatar: character!.avatar,
-                    name: character!.name,
-                    size: MediaQuery.sizeOf(context).shortestSide * 0.95,
-                    backgroundColor: _personaPanelSoft,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        if (!hasCustomBg)
-          Positioned.fill(
-            child: CustomPaint(
-              painter: _ChatTexturePainter(),
-            ),
-          ),
-        if (!hasCustomBg) ...[
-          Positioned(
-            top: -88,
-            left: -72,
-            child: _AtmosphereGlow(
-              size: 240,
-              color: const Color(0xFF40516A).withValues(alpha: 0.2),
-            ),
-          ),
-          Positioned(
-            top: 84,
-            right: -96,
-            child: _AtmosphereGlow(
-              size: 280,
-              color: _personaAccent.withValues(alpha: 0.08),
-            ),
-          ),
-          Positioned(
-            bottom: 76,
-            left: -120,
-            child: _AtmosphereGlow(
-              size: 320,
-              color: const Color(0xFF334154).withValues(alpha: 0.15),
-            ),
-          ),
-        ],
-        if (hasCustomBg)
-          // Bottom-up dark gradient: solid dark at bottom (input bar area),
-          // fades to transparent around the first message zone so the
-          // background image emerges naturally upward. No top overlay.
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    AppColors.textPrimary,
-                    AppColors.textPrimary.withValues(alpha: 0.92),
-                    AppColors.textPrimary.withValues(alpha: 0.55),
-                    Colors.transparent,
-                    Colors.transparent,
-                  ],
-                  stops: const [0, 0.10, 0.30, 0.50, 1],
-                ),
-              ),
-            ),
-          )
-        else
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.16),
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.34),
-                  ],
-                  stops: const [0, 0.2, 0.7, 1],
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _ChatTexturePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final linePaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.035)
-      ..strokeWidth = 1;
-    for (var y = 48.0; y < size.height; y += 72) {
-      canvas.drawLine(
-        Offset(0, y),
-        Offset(size.width, y + 18),
-        linePaint,
-      );
-    }
-
-    final dotPaint = Paint()
-      ..color = _personaAccent.withValues(alpha: 0.04)
-      ..style = PaintingStyle.fill;
-    for (var y = 36.0; y < size.height; y += 56) {
-      for (var x = 24.0; x < size.width; x += 64) {
-        canvas.drawCircle(Offset(x, y), 1.2, dotPaint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class _AtmosphereGlow extends StatelessWidget {
-  const _AtmosphereGlow({
-    required this.size,
-    required this.color,
-  });
-
-  final double size;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 46, sigmaY: 46),
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-          ),
+        Positioned.fill(child: LocalImage(url: bgPath, fit: BoxFit.cover)),
+        const Positioned.fill(
+          child: ColoredBox(color: Color(0xC6000000)),
         ),
-      ),
+      ],
     );
   }
 }
@@ -1079,25 +981,17 @@ class _CharacterMessageFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(
-        maxWidth: MediaQuery.sizeOf(context).width * 0.72,
+        maxWidth: MediaQuery.sizeOf(context).width * 0.76,
       ),
-      padding: const EdgeInsets.fromLTRB(18, 13, 18, 13),
-      decoration: BoxDecoration(
-        color: _personaCharacterBubble,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(7),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: const BoxDecoration(
+        color: _personaPanelRaised,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(5),
           topRight: Radius.circular(18),
           bottomLeft: Radius.circular(18),
           bottomRight: Radius.circular(18),
         ),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.34),
-            blurRadius: 24,
-            offset: const Offset(0, 12),
-          ),
-        ],
       ),
       child: child,
     );
@@ -1120,79 +1014,18 @@ class _FramedCharacterAvatar extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      padding: const EdgeInsets.all(1.5),
+      padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.black.withValues(alpha: 0.24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.38),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
-          ),
-        ],
+        color: _personaBackground,
+        border: Border.all(color: _personaLine),
       ),
       child: CharacterAvatar(
         avatar: avatar,
         name: name,
-        size: size - 3,
+        size: size - 2,
         backgroundColor: _personaPanelSoft,
       ),
-    );
-  }
-}
-
-class _FrostedCircleButton extends StatelessWidget {
-  const _FrostedCircleButton({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 38,
-      height: 38,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: _personaPanel.withValues(alpha: 0.62),
-        border: Border.all(color: _personaAccent.withValues(alpha: 0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.34),
-            blurRadius: 18,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: IconTheme(
-        data: const IconThemeData(color: _personaText),
-        child: child,
-      ),
-    );
-  }
-}
-
-class _UserAvatar extends StatelessWidget {
-  const _UserAvatar({
-    required this.avatar,
-    required this.name,
-    required this.size,
-  });
-
-  final String? avatar;
-  final String name;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return CharacterAvatar(
-      avatar:
-          avatar ?? (name.isNotEmpty ? name : UserStorage.defaultAvatarSeed),
-      name: name,
-      size: size,
-      backgroundColor: _personaAccentCool.withValues(alpha: 0.22),
     );
   }
 }
@@ -1219,72 +1052,71 @@ class PersonaChatInputBar extends StatelessWidget {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
     return Padding(
       padding: EdgeInsets.fromLTRB(14, 10, 14, bottomPadding + 12),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(18, 12, 12, 12),
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.62),
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.5),
-              blurRadius: 34,
-              offset: const Offset(0, 16),
-            ),
-            BoxShadow(
-              color: _personaAccent.withValues(alpha: 0.06),
-              blurRadius: 18,
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: TextField(
-                controller: controller,
-                focusNode: focusNode,
-                minLines: 1,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  hintStyle: const TextStyle(
-                    color: _personaTextMuted,
-                    fontSize: 15,
-                  ),
-                  isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 10,
-                  ),
-                  border: InputBorder.none,
-                ),
-                style: const TextStyle(
-                  fontSize: 15,
-                  height: 1.35,
-                  color: _personaText,
-                ),
-                textInputAction: TextInputAction.send,
-                onEditingComplete: () {},
-                onSubmitted: (_) {
-                  if (_canSend(controller.text)) onSend();
-                },
+      child: ListenableBuilder(
+        listenable: focusNode,
+        builder: (context, _) {
+          final focused = focusNode.hasFocus;
+          return Container(
+            padding: const EdgeInsets.fromLTRB(14, 8, 8, 8),
+            decoration: BoxDecoration(
+              color: _personaPanel,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: focused ? _personaAccent : _personaLine,
+                width: focused ? 1.5 : 1,
               ),
             ),
-            const SizedBox(width: 8),
-            ValueListenableBuilder<TextEditingValue>(
-              valueListenable: controller,
-              builder: (context, value, _) {
-                final canSend = _canSend(value.text);
-                return _SendButton(
-                  enabled: canSend,
-                  onTap: onSend,
-                );
-              },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    focusNode: focusNode,
+                    minLines: 1,
+                    maxLines: 5,
+                    cursorColor: _personaAccent,
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      hintStyle: const TextStyle(
+                        color: _personaTextQuiet,
+                        fontSize: 13,
+                        height: 19 / 13,
+                      ),
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 10,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      height: 19 / 13,
+                      color: _personaText,
+                    ),
+                    textInputAction: TextInputAction.send,
+                    onEditingComplete: () {},
+                    onSubmitted: (_) {
+                      if (_canSend(controller.text)) onSend();
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: controller,
+                  builder: (context, value, _) {
+                    final canSend = _canSend(value.text);
+                    return _SendButton(
+                      enabled: canSend,
+                      onTap: onSend,
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -1304,38 +1136,25 @@ class _SendButton extends StatelessWidget {
     return Semantics(
       button: true,
       enabled: enabled,
-      label: 'Send message',
+      label: UserStorage.l10n.sendLabel,
       child: GestureDetector(
         onTap: enabled ? onTap : null,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOut,
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: enabled
-                ? _personaAccent.withValues(alpha: 0.78)
-                : Colors.white.withValues(alpha: 0.08),
-            border: Border.all(
-              color: enabled
-                  ? _personaAccent.withValues(alpha: 0.95)
-                  : Colors.white.withValues(alpha: 0.08),
+        child: SizedBox.square(
+          dimension: 44,
+          child: AnimatedContainer(
+            duration: MediaQuery.disableAnimationsOf(context)
+                ? Duration.zero
+                : const Duration(milliseconds: 150),
+            curve: Curves.easeOut,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: enabled ? _personaAccent : _personaPanelRaised,
             ),
-            boxShadow: enabled
-                ? [
-                    BoxShadow(
-                      color: _personaAccent.withValues(alpha: 0.2),
-                      blurRadius: 16,
-                      offset: const Offset(0, 8),
-                    ),
-                  ]
-                : null,
-          ),
-          child: Icon(
-            Icons.send_rounded,
-            color: enabled ? const Color(0xFF5B5346) : _personaTextMuted,
-            size: 22,
+            child: Icon(
+              Icons.arrow_upward_rounded,
+              color: enabled ? _personaOnAccent : _personaTextQuiet,
+              size: 20,
+            ),
           ),
         ),
       ),
@@ -1372,6 +1191,26 @@ class _TypingDotsState extends State<_TypingDots>
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          3,
+          (index) => Padding(
+            padding: EdgeInsets.only(right: index < 2 ? 4 : 0),
+            child: Container(
+              width: 7,
+              height: 7,
+              decoration: const BoxDecoration(
+                color: _personaAccent,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, _) {
@@ -1426,6 +1265,9 @@ class _CharacterSwitcherSheet extends StatelessWidget {
     return showModalBottomSheet<CharacterModel>(
       context: context,
       backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
       builder: (ctx) => _CharacterSwitcherSheet(
         characters: characters,
         currentId: currentId,
@@ -1437,11 +1279,11 @@ class _CharacterSwitcherSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = UserStorage.l10n;
     return Container(
-      decoration: BoxDecoration(
-        color: _personaPanel.withValues(alpha: 0.96),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: const BoxDecoration(
+        color: _personaPanel,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         border: Border(
-          top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+          top: BorderSide(color: _personaLineStrong),
         ),
       ),
       child: SafeArea(
@@ -1453,7 +1295,7 @@ class _CharacterSwitcherSheet extends StatelessWidget {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.22),
+                color: _personaTextQuiet,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -1483,7 +1325,7 @@ class _CharacterSwitcherSheet extends StatelessWidget {
                       avatar: char.avatar,
                       name: char.name,
                       size: 40,
-                      backgroundColor: _personaAccent.withValues(alpha: 0.18),
+                      backgroundColor: _personaPanelSoft,
                     ),
                     title: Text(
                       char.name,
@@ -1499,7 +1341,7 @@ class _CharacterSwitcherSheet extends StatelessWidget {
                             char.tags.join(' · '),
                             style: const TextStyle(
                               fontSize: 12,
-                              color: _personaTextMuted,
+                              color: _personaTextSecondary,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

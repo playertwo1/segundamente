@@ -4791,6 +4791,24 @@ abstract class AppLocalizations {
   /// **'Type a message...'**
   String get personaChatInputHint;
 
+  /// No description provided for @personaChatWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to talk?'**
+  String get personaChatWelcomeTitle;
+
+  /// No description provided for @personaChatWelcomeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a message to get started.'**
+  String get personaChatWelcomeHint;
+
+  /// No description provided for @personaChatThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking...'**
+  String get personaChatThinking;
+
   /// No description provided for @today.
   ///
   /// In en, this message translates to:

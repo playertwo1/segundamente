@@ -2683,6 +2683,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get personaChatInputHint => 'Digite uma mensagem...';
 
   @override
+  String get personaChatWelcomeTitle => 'Vamos conversar?';
+
+  @override
+  String get personaChatWelcomeHint => 'Escreva uma mensagem para começar.';
+
+  @override
+  String get personaChatThinking => 'Pensando...';
+
+  @override
   String get today => 'Hoje';
 
   @override
