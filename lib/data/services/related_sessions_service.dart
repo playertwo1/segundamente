@@ -2,6 +2,10 @@ import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/data/services/topic_service.dart';
 import 'package:memex/domain/models/related_sessions.dart';
+import 'package:memex/domain/models/topic.dart';
+import 'package:memex/utils/logger.dart';
+
+final _logger = getLogger('RelatedSessionsService');
 
 /// Joins the text search, the topics and the session dates for
 /// [relatedSessions].
@@ -26,9 +30,17 @@ class RelatedSessionsService {
       final at = DateTime.tryParse('${meta['updated_at'] ?? ''}');
       if (at != null) times['${meta['session_id']}'] = at;
     }
+    // A broken topics file must not hide the text matches.
+    var topics = const <Topic>[];
+    try {
+      topics = await _topics.load(userId);
+    } catch (error, stackTrace) {
+      _logger.warning('Topics unreadable, using text matches only', error,
+          stackTrace);
+    }
     return relatedSessions(
       seedHits: hits,
-      topics: await _topics.load(userId),
+      topics: topics,
       reports: await _reports.loadAll(userId),
       sessionTimes: times,
     );
