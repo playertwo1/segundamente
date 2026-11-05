@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/domain/models/character_model.dart';
 import 'package:memex/l10n/app_localizations.dart';
+import 'package:memex/ui/character/view_models/character_edit_viewmodel.dart';
 import 'package:memex/ui/character/view_models/character_viewmodel.dart';
 import 'package:memex/ui/character/widgets/character_config_screen.dart';
 import 'package:memex/ui/core/themes/app_colors.dart';
@@ -125,6 +126,42 @@ void main() {
     expect(text.style?.color, isNot(Colors.red[300]));
     expect(color, isNot(Colors.red[300]));
     expect(AppColors.textSecondary, isNot(Colors.red[300]));
+  });
+
+  testWidgets('entry delete buttons are neutral 48dp targets with a label',
+      (tester) async {
+    tester.view.physicalSize = const Size(1080, 4000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final viewModel = CharacterEditViewModel(router: _FakeRouter([]))
+      ..worldEntries = [
+        {'content': 'Mundo', 'keys': ['a'], 'comment': 'c'}
+      ]
+      ..memoryEntries = [
+        {'label': 'Memoria', 'content': 'm'}
+      ];
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('pt'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          ...GlobalMaterialLocalizations.delegates,
+        ],
+        home: CharacterEditPage(viewModel: viewModel),
+      ),
+    );
+    await tester.pump();
+
+    final buttons = find.widgetWithIcon(IconButton, Icons.delete_outline);
+    expect(buttons, findsNWidgets(2));
+    for (final b in buttons.evaluate()) {
+      final button = b.widget as IconButton;
+      expect(button.tooltip, 'Excluir');
+      expect(button.color, AppColors.textTertiary);
+      final size = tester.getSize(find.byWidget(button));
+      expect(size.shortestSide, greaterThanOrEqualTo(48));
+    }
   });
 
   testWidgets('the switch toggles a character and delete asks first',
