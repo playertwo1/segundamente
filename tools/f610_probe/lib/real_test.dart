@@ -135,8 +135,10 @@ class _RealTestPageState extends State<RealTestPage> {
     });
   }
 
+  List<String> parseQueries() => queriesCtl.text.split(RegExp(r'[\r\n]+')).map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+
   Future<void> startJudging() async {
-    queries = queriesCtl.text.split('\n').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+    queries = parseQueries();
     if (queries.isEmpty) return;
     qi = 0;
     await prepare();
@@ -263,9 +265,10 @@ class _RealTestPageState extends State<RealTestPage> {
           const SizedBox(height: 8),
           const Text('Escreva de 10 a 20 perguntas ou buscas, uma por linha. Misture: com palavras que estão na nota, '
               'com outras palavras para a mesma ideia, e 3 ou 4 sobre o que você NÃO anotou.'),
-          TextField(controller: queriesCtl, minLines: 8, maxLines: 14),
+          TextField(controller: queriesCtl, minLines: 8, maxLines: 14, onChanged: (_) => setState(() {})),
           const SizedBox(height: 8),
-          FilledButton(onPressed: startJudging, child: const Text('Começar a avaliar')),
+          Text('${parseQueries().length} consultas lidas (use de 10 a 20, uma por linha)'),
+          FilledButton(onPressed: parseQueries().isEmpty ? null : startJudging, child: const Text('Começar a avaliar')),
         ]);
       case 2:
         return Column(children: [
