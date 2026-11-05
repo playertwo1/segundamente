@@ -254,6 +254,14 @@ class _SegmentBuilder {
   final lines = <String>[];
 
   TranscriptSegment build() {
+    // `[00:00:20] texto na mesma linha`: with no lines below, a long "speaker"
+    // is the text itself. shortcut: 3+ words is the cutoff, a three-word name
+    // with no text below would be read as text.
+    if (lines.isEmpty &&
+        speaker != null &&
+        speaker!.split(RegExp(r'\s+')).length >= 3) {
+      return TranscriptSegment(clock: clock, text: speaker!);
+    }
     return TranscriptSegment(
       clock: clock,
       speaker: speaker,

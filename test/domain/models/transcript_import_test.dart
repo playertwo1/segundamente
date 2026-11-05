@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/domain/models/transcript_import.dart';
 
 void main() {
+  sameLineTextTests();
+
   test('shared audio and PDF become chat attachments, other files do not', () {
     final files = chatAttachmentsFromPaths(
       ['/x/Voz 260914_170715.m4a', '/docs/a.PDF'],
@@ -231,5 +233,26 @@ void main() {
     expect(sharedPathsArePlainText(['/x/legenda.SRT']), isTrue);
     expect(sharedPathsArePlainText(['/x/a.vtt', '/x/b.txt']), isTrue);
     expect(sharedPathsArePlainText(['/x/a.vtt', '/x/b.docx']), isFalse);
+  });
+}
+
+void sameLineTextTests() {
+  group('text on the same line as the clock', () {
+    test('a long line after the clock is the text, not a speaker', () {
+      final parsed = TranscriptImport.parse(utf8.encode(
+        '[00:00:05] Bom dia a todos.\n\n[00:00:20] Marena fica responsavel.\n',
+      ));
+      expect(parsed.segments.map((s) => s.text),
+          ['Bom dia a todos.', 'Marena fica responsavel.']);
+      expect(parsed.segments.every((s) => s.speaker == null), isTrue);
+      expect(parsed.segments.first.clock, '00:00:05');
+    });
+
+    test('a short name with text below stays a speaker', () {
+      final parsed = TranscriptImport.parse(
+          utf8.encode('[00:00:05] Ana\nBom dia a todos.\n'));
+      expect(parsed.segments.single.speaker, 'Ana');
+      expect(parsed.segments.single.text, 'Bom dia a todos.');
+    });
   });
 }
