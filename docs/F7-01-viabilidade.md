@@ -1,6 +1,6 @@
 # F7-01 — Viabilidade: voz contínua, modelos locais e ponte para CLIs oficiais
 
-Data: 2026-11-05. Estado: **proposta, aguardando a escolha do dono** (D-032). Nada aqui é código nem autoriza código.
+Data: 2026-11-05. Estado: **decidido pelo dono em D-032: sem ponte para CLIs**. Nada aqui é código nem autoriza código.
 
 Nível de evidência usado abaixo: **OFICIAL** (página do fornecedor lida em 2026-11-05), **SECUNDÁRIA** (blog ou índice de pacotes, a confirmar) e **A MEDIR** (só se sabe testando no S25 ou no PC do dono).
 

@@ -229,11 +229,11 @@
 
 | ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
 |---|---|---:|---|---|---|
-| F7-01 | Comparar viabilidade, sistemas desktop, licenças, termos, autenticação e limites de dados; decidir escopo antes de código | P0 | F5 fechado (D-031 abriu só esta linha) | IN_PROGRESS | Matriz de opções, riscos e decisão aceita em docs/DECISIONS.md |
+| F7-01 | Comparar viabilidade, sistemas desktop, licenças, termos, autenticação e limites de dados; decidir escopo antes de código | P0 | F5 fechado (D-031 abriu só esta linha) | DONE | Matriz de opções, riscos e decisão aceita em docs/DECISIONS.md |
 | F7-02 | Medir Ollama/modelos locais para qualidade em pt-BR, requisitos de hardware e privacidade | P1 | F7-01 | BLOCKED | Tabela de qualidade, latência, RAM/VRAM, tamanho e plataforma; modelo escolhido ou caminho descartado com motivo |
 | F7-03 | Implementar voz full duplex opcional com controle explícito, interrupção, pausa, cancelar e estado de microfone visível | P0 | F7-01, F7-02 | BLOCKED | Testes de início, interrupção, cancelamento, erro, permissão e liberação do microfone; nenhuma gravação sem ação visível |
-| F7-04 | Criar ponte desktop opcional para Claude Code e Codex CLI oficiais, com escopo e prévia de cada solicitação | P0 | F7-01 | BLOCKED | Teste com cada CLI instalada; destino/comando visíveis, confirmação antes de enviar ou executar, cancelamento sem efeito e falha sem perda de contexto |
-| F7-05 | Decidir se uma interface MCP é necessária e, se aprovada, restringir ferramentas e permissões | P2 | F7-01, F7-04 | BLOCKED | Decisão explícita; se implementada, teste de acesso somente aos recursos autorizados e ausência de escrita em Quick Query |
+| F7-04 | Criar ponte desktop opcional para Claude Code e Codex CLI oficiais, com escopo e prévia de cada solicitação | P0 | F7-01 | CANCELLED | Teste com cada CLI instalada; destino/comando visíveis, confirmação antes de enviar ou executar, cancelamento sem efeito e falha sem perda de contexto |
+| F7-05 | Decidir se uma interface MCP é necessária e, se aprovada, restringir ferramentas e permissões | P2 | F7-01, F7-04 | CANCELLED | Decisão explícita; se implementada, teste de acesso somente aos recursos autorizados e ausência de escrita em Quick Query |
 | F7-06 | Validar privacidade, acessibilidade, segurança, termos e funcionamento nos sistemas escolhidos | P0 | F7-02 a F7-05 | BLOCKED | Auditoria sem bloqueios, resultados de testes e execução real registrados em STATE.md |
 
 **Portão F7:** requisitos de plataforma e termos decididos; voz e ponte funcionam nos sistemas aprovados; toda captura e todo encaminhamento são iniciados pelo usuário; testes e auditoria sem bloqueios. A ponte não pode contornar autenticação nem termos do fornecedor.
