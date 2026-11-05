@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:memex/agent/agent_system_prompt_helper.dart';
 import 'package:memex/agent/agent_controller.util.dart';
 import 'package:memex/agent/built_in_tools/file_tools.dart';
+import 'package:memex/agent/built_in_tools/related_sessions_tool.dart';
 import 'package:memex/agent/memory/memory_management.dart';
 import 'package:memex/agent/memory/super_agent_context_compressor.dart';
 import 'package:memex/agent/skills/manage_pkm/pkm_skill.dart';
@@ -33,6 +34,7 @@ const _readOnlyToolNames = {
   'Read',
   'BatchRead',
   'view_image',
+  'find_related_sessions',
 };
 
 /// Skills excluded in Quick Query mode (those that create/modify data).
@@ -152,6 +154,9 @@ class SuperAgent {
       // emitting multiple calls in one turn. Not in
       // _readOnlyToolNames, so the Quick Query whitelist filter below drops it.
       buildDelegateToSubagentTool(),
+      // Reads session reports (meetings, transcripts); read-only, so Quick
+      // Query keeps it.
+      buildRelatedSessionsTool(),
     ];
 
     // Filter tools in Quick Query mode — only keep read-only tools

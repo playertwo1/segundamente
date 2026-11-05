@@ -2,6 +2,7 @@ import 'package:dart_agent_core/dart_agent_core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memex/agent/security/file_permission_manager.dart';
+import 'package:memex/agent/super_agent/prompts.dart';
 import 'package:memex/agent/super_agent/super_agent.dart';
 import 'package:memex/domain/models/card_model.dart';
 
@@ -104,6 +105,13 @@ void main() {
 
     test('allows image viewing as a read-only tool', () {
       expect(SuperAgent.isQuickQueryToolAllowed('view_image'), isTrue);
+    });
+
+    test('allows session reports as a read-only tool, and the prompt names it',
+        () {
+      expect(SuperAgent.isQuickQueryToolAllowed('find_related_sessions'),
+          isTrue);
+      expect(superAgentSystemPrompt, contains('find_related_sessions'));
     });
 
     test('allows generic LS for read-only filesystem access', () {
