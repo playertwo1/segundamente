@@ -38,10 +38,12 @@ void main() {
       required String text,
       required String assignee,
       required String due,
+      String? reason,
     }) onEdit,
     required Future<void> Function({
       required String itemId,
       required ReportItemStatus status,
+      String? reason,
     }) onSetStatus,
     Future<void> Function(ReportExportFormat format, Set<String> itemIds)?
         onExport,
@@ -80,8 +82,9 @@ void main() {
         required text,
         required assignee,
         required due,
+        reason,
       }) async {},
-      onSetStatus: ({required itemId, required status}) async {},
+      onSetStatus: ({required itemId, required status, reason}) async {},
     );
 
     expect(
@@ -104,8 +107,9 @@ void main() {
         required text,
         required assignee,
         required due,
+        reason,
       }) async {},
-      onSetStatus: ({required itemId, required status}) async {},
+      onSetStatus: ({required itemId, required status, reason}) async {},
     );
     expect(
         find.byKey(const ValueKey('report_section_question')), findsOneWidget);
@@ -142,8 +146,9 @@ void main() {
         required text,
         required assignee,
         required due,
+        reason,
       }) async {},
-      onSetStatus: ({required itemId, required status}) async {},
+      onSetStatus: ({required itemId, required status, reason}) async {},
     );
 
     await tester.tap(find.byKey(const ValueKey('report_item_item_1')));
@@ -204,6 +209,7 @@ void main() {
       segments: segments,
     );
     String? edited;
+    String? editReason;
     await pump(
       tester,
       report,
@@ -213,10 +219,12 @@ void main() {
         required text,
         required assignee,
         required due,
+        reason,
       }) async {
         edited = text;
+        editReason = reason;
       },
-      onSetStatus: ({required itemId, required status}) async {},
+      onSetStatus: ({required itemId, required status, reason}) async {},
     );
 
     await tester.enterText(
@@ -233,9 +241,14 @@ void main() {
       find.byKey(const ValueKey('report_edit_text_item_1')),
       'escopo fechado',
     );
+    await tester.enterText(
+      find.byKey(const ValueKey('report_edit_reason_item_1')),
+      'alinhamento com liderança',
+    );
     await tester.tap(find.byKey(const ValueKey('report_edit_save_item_1')));
     await tester.pumpAndSettle();
     expect(edited, 'escopo fechado');
+    expect(editReason, 'alinhamento com liderança');
   });
 
   testWidgets('generate uses the selected kind', (tester) async {
@@ -251,8 +264,9 @@ void main() {
         required text,
         required assignee,
         required due,
+        reason,
       }) async {},
-      onSetStatus: ({required itemId, required status}) async {},
+      onSetStatus: ({required itemId, required status, reason}) async {},
     );
 
     await tester.tap(find.byKey(const ValueKey('report_kind')));
@@ -283,8 +297,9 @@ void main() {
         required text,
         required assignee,
         required due,
+        reason,
       }) async {},
-      onSetStatus: ({required itemId, required status}) async {},
+      onSetStatus: ({required itemId, required status, reason}) async {},
       onExport: (nextFormat, nextIds) async {
         format = nextFormat;
         ids = nextIds;
@@ -331,8 +346,9 @@ class _HostState extends State<_Host> {
         required text,
         required assignee,
         required due,
+        reason,
       }) async {},
-      onSetStatus: ({required itemId, required status}) async {
+      onSetStatus: ({required itemId, required status, reason}) async {
         setState(() {
           report = setReportItemStatus(
             report,

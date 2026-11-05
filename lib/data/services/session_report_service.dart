@@ -31,7 +31,7 @@ class SessionReportService {
     final file = _reportFile(userId, sessionId);
     if (!await file.exists()) return null;
     final raw = jsonDecode(await file.readAsString());
-    if (raw is! Map) throw FormatException('report is not an object');
+    if (raw is! Map) throw const FormatException('report is not an object');
     final report = sessionReportFromStorage(raw.cast<String, dynamic>());
     if (report.schemaVersion != raw['schema_version']) {
       await _write(file, report);
@@ -131,6 +131,7 @@ class SessionReportService {
     required String assignee,
     required String due,
     String? at,
+    String? reason,
   }) async {
     final current = await _required(userId, sessionId);
     final next = editReportItem(
@@ -147,6 +148,7 @@ class SessionReportService {
       before: current,
       after: next,
       at: at ?? DateTime.now().toIso8601String(),
+      reason: reason,
     );
     return next;
   }
@@ -157,6 +159,7 @@ class SessionReportService {
     required String itemId,
     required ReportItemStatus status,
     String? at,
+    String? reason,
   }) async {
     final current = await _required(userId, sessionId);
     final next = setReportItemStatus(
@@ -171,6 +174,7 @@ class SessionReportService {
       before: current,
       after: next,
       at: at ?? DateTime.now().toIso8601String(),
+      reason: reason,
     );
     return next;
   }
@@ -259,6 +263,7 @@ class SessionReportService {
     required SessionReport before,
     required SessionReport after,
     required String at,
+    String? reason,
   }) async {
     final previous = {
       for (final item in before.items) item.id: item,
@@ -268,7 +273,12 @@ class SessionReportService {
       final old = previous[item.id];
       if (old == null) continue;
       added.addAll(
-        revisionsForChange(before: old, after: item, at: at),
+        revisionsForChange(
+          before: old,
+          after: item,
+          at: at,
+          reason: reason,
+        ),
       );
     }
     if (added.isEmpty) return;
@@ -286,8 +296,19 @@ class SessionReportService {
   Future<List<ReportRevision>> _readRevisions(File file) async {
     if (!await file.exists()) return const [];
     final raw = jsonDecode(await file.readAsString());
-    if (raw is! Map) throw FormatException('revisions are not an object');
+    if (raw is! Map) throw const FormatException('revisions are not an object');
     return revisionsFromJson(raw.cast<String, dynamic>());
+  }
+
+  Future<List<ReportRevision>> loadRevisions({
+    required String userId,
+    required String sessionId,
+    String? itemId,
+  }) async {
+    checkSessionId(sessionId);
+    final history = await _readRevisions(_revisionsFile(userId, sessionId));
+    if (itemId == null) return history;
+    return history.where((rev) => rev.itemId == itemId).toList();
   }
 
   Future<List<SessionReport>> loadAll(String userId) async {

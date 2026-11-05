@@ -34,8 +34,10 @@ void main() {
               required text,
               required assignee,
               required due,
+              String? reason,
             }) async {},
-            onSetStatus: ({required itemId, required status}) async {},
+            onSetStatus: (
+                {required itemId, required status, String? reason}) async {},
           ),
         ),
       ),

@@ -10,6 +10,7 @@ class FollowUpsView extends StatelessWidget {
     required this.textChanges,
     required this.onSearch,
     this.onAddToCalendar,
+    this.onOpenRevisions,
   });
 
   final List<ReportHit> hits;
@@ -18,6 +19,9 @@ class FollowUpsView extends StatelessWidget {
 
   /// Offered only for items whose date was written in full.
   final ValueChanged<ReportHit>? onAddToCalendar;
+
+  /// Opens dedicated revision history for the item.
+  final ValueChanged<ReportHit>? onOpenRevisions;
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +80,16 @@ class FollowUpsView extends StatelessWidget {
   Widget? _change(ReportHit hit) {
     final change = textChanges[reportHitKey(hit.sessionId, hit.item.id)];
     if (change == null) return null;
-    return Text(
-      '${change.before} → ${change.after}',
+    final reasonSuffix =
+        change.reason != 'não informado' ? ' (${change.reason})' : '';
+    final text = Text(
+      '${change.before} → ${change.after}$reasonSuffix',
       key: ValueKey('follow_up_change_${hit.sessionId}_${hit.item.id}'),
+    );
+    if (onOpenRevisions == null) return text;
+    return InkWell(
+      onTap: () => onOpenRevisions!(hit),
+      child: text,
     );
   }
 }

@@ -76,6 +76,7 @@ class SessionReportViewModel extends ChangeNotifier {
     required String text,
     required String assignee,
     required String due,
+    String? reason,
   }) async {
     final result = await _router.editSessionReportItem(
       sessionId: sessionId,
@@ -83,6 +84,7 @@ class SessionReportViewModel extends ChangeNotifier {
       text: text,
       assignee: assignee,
       due: due,
+      reason: reason,
     );
     result.when(
       onOk: (value) {
@@ -97,11 +99,13 @@ class SessionReportViewModel extends ChangeNotifier {
   Future<void> setStatus({
     required String itemId,
     required ReportItemStatus status,
+    String? reason,
   }) async {
     final result = await _router.setSessionReportItemStatus(
       sessionId: sessionId,
       itemId: itemId,
       status: status,
+      reason: reason,
     );
     result.when(
       onOk: (value) {

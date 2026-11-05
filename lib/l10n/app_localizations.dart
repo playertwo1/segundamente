@@ -6153,6 +6153,42 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get reportEdit;
 
+  /// No description provided for @reportEditReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason for change (optional)'**
+  String get reportEditReasonHint;
+
+  /// No description provided for @reportRevisionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Revision history'**
+  String get reportRevisionsTitle;
+
+  /// No description provided for @reportRevisionsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No revisions recorded for this session'**
+  String get reportRevisionsEmpty;
+
+  /// No description provided for @reportRevisionFieldText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text modified'**
+  String get reportRevisionFieldText;
+
+  /// No description provided for @reportRevisionFieldStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status modified'**
+  String get reportRevisionFieldStatus;
+
+  /// No description provided for @reportRevisionReasonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get reportRevisionReasonLabel;
+
   /// No description provided for @reportSourceTitle.
   ///
   /// In en, this message translates to:

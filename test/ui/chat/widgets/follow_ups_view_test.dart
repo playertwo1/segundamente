@@ -51,7 +51,7 @@ void main() {
     );
   }
 
-  testWidgets('an approved follow-up shows its text change', (tester) async {
+  testWidgets('an approved follow-up shows its text change and reason', (tester) async {
     await pump(
       tester,
       hits: [hit('mandar o resumo')],
@@ -70,6 +70,26 @@ void main() {
     expect(find.text('mandar o resumo'), findsWidgets);
     expect(find.text('mandar o resumo → mandar amanhã'), findsOneWidget);
     expect(find.byKey(const ValueKey('follow_ups_empty')), findsNothing);
+
+    await pump(
+      tester,
+      hits: [hit('mandar o resumo')],
+      changes: {
+        reportHitKey('txt_report', 'item_1'): const ReportRevision(
+          itemId: 'item_1',
+          field: 'text',
+          before: 'mandar o resumo',
+          after: 'mandar amanhã',
+          at: '2026-11-02T15:04:00',
+          reason: 'pedido do cliente',
+        ),
+      },
+      onSearch: (_) {},
+    );
+    expect(
+      find.text('mandar o resumo → mandar amanhã (pedido do cliente)'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('search submits the typed query', (tester) async {

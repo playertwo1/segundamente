@@ -19,6 +19,7 @@ class FollowUpsViewModel extends ChangeNotifier {
         _openCalendar = openCalendar ?? NativeActionService.openCalendarInsert;
 
   final MemexRouter _router;
+  MemexRouter get router => _router;
   final Future<bool> Function({
     required String title,
     required DateTime start,

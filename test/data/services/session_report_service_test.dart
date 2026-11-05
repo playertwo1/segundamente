@@ -455,6 +455,7 @@ void main() {
       assignee: reportAssigneeUnknown,
       due: reportDueUnknown,
       at: '2026-11-02T15:05:00',
+      reason: 'ajuste no cronograma',
     );
     await service.editItem(
       userId: userId,
@@ -470,6 +471,28 @@ void main() {
     expect(change, isNotNull);
     expect(change!.before, 'fechar o escopo');
     expect(change.after, 'fechar depois');
+    expect(change.reason, 'ajuste no cronograma');
+
+    final loadedRevisions = await service.loadRevisions(
+      userId: userId,
+      sessionId: sessionId,
+    );
+    expect(loadedRevisions, isNotEmpty);
+    expect(loadedRevisions.any((r) => r.reason == 'ajuste no cronograma'), isTrue);
+
+    final byItem = await service.loadRevisions(
+      userId: userId,
+      sessionId: sessionId,
+      itemId: meeting.items.first.id,
+    );
+    expect(byItem.first.reason, 'ajuste no cronograma');
+
+    final nonExistent = await service.loadRevisions(
+      userId: userId,
+      sessionId: sessionId,
+      itemId: 'non_existent',
+    );
+    expect(nonExistent, isEmpty);
 
     final revisions = File(
       p.join(

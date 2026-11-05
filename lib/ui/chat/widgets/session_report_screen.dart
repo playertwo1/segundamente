@@ -3,6 +3,8 @@ import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/domain/models/session_report_export.dart';
 import 'package:memex/ui/corrections/view_models/corrections_viewmodel.dart';
 import 'package:memex/ui/corrections/widgets/corrections_screen.dart';
+import 'package:memex/ui/revisions/view_models/report_revisions_viewmodel.dart';
+import 'package:memex/ui/revisions/widgets/report_revisions_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:memex/ui/chat/view_models/session_report_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/session_report_view.dart';
@@ -41,6 +43,21 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
         elevation: 0,
         actions: [
           IconButton(
+            key: const ValueKey('report_revisions'),
+            tooltip: UserStorage.l10n.reportRevisionsTitle,
+            icon: const Icon(Icons.history, color: AppColors.textSecondary),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => ReportRevisionsScreen(
+                  viewModel: ReportRevisionsViewModel(
+                    router: context.read<MemexRouter>(),
+                    sessionId: widget.viewModel.sessionId,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          IconButton(
             key: const ValueKey('report_corrections'),
             tooltip: UserStorage.l10n.correctionsOpen,
             icon: const Icon(Icons.spellcheck, color: AppColors.textSecondary),
@@ -77,7 +94,7 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
                 format: format,
                 itemIds: itemIds,
               );
-              if (!mounted || result.isError) return;
+              if (!mounted || !context.mounted || result.isError) return;
               try {
                 await ShareService.shareExistingFile(
                   context,

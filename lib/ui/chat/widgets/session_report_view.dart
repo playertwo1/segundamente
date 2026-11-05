@@ -23,10 +23,12 @@ class SessionReportView extends StatefulWidget {
     required String text,
     required String assignee,
     required String due,
+    String? reason,
   }) onEdit;
   final Future<void> Function({
     required String itemId,
     required ReportItemStatus status,
+    String? reason,
   }) onSetStatus;
   final Future<void> Function(ReportExportFormat format, Set<String> itemIds)
       onExport;
@@ -295,10 +297,12 @@ class _ReportItemTile extends StatelessWidget {
     required String text,
     required String assignee,
     required String due,
+    String? reason,
   }) onEdit;
   final Future<void> Function({
     required String itemId,
     required ReportItemStatus status,
+    String? reason,
   }) onSetStatus;
 
   @override
@@ -393,8 +397,8 @@ class _ReportItemTile extends StatelessWidget {
   }
 
   Future<void> _edit(BuildContext context) async {
-    final saved =
-        await showDialog<({String text, String assignee, String due})>(
+    final saved = await showDialog<
+        ({String text, String assignee, String due, String? reason})>(
       context: context,
       builder: (dialogContext) => _EditReportItemDialog(item: item),
     );
@@ -404,6 +408,7 @@ class _ReportItemTile extends StatelessWidget {
       text: saved.text,
       assignee: saved.assignee,
       due: saved.due,
+      reason: saved.reason,
     );
   }
 }
@@ -421,6 +426,7 @@ class _EditReportItemDialogState extends State<_EditReportItemDialog> {
   late final TextEditingController _text;
   late final TextEditingController _assignee;
   late final TextEditingController _due;
+  late final TextEditingController _reason;
 
   @override
   void initState() {
@@ -428,6 +434,7 @@ class _EditReportItemDialogState extends State<_EditReportItemDialog> {
     _text = TextEditingController(text: widget.item.text);
     _assignee = TextEditingController(text: widget.item.assignee);
     _due = TextEditingController(text: widget.item.due);
+    _reason = TextEditingController();
   }
 
   @override
@@ -435,12 +442,14 @@ class _EditReportItemDialogState extends State<_EditReportItemDialog> {
     _text.dispose();
     _assignee.dispose();
     _due.dispose();
+    _reason.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final id = widget.item.id;
+    final l10n = UserStorage.l10n;
     return AlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -460,14 +469,23 @@ class _EditReportItemDialogState extends State<_EditReportItemDialog> {
             controller: _due,
             maxLines: 1,
           ),
+          TextField(
+            key: ValueKey('report_edit_reason_$id'),
+            controller: _reason,
+            maxLines: 1,
+            decoration: InputDecoration(
+              hintText: l10n.reportEditReasonHint,
+            ),
+          ),
           TextButton(
             key: ValueKey('report_edit_save_$id'),
             onPressed: () => Navigator.pop(context, (
               text: _text.text,
               assignee: _assignee.text,
               due: _due.text,
+              reason: _reason.text.trim().isEmpty ? null : _reason.text.trim(),
             )),
-            child: Text(UserStorage.l10n.confirm),
+            child: Text(l10n.confirm),
           ),
         ],
       ),

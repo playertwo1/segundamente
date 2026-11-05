@@ -19,6 +19,7 @@ class ReportRevision {
     required this.before,
     required this.after,
     required this.at,
+    this.reason = 'não informado',
   });
 
   final String itemId;
@@ -26,6 +27,7 @@ class ReportRevision {
   final String before;
   final String after;
   final String at;
+  final String reason;
 }
 
 String reportHitKey(String sessionId, String itemId) {
@@ -66,10 +68,14 @@ List<ReportRevision> revisionsForChange({
   required ReportItem before,
   required ReportItem after,
   required String at,
+  String? reason,
 }) {
   if (before.id != after.id) {
     throw StateError('item mismatch');
   }
+  final effectiveReason = (reason != null && reason.trim().isNotEmpty)
+      ? reason.trim()
+      : 'não informado';
   final rows = <ReportRevision>[];
   if (before.text != after.text) {
     rows.add(
@@ -79,6 +85,7 @@ List<ReportRevision> revisionsForChange({
         before: before.text,
         after: after.text,
         at: at,
+        reason: effectiveReason,
       ),
     );
   }
@@ -90,6 +97,7 @@ List<ReportRevision> revisionsForChange({
         before: before.status.name,
         after: after.status.name,
         at: at,
+        reason: effectiveReason,
       ),
     );
   }
@@ -118,6 +126,7 @@ Map<String, dynamic> revisionsToJson(List<ReportRevision> rows) {
           'before': row.before,
           'after': row.after,
           'at': row.at,
+          'reason': row.reason,
         },
     ],
   };
@@ -126,10 +135,10 @@ Map<String, dynamic> revisionsToJson(List<ReportRevision> rows) {
 List<ReportRevision> revisionsFromJson(Map<String, dynamic> json) {
   final version = json['schema_version'];
   if (version != reportRevisionSchemaVersion) {
-    throw FormatException('revision schema');
+    throw const FormatException('revision schema');
   }
   final rawItems = json['items'];
-  if (rawItems is! List) throw FormatException('revision items');
+  if (rawItems is! List) throw const FormatException('revision items');
   return [
     for (final raw in rawItems)
       if (raw is Map)
@@ -139,8 +148,11 @@ List<ReportRevision> revisionsFromJson(Map<String, dynamic> json) {
           before: raw['before'] as String,
           after: raw['after'] as String,
           at: raw['at'] as String,
+          reason: (raw['reason'] as String?)?.trim().isNotEmpty == true
+              ? (raw['reason'] as String).trim()
+              : 'não informado',
         )
       else
-        throw FormatException('revision item'),
+        throw const FormatException('revision item'),
   ];
 }

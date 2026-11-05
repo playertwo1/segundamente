@@ -94,6 +94,15 @@ void main() {
     expect(rows.single.field, 'text');
     expect(rows.single.before, 'fechar o escopo');
     expect(rows.single.after, 'fechar depois');
+    expect(rows.single.reason, 'não informado');
+
+    final withReason = revisionsForChange(
+      before: before,
+      after: renamed,
+      at: '2026-11-02T15:04:30',
+      reason: 'decisão da equipe',
+    );
+    expect(withReason.single.reason, 'decisão da equipe');
 
     final approved = revisionsForChange(
       before: renamed,
@@ -103,6 +112,7 @@ void main() {
     expect(approved.single.field, 'status');
     expect(approved.single.before, 'unconfirmed');
     expect(approved.single.after, 'approved');
+    expect(approved.single.reason, 'não informado');
 
     expect(
       revisionsForChange(
@@ -114,8 +124,24 @@ void main() {
     );
     expect(latestTextChange([...rows, ...approved], '1')!.after, 'fechar depois');
 
-    final stored = revisionsFromJson(revisionsToJson(rows));
+    final stored = revisionsFromJson(revisionsToJson(withReason));
     expect(stored.single.before, 'fechar o escopo');
+    expect(stored.single.reason, 'decisão da equipe');
+
+    final legacy = revisionsFromJson({
+      'schema_version': 1,
+      'items': [
+        {
+          'item_id': '1',
+          'field': 'text',
+          'before': 'antigo',
+          'after': 'novo',
+          'at': '2026-11-02T15:00:00',
+        }
+      ],
+    });
+    expect(legacy.single.reason, 'não informado');
+
     expect(
       () => revisionsFromJson({'schema_version': 2, 'items': []}),
       throwsFormatException,

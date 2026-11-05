@@ -3441,6 +3441,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportEdit => 'Edit';
 
   @override
+  String get reportEditReasonHint => 'Reason for change (optional)';
+
+  @override
+  String get reportRevisionsTitle => 'Revision history';
+
+  @override
+  String get reportRevisionsEmpty => 'No revisions recorded for this session';
+
+  @override
+  String get reportRevisionFieldText => 'Text modified';
+
+  @override
+  String get reportRevisionFieldStatus => 'Status modified';
+
+  @override
+  String get reportRevisionReasonLabel => 'Reason';
+
+  @override
   String get reportSourceTitle => 'Source excerpt';
 
   @override

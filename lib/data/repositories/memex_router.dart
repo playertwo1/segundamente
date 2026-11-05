@@ -1274,6 +1274,7 @@ class MemexRouter {
     required String text,
     required String assignee,
     required String due,
+    String? reason,
   }) {
     return runResult(() async {
       final userId = await _reportUserId();
@@ -1284,6 +1285,7 @@ class MemexRouter {
         text: text,
         assignee: assignee,
         due: due,
+        reason: reason,
       );
     });
   }
@@ -1292,6 +1294,7 @@ class MemexRouter {
     required String sessionId,
     required String itemId,
     required ReportItemStatus status,
+    String? reason,
   }) {
     return runResult(() async {
       final userId = await _reportUserId();
@@ -1300,6 +1303,7 @@ class MemexRouter {
         sessionId: sessionId,
         itemId: itemId,
         status: status,
+        reason: reason,
       );
     });
   }
@@ -1420,6 +1424,20 @@ class MemexRouter {
     return runResult(() async {
       final userId = await _reportUserId();
       return SessionReportService().latestTextChanges(userId: userId);
+    });
+  }
+
+  Future<Result<List<ReportRevision>>> loadSessionRevisions({
+    required String sessionId,
+    String? itemId,
+  }) {
+    return runResult(() async {
+      final userId = await _reportUserId();
+      return SessionReportService().loadRevisions(
+        userId: userId,
+        sessionId: sessionId,
+        itemId: itemId,
+      );
     });
   }
 

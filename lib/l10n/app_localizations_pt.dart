@@ -3473,6 +3473,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reportEdit => 'Editar';
 
   @override
+  String get reportEditReasonHint => 'Motivo da alteração (opcional)';
+
+  @override
+  String get reportRevisionsTitle => 'Histórico de revisões';
+
+  @override
+  String get reportRevisionsEmpty =>
+      'Nenhuma revisão registrada para esta sessão';
+
+  @override
+  String get reportRevisionFieldText => 'Texto modificado';
+
+  @override
+  String get reportRevisionFieldStatus => 'Status modificado';
+
+  @override
+  String get reportRevisionReasonLabel => 'Motivo';
+
+  @override
   String get reportSourceTitle => 'Trecho de origem';
 
   @override

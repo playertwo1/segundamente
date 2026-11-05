@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memex/ui/chat/view_models/follow_ups_viewmodel.dart';
 import 'package:memex/ui/chat/widgets/follow_ups_view.dart';
+import 'package:memex/ui/revisions/view_models/report_revisions_viewmodel.dart';
+import 'package:memex/ui/revisions/widgets/report_revisions_screen.dart';
 import 'package:memex/utils/toast_helper.dart';
 import 'package:memex/utils/user_storage.dart';
 
@@ -51,6 +53,19 @@ class _FollowUpsScreenState extends State<FollowUpsScreen> {
                   UserStorage.l10n.addToCalendarFailed,
                 );
               }
+            },
+            onOpenRevisions: (hit) {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => ReportRevisionsScreen(
+                    viewModel: ReportRevisionsViewModel(
+                      router: widget.viewModel.router,
+                      sessionId: hit.sessionId,
+                      itemId: hit.item.id,
+                    ),
+                  ),
+                ),
+              );
             },
           );
         },

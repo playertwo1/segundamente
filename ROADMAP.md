@@ -189,7 +189,7 @@
 |---|---|---:|---|---|---|
 | F6-01 | Buscar sessões e itens entre registros, começando por texto e avançando para semântica | P0 | D-010, F3 | IN_PROGRESS | Busca semântica em pt-BR avaliada contra busca textual, com evidência dos resultados e teste de consulta fora do tema |
 | F6-02 | Listar encaminhamentos aprovados sem incluir sugestões pendentes ou tarefas internas dos agentes | P0 | F3-05 | IN_PROGRESS | Painel no S25 exibe apenas item confirmado; validar estado vazio, busca e acesso pelo fluxo normal |
-| F6-03 | Mostrar o que mudou e preservar histórico de versões e motivo | P0 | F3-06 | IN_PROGRESS | Alteração cria revisão; exclusão remove derivados e preserva original; “por quê” tem origem explícita ou aparece como não informado |
+| F6-03 | Mostrar o que mudou e preservar histórico de versões e motivo | P0 | F3-06 | DONE | Alteração cria revisão com motivo explícito ou 'não informado'; exclusão remove derivados e preserva original; testes cobrem ReportRevision, SessionReportService, revisions.json, FollowUpsView e SessionReportView |
 | F6-04 | Criar tópicos/projetos como entidade própria e relacioná-los a sessões | P1 | F6-01 | IN_PROGRESS | Modelo, migração e UI ligados a sessões; não confundir seção de relatório com tópico |
 | F6-05 | Organizar tags hierárquicas como area/projeto, com árvore e contagens | P1 | D-014 | IN_PROGRESS | Pai soma filhos; tag simples fica na raiz; tocar filtra; testes e prova visual no S25 |
 | F6-06 | Combinar filtros de propriedade e salvar visões locais | P1 | F6-01 | IN_PROGRESS | Filtros combinam por E; visão persiste entre reinícios e pode ser renomeada/apagada |
