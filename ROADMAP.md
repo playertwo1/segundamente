@@ -124,7 +124,7 @@
 | F3-04 | Vincular cada item ao segmento/relógio de origem e permitir abrir a fonte | P0 | F3-02 | DONE | Fixture de teste abre o segmento e relógio corretos; original permanece acessível |
 | F3-05 | Deixar sugestões não confirmadas até decisão humana; não inventar responsável ou prazo | P0 | F3-02 | DONE | Fixture prova estado inicial pendente e valores “não identificado”/“não informado” |
 | F3-06 | Editar, confirmar, descartar, buscar e excluir relatório e derivados sem alterar o original | P1 | F3-05 | DONE | Fixtures provam edição, estados, busca e exclusão com original preservado |
-| F3-07 | Reduzir falsos positivos e duplicatas na extração de tarefas | P1 | F3-02 | READY | Casos positivos/negativos pt-BR; narração, opinião e fato passado não viram tarefa; duplicata não entra duas vezes |
+| F3-07 | Reduzir falsos positivos e duplicatas na extração de tarefas | P1 | F3-02 | IN_PROGRESS | Casos positivos/negativos pt-BR; narração, opinião e fato passado não viram tarefa; duplicata não entra duas vezes |
 | F3-08 | Regras de resumo em português, preservação das notas do usuário e regeneração sem apagar a versão anterior | P1 | F3-02 | READY | Teste por regra e validação no S25; título vazio não vira relatório em branco |
 | F3-09 | Correção conservadora da transcrição em arquivo separado, sem reescrever nem traduzir o original | P2 | F2-04, F3-08 | BACKLOG | Só substituições autorizadas de palavras/trechos existentes; teste recusa índices/operações inválidos e compara original byte a byte |
 

@@ -233,6 +233,7 @@ SessionReport sessionReportFromModelJson({
   final byId = {for (final segment in segments) segment.id: segment};
   final sections = sectionsFor(kind);
   final items = <ReportItem>[];
+  final seen = <String>{};
   for (var i = 0; i < rawItems.length; i++) {
     final raw = rawItems[i];
     if (raw is! Map) throw FormatException('item $i is not an object');
@@ -255,10 +256,16 @@ SessionReport sessionReportFromModelJson({
     if (clock != null && clock.isNotEmpty && clock != segment.clock) {
       throw FormatException('clock does not match $segmentId');
     }
+    final finalKind = _kindAfterTaskGuard(itemKind, '$text $excerpt');
+    if (!sections.contains(finalKind)) continue;
+    final duplicate = '${_normalizedKey(text)}|${finalKind.name}';
+    final sameSource =
+        '$segmentId|${_normalizedKey(excerpt)}|${finalKind.name}';
+    if (!seen.add(duplicate) || !seen.add(sameSource)) continue;
     items.add(
       ReportItem(
-        id: 'item_${i + 1}',
-        kind: itemKind,
+        id: 'item_${items.length + 1}',
+        kind: finalKind,
         text: text,
         status: ReportItemStatus.unconfirmed,
         assignee: reportAssigneeUnknown,
@@ -283,6 +290,57 @@ SessionReport sessionReportFromModelJson({
   );
 }
 
+const _letterBefore = r'(?<![\p{L}])';
+const _letterAfter = r'(?![\p{L}])';
+
+// shortcut: pt-BR cue words only. A task phrased without any of them still
+// reaches the user's review; widen the lists when a real sample needs it.
+final _pastFact = RegExp(
+  '$_letterBefore(?:ontem|anteontem|semana passada|mês passado|'
+  'já (?:fiz|fez|enviei|mandei|resolvi|terminei|concluí|foi|foram)|'
+  'foi (?:enviad|feit|conclu|resolvid|entregue)\\p{L}*|'
+  'fiz|enviei|mandei|terminei|resolvi|combinamos|fomos)$_letterAfter',
+  caseSensitive: false,
+  unicode: true,
+);
+final _opinion = RegExp(
+  '$_letterBefore(?:acho que|eu acho|na minha opinião|talvez|quem sabe|'
+  'seria (?:bom|legal|interessante|melhor)|parece que|gosto d[eoa]|'
+  'não gosto)$_letterAfter',
+  caseSensitive: false,
+  unicode: true,
+);
+final _obligation = RegExp(
+  '$_letterBefore(?:preciso|precisa|precisamos|dev[eoi]|devemos|vai|vamos|'
+  'tem que|temos que|fica responsável|lembrar de|não esquecer|até|amanhã|'
+  'próxim[oa]|enviar|mandar|ligar|marcar|agendar)$_letterAfter',
+  caseSensitive: false,
+  unicode: true,
+);
+
+/// A task that is only a past fact or an opinion is not a commitment: it
+/// becomes a summary or an idea, and an explicit obligation keeps it a task.
+ReportItemKind _kindAfterTaskGuard(ReportItemKind kind, String evidence) {
+  if (kind != ReportItemKind.task || _obligation.hasMatch(evidence)) {
+    return kind;
+  }
+  if (_pastFact.hasMatch(evidence)) return ReportItemKind.summary;
+  if (_opinion.hasMatch(evidence)) return ReportItemKind.idea;
+  return kind;
+}
+
+String _normalizedKey(String value) {
+  const from = 'áàâãäéèêëíìîïóòôõöúùûüç';
+  const to = 'aaaaaeeeeiiiiooooouuuuc';
+  final buffer = StringBuffer();
+  for (final rune in value.toLowerCase().runes) {
+    final ch = String.fromCharCode(rune);
+    final at = from.indexOf(ch);
+    buffer.write(at >= 0 ? to[at] : ch);
+  }
+  return buffer.toString().replaceAll(RegExp(r'[^a-z0-9]+'), ' ').trim();
+}
+
 // shortcut: sends the whole text in one request, no chunking; split by time
 // when a real 50 min transcript exceeds the model context.
 const reportModelInputLimit = 60000;
@@ -298,7 +356,10 @@ String reportExtractionSystemPrompt(ReportKind kind) {
       'Never invent facts, people or dates. Do not output assignees, '
       'due dates or status. Use summary for the main point and decision, '
       'task, followUp, idea, opportunity or question only when the '
-      'transcript clearly says so. Skip anything unclear.';
+      'transcript clearly says so. A task is a future commitment someone '
+      'accepts or is asked to do. Narration, opinions, hypotheses and facts '
+      'already done are never tasks. Emit each item once; do not repeat an '
+      'item with different words. Skip anything unclear.';
 }
 
 String reportExtractionUserPrompt(List<ReportSegment> segments) {

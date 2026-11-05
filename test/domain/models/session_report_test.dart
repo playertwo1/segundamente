@@ -247,4 +247,127 @@ void main() {
     expect(reportExtractionSystemPrompt(ReportKind.brainstorm),
         contains('idea, opportunity'));
   });
+
+  group('task extraction guard (pt-BR)', () {
+    SessionReport extract(
+      ReportKind kind,
+      List<(String kind, String text)> raw,
+    ) {
+      final segs = [
+        for (var i = 0; i < raw.length; i++)
+          ReportSegment(id: 'seg_$i', text: raw[i].$2, clock: '00:00:0$i'),
+      ];
+      return sessionReportFromModelJson(
+        sessionId: 's',
+        kind: kind,
+        customTitle: null,
+        segments: segs,
+        json: {
+          'schema_version': 1,
+          'items': [
+            for (var i = 0; i < raw.length; i++)
+              {
+                'kind': raw[i].$1,
+                'text': raw[i].$2,
+                'segment_id': 'seg_$i',
+                'excerpt': raw[i].$2,
+              },
+          ],
+        },
+      );
+    }
+
+    test('real commitments stay tasks', () {
+      final report = extract(ReportKind.reuniao, [
+        ('task', 'Carlos deve enviar o resumo à equipe amanhã.'),
+        (
+          'task',
+          'Marina fica responsável por concluir os testes até o dia 20.'
+        ),
+        ('task', 'Preciso enviar o relatório que fiz ontem.'),
+        ('task', 'Vamos atualizar a página de preços.'),
+      ]);
+      expect(
+          report.items.map((i) => i.kind), everyElement(ReportItemKind.task));
+      expect(report.items, hasLength(4));
+    });
+
+    test('a past fact is not a task', () {
+      final report = extract(ReportKind.reuniao, [
+        ('task', 'Ontem o time enviou o relatório ao cliente.'),
+        ('task', 'Eu já resolvi o problema do login.'),
+        ('task', 'O contrato foi assinado na semana passada.'),
+      ]);
+      expect(report.items.map((i) => i.kind),
+          everyElement(ReportItemKind.summary));
+    });
+
+    test('an opinion is an idea where the report has ideas, else dropped', () {
+      final free = extract(ReportKind.livre, [
+        ('task', 'Acho que seria melhor mudar o layout.'),
+        ('task', 'Talvez a gente devesse testar outro fornecedor.'),
+      ]);
+      expect(free.items.map((i) => i.kind), everyElement(ReportItemKind.idea));
+
+      final meeting = extract(ReportKind.reuniao, [
+        ('task', 'Acho que seria melhor mudar o layout.'),
+        ('task', 'Carlos deve enviar o resumo amanhã.'),
+      ]);
+      expect(meeting.items.single.text, 'Carlos deve enviar o resumo amanhã.');
+    });
+
+    test('the same item is not listed twice', () {
+      final segs = [
+        const ReportSegment(
+            id: 'seg_0',
+            text: 'Carlos deve enviar o resumo.',
+            clock: '00:00:01'),
+      ];
+      final report = sessionReportFromModelJson(
+        sessionId: 's',
+        kind: ReportKind.reuniao,
+        customTitle: null,
+        segments: segs,
+        json: {
+          'schema_version': 1,
+          'items': [
+            {
+              'kind': 'task',
+              'text': 'Carlos deve enviar o resumo.',
+              'segment_id': 'seg_0',
+              'excerpt': 'Carlos deve enviar o resumo.'
+            },
+            {
+              'kind': 'task',
+              'text': 'carlos deve enviar o RESUMO',
+              'segment_id': 'seg_0',
+              'excerpt': 'Carlos deve enviar'
+            },
+            {
+              'kind': 'task',
+              'text': 'Enviar o resumo (Carlos)',
+              'segment_id': 'seg_0',
+              'excerpt': 'Carlos deve enviar o resumo.'
+            },
+            {
+              'kind': 'followUp',
+              'text': 'Carlos deve enviar o resumo.',
+              'segment_id': 'seg_0',
+              'excerpt': 'Carlos deve enviar o resumo.'
+            },
+          ],
+        },
+      );
+      expect(report.items.map((i) => (i.kind, i.id)), [
+        (ReportItemKind.task, 'item_1'),
+        (ReportItemKind.followUp, 'item_2'),
+      ]);
+    });
+
+    test('the prompt states what a task is', () {
+      final prompt = reportExtractionSystemPrompt(ReportKind.reuniao);
+      expect(prompt, contains('future commitment'));
+      expect(prompt, contains('never tasks'));
+    });
+  });
 }
