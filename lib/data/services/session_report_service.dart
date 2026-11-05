@@ -52,6 +52,7 @@ class SessionReportService {
       customTitle: customTitle,
       segments: await _segments(userId, sessionId),
     );
+    await _archivePrevious(userId, sessionId);
     await _write(_reportFile(userId, sessionId), report);
     _logger.info('Drafted session report $sessionId');
     return report;
@@ -111,6 +112,7 @@ class SessionReportService {
       segments: await _segments(userId, sessionId),
       json: json,
     );
+    await _archivePrevious(userId, sessionId);
     await _write(_reportFile(userId, sessionId), report);
     return report;
   }
@@ -219,6 +221,20 @@ class SessionReportService {
         'report.json',
       ),
     );
+  }
+
+  /// Regenerating replaces report.json, so the previous version is kept next
+  /// to it as report.v1.json, report.v2.json, ... and goes away with the
+  /// other derivatives when the session is deleted.
+  Future<void> _archivePrevious(String userId, String sessionId) async {
+    final current = _reportFile(userId, sessionId);
+    if (!await current.exists()) return;
+    final names = await current.parent
+        .list()
+        .map((entity) => p.basename(entity.path))
+        .toList();
+    final next = names.where(_isArchivedReport).length + 1;
+    await current.copy(p.join(current.parent.path, 'report.v$next.json'));
   }
 
   File _revisionsFile(String userId, String sessionId) {
@@ -367,6 +383,9 @@ class SessionReportService {
     return buffer.toString();
   }
 }
+
+bool _isArchivedReport(String name) =>
+    RegExp(r'^report\.v\d+\.json$').hasMatch(name);
 
 void _checkId(String sessionId) {
   if (sessionId.isEmpty ||

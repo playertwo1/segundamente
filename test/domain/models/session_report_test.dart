@@ -369,5 +369,13 @@ void main() {
       expect(prompt, contains('future commitment'));
       expect(prompt, contains('never tasks'));
     });
+
+    test('the prompt carries the Portuguese summary rules', () {
+      final prompt = reportExtractionSystemPrompt(ReportKind.reuniao);
+      expect(prompt, contains('Brazilian Portuguese'));
+      expect(prompt, contains('never translate or correct'));
+      expect(prompt, contains('at most two sentences'));
+      expect(prompt, contains('never rewrite'));
+    });
   });
 }

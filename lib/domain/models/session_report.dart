@@ -359,7 +359,12 @@ String reportExtractionSystemPrompt(ReportKind kind) {
       'transcript clearly says so. A task is a future commitment someone '
       'accepts or is asked to do. Narration, opinions, hypotheses and facts '
       'already done are never tasks. Emit each item once; do not repeat an '
-      'item with different words. Skip anything unclear.';
+      'item with different words. When the transcript is in Portuguese, '
+      'write every text in Brazilian Portuguese, keep names, numbers, '
+      'amounts and dates exactly as spoken, never translate or correct the '
+      'speaker, and keep each summary to at most two sentences. Notes the '
+      'user typed are source text: quote them in excerpt, never rewrite '
+      'them. Skip anything unclear.';
 }
 
 String reportExtractionUserPrompt(List<ReportSegment> segments) {

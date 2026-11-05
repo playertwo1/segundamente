@@ -237,7 +237,8 @@ void main() {
     expect(await original.readAsBytes(), bytes);
   });
 
-  test('follow-ups, text search and revisions stay beside the report', () async {
+  test('follow-ups, text search and revisions stay beside the report',
+      () async {
     final original = await storeTranscript();
     final bytes = await original.readAsBytes();
     const otherId = 'txt_other';
@@ -279,7 +280,8 @@ void main() {
 
     final found = await service.search(userId: userId, query: 'escopo');
     expect(found.single.sessionId, sessionId);
-    expect(await service.search(userId: userId, query: 'assunto'), hasLength(1));
+    expect(
+        await service.search(userId: userId, query: 'assunto'), hasLength(1));
 
     await service.editItem(
       userId: userId,
@@ -358,5 +360,77 @@ void main() {
       ask: (system, user) async => throw const SocketException('offline'),
     );
     expect(failed.modelError, isA<SocketException>());
+  });
+
+  test('regenerating keeps every earlier version beside the report', () async {
+    final original = await storeTranscript();
+    final before = await original.readAsBytes();
+    final dir = p.join(
+      FileSystemService.instance.getSessionReportsPath(userId),
+      sessionId,
+    );
+
+    final first = await service.draft(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.reuniao,
+      customTitle: null,
+    );
+    expect(File(p.join(dir, 'report.v1.json')).existsSync(), isFalse);
+
+    await service.editItem(
+      userId: userId,
+      sessionId: sessionId,
+      itemId: first.items.first.id,
+      text: 'texto que eu corrigi',
+      assignee: reportAssigneeUnknown,
+      due: reportDueUnknown,
+    );
+    await service.draft(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.brainstorm,
+      customTitle: null,
+    );
+    await service.draft(
+      userId: userId,
+      sessionId: sessionId,
+      kind: ReportKind.livre,
+      customTitle: null,
+    );
+
+    final v1 =
+        jsonDecode(File(p.join(dir, 'report.v1.json')).readAsStringSync());
+    final v2 =
+        jsonDecode(File(p.join(dir, 'report.v2.json')).readAsStringSync());
+    expect(v1['items'].first['text'], 'texto que eu corrigi');
+    expect(v1['kind'], 'reuniao');
+    expect(v2['kind'], 'brainstorm');
+    expect(File(p.join(dir, 'report.v3.json')).existsSync(), isFalse);
+    expect(
+      (await service.load(userId: userId, sessionId: sessionId))!.kind,
+      ReportKind.livre,
+    );
+    // The user's own notes are the source and are never rewritten.
+    expect(await original.readAsBytes(), before);
+
+    await service.deleteDerivatives(userId: userId, sessionId: sessionId);
+    expect(Directory(dir).existsSync(), isFalse);
+  });
+
+  test('a blank custom title or blank source never becomes a blank report', () {
+    expect(
+      () => titleFor(ReportKind.custom, '   '),
+      throwsArgumentError,
+    );
+    expect(
+      () => draftSessionReport(
+        sessionId: sessionId,
+        kind: ReportKind.livre,
+        customTitle: null,
+        segments: const [ReportSegment(id: 'seg_0', text: '  ')],
+      ),
+      throwsStateError,
+    );
   });
 }
