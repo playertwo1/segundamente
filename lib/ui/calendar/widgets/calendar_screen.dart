@@ -145,6 +145,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
+  // Fill strength per activity level 0..4 (see activityLevel).
+  static const _levelAlpha = [0.0, 0.14, 0.26, 0.42, 0.62];
+
   Widget _buildDayCell(CalendarViewModel vm, DateTime date) {
     final isSelected = date.year == vm.selectedDate.year &&
         date.month == vm.selectedDate.month &&
@@ -153,78 +156,71 @@ class _CalendarScreenState extends State<CalendarScreen> {
         date.month == DateTime.now().month &&
         date.day == DateTime.now().day;
     final count = vm.getCardCountForDay(date);
+    final level = activityLevel(count);
     final hasData = count > 0;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      excludeSemantics: true,
+      label: '${DateFormat.yMMMMd(UserStorage.l10n.localeName).format(date)}'
+          '${hasData ? ', $count' : ''}',
       onTap: () => vm.setSelectedDate(date),
-      child: Container(
-        margin: const EdgeInsets.all(4),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primary
-                      : (hasData
-                          ? AppColors.primary.withValues(alpha: 0.15)
-                          : null),
-                  shape: BoxShape.circle,
-                  border: isToday && !isSelected
-                      ? Border.all(color: AppColors.primary)
-                      : null,
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '${date.day}',
-                  style: TextStyle(
+      child: GestureDetector(
+        onTap: () => vm.setSelectedDate(date),
+        child: Container(
+          margin: const EdgeInsets.all(4),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
                     color: isSelected
-                        ? Colors.white
+                        ? AppColors.primary
                         : (hasData
-                            ? const Color(0xFF4338CA)
-                            : (date.weekday >= 6
-                                ? AppColors.textTertiary
-                                : AppColors.textPrimary)),
-                    fontWeight: isSelected || isToday || hasData
-                        ? FontWeight.bold
-                        : FontWeight.normal,
+                            ? AppColors.primary
+                                .withValues(alpha: _levelAlpha[level])
+                            : null),
+                    shape: BoxShape.circle,
+                    border: isToday && !isSelected
+                        ? Border.all(color: AppColors.primary)
+                        : null,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '${date.day}',
+                    style: TextStyle(
+                      color: isSelected
+                          ? AppColors.background
+                          : (hasData || date.weekday < 6
+                              ? AppColors.textPrimary
+                              : AppColors.textTertiary),
+                      fontWeight: isSelected || isToday || hasData
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
                   ),
                 ),
-              ),
-              if (hasData)
-                Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.check_circle,
-                        size: 10,
-                        color:
-                            isSelected ? AppColors.primary : AppColors.success,
+                if (hasData)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      '$count',
+                      style: const TextStyle(
+                        fontSize: 9,
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(width: 2),
-                      Text(
-                        '$count',
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: isSelected
-                              ? AppColors.primary
-                              : AppColors.textSecondary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              else
-                const SizedBox(height: 12),
-            ],
+                    ),
+                  )
+                else
+                  const SizedBox(height: 12),
+              ],
+            ),
           ),
         ),
       ),

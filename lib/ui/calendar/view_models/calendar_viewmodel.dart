@@ -5,6 +5,13 @@ import 'package:memex/domain/models/calendar_model.dart';
 import 'package:memex/data/repositories/memex_router.dart';
 import 'package:memex/utils/result.dart';
 
+/// Activity level of a day in the month grid: 0, 1, 2, 3-4 or 5+ cards.
+int activityLevel(int count) {
+  if (count <= 0) return 0;
+  if (count >= 5) return 4;
+  return count >= 3 ? 3 : count;
+}
+
 /// ViewModel for the Calendar page. Holds month cache, selected date,
 /// and delegates data to [MemexRouter].
 class CalendarViewModel extends ChangeNotifier {

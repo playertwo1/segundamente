@@ -194,7 +194,7 @@
 | F6-05 | Organizar tags hierárquicas como area/projeto, com árvore e contagens | P1 | D-014 | READY | Pai soma filhos; tag simples fica na raiz; tocar filtra; testes e prova visual no S25 |
 | F6-06 | Combinar filtros de propriedade e salvar visões locais | P1 | F6-01 | READY | Filtros combinam por E; visão persiste entre reinícios e pode ser renomeada/apagada |
 | F6-07 | Mostrar prévia opcional de URL, desligada por padrão | P2 | F5-02 | BACKLOG | Somente HTTP/HTTPS; recusar localhost, IP privado e redirecionamento para privado; sem cookies; aviso de que abrir URL contata o site |
-| F6-08 | Mostrar intensidade de atividade por dia no calendário mensal | P2 | D-014 | READY | Cinco níveis: 0, 1, 2, 3–4, 5+; contraste e leitura de hoje/seleção permanecem corretos |
+| F6-08 | Mostrar intensidade de atividade por dia no calendário mensal | P2 | D-014 | IN_PROGRESS | Cinco níveis: 0, 1, 2, 3–4, 5+; contraste e leitura de hoje/seleção permanecem corretos |
 | F6-09 | Recuperar sessões relacionadas a perguntas com sementes, tópico e limite de relevância | P1 | F6-01, F6-04 | BACKLOG | Sementes de texto permanecem; irmãs por tópico respeitam relevância/orçamento; pergunta fora de tema não recebe sessão alheia |
 | F6-10 | Medir embeddings locais multilíngues para busca em português antes de decidir implementação | P2 | F6-09 | BACKLOG | Comparação com busca textual em pt-BR, tamanho do modelo, tempo e memória no S25; sem benefício medido, não implementar |
 | F6-11 | Oferecer “Adicionar à agenda” em encaminhamento aprovado com data explícita | P2 | F6-02 | READY | ACTION_INSERT abre calendário com título e descrição; não pede permissão de leitura nem grava evento sem confirmação |
