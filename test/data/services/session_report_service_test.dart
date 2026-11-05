@@ -9,6 +9,8 @@ import 'package:memex/data/services/local_asset_server.dart';
 import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
 import 'package:memex/domain/models/session_report_export.dart';
+import 'package:memex/agent/built_in_tools/related_sessions_tool.dart';
+import 'package:memex/data/services/related_sessions_service.dart';
 import 'package:memex/data/services/topic_service.dart';
 import 'package:memex/data/services/transcript_import_service.dart';
 import 'package:memex/domain/models/report_memory.dart';
@@ -180,6 +182,45 @@ void main() {
     expect(loaded.kind, ReportKind.estudo);
     final stored = jsonDecode(await file.readAsString()) as Map;
     expect(stored['schema_version'], sessionReportSchemaVersion);
+  });
+
+  test('related sessions: text seed, topic sibling, nothing for off-topic',
+      () async {
+    await storeTranscript();
+    Future<void> store(String id, String line) =>
+        TranscriptImportService().saveIfConfirmed(
+          userId: userId,
+          sessionId: id,
+          sources: [TranscriptImport.parse(utf8.encode('00:01\n$line\n'))],
+          confirmed: true,
+        );
+    await store('txt_irma', 'comprar cimento para a laje');
+    await store('txt_solta', 'agendar o dentista');
+    for (final id in [sessionId, 'txt_irma', 'txt_solta']) {
+      await service.draft(
+        userId: userId,
+        sessionId: id,
+        kind: ReportKind.reuniao,
+        customTitle: null,
+      );
+    }
+    await TopicService().update(userId, (t) {
+      t = addTopic(t, id: 't1', name: 'Obra');
+      t = linkSession(t, 't1', sessionId);
+      return linkSession(t, 't1', 'txt_irma');
+    });
+
+    final found = await RelatedSessionsService().find(userId, 'escopo');
+    expect(found.map((r) => r.sessionId), [sessionId, 'txt_irma']);
+    expect(found.map((r) => r.isSeed), [true, false]);
+
+    final report = await service.load(userId: userId, sessionId: 'txt_irma');
+    final text = renderRelatedSession(found.last, report!);
+    expect(text, contains('same topic'));
+    expect(text, contains('cimento'));
+    expect(text, isNot(contains('dentista')));
+
+    expect(await RelatedSessionsService().find(userId, 'futebol'), isEmpty);
   });
 
   test('topics persist and deleting a session unlinks it from every topic',

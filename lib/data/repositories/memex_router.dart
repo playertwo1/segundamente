@@ -44,6 +44,7 @@ import 'package:memex/data/services/chat_service.dart';
 import 'package:memex/data/services/chat_session_storage.dart';
 import 'package:memex/data/services/session_report_export_service.dart';
 import 'package:memex/data/services/session_report_service.dart';
+import 'package:memex/data/services/related_sessions_service.dart';
 import 'package:memex/data/services/topic_service.dart';
 import 'package:memex/domain/models/related_sessions.dart';
 import 'package:memex/domain/models/report_memory.dart';
@@ -1342,22 +1343,7 @@ class MemexRouter {
   /// Sessions to read for [question]: the text hits plus topic siblings.
   Future<Result<List<RelatedSession>>> findRelatedSessions(String question) {
     return runResult(() async {
-      final userId = await _reportUserId();
-      final reports = SessionReportService();
-      final hits = await reports.search(userId: userId, query: question);
-      if (hits.isEmpty) return const <RelatedSession>[];
-      final times = <String, DateTime>{};
-      for (final meta in await ChatSessionStorage.instance
-          .listSessionMetadata(userId)) {
-        final at = DateTime.tryParse('${meta['updated_at'] ?? ''}');
-        if (at != null) times['${meta['session_id']}'] = at;
-      }
-      return relatedSessions(
-        seedHits: hits,
-        topics: await TopicService().load(userId),
-        reports: await reports.loadAll(userId),
-        sessionTimes: times,
-      );
+      return RelatedSessionsService().find(await _reportUserId(), question);
     });
   }
 

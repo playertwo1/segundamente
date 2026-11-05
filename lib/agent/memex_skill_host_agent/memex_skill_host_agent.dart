@@ -2,6 +2,7 @@ import 'package:dart_agent_core/dart_agent_core.dart';
 import 'package:memex/agent/agent_controller.util.dart';
 import 'package:memex/agent/agent_system_prompt_helper.dart';
 import 'package:memex/agent/built_in_tools/file_tools.dart';
+import 'package:memex/agent/built_in_tools/related_sessions_tool.dart';
 import 'package:memex/agent/built_in_tools/search_event_logs_tool.dart';
 import 'package:memex/agent/common_tools.dart';
 import 'package:memex/agent/flutter_js_runtime.dart';
@@ -53,6 +54,7 @@ class MemexSkillHostAgent {
       fileToolFactory.buildRemoveTool(),
       fileToolFactory.buildEditTool(),
       buildSearchEventLogsTool(),
+      buildRelatedSessionsTool(),
       getCurrentTimeTool,
     ];
 
