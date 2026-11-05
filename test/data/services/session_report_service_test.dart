@@ -14,12 +14,14 @@ import 'package:memex/data/services/glossary_service.dart';
 import 'package:memex/data/services/related_sessions_service.dart';
 import 'package:memex/data/services/saved_view_service.dart';
 import 'package:memex/data/services/topic_service.dart';
+import 'package:memex/data/services/transcript_correction_service.dart';
 import 'package:memex/data/services/transcript_import_service.dart';
 import 'package:memex/domain/models/report_memory.dart';
 import 'package:memex/domain/models/session_report.dart';
 import 'package:memex/domain/models/glossary.dart';
 import 'package:memex/domain/models/saved_view.dart';
 import 'package:memex/domain/models/topic.dart';
+import 'package:memex/domain/models/transcript_correction.dart';
 import 'package:memex/domain/models/transcript_import.dart';
 import 'package:memex/utils/user_storage.dart';
 import 'package:path/path.dart' as p;
@@ -207,6 +209,46 @@ void main() {
     );
     expect(system, contains('Alvarenga'));
     expect(await GlossaryService().load(userId), ['Alvarenga']);
+  });
+
+  test('corrections live in a separate file and never touch the original',
+      () async {
+    final original = await storeTranscript();
+    final bytes = await original.readAsBytes();
+    final corrections = TranscriptCorrectionService();
+
+    expect(
+      (await corrections.correctedSegments(userId, sessionId))[0].text,
+      'fechar o escopo',
+    );
+    final corrected = await corrections.save(userId, sessionId, [
+      const TextFix(segmentId: 'seg_0', from: 'escopo', to: 'escopo do site'),
+    ]);
+    expect(corrected[0].text, 'fechar o escopo do site');
+    expect(await original.readAsBytes(), bytes);
+    expect(
+      File(p.join(original.parent.parent.path, 'corrections.json'))
+          .existsSync(),
+      isTrue,
+    );
+    expect(
+      (await corrections.correctedSegments(userId, sessionId))[0].text,
+      'fechar o escopo do site',
+    );
+
+    await expectLater(
+      corrections.save(userId, sessionId, [
+        const TextFix(segmentId: 'seg_0', from: 'nada', to: 'x'),
+      ]),
+      throwsA(isA<CorrectionRefused>()),
+    );
+    // The refused set did not replace the stored one.
+    expect(await corrections.load(userId, sessionId), hasLength(1));
+    expect(await original.readAsBytes(), bytes);
+    await expectLater(
+      corrections.save(userId, '../x', const []),
+      throwsArgumentError,
+    );
   });
 
   test('saved views persist between loads', () async {

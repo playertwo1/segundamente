@@ -26,7 +26,7 @@ class SessionReportService {
     required String userId,
     required String sessionId,
   }) async {
-    _checkId(sessionId);
+    checkSessionId(sessionId);
     final file = _reportFile(userId, sessionId);
     if (!await file.exists()) return null;
     final raw = jsonDecode(await file.readAsString());
@@ -209,7 +209,7 @@ class SessionReportService {
     required String userId,
     required String sessionId,
   }) async {
-    _checkId(sessionId);
+    checkSessionId(sessionId);
     final dir = Directory(
       p.join(_files.getSessionReportsPath(userId), sessionId),
     );
@@ -325,8 +325,8 @@ class SessionReportService {
   }
 
   Future<List<ReportSegment>> _segments(String userId, String sessionId) async {
-    _checkId(sessionId);
-    final imported = await _importedSegments(userId, sessionId);
+    checkSessionId(sessionId);
+    final imported = await importedSegments(userId, sessionId);
     if (imported.isNotEmpty) return imported;
     final text = await _chatText(userId, sessionId);
     if (text.trim().isEmpty) throw StateError('nothing to report');
@@ -335,7 +335,7 @@ class SessionReportService {
     ];
   }
 
-  Future<List<ReportSegment>> _importedSegments(
+  Future<List<ReportSegment>> importedSegments(
     String userId,
     String sessionId,
   ) async {
@@ -392,7 +392,7 @@ class SessionReportService {
 bool _isArchivedReport(String name) =>
     RegExp(r'^report\.v\d+\.json$').hasMatch(name);
 
-void _checkId(String sessionId) {
+void checkSessionId(String sessionId) {
   if (sessionId.isEmpty ||
       sessionId.contains('/') ||
       sessionId.contains('\\') ||
