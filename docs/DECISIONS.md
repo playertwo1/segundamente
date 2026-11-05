@@ -36,6 +36,7 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 | D-030 | 2026-11-04 | Ampliar F9 com PDFs, Todo, destinos de tarefas e relatórios PDF/DOCX | ACCEPTED |
 | D-031 | 2026-11-05 | Abrir só a pesquisa F7-01 (sem código) antes do portão F5 | ACCEPTED |
 | D-032 | 2026-11-05 | F7 sem ponte para CLIs: o login ChatGPT/Codex já existente basta | ACCEPTED |
+| D-033 | 2026-11-05 | `daedalus-echo` só como referência; F7-02 passa a medir IA no aparelho, não Ollama | ACCEPTED |
 
 ## D-001 — Base: fork do Memex
 - Contexto: Memex já traz diário/chat, banco local (Drift/SQLite), provedores e OAuth. Licença GPL-3.0.
@@ -190,3 +191,8 @@ Só escolhas caras de desfazer ou que outro agente poderia contestar. Nova decis
 - Decisão: não haverá ponte desktop (F7-04) nem interface MCP (F7-05). O app segue com o login ChatGPT já existente; nenhum fluxo novo de credenciais. O limite dos termos permanece: sem login Claude.ai por assinatura (D-005).
 - Em aberto, sem decisão: voz full duplex (F7-03) e Ollama (F7-02). Seguem `BLOCKED` até o dono pedir, e só com medição no S25/PC.
 - F7-01 cumpre o objetivo (escopo decidido antes de código).
+
+## D-033 — daedalus-echo como referência (2026-11-05)
+- Contexto: o dono propôs https://github.com/DaedalusApps/daedalus-echo (MIT, Kotlin) como exemplo de conversa duplex. Pelo README e pela árvore de arquivos, ele é gravador + transcrição Whisper + resumo Gemma 3 1B + busca por embeddings; não tem voz sintetizada, VAD contínuo, cancelamento de eco nem interrupção (busca por `TextToSpeech`, `AcousticEchoCanceler`, `VOICE_COMMUNICATION` sem resultado).
+- Decisão (escolha do dono): usar só como referência de IA no aparelho e embeddings. F7-02 passa de "Ollama no PC" para "medir modelo local no S25" (ex.: Gemma 3 1B, qualidade em pt-BR, RAM, latência, tamanho). Para F6-10, o Universal Sentence Encoder do projeto não está comprovado para português; candidatos a medir: USE multilingual (16 idiomas, inclui português) e EmbeddingGemma (100+ idiomas; tamanhos a confirmar). O Whisper `base.en` dele é só inglês e não serve.
+- Limites: nenhum código, dependência ou download de modelo é autorizado; nada foi medido. O duplex (F7-03) continua sem exemplo e sem teste.

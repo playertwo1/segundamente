@@ -2,7 +2,7 @@
 
 **Visão e escopo:** [PROJECT.md](PROJECT.md) · **Design aprovado:** [DESIGN.md](DESIGN.md) · **Índice e pranchas:** [docs/INDEX.md](docs/INDEX.md) · **Estado e próxima ação:** [STATE.md](STATE.md) · **Decisões:** [docs/DECISIONS.md](docs/DECISIONS.md) · **Regras de execução:** [docs/WATCHDOG.md](docs/WATCHDOG.md) · **Auditoria:** [docs/AUDIT.md](docs/AUDIT.md)
 
-**Atualização deste mapa:** 2026-11-04. Para evidência posterior, use a entrada datada mais recente de STATE.md e o estado atual do repositório. Se o resumo inicial de STATE.md divergir de uma evidência posterior, prevalece a evidência datada mais recente; atualize o resumo quando STATE.md for revisado.
+**Atualização deste mapa:** 2026-11-05. Para evidência posterior, use a entrada datada mais recente de STATE.md e o estado atual do repositório. Se o resumo inicial de STATE.md divergir de uma evidência posterior, prevalece a evidência datada mais recente; atualize o resumo quando STATE.md for revisado.
 
 ## Como ler e executar este roadmap
 
@@ -230,7 +230,7 @@
 | ID | Entrega verificável | Prio | Depende de | Estado | Evidência de aceite |
 |---|---|---:|---|---|---|
 | F7-01 | Comparar viabilidade, sistemas desktop, licenças, termos, autenticação e limites de dados; decidir escopo antes de código | P0 | F5 fechado (D-031 abriu só esta linha) | DONE | Matriz de opções, riscos e decisão aceita em docs/DECISIONS.md |
-| F7-02 | Medir Ollama/modelos locais para qualidade em pt-BR, requisitos de hardware e privacidade | P1 | F7-01 | BLOCKED | Tabela de qualidade, latência, RAM/VRAM, tamanho e plataforma; modelo escolhido ou caminho descartado com motivo |
+| F7-02 | Medir modelo local no S25 (D-033; antes Ollama) para qualidade em pt-BR, requisitos de hardware e privacidade | P1 | F7-01 | BLOCKED | Tabela de qualidade, latência, RAM/VRAM, tamanho e plataforma; modelo escolhido ou caminho descartado com motivo |
 | F7-03 | Implementar voz full duplex opcional com controle explícito, interrupção, pausa, cancelar e estado de microfone visível | P0 | F7-01, F7-02 | BLOCKED | Testes de início, interrupção, cancelamento, erro, permissão e liberação do microfone; nenhuma gravação sem ação visível |
 | F7-04 | Criar ponte desktop opcional para Claude Code e Codex CLI oficiais, com escopo e prévia de cada solicitação | P0 | F7-01 | CANCELLED | Teste com cada CLI instalada; destino/comando visíveis, confirmação antes de enviar ou executar, cancelamento sem efeito e falha sem perda de contexto |
 | F7-05 | Decidir se uma interface MCP é necessária e, se aprovada, restringir ferramentas e permissões | P2 | F7-01, F7-04 | CANCELLED | Decisão explícita; se implementada, teste de acesso somente aos recursos autorizados e ausência de escrita em Quick Query |
@@ -310,6 +310,7 @@
 | Escolher idioma do resumo pelo idioma predominante | Só se o produto voltar a suportar mais de en e pt |
 | Biblioteca agregada de fotos, PDFs e áudios | Depois de F2/F6, se a busca atual não bastar |
 | Chave Gemini como reserva de transcrição | Se o caminho D-011 falhar ou se os limites medidos forem insuficientes |
+| Conversas guiadas por perfil: o Advogado do Diabo define a ideia/hipótese, apresenta uma objeção por turno, recebe a réplica e termina com veredito equilibrado e resumo opcional; outros personagens podem ter ciclos próprios, como professor com perguntas e exercício ou planejador com alternativas, riscos e próximo passo. O usuário pode responder, pular ou encerrar; conclusões só viram registros após salvamento explícito. | Reavaliar após o fechamento da F5 e a validação dos chats da F5V; experimentar em dois perfis e definir controles, formato das saídas e o que pode ser salvo antes de abrir uma tarefa de implementação |
 
 Ideias já avaliadas e distribuídas em tarefas ficam nas decisões D-014, D-016 e D-018; não reabrir essas pesquisas sem uma lacuna concreta.
 
@@ -323,3 +324,4 @@ Ideias já avaliadas e distribuídas em tarefas ficam nas decisões D-014, D-016
 - 2026-11-04 — D-023 retirada do espelho chinês e D-024 remoção dos componentes chineses do produto.
 - 2026-11-04 — D-025 a D-028: pranchas visuais, microfone explícito e limites de execução; ver docs/DECISIONS.md.
 - 2026-11-04 — D-029/D-030: planejar Meeting Decoder na F9 com PDFs, Todo pessoal, encaminhamentos e relatórios PDF/DOCX. F9 permanece bloqueada.
+- 2026-11-05 — ideia futura de conversas guiadas por perfil: objeções e veredito para o Advogado do Diabo, com dinâmicas próprias para outros personagens; sem iniciar implementação.
